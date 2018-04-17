@@ -1,0 +1,2547 @@
+\documentclass[reqno]{amsart}
+
+\usepackage{hott}
+
+\title{Classifying types}
+\author{Egbert Rijke}
+\address{Carnegie Mellon University\\%
+Department of Philosophy\\%
+5000 Forbes Avenue\\%
+Baker Hall 135\\%
+Pittsburgh, PA 15213}
+\email{erijke@andrew.cmu.edu}
+\date{\today}
+
+\addbibresource{bibliography.bib}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+In this prospectus I shall attempt to describe the state of the art of the
+study of synthetic homotopy theory, in particular on questions concerning
+stable homotopy theory, infinite loop spaces, and generalized cohomology theories. 
+We shall suggest a possibility of defining K-theory via the classifying types
+of vector bundles, a possibility of the classification of types modulo the
+bordism relation, and we shall describe some of the foundational
+work that still needs to be done in order to attempt research in these directions.
+\end{abstract}
+
+\section{Introduction}
+\begin{it}
+This document is a prospectus for the Pure and Applied Logic program at
+Carnegie Mellon University. 
+The goal of this document is to propose the research leading to the dissertation of the author. 
+This research will be directed by Prof. Awodey (CMU), 
+and the committee for the prospectus consists of Prof. Avigad (CMU),
+and Dr. Buchholtz (TU Darmstadt). 
+%The prospectus was successfully defended on December 13th, 2016.
+\end{it}
+
+\bigskip
+The study of homotopy theoretic phenomena in the language of type theory \cite{hottbook} is 
+sometimes loosely called `synthetic homotopy theory' \cite{Brunerie16}. 
+Homotopy theory in type theory \cite{Awodey12} is only one of the
+many aspects of homotopy type theory, which also includes the study of the
+set theoretic semantics (models of homotopy type theory and univalence in a
+meta-theory of sets or categories \cite{Awodey14,AwodeyWarren,BezemCoquandHuber,KapulkinLeFanuLumsdaine,Shulman15,Voevodsky15}), type theoretic semantics (internal models of homotopy type
+theory), and computational semantics \cite{AngiuliHarperWilson}, as well as the study of various questions
+in the internal language of homotopy type theory which are not necessarily 
+motivated by homotopy theory, or questions related to the development of
+formalized libraries of mathematics based on homotopy type theory.
+This prospectus concerns synthetic homotopy
+theory and some aspects of the type theoretic semantics of homotopy type theory.
+
+Homotopy type theory is based on Martin-L\"of's theory of dependent types \cite{MartinLof84}, which
+was developed during the 1970's and 1980's.
+The novel additions of homotopy type theory are Voevodsky's univalence axiom \cite{Voevodsky06,Voevodsky10},
+and higher inductive types \cite{Lumsdaine11Blog,Shulman11Blog,hottbook}. The univalence axiom characterizes the identity
+type on the universe, and thereby establishes the universe as an object classifier \cite{RijkeSpitters}.
+Higher inductive types are a generalization of inductive types, in which both
+point constructors (generators) and path constructors (relations) may be specified.
+A simple class of higher inductive types, which includes most known higher inductive
+types, are the homotopy coequalizers. When the universe is assumed to be closed
+under homotopy coequalizers, it is also closed under pushouts \cite{hottbook}, 
+sequential colimits \cite{hottbook}, and propositional truncation truncation \cite{VanDoorn15}.
+For instance, we get the $n$-spheres \cite{Lumsdaine12Blog} by setting $\sphere{-1}\defeq\emptyt$ and
+by inductively defining the $(n+1)$-sphere $\sphere{n+1}$ to be the pushout
+of the span $\unit \leftarrow\sphere{n}\rightarrow\unit$. 
+Then we can attach $(n+1)$-cells to a type $X$.
+Let $f:(\sm{a:A}B(a))\to X$ be a family of attaching maps
+for some $\sphere{n}$-bundle $B:A\to\sm{S:\UU}\brck{\sphere{n}=S}$. We
+attach the $(n+1)$-disks indexed by $A$ to $X$ by taking the homotopy pushout
+\begin{equation*}
+\begin{tikzcd}
+\sm{a:A}B(a) \arrow[r,"f"] \arrow[d,swap,"\pi_1"]  & X \arrow[d,"\inr"] \\
+A \arrow[r,swap,"\inl"] & P. \arrow[ul,phantom,very near start,"\ulcorner"]
+\end{tikzcd}
+\end{equation*}
+
+Unless otherwise specified, we shall assume a univalent universe that is closed
+under the usual type constructors, including a natural numbers object, and
+homotopy coequalizers. The model in cubical sets by Coquand et al. \cite{BezemCoquandHuber} is a
+constructive model for this setup, although the fact that it is closed under
+homotopy coequalizers is currently unpublished.
+
+We outline the contents of this prospectus. First, I shall provide a (very) brief 
+description of the current state of affairs in homotopy type theory. Then,
+I will propose future research. While doing so, I shall sketch the background
+theory of the proposed future work, and indicate some completed work that I also
+plan to include in my dissertation. A proposed outline of the dissertation
+can be found in \autoref{outline}.
+
+We will follow the notation of \cite{hottbook}.
+Also, it is worth pointing out that when we give two equivalent descriptions
+of the same thing, we mean that their types are homotopy equivalent
+(rather than just logically equivalent), and usually
+we have a canonical equivalence in mind. A basic
+example: dependent types over $A$ may be described equivalently as maps into
+$A$. By this we mean that the types $A\to\UU$ and $\sm{B:\UU}B\to A$ are 
+homotopy equivalent, where the equivalence sends $P:A\to\UU$ to the map
+$\pi_1:(\sm{a:A}\P(a))\to A$.
+
+\begin{tabular}{rr}
+\end{tabular}
+
+\subsection{Acknowledgments}
+I gratefully acknowledge the input I received from everyone in the HoTT group at Carnegie Mellon University. In particular, I am grateful to the committee members for this prospectus: my advisor Steve Awodey, Jeremy Avigad, and Ulrik Buchholtz. The initial idea of developing spectral sequences and the theory of spectra is due to Mike Shulman \cite{Shulman13Spectral}. For the idea of developing (co)bordism, Thom spectra, and to attempt to show Bott periodicity in homotopy type theory I am indebted to Ulrik Buchholtz. 
+
+There is a formalization project on spectra and spectral sequences involving Steve Awodey, Ulrik Buchholtz, Flris van Doorn, Mike Shulman and me, and I plan to do the proposed research on these topics with them.
+The proposed research on the graph model and homotopy coequalizers is joint work with Bas Spitters. The proposed research on higher modalities is joint work with Mike Shulman and Bas Spitters. The project of defining the Grassmannians, studying vector bundles over types, developing K-theory, sphere bundles and their Thom spaces in homotopy type theory is joint work with Ulrik Buchholtz. The work on hereditarily reflexive relations is joint work with Nicolas Tabareau and Simon Boulier.
+
+I gratefully acknowledge the support of the Air Force Office of Scientific Research through MURI grant FA9550-15-1-0053. Any opinions, findings and conclusions or recommendations expressed in this material are those of the authors and do not necessarily reflect the views of the AFOSR.
+
+\section{The study of identity types}
+Types in homotopy type theory may be regarded as spaces up to homotopy \cite{AwodeyWarren,KapulkinLeFanuLumsdaine}. 
+From this perspective, we view the type of identifications between two points
+$x,y:A$ as the space of paths from $x$ to $y$.
+The core business in homotopy type theory, and of this prospectus, 
+is to study identity types and to distill algebraic information about them
+within type theory. 
+
+A basic tool in the study of identity types is the following
+folklore theorem, which holds in the setting of plain Martin-L\"of type theory (i.e., without
+further assumptions such as function extensionality or univalence).
+
+\begin{thm}\label{thm:encode-decode}
+Let $A$ be a type with base point $a_0$, and let $P$ be a type family
+over $A$ with $p_0:P(a_0)$. Then the following are equivalent:
+\begin{enumerate}
+\item The fiberwise map
+\begin{equation*}
+\prd{x:A} (\id{a_0}{x})\to P(x),
+\end{equation*}
+defined by path induction by sending $\refl{a_0}$ to $p_0$, is a fiberwise equivalence.
+\item The total space $\sm{x:A}P(x)$ is contractible.
+\end{enumerate}
+\end{thm}
+
+A variation of the above theorem, in which the contractibility of the total space
+is broken down more verbosely, is called the \define{encode-decode method}
+\cite{LicataShulman}.
+
+Given a base point $a_0:A$, we define a map $y_A(a_0):A\to\UU$ into the universe by $x\mapsto (a_0=x)$. 
+The map $a_0\mapsto y_A(a_0)$ may be considered to be a Yoneda-embedding, when
+we view the type $A$ as the weak $\omega$-groupoid whose higher morphisms are
+given by the iterated identity types \cite{VanDenBergGarner,Lumsdaine10}.
+A basic application of the univalence axiom is that this map is indeed an embedding, in the homotopical sense that it induces equivalences on identity types.
+We state several equivalent forms of the univalence axiom, which characterizes the identity type of the universe.
+
+\begin{thm}\label{thm:univalence}
+The following are equivalent:
+\begin{enumerate}
+\item \textup{\define{The univalence axiom.}} For any $A:\UU$, the fiberwise map
+\begin{equation*}
+\prd{B:\UU} (\id{A}{B})\to(\eqv{A}{B}),
+\end{equation*}
+defined by path induction by sending $\refl{A}$ to $\idfunc[A]$, is a fiberwise equivalence.
+\item For any $A:\UU$, the total space $\sm{B:\UU}\eqv{A}{B}$ is contractible.
+\item For any $f:B\to A$, the type of pairs $(\chi,\theta)$ consisting of $\chi:A\to\UU$ and $\theta : \prd{a:A} \fib{f}{a}\to \chi(a)$ such that the square
+\begin{equation*}
+\begin{tikzcd}[column sep=large]
+B \arrow[r,"\eta"] \arrow[d,swap,"f"] & \sm{a:A}\fib{f}{a} \arrow[r,"\total{\theta}"] & \sm{X:\UU} X \arrow[d,"\proj1"] \\
+A \arrow[rr,swap,"\chi"] & & \UU
+\end{tikzcd}
+\end{equation*}
+is a pullback square, is contractible. Here, the map $\eta:B\to\sm{a:A}\fib{f}{a}$ is the equivalence $b\mapsto\pairr{f(b),b,\refl{f(b)}}$. In other words, the universe is an \define{object classifier} as in \cite{Lurie09}.
+\begin{comment}
+\item \textup{\define{The descent property.}} For any parallel pair $f,g:B\to A$ of maps with homotopy coequalizer $c:A\to C_{f,g}$ and $H:c\circ f \htpy c\circ g$, the map
+\begin{equation*}
+(C_{f,g}\to\UU)\to\Big(\sm{P:A\to\UU}\prd{b:B}\eqv{P(f(b))}{P(g(b))}\Big)
+\end{equation*}
+defined by taking $Q:C_{f,g}\to\UU$ to the pair $\pairr{P,e}$, where $P$ and $e$ are
+given by
+\begin{align*}
+P(a) & \defeq Q(c(a))\\
+e(b) & \defeq \transfibf{Q}(H(b)),
+\end{align*}
+is an equivalence.
+\end{comment}
+\end{enumerate}
+\end{thm} 
+
+The main directions that one may take in the study of identity types are:
+\begin{enumerate}
+\item The study of the interaction of identity types with the type forming operations.
+\item The study of homotopy groups of types.
+\item The study of the operations a pointed type may possess in order for it to be a loop space, or a loop space of a loop space, and so on.
+\end{enumerate}
+The first item on this list has reached a mostly satisfactory state in \cite{hottbook}, except that general statements that identity types commute with homotopy coequalizers or coinductive types in a certain way are lacking. The case of identity types of W-types is addressed by Danielson in \cite{Danielson12Blog}. Note that the univalence axiom characterizes the identity type of the universe, and therefore settles the question in the case of universes.
+
+\begin{proposal}\label{p:id_of_coeq}
+To show that for any type-valued binary relation $R:A\to A\to \UU$ on a type $A$, the identity type of the homotopy coequalizer 
+$\colim(A,R)$ of $R$ (i.e., the graph quotient), is equivalently described as
+the family of higher inductive types $\pts{P}:A\to (A\to\UU)$ with constructors
+\begin{align*}
+\eta & : \prd{a:A} \pts{P}(a,a) \\
+\edg{P} & : \prd*{a,x,y:A}{e:R(x,y)} \pts{P}(a,x)\to\pts{P}(a,y) \\
+{P}_{linv_0} & : \prd*{a,x,y:A}{e:R(x,y)} \pts{P}(a,y)\to\pts{P}(a,x) \\
+{P}_{linv_1} & : \prd*{a,x,y:A}{e:R(x,y)}{u:\pts{P}(a,x)} P_{linv_0}(\edg{P}(e,u))=u \\
+{P}_{rinv_0} & : \prd*{a,x,y:A}{e:R(x,y)} \pts{P}(a,y)\to\pts{P}(a,x) \\
+{P}_{rinv_1} & : \prd*{a,x,y:A}{e:R(x,y)}{v:\pts{P}(a,y)} \edg{P}({P}_{rinv_0}(e,v))=v.
+\end{align*}
+This definition can be adjusted appropriately in the case of a reflexive relation $R$. 
+
+As formulated, this family of higher inductive type is recursive, but it seems
+reasonable to expect that it can be approximated by a sequence of non-recursive
+families of higher inductive types. For instance, the loop space of a suspension
+is computed via the James construction. 
+\end{proposal}
+
+Let us now briefly discuss the homotopy groups of types (see Chapter 8 of \cite{hottbook} for more details).
+Let $X$ be a type with base point $x_0$. Then the \define{loop space} $\loopspace{X}$ is
+defined as the type $(x_0=x_0)$, and the constant loop $\refl{x_0}$
+is considered the base point of $\loopspace{X}$. The loop space is the fiber
+of the path fibration at the base point, i.e.,~we have a fiber sequence
+\begin{equation*}
+\loopspace{X}\hookrightarrow \totalpath{X} \fibration X,
+\end{equation*}
+where $\totalpath{X}\defeq\sm{x:X}x_0=x$ is the total space of the path fibration.
+Note that $\totalpath{X}$ is contractible. The \define{$n$-th homotopy group} of $X$ is
+defined to be the type
+\begin{equation*}
+\pi_n(X)\defeq \trunc{0}{\loopspace[n]{X}}.
+\end{equation*}
+Here, the $0$-th homotopy `group' is just the set of \define{connected components} of $X$. The
+$1$-st homotopy group is the \define{fundamental group}. All the higher homotopy groups
+are abelian groups. Any fiber sequence $F\hookrightarrow E\fibration B$, or equivalently, any type family $P:B\to\UU$, gives rise to a long exact sequence of homotopy groups
+\begin{equation*}
+\begin{tikzcd}
+\cdots \arrow[r] & \pi_n(F) \arrow[r] & \pi_n(E) \arrow[r] & \pi_n(B) \arrow[r] & \pi_{n-1}(F) \arrow[r] & \cdots
+\end{tikzcd}
+\end{equation*}
+There are formalized proofs of the fact that $\pi_1(\sphere{1})=\Z$
+by Licata and Shulman \cite{LicataShulman}, that $\pi_n(\sphere{n})=\Z$ \cite{hottbook}, and that $\pi_3(\sphere{2})=\Z$ by Brunerie \cite{hottbook}.
+A major recent accomplishment in homotopy type theory was Brunerie's proof that $\pi_4(\sphere{3})=\Z/2$ \cite{Brunerie16}. 
+
+\subsection{Characterizing loop spaces}
+The other aspect of understanding identity types that we mentioned is to study the operations a type may
+possess in order for it to be a loop space, or a loop space of a loop space, and so on,
+until one understands infinite loop spaces in type theory. In other words,
+we want to know when a pointed type $X$ is of the form $\loopspace[n]{Y}$, for
+some pointed type $Y$.
+Classically, this question has been addressed by the operads
+of Boardman and Vogt \cite{BoardmanVogt}, and May \cite{May72}. 
+However, in homotopy type theory this task comes with
+its own intricacies, because everything one can say within this theory must
+always be homotopy invariant. 
+
+Note that if $X$ is the loop space of a certain pointed type $Y$, 
+then it is also the loop space of the connected component of $Y$ at the base point.
+So we restrict our attention to pointed connected types, and write
+$\tilde{\UU}^c$ for the type of all pointed connected types. 
+There is an obvious map from $\tilde{\UU}^c$ to the type $\tilde{\UU}$ of all pointed types, which takes a pointed connected type to its loop space. 
+
+Now, suppose we have defined a structure $\mathsf{isLoopSpace}:\tilde{\UU}\to\mathcal{V}$, for some sufficiently large universe $\mathcal{V}$. Then, first of all, we should have a lift
+\begin{equation*}
+\begin{tikzcd}
+& \sm{(X,x_0):\tilde{\UU}}\mathsf{isLoopSpace}(X,x_0) \arrow[d,->>] \\
+\tilde{\UU}^c \arrow[r,swap,"\loopspacesym"] \arrow[ur,densely dotted,"K"] & \tilde{\UU}
+\end{tikzcd}
+\end{equation*}
+that gives every actual loop space the additional structure of $\mathsf{isLoopSpace}$. Second of all, we would like to show that the lift $K$ is an equivalence. 
+
+Using \autoref{thm:encode-decode,thm:univalence} we can already give a characterization
+of loop spaces, that meets the above criteria. In the following theorem we write $\UU_X\defeq\sm{A:\UU}\brck{X=A}$.
+In other words, $\UU_X$ is the connected component of the universe, that contains $X$.
+A simple application of the univalence axiom gives that $\loopspace{\UU_X}$ is
+equivalent to the type $\eqv{X}{X}$ of automorphisms on $X$. 
+\begin{comment}
+Also, since $\UU_X$
+is the image of a small type into a locally small type (more precisely, a point in the universe),
+it follows that $\UU_X$ is equivalent to a type in $\UU$, provided that $\UU$
+is closed under pushouts.
+\end{comment}
+
+\begin{thm}\label{thm:principal-hspaces}
+Let $X$ be a type with base point $1_X$. The following structures are equivalent:
+\begin{enumerate}
+\item There is a pointed connected type $B$ such that $\loopspace{B}=X$, preserving the base point.
+\item \textbf{Principal H-space structure.} There are
+\begin{align*}
+\mathcal{O}_X & : \UU_X\to\UU \\
+o_X & : \mathcal{O}_X(X),
+\end{align*}
+such that the type
+\begin{equation*}
+\sm{A:\UU_X}\mathcal{O}_X(A)\times A
+\end{equation*}
+is contractible. 
+\end{enumerate}
+\end{thm}
+
+By the contractibility condition, it follows that the type family $(A,o)\mapsto A$
+on $\sm{A:\UU_X}\mathcal{O}_X(A)$ is equivalent to the family of paths starting at $X$.
+In particular, $X$ is the loop space of $\sm{A:\UU_X}\mathcal{O}_X(A)$. This gives us passage from (ii) to (i). 
+Conversely, if $B$ is a pointed connected type with loop space $X$, then the path fibration $P$ given by $b\mapsto (\ast=b)$ lands in $\UU_X$. We simply take $\mathcal{O}_X$ to be $\fibf{P}:\UU_X\to\UU$, and show that this satisfies the contractibility condition. 
+
+The type family $\mathcal{O}_X$ also plays a role in the classifying property of a pointed connected type. By an $X$-bundle we shall mean a type family $P:A\to\UU_X$, or equivalently, a map $f:B\to A$ for which $\fibf{f}$ is an $X$-bundle in the previous sense.
+
+\begin{thm}\label{thm:classifier}
+Let $Y$ be a pointed connected type with loop space $X$, and let $f:B\to A$ be an $X$-bundle. Then the type of functions $\chi_f:A\to Y$ for which the square
+\begin{equation*}
+\begin{tikzcd}
+B \arrow[r] \arrow[d,swap,"f"] & \unit \arrow[d] \\
+A \arrow[r,swap,"\chi_f"] & Y
+\end{tikzcd}
+\end{equation*}
+is a pullback square, is equivalent to the type $\prd{a:A}\mathcal{O}_X(\fib{f}{a})$. 
+\end{thm}
+
+Note that in \autoref{thm:principal-hspaces}, most of the algebraic structure of being a loop
+space is hidden in the contractibility condition for principal H-space structures. This is somewhat undesirable, so we make the following proposal.
+
+\begin{proposal}\label{p:loop_space}
+Provide a structure containing explicit operations on a pointed type, that is equivalent to it being a loop space.
+\end{proposal}
+
+\begin{comment}
+\section{A generalization of the flattening lemma}
+The computation of the identity type of a given type becomes notably difficult and interesting when the type
+under consideration is a higher inductive type. 
+The univalence axiom may be used to define a type family $P$ over the homotopy 
+coequalizer $C_{f,g}$ of a parallel pair $f,g:B\to A$. 
+If our goal is to show that $P$ is fiberwise equivalent
+to the family of paths with a fixed starting point, we may proceed by showing that the
+total space $\sm{x:C_{f,g}}P(x)$ is contractible, as suggested by \autoref{thm:encode-decode}.
+The total space of a type family over a coequalizer is again a coequalizer.
+This fact is known in the homotopy type theory community as the flattening 
+lemma, and was first shown by Brunerie \cite{Brunerie16}. In this section we set
+out a line of research leading to a generalization of the flattening lemma,
+which may be used later on in the study of $\omega$-compact types, and in the
+study of spectra.
+
+\subsection{Homotopy coequalizers}
+A pair of maps $s,t:E\to V$ is equivalently described as an internal graph.
+An internal graph $\Gamma$ consists of a type $\pts{\Gamma}:\UU$ of
+vertices and a binary relation $\edg{\Gamma}:\pts{\Gamma}\to\pts{\Gamma}\to\UU$.
+Likewise, a reflexive pair $s,t:E\to V$, $r:V\to E$, $s\circ r=t\circ r=\idfunc[V]$
+is equivalently described as an internal reflexive graph $\Gamma$, which has
+in addition to a type $\pts{\Gamma}$ of vertices and a relation $\edg{\Gamma}$
+of edges, a term $\rfx{\Gamma}:\prd{i:\pts{\Gamma}}\edg{\Gamma}(i,i)$.
+
+The coequalizer of a pair is then equivalently described as the
+\define{graph quotient}, and the reflexive coequalizer of a reflexive pair
+is equivalently described as a reflexive graph quotient. Both constructions
+are `left adjoint' to the discrete (reflexive) graph functor 
+$\Delta:\UU\to\mathrm{(r)Gph}$, which acts on objects, fibrations and sections.
+Given a (reflexive) graph $\Gamma$, the graph
+quotient $\colim(\Gamma)$ comes with a morphism 
+$\eta:\Gamma\to\Delta(\colim(\Gamma))$ of (reflexive) graphs that provides for
+the point and path constructors. Given a type family $P$ on $\colim(\Gamma)$,
+the \define{transpose} $\tilde{P}$ of $P$ is defined to be the type family 
+$\eta^\ast(\Delta(P))$. Likewise, the transpose $\tilde{s}$ of a section of $P$
+is defined to be $\eta^\ast(\Delta(s))$.
+The induction principle states that for any section (or term) $f$ of $\tilde{P}$
+we get a section $s$ of $P$ such that $\tilde{s}=f$. This
+suffices to show the universal property for $\colim(\Gamma)$, and establish its
+uniqueness.
+
+The functors we have discussed so far fit in the following picture, in which
+$U:\tfrGraph\to\tfGraph$ forgets the reflexivity and $F:\tfGraph\to\tfrGraph$
+freely adds it.
+\begin{equation*}
+\begin{tikzcd}[column sep=8em,row sep=3em]
+\tfGraph \arrow[dr,bend left=15,"\colim"] \arrow[dd,bend right=15,swap,"F"] \\
+& \UU \arrow[ul,bend left=15,"\Delta"] \arrow[dl,bend left=15,"\Delta"] \\
+\tfrGraph \arrow[ur,bend left=15,"\colim"] \arrow[uu,bend right=15,swap,"U"]
+\end{tikzcd}
+\end{equation*}
+In this diagram we have $U\circ\Delta=\Delta$ and $\colim\circ F=\colim$.
+
+Nevertheless, the model of reflexive graphs has nice features that the model of
+ordinary graphs doesn't have. 
+For one reason, in the case of ordinary graphs, the terminal object is not preserved by
+$\colim$. Instead, $\tfcolim(\unit)$ is the circle. Slightly more generally,
+we have $\colim\circ\Delta=(\blank)\times\sphere{1}$ in the non-reflexive case,
+whereas we have $\colim\circ\Delta=\idfunc$ in the reflexive case. 
+Moreover, the reflexive graph
+model is cohesive over the universe, whereas for the above reason the ordinary 
+graph model isn't.
+
+\begin{proposal}
+To show that the graph model is the free model on $\UU$ which has homotopy coequalizers.
+\end{proposal}
+
+Note that the ordinary graph quotients have a point and a path constructor,
+whereas the reflexive graph quotients also have a 2-path constructor to preserve
+reflexivity. This complicates formalizations about them slightly, but there are
+several ways around this. 
+For example, there is a second functor $V:\tfrGraph\to\tfGraph$, 
+which takes $\Gamma$ to the graph $V(\Gamma)$ with
+vertices $\pts{V(\Gamma)}\defeq\pts{\Gamma}+\pts{\Gamma}$, and edges
+obtained from $\edg{V(\Gamma)}(\inl(i),\inr(j)):=\edg{\Gamma}(i,j)$ and no other edges.
+Then the type of graph morphisms $\tfGraph(V(\Gamma),\Delta(X))$ corresponds naturally to the type of
+reflexive graph morphisms $\tfrGraph(\Gamma,\Delta(X))$, so it follows that
+the square
+\begin{equation*}
+\begin{tikzcd}
+\sm{i,j:\pts{\Gamma}} \edg{\Gamma}(i,j) \arrow[r,"\pi_2"] \arrow[d,swap,"\pi_1"] & \pts{\Gamma} \arrow[d,"\pts{\eta}"] \\
+\pts{\Gamma} \arrow[r,swap,"\pts{\eta}"] & \colim(\Gamma)
+\end{tikzcd}
+\end{equation*}
+is a pushout square, and hence can be obtained from coequalizers. 
+
+As an application of this observation, recall that in the case of ordinary graphs it is not really clear what $\colim(\nabla(X))$
+is, where $\nabla(X)$ is the indiscrete graph on $X$. 
+In the case of reflexive graphs we can do better: it follows that $\colim(\nabla(X))$ is the join $\join{X}{X}$ of $X$ with itself. 
+
+\begin{proposal}[Joint with Jonas Frey]
+We know from the join construction that if we iterate the composite $\colim\circ\nabla$, we get a sequence of length $\omega$ that converges to the propositional truncation. Also, $\colim$ and $\nabla$ are the outer adjoints of the cohesive model of reflexive graphs. This suggests that it might be possible to obtain a reflective subtopos of the base topos of any cohesive topos in a similar way. In the case of cohesive $1$-toposes it seems that $\pi\circ\nabla$ is a well-pointed endofunctor, so we are in the position to apply the machinery in \cite{Kelly80}. We do not yet know about the case for higher toposes.
+\end{proposal}
+
+\subsection{Covariant diagrams, contravariant diagrams, and equifibered families on a graph}
+The transpose of a family over $\colim(\Gamma)$ enjoys a distinguished status
+among the graph families over $\Gamma$ that is not for every family.
+
+Let us first explicitly describe the transposed family $\Delta(P)\circ\eta$. 
+First, the family $\Delta(P)$ over $\Delta(\colim(\Gamma))$ is
+given on vertices by $\pts{\Delta(P)}\defeq P$. Then, for an edge $e:x=y$ in $\Delta(\colim(\Gamma))$ and $u:P(x)$ and $v:P(y)$, we have the type $\edg{\Delta(P)}(e,u,v)\defeq (\trans{e}{u}=v)$ of edges.
+
+Note that the type $\sm{v:P(y)}\edg{\Delta(P)}(e,u,v)$ is contractible. In other words, the relation $\edg{\Delta(P)}(e) : \pts{\Delta(P)}(x) \to \pts{\Delta(P)}(y) \to\UU$ is a functional relation. Similarly, since transport over $e:x=y$ is an equivalence, the relation $\edg{\Delta(P)}(e)$ is also functional in the opposite direction, i.e. as a function from $\pts{\Delta(P)}(y)$ to $\pts{\Delta(P)}(y)$.
+
+A relation $R : X \to{} Y\to{} \UU$ which is functional is the same thing as a function from $X$ to $Y$, and a relation $R:X\to{}Y\to{}\UU$ which is functional in both directions is the same thing as an equivalence from $X$ to $Y$.
+Thus, given a family $A$ of graphs over $\Gamma$, we can ask whether each of the relations $\edg{A}(e) : \pts{A}(i) \to{} \pts{A}(j) \to{}U$ is either (i) functional, or (ii) functional in the opposite direction, or (iii) functional in both directions. These conditions on a family of graphs $A$ over $\Gamma$ are conditions of cartesianness, for they are (respectively) equivalent to (i) the left square being a pullback, (ii) the right square being a pullback, or (iii) both squares being pullback, in the following diagram
+\begin{equation*}
+\begin{tikzcd}
+\pts{\msm{\Gamma}{A}} \arrow[d,->>] & \sm{(i,x),(j,y):\pts{\msm{\Gamma}{A}}}\edg{\msm{\Gamma}{A}}((i,x),(j,y)) \arrow[l] \arrow[r] \arrow[d,->>] & \pts{\msm{\Gamma}{A}} \arrow[d,->>] \\
+\pts{\Gamma} & \sm{i,j:\pts{\Gamma}}\edg{\Gamma}(i,j) \arrow[l] \arrow[r] & \pts{\Gamma}
+\end{tikzcd}
+\end{equation*}
+Here, $\msm{\Gamma}{A}$ is the graph with vertices given by $\pts{\msm{\Gamma}{A}}\defeq \sm{i:\pts{\Gamma}}\pts{A}(i)$ and edges given by $\edg{\msm{\Gamma}{A}}((i,x),(j,y))\defeq \sm{e:\edg{\Gamma}(i,j)}\edg{A}(e,x,y)$. 
+
+We see that we get four notions of type dependency on a graph. We have the original notion of a dependent graph, and by putting conditions of cartesianness in play we get three more:
+
+\begin{enumerate}
+\item \textbf{Diagrams.} A (covariant) diagram $D$ over a graph $\Gamma$ consists of a type family $\pts{D} : \pts{\Gamma}\to{}\UU$, and an indexed family of functions 
+\begin{equation*}
+\edg{D} : \prd{i,j:\pts{\Gamma}}{e:\edg{\Gamma}(i,j)}\pts{D}(i)\to \pts{D}(j).
+\end{equation*}
+A term $x$ of a diagram $D$ over $\Gamma$ consists of a section $\pts{x} : \prd{i:\pts{\Gamma}}\pts{D}(i)$, that is compatible with the edges by 
+\begin{equation*}
+\edg{x} : \prd{i,j:\pts{\Gamma}}{e:\edg{\Gamma}(i,j)}\edg{D}(e,\pts{x}(i))={}\pts{x}(j).
+\end{equation*}
+Note that the type of all terms of a diagram $D$ can be given the structure of a cone on $D$, and indeed this is the limiting cone for $D$.
+\item \textbf{Contravariant Diagrams.} A contravariant diagram $D$ over a graph $\Gamma$ consists of a type family $\pts{D} : \pts{\Gamma}\to{}\UU$, and an indexed family of functions 
+\begin{equation*}
+\edg{D} : \prd{i,j:\pts{\Gamma}}{e:\edg{\Gamma}(i,j)}\pts{D}(j)\to \pts{D}(i).
+\end{equation*}
+A term $x$ of a contravariant diagram $D$ over $\Gamma$ consists of a section $\pts{x} : \prd{i:\pts{\Gamma}}\pts{D}(i)$, in which is compatible with the edges by 
+\begin{equation*}
+\edg{x} : \prd{i,j:\pts{\Gamma}}{e:\edg{\Gamma}(i,j)} \edg{D}(e,\pts{x}(j))=\pts{x}(i).
+\end{equation*}
+\item \textbf{Equifibered Families.} An equifibered family $E$ over a graph $\Gamma$ consists of a type family $\pts{E}:\pts{\Gamma}\to{}\UU$, and an indexed family of equivalences 
+\begin{equation*}
+\edg{E} : \prd{i,j:\pts{\Gamma}}{e:\edg{\Gamma}(i,j)}\eqv{\pts{E}(i)}{\pts{E}(j)}.
+\end{equation*}
+A term $x$ of an equifibered family $E$ over $\Gamma$ consists of a section $\pts{x} : \prd{i:\pts{\Gamma}}\pts{E}(i)$, that is compatible with the edges by 
+\begin{equation*}
+\edg{x} : \prd{i,j:\pts{\Gamma}}{e:\edg{\Gamma}(i,j)} \edg{E}(e,\pts{x}(i))=\pts{x}(j).
+\end{equation*}
+\end{enumerate}
+In the above, we did not take reflexivity into account, but it is straightforward to do so.
+
+Using these varying notions of families, we can nicely detect the variances of the different type operations. For instance, if $D$ is a contravariant diagram over $\Gamma$, and $E$ is a (covariant) diagram over $\Gamma.D$, then $\Pi(D,E)$ is again a (covariant) diagram over $\Gamma$. If $D$ was contravariant and $E$ covariant, then $\Pi(D,E)$ would be contravariant. Similarly for the W-graphs. If $D$ is contravariant and $E$ is covariant, then $\w(D,E)$ is contravariant, while if $D$ is covariant and $E$ contravariant, then $\w(D,E)$ is covariant. When you try to take $\Pi(D,E)$ where both $D$ and $E$ are covariant, you still get a family of graphs, but it will be a general one. In particular, we see that the diagrams and contravariant diagrams do not inherit $\Pi$ and $\w$ from the ambient graph model, but the equifibered families do!
+
+On the other hand, the model in which the families are the equifibered families is a full model of type theory with dependent function types and W-types. Moreover, an equifibered family over a graph $\Gamma$ prescribes precisely the descent data that is needed to get a type family over $\colim(\Gamma)$. Indeed, the descent theorem states that the type of type families over $\colim(\Gamma)$ is equivalent to the type of equifibered families over $\Gamma$, the equivalence being transposing. Even more: the descent theorem can be extended to a 'slice-wise' equivalence between models. In other words, locally the univalent universe is as a model of type theory precisely the same thing as the graph model with equifibered families. In particular, we have the flattening lemma, which states that the $\Sigma$-types correspond.
+
+\begin{thm}[The flattening lemma]
+Let $E$ be an equifibered family over a graph $\Gamma$. Then $E$ determines a type family $\colim(E)$ over $\colim(\Gamma)$. Moreover, we have a commuting triangle
+\begin{equation*}
+\begin{tikzcd}
+\colim(\msm{\Gamma}{E}) \arrow[dr,swap,"\pi"] \arrow[rr] & & \sm{x:\colim(\Gamma)}\colim(E)(x) \arrow[dl,->>] \\
+& \colim(\Gamma)
+\end{tikzcd}
+\end{equation*}
+in which the top map is an equivalence.
+\end{thm}
+
+\begin{proposal}
+We see that, even if we attempt to formalize just several aspects of the graph model of type theory in order to study higher inductive types, we run into various different models with varying amounts of structure beyond type dependency. The situation really calls for us to also formalize an abstract notion of model in homotopy type theory of which all the models we have encountered so far, including the univalent universe, are instances. This should be useful even if we cannot find a completely satisfactory notion of model (because it might be lacking higher coherences), just because it will force us to be formal about what we mean by having implemented a model of type theory as a structure of unrestricted truncation level.
+\end{proposal}
+
+\subsection{The equifibrant replacement modality}
+The functorial action of $\colim$ sends the projection morphism $\pi_1:\tfGraph(\msm{\Gamma}{A},\Gamma)$ to a morphism
+\begin{equation*}
+\colim(\msm{\Gamma}{A})\to\colim(\Gamma)
+\end{equation*}
+A map into $\colim(\Gamma)$ is equivalently described as a type family over $\colim(\Gamma)$, and a type family over $\colim(\Gamma)$ is equivalently described as an equifibered family of graphs over $\Gamma$. Thus, we obtain a new graph family $\eqf{A}$ over $\Gamma$, which we call the \define{equifibered replacement} of $A$. 
+
+Being equifibered is a property on type families over $\Gamma$, which is a universe
+in the usual sense that it is closed under the usual type operations, and classifies
+arbitrary morphisms. Thus, we are in the position to ask whether this universe is
+the universe of modal type families for an equifibered replacement modality, 
+i.e., to ask whether the above equifibrant replacement operation is any good.
+
+\begin{proposal}
+To show that equifibrant replacement of graph families over $\Gamma$ is a lex modality.
+\end{proposal}
+
+One aspect of the proposal is to compare the above equifibrant replacement 
+operation with a higher inductive definition of equifibrant replacement. Here,
+we define $\pts{\eqf{A}}:\pts{\Gamma}\to\UU$ to be the higher inductive
+family of types with two sets of constructors. The
+first set makes sure
+that there are equivalences $\eqv{\pts{\eqf{A}}(i)}{\pts{\eqf{A}}(j)}$ for every
+edge $e:\edg{\Gamma}(i,j)$. 
+\begin{small}
+\begin{align*}
+\edg{\eqf{A}} & : \prd*{i,j:\pts{\Gamma}}{e:\edg{\Gamma}(i,j)} \pts{\eqf{A}}(i)\to\pts{\eqf{A}}(j) \\
+{\eqf{A}}_{linv_0} & : \prd*{i,j:\pts{\Gamma}}{e:\edg{\Gamma}(i,j)} \pts{\eqf{A}}(j)\to\pts{\eqf{A}}(i) \\
+{\eqf{A}}_{linv_1} & : \prd*{i,j:\pts{\Gamma}}{e:\edg{\Gamma}(i,j)}{x:\pts{\eqf{A}}(i)} \eqf{A}_{linv_0}(\edg{\eqf{A}}(e,x))=x \\
+{\eqf{A}}_{rinv_0} & : \prd*{i,j:\pts{\Gamma}}{e:\edg{\Gamma}(i,j)} \pts{\eqf{A}}(j)\to\pts{\eqf{A}}(i) \\
+{\eqf{A}}_{rinv_1} & : \prd*{i,j:\pts{\Gamma}}{e:\edg{\Gamma}(i,j)}{y:\pts{\eqf{A}}(j)} \edg{\eqf{A}}({\eqf{A}}_{rinv_0}(e,y))=y \\
+\rfx{\eqf{A}} & : \prd*{i:\pts{\Gamma}}{x:\pts{\eqf{A}}(i)} \edg{\eqf{A}}(\rfx{\Gamma}(i),x) = x.
+\end{align*}%
+\end{small}%
+By this set of constructors we can speak of an equifibered family $\eqf{A}$.
+The second set of constructors provides the unit $\modalunit:A\to\eqf{A}$ of the adjunction. 
+\begin{align*}
+\pts{\eta} & : \prd*{i:\pts{\Gamma}}\pts{A}(i)\to\pts{\eqf{A}}(i) \\
+\edg{\eta} & : \prd*{i,j:\pts{\Gamma}}{e:\edg{\Gamma}(i,j)}{x:\pts{A}(i)}{y:\pts{A}(j)}{s:\edg{A}(e,x,y)} \edg{\mathsf{EqF}}(e,\pts{\eta}(x))=\pts{\eta}(y) \\
+\rfx{\eta} & : \prd*{i:\pts{\Gamma}}{x:\pts{A}(i)} \edg{\eta}(\rfx{\Gamma}(i),x,x,\rfx{A}(x))=\rfx{\eqf{A}}(\pts{\eta}(x)).
+\end{align*}
+The induction principle can be given in a similar way, although one has to pay attention to the fact that this higher inductive
+family is recursive. The goal is then to show that for any graph family $A$ over
+$\Gamma$, we have a commuting triangle
+\begin{equation*}
+\begin{tikzcd}
+\colim(\msm{\Gamma}{A}) \arrow[dr,swap,"\pi"] \arrow[rr] & & \sm{x:\colim(\Gamma)}\colim(\eqf{A})(x) \arrow[dl,->>] \\
+& \colim(\Gamma)
+\end{tikzcd}
+\end{equation*}
+in which the top map is an equivalence. Note that this would give a generalized version of Brunerie's flattening lemma, since it states that we have such a commuting triangle in the case where $A$ is already equifibered.
+
+The equifibrant replacement operation may be used to define for any $v_0:\pts{\Gamma}$, the family of paths in $\colim(\Gamma)$ starting at $\pts{\eta}(v_0)$ as a higher inductive family of types. Indeed, one simply takes the equifibrant replacement of the graph family $A$ over $\Gamma$ by $\pts{A}(i)\defeq (v_0=i)$ and no edges, so that the graph quotient $\colim(\msm{\Gamma}{A})$ is contractible. Then $\colim(\eqf{A})$ is a type family over $\colim(\Gamma)$ with a point over the base point and a contractible total space, so it must be family of paths starting at $\pts{\eta}(v_0)$. By repeating this process for every $i:\pts{\Gamma}$, one obtains the free groupoid generated by $\Gamma$. Indeed, the free groupoid should be the identity type of $\colim(\Gamma)$ pulled back along $\pts{\eta}$. 
+
+Other applications include the computation of identity types in special classes of colimits, where the equifibrant replacement operation simplifies. Among the classes of which we are thinking is the class of sequential colimits. A type sequence (i.e., an ascending type sequence), is a diagram on the graph $N$ with $\pts{N}\defeq \N$ and $\edg{N}(n,m)\defeq n+1=m$. 
+
+\begin{proposal}\label{p:seq_colim_eqf}
+To show that the equifibrant replacement of a diagram $D$ over $N$ can be described equivalently as
+\begin{equation*}
+\eqv{\eqf{D}(n)}{\colim(D)}.
+\end{equation*}
+In particular, it can be obtained in any univalent universe that is closed under
+homotopy coequalizers. We will use this description also in the notion of spectrification.
+
+Furthermore, let $P\defeq\sequence{P}{f}$ be a sequence over $A\defeq\sequence{A}{a}$,
+as indicated in the diagram
+\begin{equation*}
+\begin{tikzcd}
+P_{0} \arrow[r,"f_0"] \arrow[d,->>] & P_{1} \arrow[r,"f_1"] \arrow[d,->>] & P_{2} \arrow[r,"f_2"] \arrow[d,->>] & \cdots \\
+A_0 \arrow[r,"a_0"] & A_1 \arrow[r,"a_1"] & A_2 \arrow[r,"a_2"] & \cdots
+\end{tikzcd}
+\end{equation*}
+Here, each $f_n$ has type $\prd{x:A_n} P_n(x)\to P_{n+1}(a_n(x))$, rendering the
+squares commutative implicitly.
+We propose to show that we have a commuting triangle
+\begin{equation*}
+\begin{tikzcd}[column sep=huge]
+\tfcolim(\msm{A}{P}) \arrow[rr,"{\alpha\defeq\mathsf{rec}(\lam{\pairr{x,y}}\pairr{\iota_n(x),\iota_0(y)},\blank)}"] \arrow[dr,swap,"{p\defeq\mathsf{rec}(\iota_n\circ \proj 1,\blank)}"]
+& & \sm{x:A_\infty}P_\infty(x) \arrow[dl,"{\proj 1}"] \\
+& A_\infty
+\end{tikzcd}
+\end{equation*}
+in which $\alpha$ is an equivalence. 
+An easy corollary is that for any type sequence $\sequence{A}{a}$, and any $x,y:A_n$, there is an equivalence
+\begin{equation*}
+\eqv{(\id{\iota_n(x)}{\iota_n(y)})}{\tfcolim(\id[A_{n+k}]{a^k(x)}{a^k(y)})},
+\end{equation*}
+where $\iota_n:A_n\to A_\infty$ is the inclusion.
+\end{proposal}
+
+\begin{proposal}
+To approximate the higher inductive definition of equifibrant replacement by
+an $\omega$-sequence of non-recursive higher inductive families. In particular,
+it would be nice to have an approximation that reduces to the James construction.
+\end{proposal}
+\end{comment}
+
+\subsection{The join construction}
+Suppose we have two maps $f:A\to X$ and $g:B\to X$, with a common codomain $X$.
+Then we can take the join $\join{f}{g}$ of $f$ and $g$, by taking the
+pushout of the pullback in the slice over $X$, as indicated in the diagram
+\begin{equation*}
+\begin{tikzcd}
+A\times_X B \arrow[r] \arrow[d] \arrow[dr,phantom,"\ulcorner" very near end] & B \arrow[ddr,bend left=15,"g"] \arrow[d,"\inr"] \\
+A \arrow[r,swap,"\inl"] \arrow[drr,bend right=15,swap,"f"] & \join[X]{A}{B} \arrow[dr,swap,"\join{f}{g}" near start] \\
+& & X
+\end{tikzcd}
+\end{equation*}
+The domain of $\join{f}{g}$ is denoted by $\join[X]{A}{B}$, in analogy to the
+fiber product notation $A\times_X B$. Note that by the join $\join{f}{g}$, we
+do not mean the functorial action of the join. One can use the flattening lemma
+to show that the fibers $\fib{\join{f}{g}}{x}$ of the join are the join
+$\join{\fib{f}{x}}{\fib{g}{x}}$ of the fibers. 
+
+The join of maps with a common codomain is a slight generalization of the join
+of types, and it follows from the associativity and commutativity of the join
+of types that the join of maps with a common codomain is associative and
+commutative as well. The map $\emptyt\to X$ serves as a unit, and the
+join of embeddings is again an embedding.
+
+We may now consider the iterated join powers $f^{\ast n}$ of a map $f:A\to X$ with itself.
+Thus, we obtain a sequence
+\begin{equation*}
+\begin{tikzcd}
+\im_\ast^0(f) \arrow[dr,swap,near start,"f^{\ast 0}"] \arrow[r,"i_{0}"] & \im_\ast^1(f) \arrow[d,swap,near start,"f^{\ast 1}"] \arrow[r,"i_1"] & \im_\ast^2(f) \arrow[dl,swap,"f^{\ast 2}" xshift=.5em] \arrow[r,"i_2"] & \cdots \arrow[dll,"f^{\ast 3}"] \\
+& X.
+\end{tikzcd}
+\end{equation*}
+Where $\im_\ast^0(f)\defeq \emptyt$, with the unique map $f^{\ast 0}$ into $X$. Then we define $\im_\ast^{n+1}(f)\defeq \join[X]{A}{\im_\ast^n(f)}$, and
+$f^{\ast(n+1)}\defeq \join{f}{f^{\ast n}}$. The type $\im_\ast^n(f)$ is called the $n$-th approximation of the image. This sequence converges to the image inclusion $\im(f)\to X$. That is, $f^{\ast\infty}$ is an embedding\footnote{There are several equivalent ways to define embeddings. For example, an embedding is a map of which the fibers are mere propositions, or equivalently an embedding is a map for which the induced action on paths is a family of equivalences.}, and it has the universal property of the image inclusion of $f$.
+
+We can modify the join construction slightly, to allow the case where $X$ is only assumed to be locally small, rather than small. A type $X$ is said to be locally small if for each $x,y:X$ there is a type $x='y:\UU$ and an equivalence $\eqv{(x=y)}{(x='y)}$. Basic examples of locally small types include: small types, any mere proposition, the universe, and the type $A\to X$ for any $A:\UU$ and locally small $X$. 
+
+If $f:A\to X$ and $g:B\to X$ are maps from small types $A$ and $B$ into a locally small type $X$, then we can
+consider the modified pullback $A\times'_X B\defeq \sm{a:A}{b:B}f(a)='g(b)$. This type satisfies the universal property of the pullback, and moreover it is small. Hence we can also consider the modified join $f\ast'_X g$ of $f$ and $g$, and follow through the construction of the image of $f$ by iteratively  joining $f$ with itself, using the modified join. 
+
+\begin{thm}\label{defn:modified-join}
+Let $\UU$ be a univalent universe in Martin-L\"of type theory with global function extensionality, 
+and assume that $\UU$ is closed under graph quotients. 
+
+Let $f:A\to X$, where $A:\UU$ and $X$ is only assumed to be locally small with respect to $\UU$.
+Then we can construct a small type $\im'(f):\UU$, a surjective map $q'_f:A\to\im'(f)$, and an embedding $i'_f:\im'(f)\to X$ such that the triangle
+\begin{equation*}
+\begin{tikzcd}
+A \arrow[r,"{q'_f}"] \arrow[dr,swap,"f"] & \im'(f) \arrow[d,"{i'_f}"] \\
+& X
+\end{tikzcd}
+\end{equation*}
+commutes, and $i_f:\im'(f)\to X$ has the universal property of the image inclusion of $f$.
+\end{thm}
+
+We call this construction the \define{join construction}. Note that it works
+in particular for (locally small) pointed connected types. Suppose we have a pointed connected
+type $X$, then we can regard the base point as a map $\unit\to X$. From the
+join construction we obtain a filtration
+\begin{equation*}
+\begin{tikzcd}
+X_0 \arrow[r] & X_1 \arrow[r] & X_2 \arrow[r] & \cdots \arrow[r] & X
+\end{tikzcd}
+\end{equation*}
+of $X$. 
+
+A degenerate case of the join construction arises when we consider a type $X$
+as a map $X\to \unit$. By the join construction we get the image of $X$ in
+$\unit$, which is the propositional truncation. More generally, we can construct
+the $n$-truncation for any $n:\N_{-2}$ inductively: for any type $A$, the
+image of the map
+\begin{equation*}
+\lam{x}(\lam{y}\trunc{n}{x=y}) : A \to (A\to \UU)
+\end{equation*}
+has the universal property of the $(n+1)$-truncation of $A$, and by the modified
+join construction it is constructed as a type in $\UU$.
+
+\begin{proposal}\label{p:image_stability}
+For the usual definition of the image, for instance as in \cite{hottbook}, we
+know that the resulting orthogonal factorization system is stable. We also need
+to show that for the image defined in this way.
+\end{proposal}
+
+\subsection{The real and complex projective spaces}
+The join construction can also be used to construct the real and complex
+projective spaces. We already know what $\rprojective{\infty}$ and $\cprojective{\infty}$
+should be: 
+the Eilenberg-Mac Lane spaces $K(\Z/2,1)$ and $K(\Z,2)$, respectively. Both are pointed connected
+types, and the canonical filtrations of $K(\Z/2,1)$ and $K(\Z,2)$ consist
+of the finite dimensional projective spaces.
+
+\subsection{Homotopy coherent equivalence relations}
+We turn to the question of defining homotopy coherent equivalence relations in homotopy type theory. 
+The identity type of any type is the initial reflexive type-valued binary relation on types.
+By virtue of their (homotopy) initiality, they obtain the structure
+of a higher groupoid. This can be made precise externally, as is done in the
+work of Van den Berg and Garner \cite{VanDenBergGarner}, and LeFanu Lumsdaine 
+\cite{Lumsdaine10}, but so far it has been an open problem to give in type theory
+a satisfactory, sufficiently explicit description for a reflexive relation
+to be an $\infty$-equivalence relation. This problem is closely related to
+the problem of defining in type theory the structure on pointed types to be a 
+loop space. In this section and the next, we propose research to address these two issues.
+We hope to eventually be able to give a \emph{satisfactory} notion of type-valued equivalence relations. Before we suggest a step in this direction, we describe the task that lies ahead.
+
+We suppose that equivalence relations on a type $A$ are reflexive type-valued
+binary relations with certain extra structure. For the purpose of this argument,
+we call the extra structure that $(R,\rho)$ might possess $\mathsf{isEqRel}_A(R,\rho)$.
+In other words, $\mathsf{isEqRel}$ is a (type-valued) predicate on the type of
+reflexive graphs.
+
+To show that $\mathsf{isEqRel}_A$ is adequate as a structure of equivalence relations
+we compare it with the surjective maps out of $A$. After all, at some point we will define a suitable quotienting operation
+that takes an equivalence relation $\mathcal{R}$ on $A$ to a surjective map $q_{\mathcal{R}}:A\to A/\mathcal{R}$, and this quotienting operation must be effective.
+Let us write $(A \mathbin{\downarrow_s} \UU)$ for the type of all surjective maps out of $A$ into some small type, i.e.
+\begin{equation*}
+(A \mathbin{\downarrow_s} \UU) := \sm{B:\UU}{f:A\to{} B}\mathsf{isSurj}(f).
+\end{equation*}
+
+To any map $f : A\to{} B$, not necessarily a surjective one, we can associate a reflexive relation on $A$, by substituting $f$ in the identity type on $B$. More precisely, we define a map $k_A :(A \mathbin{\downarrow_s} \UU) \to{} \mathsf{rRel}(A)$, by taking $k_A(f)$ to be the reflexive relation on $A$ consisting of the binary relation $x,y \mapsto{} (f(x)=f(y))$ and the proof $x \mapsto \refl{f(x)}$ of reflexivity. We might call $k_A(f)$ the \define{pre-kernel} of $f$, since morally it is the kernel but it lacks an explicit structure of an equivalence relation (it might possess this structure in many different ways). There are two things that need to be done:
+\begin{enumerate}
+\item To lift $k_A$ to an operation $K_A$ as indicated in the diagram
+\begin{equation*}
+\begin{tikzcd}[column sep=large]
+& \sm{(R,\rho):\mathsf{rRel}(A)}\mathsf{isEqRel}_A(R,\rho) \arrow[d,->>] \\
+(A \mathbin{{\downarrow}_s} U) \arrow[r,swap,"k_A"] \arrow[ur,densely dotted,"K_A"] & \mathsf{rRel}(A)
+\end{tikzcd}
+\end{equation*}
+In other words, every pre-kernel needs to be given the structure of an equivalence relation so that it becomes a kernel.
+\item To show that $K_A$ is an equivalence.
+\end{enumerate}
+
+We spell out what the second requirement means. It involves finding, for every equivalence relation $\mathcal{R}$ on $A$, the quotient $A/\mathcal{R}$ and a surjective map $q_{\mathcal{R}} : A\to A/\mathcal{R}$. This gives the inverse $Q_A$ of $K_A$. Then, to show that $Q_A\circ K_A=1$, you need to show that there is a commuting triangle
+\begin{equation*}
+\begin{tikzcd}[column sep=large]
+& A \arrow[dl,swap,"q_{K_A(f)}"] \arrow[dr,"f"] \\
+A/K_A(f) \arrow[rr] & & B
+\end{tikzcd}
+\end{equation*}
+in which the bottom map is an equivalence. Finally, the quotenting operation $Q_A$ needs to be shown effective, i.e. it needs to be shown that $K_A\circ Q_A =1$. This involves first showing that, for any equivalence relation $\mathcal{R}:=(R,\rho,H)$ there is a fiberwise equivalence
+\begin{equation*}
+\prd{x,y:A} (q_{\mathcal{R}}(x)=q_{\mathcal{R}}(y)) \to{} R(x,y)
+\end{equation*}
+preserving reflexivity. This determines a path $p : k_A(q_{\mathcal{R}})=(R,\rho)$. To complete the proof of effectiveness, it needs to be shown that $\mathsf{trans}(p,\mathsf{pr}_2(K_A(Q_A(\mathcal{R})))= H$. In other words, that the canonical structure of being an equivalence relation that the pre-kernel $k_A(Q_A(\mathcal{R}))$ possesses, agrees with the assumed structure $H$, that $(R,\rho)$ is an equivalence relation.
+
+There are already at least two notions of type-valued equivalence relations that satisfy the two requirements described above, and there is a third notion in progress, which we shall describe in \autoref{sec:hrr}:
+\begin{enumerate}
+\item The first one is completely uninformative, but it is out there anyway. We can take $\mathsf{isEqRel}_A$ to be just $\mathsf{fib}_{k_A}$. Since for any map, the total space of the fibers is equivalent to the domain, this satisfies the two requirements for completely general reasons. We learned nothing from this example.
+\item The second example is that of `principal equivalence relations'. 
+\end{enumerate}
+
+\begin{defn}
+A \define{principal equivalence relation} $\mathcal{R}$ on a type $A$ consists of
+\begin{enumerate}
+\item A binary relation $R:A\to (A\to \UU)$ with a proof $\rho:\prd{a:A}R(a,a)$ of reflexivity,
+\item A type family
+\begin{equation*}
+\mathcal{O}_\mathcal{R} : \im(R)\to\UU \\
+\end{equation*}
+of \define{$\mathcal{R}$-orientations} on the predicates $P:A\to \UU$ in the image of $R$, with a \define{canonical $\mathcal{R}$-orientation}
+\begin{equation*}
+o_{\mathcal{R}} : \prd{a:A}\mathcal{O}_{\mathcal{R}}(R(a)),
+\end{equation*}
+\end{enumerate}
+such that the type
+\begin{equation*}
+\sm{P:\im(R)}\mathcal{O}_{\mathcal{R}}(P)\times P(a)
+\end{equation*}
+is contractible for every $a:A$. 
+\end{defn}
+
+For example, a principal equivalence relation on $\unit$ is the same thing as a principal H-space. 
+A $\prop$-valued equivalence relation on a type $A$ is a principal equivalence relation. The type of orientations is always contractible.
+
+\begin{comment}
+\begin{defn}
+Given a principal equivalence relation $\mathcal{R}$ on $A$, we define the \define{quotient} 
+\begin{equation*}
+A/\mathcal{R}\defeq\sm{P:\im(R)}\mathcal{O}_{\mathcal{R}}(P).
+\end{equation*}
+The \define{quotient map} $q_{\mathcal{R}}:A\to A/\mathcal{R}$ is defined to be $x\mapsto\pairr{R(x),o_{\mathcal{R}}(x)}$. 
+\end{defn}
+
+It is easy to show that the quotient map $q_{\mathcal{R}}$ is surjective for any principal equivalence relation $\mathcal{R}$. The type $A/\mathcal{R}$ is in some sense a classifying space, as we will now describe.
+Let $\mathcal{R}$ be a principal equivalence relation on $A$, and let $B$ be a type. An \define{$\mathcal{R}$-span} on $B$ is defined to be a span $S:B\to (A\to\UU)$ so that $S(b):\im(R)$ for any $b:B$. An \define{oriented $\mathcal{R}$-span} from $B$ to $A$ is an $\mathcal{B}$-span $S$ with an $\mathcal{R}$-orientation for each $S(b,a)$. Equivalently, an oriented $\mathcal{R}$-span from $B$ to $A$ is a map $A\to A/\mathcal{R}$. 
+
+\begin{thm}\label{thm:classifying}
+Let $\mathcal{R}$ be a principal equivalence relation on $A$. Then the quotient map $q_{\mathcal{R}}$
+classifies the oriented $\mathcal{R}$-spans, in the sense that for each $\mathcal{R}$-span $S$ from $B$ to $A$, the type of maps $g:B\to A/\mathcal{R}$ such that the square
+\begin{equation*}\label{eq:classifier}
+\begin{tikzcd}
+\sm{a:A}{b:B}S(b,a) \arrow[r,"\pi_1"] \arrow[d,swap,"\pi_2"] & A \arrow[d,"q_{\mathcal{R}}"] \\
+B \arrow[r,swap,"g"] & A/\mathcal{R}
+\end{tikzcd}
+\end{equation*}
+is a pullback square, is equivalent to the type of $\mathcal{R}$-orientations of $S$.  
+\end{thm}
+
+The quotient $A/\mathcal{R}$, as stated, is not in $\UU$. 
+However, we can show that it is equivalent to a type in $\UU$. 
+We do this via the quotient approximation construction, which constructs a type sequence with an equivalence from its sequential colimit to $A/\mathcal{R}$.
+
+\begin{defn}\label{defn:qac}
+Let $\mathcal{R}$ be a principal equivalence relation on $A$. The \define{quotient approximation construction} is an endomorphism on the type
+\begin{equation*}
+\sm{B:\UU} B\to A/\mathcal{R}.
+\end{equation*}
+The empty type inhabits the above type, so we obtain a map of type
+\begin{equation*}
+\N_{-1}\to\Big(\sm{B:\UU} B\to A/\mathcal{R}\Big).
+\end{equation*}
+We denote the types in this sequence by $(A/\mathcal{R})_n$. Furthermore, we get for each $n:\N_{-1}$ a relation $\tilde{R}_n:(A/\mathcal{R})_n\to (A\to\UU)$, and an orientation
+\begin{equation*}
+o_{\tilde{R}_n}:\prd{t:(A/\mathcal{R})_n} \mathcal{O}_{\mathcal{R}}(\tilde{R}_n(t)).
+\end{equation*}
+\end{defn}
+
+\begin{proof}[Construction]
+Let $B:\UU$ and $\pairr{S,\gamma}:B\to A/\mathcal{R}$. By pulling back along the tautological map $q_{\mathcal{R}}$ and pushing out again, we obtain $Y^+$ and $\pairr{S^+,\gamma^+}$ as indicated in the following diagram
+\begin{equation*}
+\begin{tikzcd}
+\sm{a:A}{b:B}S(b,a) \arrow[r,"\pi_1"] \arrow[d,swap,"\pi_2"] & A \arrow[d,"\inl"] \arrow[ddr,bend left=15,"q_{\mathcal{R}}"] \\
+B \arrow[r,"\inr"] \arrow[drr,bend right=15,swap,"{\pairr{S,\gamma}}"] & B^+ \arrow[dr,densely dotted,near start,swap,"{\pairr{S^+,\gamma^+}}"] \\
+& & A/\mathcal{R}
+\end{tikzcd}
+\end{equation*}
+\end{proof}
+
+\begin{thm}\label{thm:iteratedjoin}
+Let $\mathcal{R}$ be a principal equivalence relation on $A$, and consider $\pairr{S,\gamma}:B\to A/\mathcal{R}$. Then there is an equivalence
+\begin{equation*}
+\eqv{\Big(\sm{b:B^+}S^+(b,a)\Big)}{\join{\Big(\sm{x:A}R(x,a)\Big)}{\Big(\sm{b:B}S(b,a)\Big)}}.
+\end{equation*}
+\end{thm}
+\end{comment}
+
+Neither of the examples of notions of type-valued equivalence relations is completely satisfactory. In both cases, the types $\mathsf{isEqRel}_A(R,\rho)$ is a large type, and we need the univalence axiom to extend $k_A$ to $K_A$. I believe that ultimately, the type $\mathsf{isEqRel}_A(R,\rho)$ should be a small type of which the formulation does not rely on the univalence axiom, and for which $k_A$ can be lifted to $K_A$ without univalence. Moreover, in the scenario where that is possible it would be nice that the assertion that $K_A$ is an equivalence for each type $A$, is itself equivalent to the univalence axiom. I hope that something like that would be possible in the future.
+
+\subsection{Hereditarily reflexive relations}\label{sec:hrr}
+Suppose $(R,\rho)$ is a reflexive relation on a type $A$, let $f:(A,R,\rho)\to\Delta(B)$
+be a morphism of reflexive graphs, and let $(S,\sigma)$ be a reflexive relation
+on the type $B$. Since $(\idtypevar{B},\refl{B})$ is the initial reflexive relation
+on $B$, the map $\idfunc:B\to B$ extends uniquely to a morphism $\varepsilon:\Delta(B)\to (B,S,\sigma)$
+of reflexive graphs, the unit of the adjunction $\Delta\dashv \Gamma$. 
+
+We say that $(S,\sigma)$ is \define{strongly compatible} with $(R,\rho)$ over $f$
+if the action on edges 
+\begin{equation*}
+\edg{(\varepsilon\circ f)} : \prd{x,y:A} R(x,y)\to S(\pts{f}(x),\pts{f}(y))
+\end{equation*}
+of the composite $\varepsilon\circ f:(A,R,\rho)\to (B,S,\sigma)$
+is a fiberwise equivalence. Equivalently, $(S,\sigma)$ is strongly compatible with
+$(R,\rho)$ over $f$ if the square
+\begin{equation*}
+\begin{tikzcd}[column sep=6em]
+\sm{x,y:A}R(x,y) \arrow[d,->>] \arrow[r,"\total{\edg{(\varepsilon\circ f)}}"] & \sm{u,v:B} S(u,v) \arrow[d,->>] \\
+A\times A \arrow[r,swap,"\pts{f}\times\pts{f}"] & B\times B
+\end{tikzcd}
+\end{equation*}
+is a pullback square.
+
+Note that $(R,\rho)$ can only have a strongly compatible extension if it is
+transitive.
+
+\begin{lem}
+Suppose $(S,\sigma)$ is a strongly compatible extension of $(R,\rho)$ over $f$.
+Then the outer square in the diagram
+\begin{equation*}
+\begin{tikzcd}[column sep=large]
+\sm{x,y:A}R(x,y) \arrow[r,"\pi_2"] \arrow[d,swap,"\pi_1"] & A \arrow[d,"\pts{f}"] \arrow[ddr,bend left=15,"R(a)"] \\
+A \arrow[r,swap,"\pts{f}"] \arrow[drr,bend right=15,swap,"R(a)"] & B \arrow[dr,swap,near start,"S(\pts{f}(a))"] \\
+& & \UU
+\end{tikzcd}
+\end{equation*}
+commutes for every $a:A$, so there is an operation
+\begin{equation*}
+\tau : \prd{a,x,y:A} R(x,y)\to (\eqv{R(a,x)}{R(a,y)})
+\end{equation*}
+witnessing the transitivity of $R$.
+\end{lem}
+
+To see this, note that the two triangles commute by the assumption that
+$(S,\sigma)$ is strongly compatible, and the inner square commutes since
+maps $(A,R,\rho)\to\Delta(B)$ of reflexive graphs correspond to maps 
+$V(A,R,\rho)\to \Delta$ of ordinary graphs.
+
+The idea is now that by asking iteratively for more and more strongly compatible
+extensions, we get more and more of the structure of a homotopy coherent
+equivalence relation. We do this via a coinductive definition. The kind of
+coinductive type we will use can be stated as cofinal algebras for the
+polynomial endofunctor associated to an indexed container, and therefore exists
+in the setting of homotopy type theory by the work of Ahrens, Capriotti and
+Spadotti \cite{AhrensCapriottiSpadotti}.
+
+\begin{defn}
+Let $(R,\rho)$ be a reflexive relation on a type $A$. 
+The structure of being a \define{hereditarily reflexive relation} is the
+indexed coinductive type $\mathsf{isHRR}:\tfrGraph\to\UU$, where
+\begin{enumerate}
+\item each $H:\mathsf{isHRR}(A,R,\rho)$ destructs first into a reflexive relation
+$(S,\sigma)$ over $\colim(A,R,\rho)$, which is strongly compatible with
+$(R,\rho)$ over the unit $\eta : (A,R,\rho)\to\Delta(\colim(A,R,\rho))$
+of the adjunction $\colim\dashv\Delta$,
+\item Secondly, there is again a term of $\mathsf{isHRR}(\colim(A,R,\rho),S,\sigma)$. 
+\end{enumerate}
+\end{defn}
+
+Any hereditarily reflexive relation $(R,\rho)$ over $A$ determines a sequence
+\begin{equation*}
+\begin{tikzcd}
+(A_0,R_0,\rho_0) \arrow[r] & (A_1,R_1,\rho_1) \arrow[r] & (A_2,R_2,\rho_2) \arrow[r] & \cdots
+\end{tikzcd}
+\end{equation*}
+of reflexive graphs, where each morphism is of the form $\varepsilon\circ\eta$.
+We write $(A/R,R_\infty,\rho_\infty)$ for the sequential colimit of this
+sequence. The sequential colimit $A/R$ is a model for the quotient of $A$ by
+the hereditarily reflexive relation $(R,\rho)$. Note that from the definition
+of $(A/R,R_\infty,\rho_\infty)$ we get a morphism $i:(A,R,\rho)\to\Delta(A/R)$.
+To show that $A/R$ is indeed a good candidate for the quotient, we would like
+to show that $(R_\infty,\rho_\infty)$ is strongly compatible
+with $(R,\rho)$ over $i$, and that $(R_\infty,\rho_\infty)=(\idtypevar{A/R},\refl{A/R})$. 
+
+\begin{comment}
+A quick way to see that the sequential colimit should be of the form $\Delta(A/R)$, 
+is that each composite $\varepsilon\circ\eta$ is a factorization through
+a discrete reflexive graph, and the discrete reflexive graphs form a lex submodel
+of the model of all reflexive graphs.
+
+\begin{proposal}
+To formalize that the discrete graphs form a lex submodel of the reflexive graphs,
+and that this is closed under colimits.
+\end{proposal}
+\end{comment}
+
+\begin{defn}
+Let $R$ be a hereditarily reflexive relation on $A$. We define a type
+valued relation $R':A\to A/R\to\UU$.
+\end{defn}
+
+\begin{proof}
+Let $a:A$. We define $R'(a):A/R\to\UU$ by the universal property of $A/R$. 
+Note that we have the equifibered family of type sequences
+\begin{equation*}
+\begin{tikzcd}
+R_0(a) \arrow[d,->>] \arrow[r] & R_1(\eta_0(a)) \arrow[d,->>] \arrow[r] & R_2(\eta_1(\eta_0(a))) \arrow[d,->>] \arrow[r] & \cdots
+  \\
+A_0 \arrow[r,swap,"\eta_0"] & A_1 \arrow[r,swap,"\eta_1"] & A_2 \arrow[r,swap,"\eta_2"] & \cdots
+\end{tikzcd}
+\end{equation*}
+The horizontal maps in the top row are indeed fiberwise equivalences, by the
+assumption that $R_{n+1}$ is strongly compatible with $R_n$, for each
+$n:\N$. 
+\end{proof}
+
+\begin{thm}
+For any $a:A$, the type
+\begin{equation*}
+\sm{x:A/R} R'(a,x)
+\end{equation*}
+is contractible.
+\end{thm}
+
+\begin{proof}
+By the flattening lemma, we have a commuting triangle
+\begin{equation*}
+\begin{tikzcd}
+\tfcolim\big(\sm{x:A_n} R_n(\eta^n(a),x)\big) \arrow[rr] \arrow[dr,swap,"\pi"] & & \sm{x:A/R} R'(a,x) \arrow[dl,"\proj 1"] \\
+& A/R
+\end{tikzcd}
+\end{equation*}
+in which the top map is an equivalence. Therefore, it suffices to show that the
+type 
+\begin{equation*}
+\tfcolim\big(\sm{x:A_n} R_n(\eta^n(a),x)\big)
+\end{equation*}
+is contractible. We first show that there is a natural equivalence of type sequences
+\begin{small}
+\begin{equation*}
+\begin{tikzcd}
+\Big(\sm{x:A}R(a,x)\Big)^{\ast 2^0} \arrow[r] \arrow[d,swap,"\eqvsym"] & \Big(\sm{x:A}R(a,x)\Big)^{\ast 2^1} \arrow[r] \arrow[d,swap,"\eqvsym"] & \Big(\sm{x:A}R(a,x)\Big)^{\ast 2^2} \arrow[r] \arrow[d,swap,"\eqvsym"] & \cdots \\
+\sm{x:A_0} R_0(\eta^0(a),x) \arrow[r] & \sm{x:A_1} R_1(\eta^n(a),x) \arrow[r] & \sm{x:A_2} R_2(\eta^2(a),x) \arrow[r] & \cdots
+\end{tikzcd}
+\end{equation*}
+\end{small}
+so that it suffices to show that the upper type sequence has a contractible sequential colimit.
+
+We will construct the natural equivalence componentwise by induction on $n$, so that the naturality squares will automatically commute. In the base case we may just take the identity map. For the induction hypothesis, let $e_n:\eqv{\big(\sm{x:A}R(a,x)\big)^{\ast 2^n}}{\sm{x:A_n} R_n(\eta^n(a),x)}$ be an equivalence. Our goal is to construct an equivalence
+\begin{equation*}
+e_{n+1}:\eqv{\Big(\sm{x:A}R(a,x)\Big)^{\ast 2^{n+1}}}{\sm{x:A_{n+1}} R_{n+1}(\eta^{n+1}(a),x)}
+\end{equation*}
+such that the square
+\begin{equation*}
+\begin{tikzcd}
+\Big(\sm{x:A}R(a,x)\Big)^{\ast 2^{n+1}} \arrow[d,swap,"e_n"] \arrow[r,"\inl"] & \Big(\sm{x:A}R(a,x)\Big)^{\ast 2^{n+1}} \arrow[d,"e_{n+1}"] \\
+\sm{x:A_n}R_n(a,x) \arrow[r] & \sm{x:A_{n+1}}R_{n+1}(a,x)
+\end{tikzcd}
+\end{equation*}
+commutes. By functoriality of the join, it suffices to construct an equivalence $\alpha$ such that bottom triangle in the diagram
+\begin{equation*}
+\begin{tikzcd}
+\Big(\sm{x:A}R(a,x)\Big)^{\ast 2^{n+1}} \arrow[d,swap,"e_n"] \arrow[r,"\inl"] & \Big(\sm{x:A}R(a,x)\Big)^{\ast 2^{n+1}} \arrow[d,"\join{e_n}{e_n}"] \\
+\sm{x:A_n}R_n(a,x) \arrow[r,"\inl"] \arrow[dr] & \join{\Big(\sm{x:A_n}R_n(a,x)\Big)}{\Big(\sm{x:A_n}R_n(a,x)\Big)} \arrow[d,"\alpha"] \\
+& \sm{x:A_{n+1}}R_{n+1}(a,x)
+\end{tikzcd}
+\end{equation*}
+We construct this equivalence using the flattening lemma. By the flattening lemma, we have a pushout square
+\begin{equation*}
+\begin{tikzcd}
+\sm{x,y:A_n}R_n(\eta^n(a),x)\times R_n(x,y) \arrow[r] \arrow[d] & \sm{x:A_n}R_n(\eta^n(a),x) \arrow[d] \\
+\sm{x:A_n}R_n(\eta^n(a),x) \arrow[r] & \sm{x:A_{n+1}}R_{n+1}(\eta^{n+1}(a),x)
+\end{tikzcd}
+\end{equation*}
+Therefore, it suffices to construct a natural equivalence of spans
+\begin{tiny}
+\begin{equation*}
+\begin{tikzcd}[column sep=small]
+\sm{x:A_n}R_n(\eta^n(a),x) \arrow[d,swap,"\idfunc"] & \Big(\sm{x:A_n}R_n(\eta^n(a),x)\Big)\times\Big(\sm{x:A_n}R_n(\eta^n(a),x)\Big) \arrow[l] \arrow[r] \arrow[d,swap,"\eqvsym"] & \sm{x:A_n}R_n(\eta^n(a),x) \arrow[d,"\idfunc"] \\
+\sm{x:A_n}R_n(\eta^n(a),x) & \sm{x,y:A_n} R_n(\eta^n(a),x)\times R_n(x,y) \arrow[l] \arrow[r] & \sm{x:A_n}R_n(\eta^n(a),x)
+\end{tikzcd}
+\end{equation*}
+\end{tiny}
+This can be done by the fact that $R_n$ has a strongly compatible extension.
+
+We have finished the construction of our natural equivalence of type sequences.
+Now we observe that for any type $A$, we have an equivalence $\eqv{A\ast A}{\mathsf{colim}(\nabla(A))}$, where $\nabla(A)$ is the reflexive discrete graph on $A$. Thus, the sequence we have constructed is in fact Boulier's approximation\footnote{Boulier's approximation is a slight modification of Van Doorn's approximating sequence of the propositional truncation, by replacing the graph quotient of the indiscrete graph by the reflexive graph quotient of the indiscrete reflexive graph} of the propositional truncation of $\sm{x:A}R(a,x)$. Since this is a pointed type, it follows that the colimit is contractible.
+\end{proof}
+
+\begin{cor}
+Let $a:A$. The fiberwise map of type
+\begin{equation*}
+\prd{x:A/R} (q_{\mathcal{R}}(a)=x)\to R'(a,x)
+\end{equation*}
+which sends $\refl{q_{\mathcal{R}}(a)}$ to $\rho(a)$, is a fiberwise equivalence.
+\end{cor}
+
+We have seen that $A/R$ is indeed a good quotient type, but it remains to show
+that the quotienting operation is effective.
+
+\begin{proposal}\label{p:hereditarily_reflexive_relations}
+To show that the quotienting operation for hereditarily reflexive relations is
+effective.
+\end{proposal}
+
+Even if the quotienting operation of hereditarily reflexive relations can be
+proven effective, we are still looking for a more explicit structure of 
+equivalence relations, in which the operations and higher coherences are expressed
+directly. Our hope is that by making small steps, we will eventually find such
+a structure in homotopy type theory, and that we will eventually settle on 
+a structure that we are willing to call an internal $\infty$-groupoid structure.
+
+\subsection{Commutative operations in homotopy type theory}
+Recall that a binary operation $\mu:X^2\to X$ is said to be commutative, if
+there is a homotopy $\prd{x,y:X} \mu(x,y)=\mu(y,x)$. The data of a commutative
+operation in this sense, is equivalent to a term of type
+\begin{equation*}
+\Big(\sm{t:\rprojective{1}} X^{\gamma^1_{\sphere{0}}(t)}\Big)\to X,
+\end{equation*}
+where $\gamma^1_{\sphere{0}}$ is the tautological bundle on $\rprojective{1}$,
+which is just the double cover on the circle.
+
+However, the commutativity of a homotopy coherent commutative operation on $X$ 
+should also respect transport along the loop, and this process continues.
+Thus, a homotopy coherent commutative operation should be a compatible choice
+of operations
+\begin{equation*}
+\Big(\sm{t:\rprojective{n}} X^{\gamma^n_{\sphere{0}}(t)}\Big) \to X
+\end{equation*}
+for all $n:\N$, where $\gamma^n_{\sphere{0}}$ is the tautological bundle on
+$\rprojective{n}$. The compatibility here just ensures that these operations extend
+to an operation on $\rprojective{\infty}$, which is just the type of $2$-element
+types, justifying the following definition.
+
+\begin{defn}
+A (homotopy coherent) commutative multiplication on a type $X$ is a triple
+$(\mu,\tilde{\mu},H)$ consisting of a binary operation $\mu:X^2\to X$, and
+an extension
+\begin{equation*}
+\begin{tikzcd}
+X^2 \arrow[r,"\mu"] \arrow[d] & X \\
+\sm{A:B\symmetric{2}}X^A \arrow[ur,densely dotted,swap,"\tilde{\mu}"]
+\end{tikzcd}
+\end{equation*}
+where the commutativity of the triangle is witnessed by the homotopy $H$.
+\end{defn}
+
+\begin{rmk}
+The type of commutative operations on a type $X$ is equivalent to the type
+\begin{equation*}
+(\sm{A:B\symmetric{2}}X^A)\to X.
+\end{equation*}
+In other words, a commutative operation is precisely the algebra structure for
+the polynomial endofunctor $X\mapsto \sm{A:B\symmetric{2}}X^A$. Recall that the
+type $\sm{A:B\symmetric{2}}X^A$ is the type of \define{unordered pairs} in $X$.
+So, we see that a commutative operation is an operation that acts on the
+unordered pairs in $X$. 
+\end{rmk}
+
+\begin{proposal}\label{p:commutative_ops_examples}
+Show that the following are commutative operations:
+\begin{enumerate}
+\item Path concatenation in a double loop space.
+\item Cartesian products, join, smash product, etcetera.
+\item The H-space structure on $\sphere{1}$. (This can be obtained from the first item, since $\eqv{\sphere{1}}{K(\Z,1)}{\loopspace[2]{K(\Z,3)}}$, but maybe also separately)
+\end{enumerate}
+\end{proposal}
+
+The above definition of commutative operations suggests another definition of
+$G$-symmetric operations, where $G$ is a typal group, i.e.~the loop space of
+a pointed connected type $BG$. 
+
+\begin{defn}
+Let $(G,BG,\alpha)$ be a typal group consisting of a pointed type $G$, a pointed
+connected type $BG$, and a pointed equivalence $\alpha:\eqv{\loopspace{BG}}{G}$.
+A $G$-symmetric $G$-ary operation is defined to be a triple $(\mu,\tilde{\mu},H)$,
+consisting of $\mu:X^G\to X$, and an extension
+\begin{equation*}
+\begin{tikzcd}
+X^G \arrow[r,"\mu"] \arrow[d] & X \\
+\sm{b:BG} X^{\gamma_G(b)} \arrow[ur,densely dotted,swap,"\tilde{\mu}"]
+\end{tikzcd},
+\end{equation*}
+with $H$ witnessing that the triangle commutes. Here $\gamma_G(b)\defeq (\ast=b)$
+is the universal bundle on $BG$.
+\end{defn}
+
+\begin{comment}
+Next, we consider the possibility of extending our notion of other coherent
+classes of operations on $X$. 
+
+\begin{proposal}
+Consider the operation given by
+\begin{equation*}
+S \mapsto X^S.
+\end{equation*}
+By extending this operation to a functor acting on either of the following categories
+\begin{enumerate}
+\item Finite linear orders and order preserving surjective maps,
+\item Finite linear orders and order preserving maps,
+\item Finite sets and surjective maps,
+\item Finite sets and maps.
+\end{enumerate}
+\end{proposal}
+commutative operation to that of a coherently associative and commutative operation
+with a neutral element. 
+Given a binary operation $\mu:X^2\to X$, and an embedding $f:\mathbf{2}\to\mathbf{3}$,
+we have a canonical equivalence $e_f:\eqv{X^3}{X^2\times X}$. Therefore, we can extend
+$\mu$ to a ternary operation $\mu^3:X^3\to X$, defined as the composite
+\begin{equation*}
+\begin{tikzcd}
+X^3 \arrow[r,"e_f"] & X^2\times X \arrow[rr,"{\mu\times \idfunc[X]}"] & & X^2 \arrow[r,"\mu"] & X. 
+\end{tikzcd}
+\end{equation*}
+
+\begin{proposal}
+
+Can we explicitly describe the colimit of the functor $\mathcal{F}_X$?
+Do the maps from $\colim(\mathcal{F}_X)$ to $X$ (or equivalently, natural transformations
+from $\mathcal{F}_X$ to the constant functor with value $X$) correspond to
+binary operations which are coherently associative, commutative and have a neutral
+element?
+
+Can we give an alternative description of the types $X$ structured by a map
+$\colim(\mathcal{F}_X)\to X$? E.g. are they double loop spaces or infinite loop
+spaces?
+\end{proposal}
+\end{comment}
+
+\section{Infinite loop spaces, stable homotopy theory and generalized homology and cohomology theories}
+Homotopy type theory provides a promising setting for the study of three closely
+related fields, described by Adams in \cite{Adams78}
+\begin{enumerate}
+\item Infinite loop spaces.
+\item Stable homotopy theory.
+\item Generalized homology and cohomology theories.
+\end{enumerate}
+
+\subsection{Spectra}
+An \define{infinite loop space} $\spectrum{E}$, or \define{spectrum}, is a $\Z$-indexed\footnote{Other indexing types may be used as well. A particularly elegant approach is presented in \cite{Kochman96}, where spectra are indexed by finite dimensional vector spaces, i.e., by $\bigsqcup_n BO(n)$. In the formalization of spectral sequences we use a type with an endomorphism to index spectra.} family
+$(E_n)_{n:\Z}$ of pointed types, with pointed equivalences
+\begin{equation*}
+\varepsilon_n : \ptdeqv{E_n}{\loopspace{E_{n+1}}} 
+\end{equation*}
+as structure maps. In other words, a spectrum is a type which is given the structure of the loop space
+of another space, which is again given the structure of the loop space of a space,
+and so on. A basic example of a spectrum is the Eilenberg-Mac Lane spectrum
+$K(G)$ of an abelian group. This has been formalized in homotopy type theory
+by Finster and Licata \cite{FinsterLicata}, and has been used by Shulman to 
+define synthetic cohomology \cite{Shulman13Cohomology}. 
+
+Classically, there is a spectrum obtained from the \define{infinite unitary group} $U\defeq\colim_n(U(n))$. By complex Bott periodicity its loop space is $\Z\times BU$, and therefore its double loop space is $U$ again. Similarly, the \define{infinite orthogonal group} $O\defeq\colim_n(O(n))$ and the \define{infinite symplectic group} $Sp\defeq\colim_n(Sp(n))$ are infinite loop spaces by real and quaternionic Bott periodicity, with period $8$.
+
+A third class of examples of spectra are the Thom spectra for cobordism.
+These are used for the classification of manifolds up to cobordism, which turns
+out to be easier than the classification of manifolds up to diffeomorphism.
+A fourth example of spectra is the spectrum $tmf$ of topological modular forms
+by Hopkins \cite{Hopkins02}.
+
+Note that what we call here a spectrum, is in the classical literature called
+an $\Omega$-spectrum. A pre-spectrum (which is classically known as a spectrum),
+is a $\Z$-indexed family of pointed types $(E_n)$, with structure maps
+\begin{equation*}
+\varepsilon_n : E_n\to_\ast\loopspace{E_{n+1}}
+\end{equation*}
+This shift in terminology, which was suggested by Shulman, is motivated by our 
+interests: the category of spectra corresponds to generalized homology and cohomology theories, whereas the category of pre-spectra just contains them.
+A basic example of a pre-spectrum is the \define{suspension pre-spectrum}
+$\suspspec(X)$ associated to any type $X$, in which $\suspspec(X)_n\defeq
+\susp[n](X)$. The suspension-loop space adjunction gives a natural choice of
+a structure map $\varepsilon_n:\susp[n](X)\to_\ast\loopspace{\susp[n+1](X)}$, and
+this definition can be extended to the negative integers by taking loop spaces. 
+Of particular importance is the \define{sphere-pre-spectrum}, which is the
+suspension pre-spectrum $\suspspec(\sphere{0})$. 
+
+A morphism
+$f:\spectrum{E}\to\spectrum{F}$ of (pre-)spectra is simply a $\Z$-indexed family
+of base point preserving maps $(f_n:E_n\to_\ast F_n)$, for which the square
+\begin{equation*}
+\begin{tikzcd}[column sep=huge]
+E_n \arrow[d,swap,"\varepsilon_n"] \arrow[r,"f_n"] & F_n \arrow[d,"\varepsilon_n"] \\
+\loopspace{E_{n+1}} \arrow[r,swap,"\loopspace{f_{n+1}}"] & \loopspace{F_{n+1}}
+\end{tikzcd}
+\end{equation*}
+of pointed maps commutes via a pointed homotopy.
+Thus, we get categories of spectra and pre-spectra, where the category of spectra is a
+full subcategory of the category of pre-spectra. 
+
+Note that for every (pre-)spectrum $\spectrum{E}$ and any $k:\Z$, we have the spectrum
+$\spshift{k}(\spectrum{E})$ given by $(\spshift{k}{\spectrum{E}})_n\defeq E_{n+k}$. 
+For example, $\spshift{k}(\suspspec(\sphere{0}))=\suspspec(\sphere{k})$. 
+A morphism of degree $k$ from $\spectrum{E}$ to $\spectrum{F}$ is defined to be
+a morphism of type $\mathrm{preSpec}(\spectrum{E},\spectrum{F})_k\defeq \mathrm{preSpec}(\spectrum{E},\spshift{k}(\spectrum{F}))$. Thus, an ordinary morphism of (pre-)spectra is a morphism of degree $0$.
+Note that $\trunc{0}{\mathrm{preSpec}(\suspspec{X},\spectrum{E})_k}=\trunc{0}{X\to_\ast E_k}$. 
+
+Pre-spectra may be \define{spectrified} \cite{LewisMay}. In other words, we can define a left adjoint
+to the inclusion $i:\mathbf{Spec}\to\mathbf{preSpec}$ of spectra in pre-spectra.
+Suppose we are given a pre-spectrum $\spectrum{E}$. Then we define
+$\spectrify(E)_n$ to be the sequential colimit 
+\begin{equation*}
+\begin{tikzcd}
+E_n \arrow[r] & \loopspace{E_{n+1}} \arrow[r] & \loopspace[2]{E_{n+2}} \arrow[r] & \cdots
+\end{tikzcd}
+\end{equation*}
+Then there is a canonical map $\varepsilon_n:\spectrify(E)_n\to\loopspace{\spectrify(E)_{n+1}}$. The following proposal is to show that this structure map is an equivalence.
+
+\begin{proposal}\label{p:seq_colim_eqf}
+To show that the equifibrant replacement of a diagram $D$ over $N$ can be described equivalently as
+\begin{equation*}
+\eqv{\eqf{D}(n)}{\colim(D)}.
+\end{equation*}
+In particular, it can be obtained in any univalent universe that is closed under
+homotopy coequalizers. We will use this description also in the notion of spectrification.
+
+Furthermore, let $P\defeq\sequence{P}{f}$ be a sequence over $A\defeq\sequence{A}{a}$,
+as indicated in the diagram
+\begin{equation*}
+\begin{tikzcd}
+P_{0} \arrow[r,"f_0"] \arrow[d,->>] & P_{1} \arrow[r,"f_1"] \arrow[d,->>] & P_{2} \arrow[r,"f_2"] \arrow[d,->>] & \cdots \\
+A_0 \arrow[r,"a_0"] & A_1 \arrow[r,"a_1"] & A_2 \arrow[r,"a_2"] & \cdots
+\end{tikzcd}
+\end{equation*}
+Here, each $f_n$ has type $\prd{x:A_n} P_n(x)\to P_{n+1}(a_n(x))$, rendering the
+squares commutative implicitly.
+We propose to show that we have a commuting triangle
+\begin{equation*}
+\begin{tikzcd}[column sep=huge]
+\tfcolim(\msm{A}{P}) \arrow[rr,"{\alpha\defeq\mathsf{rec}(\lam{\pairr{x,y}}\pairr{\iota_n(x),\iota_0(y)},\blank)}"] \arrow[dr,swap,"{p\defeq\mathsf{rec}(\iota_n\circ \proj 1,\blank)}"]
+& & \sm{x:A_\infty}P_\infty(x) \arrow[dl,"{\proj 1}"] \\
+& A_\infty
+\end{tikzcd}
+\end{equation*}
+in which $\alpha$ is an equivalence. 
+An easy corollary is that for any type sequence $\sequence{A}{a}$, and any $x,y:A_n$, there is an equivalence
+\begin{equation*}
+\eqv{(\id{\iota_n(x)}{\iota_n(y)})}{\tfcolim(\id[A_{n+k}]{a^k(x)}{a^k(y)})},
+\end{equation*}
+where $\iota_n:A_n\to A_\infty$ is the inclusion. In fact, the above proposal 
+could be obtained more generally as a generalization of the flattening lemma
+that also works for arbitrary families of graphs.
+\end{proposal}
+
+\begin{proposal}\label{p:spectrification}
+Formalize that spectrification is left adjoint to the inclusion of spectra in
+the category of pre-spectra, and show that spectrification is left exact.
+\end{proposal}
+
+We say that two types $X$ and $Y$ are \define{of the same stable homotopy type} if $\spectrify{\suspspec{X}}=\spectrify{\suspspec{Y}}$. Similarly, we may say that two pre-spectra $\spectrum{E}$ and $\spectrum{F}$ are of the same stable homotopy type if their spectrifications are equal.
+
+\begin{proposal}\label{p:suspension}
+To show that for any
+pre-spectrum $\spectrum{E}$, the spectrum $(\susp(E_n))$ obtained by taking the pointwise suspension,
+is of the same stable homotopy type as the pre-spectrum $\spshift{1}(\spectrum{E})$ obtained by a shift, following Theorem 8.26 of Switzer \cite{Switzer02}.
+\end{proposal}
+
+\begin{proposal}\label{p:colimits_spectra}
+Homotopy colimits of pre-spectra can be taken pointwise. We propose to study
+these homotopy colimits, and formalize their most basic properties, especially
+those with respect to spectrification. 
+\end{proposal}
+
+\begin{proposal}\label{p:cw_spectra}
+To define CW-spectra, analogous to the the type-theoretical construction of
+CW-complexes.
+\end{proposal}
+
+\begin{comment}
+As a final remark before we move on to stable homotopy groups and homotopy
+groups of spectra, we suggest how constructions of CW-complexes can be mimicked
+in the case of (pre-)spectra. 
+(Pre-)spectra can be parametrized over an arbitrary type. More precisely, given a base type
+$B$, an \define{parametrized (pre-)spectrum} is simply a map
+\begin{equation*}
+B\to\mathrm{(pre)Spec}
+\end{equation*}
+into the type of all (pre-)spectra. A \define{$k$-sphere-spectrum bundle} over $B$ is
+an parametrized spectrum which lands in the connected component of $\suspspec(\sphere{k})$. 
+Suppose we have a $k$-sphere-spectrum bundle $\spectrum{E}$ over $B$, and for each $b:B$
+a morphism $f(b):\spectrum{E}(b)\to \spectrum{F}$ of pre-spectra. 
+Then we obtain a pre-spectrum $\spectrum{G}$ by \define{attaching} the $B$-parametrized $(k+1)$-cells to $\spectrum{F}$,
+by taking for each $n:\Z$ the pushout
+\begin{equation*}
+\begin{tikzcd}[column sep=7em]
+\sm{b:B}E_n(b) \arrow[r,"\lam{b}{x}f(b)_n(x)"] \arrow[d,"\proj 1"] & F_n \arrow[d] \\
+B \arrow[r] & G_n
+\end{tikzcd}
+\end{equation*}
+The structure maps are induced by the structure maps for $\spectrum{E}$ and $\spectrum{F}$.
+\end{comment}
+
+\subsection{Stable homotopy theory}
+The category of spectra is the right setting for stable homotopy theory. Recall
+that by Freudenthal's suspension theorem, if $X$ is a pointed $n$-connected
+type, then the canonical map $X\to\loopspace{\susp(X)}$ is $2n$-connected. 
+Thus, we get an isomorphism $\pi_i(X)\to\pi_{i+1}(\susp(X))$ for any $i\leq 2n$. 
+It follows that for any type $X$, i.e., without restrictions on the connectivity of $X$, the sequence
+\begin{equation*}
+\begin{tikzcd}
+\pi_i(X) \arrow[r] & \pi_{i+1}(\susp(X)) \arrow[r] & \pi_{i+2}(\susp[2](X)) \arrow[r] & \cdots
+\end{tikzcd}
+\end{equation*}
+becomes eventually constant. The eventual value of this sequence is called the \define{stable homotopy group} $\pi^S_i(X)$ of $X$, and it is always abelian. For example, the groups $\pi_0^S(\sphere{0})=\Z$ and $\pi_1^S(\sphere{0})=\Z/2$ are already calculated in homotopy type theory. A complete list of all the stable homotopy groups of spheres is not known, but it is known by a theorem of Serre \cite{Serre53} that they are finite for $i>0$. Extensive computations of stable homotopy groups of spheres can be found in \cite{Kochman96,Ravenel86}
+
+Now observe that $\pi_i^S(X)=\pi_i(\spectrify(\suspspec{X})_0)$. That is, the homotopy groups of the type $\spectrify(\suspspec{X})_0$ are the stable homotopy groups of $X$. 
+
+We define the $i$-th homotopy group $\pi_i(\spectrum{E})$ of a spectrum $\spectrum{E}$ to be $\pi_0(E_{-i})$. 
+If $\spectrum{E}$ is a pre-spectrum, then its $i$-th homotopy group is defined to be the sequential colimit
+\begin{equation*}
+\begin{tikzcd}
+\pi_0(E_{-i}) \arrow[r] & \pi_{1}(E_{1-i}) \arrow[r] & \pi_{2}(E_{2-i}) \arrow[r] & \cdots
+\end{tikzcd}
+\end{equation*}
+This definition coincides with the definition of the $i$-th homotopy group of $\spectrum{E}$ if $\spectrum{E}$ happens to be a spectrum. Equivalently, one may define the $i$-th homotopy group of a pre-spectrum to be the $i$-th homotopy group of its spectrification. Note that (pre-)spectra have homotopy groups for all $i:\Z$.
+
+It is not hard to see that the $i$-th homotopy group of a pre-spectrum is the same as the $i$-th homotopy group of its spectrification, but this is something that should be formalized. Let us write $\pi_\ast(\spectrum{E})$ for the $\Z$-graded abelian group $\bigoplus_{(i:\Z)}\pi_i(\spectrum{E})$. Fibers of maps of spectra are taken pointwise, and indeed fibers are again spectra. Thus, suppose that we have a fibration sequence $\spectrum{F}\hookrightarrow\spectrum{E}\fibration\spectrum{B}$. Then we get a long exact sequence of homotopy groups of spectra, which we may express concisely as a commuting triangle
+\begin{equation*}
+\begin{tikzcd}[column sep=small]
+\pi_\ast(\spectrum{B}) \arrow[rr] & & \pi_\ast(\spectrum{F}) \arrow[dl] \\
+& \pi_\ast(\spectrum{E}) \arrow[ul]
+\end{tikzcd}
+\end{equation*}
+of which the top map has degree $-1$.
+
+In some cases, the graded abelian group $\pi_\ast(\spectrum{E})$ may be given the structure of a graded ring. 
+%A spectrum $\spectrum{E}$ which possesses the extra structure to make $\pi_\ast(\spectrum{E})$ into a graded ring is called a \define{ring spectrum}. 
+For instance, in homotopy type theory we can easily reproduce the fact that $\pi_\ast^S(\sphere{0})$ is a graded ring, see for instance Proposition 4.56 in Hatcher \cite{HatcherAT}.
+
+\begin{defn}
+We define $\mu_{i,j} : \pi_i^S(\sphere{0})\times\pi_j^S(\sphere{0})\to\pi_{i+j}^S(\sphere{0})$. 
+\end{defn}
+
+\begin{proof}[Construction]
+By Freudenthal's suspension theorem we may take $n:\N$ sufficiently large 
+so that $\pi_i^S(\sphere{0})=\pi_{n+i}(\sphere{n})$, $\pi_j^S(\sphere{0})=\pi_{n+i+j}(\sphere{n+i})$, and $\pi_{i+j}^S(\sphere{0})=\pi_{n+i+j}(\sphere{n})$. By the universal property of $0$-truncation we
+have a unique extension, as indicated by the diagram
+\begin{equation*}
+\begin{tikzcd}
+(\sphere{n+i}\to_\ast\sphere{n})\times(\sphere{n+i+j}\to_\ast\sphere{n+i}) \arrow[r,"\circ"] \arrow[d,swap,"\eta\times\eta"] & (\sphere{n+i+j}\to_\ast\sphere{n}) \arrow[d,"\eta"] \\
+\pi_{n+i}(\sphere{n})\times\pi_{n+i+j}(\sphere{n+i}) \arrow[r,densely dotted] & \pi_{n+i+j}(\sphere{n}),
+\end{tikzcd}
+\end{equation*}
+where the top map is given by composition.
+\end{proof}
+
+\begin{proposal}\label{p:ring_structure_on_stems}
+To show in homotopy type theory that with the product on $\pi_\ast^S(\sphere{0})$ defined above, $\pi_\ast^S(\sphere{0})$ forms a graded ring, and that $\mu_{i,j}(\alpha,\beta)=(-1)^{ij}\mu_{j,i}(\beta,\alpha)$. 
+
+Prove Nishida's nilpotence theorem \cite{Nishida73}, i.e., that for any $\alpha:\pi_\ast^S(\sphere{0})$, there is a $k$ such that $\alpha^k=0$. 
+\end{proposal}
+
+\begin{proposal}\label{p:homotopy_groups_of_spheres_finite}
+To show that the groups $\pi_i(\sphere{n})$ are finite, except when $i=n$ or $(i,n)=(4k-1,2k)$ for some $k:\N$. See for instance Hatcher \cite{HatcherSSAT}. 
+\end{proposal}
+
+In \cite{Pontryagin59}, Pontryagin showed that the bordism ring of framed manifolds is isomorphic to the graded ring of stable homotopy groups of spheres. In \cite{Thom54}, Thom showed that the graded ring of stable homotopy groups of the spectrum $\spectrum{MO}$ is isomorphic to the bordism ring of all closed smooth manifolds. 
+
+\subsection{Generalized homology and cohomology theories}
+Given a spectrum $\spectrum{E}$ we can define the generalized homology theory and the generalized cohomology theory associated to $\spectrum{E}$.
+A generalized homology or cohomology theory is a functor which satisfies the axioms of Eilenberg and Steenrod, but not necessarily the `dimension' axiom. We also include a finite version of Milnor's wedge axiom. According to Adams \cite{Adams78}, generalized (co)homology theories fall within three classes: ordinary (co)homology theories, variants of K-theory, and variants of (co)bordism. 
+
+Generalized cohomology theories associated to spectra are readily defined, and have already been studied in the setting of homotopy type theory by \cite{Shulman13Cohomology}. For generalized homology theories we first need to study the smash product in more detail. The smash product has been studied in homotopy type theory by \cite{Brunerie16}. 
+
+\begin{defn}
+A \define{(reduced) generalized cohomology theory} is a pair $(h^\ast,\sigma)$ consisting of a contravariant functor $h^\ast:\tilde{\UU}\to \mathrm{Ab}^\Z$ from the universe of pointed types into the category of $\Z$-graded abelian groups\footnote{Note that an abelian group is the same thing as a $\Z$-module. Some cohomology theories take values in graded $R$-modules for some other ring $R$. In particular, $h^\ast$ might take values in graded vector spaces over a field $k$.}, together with a natural isomorphism $\sigma:h^\ast(\blank)\cong h^{\ast}(\susp(\blank))$ of degree $1$, satisfying the following axioms:
+\begin{enumerate}
+\item \textbf{Exactness axiom.} For any map $f:A\to_\ast X$ of pointed types, recall that the \define{mapping cone} $C_f$ of $f$ is the pushout of the span $\unit \leftarrow A \rightarrow X$. The exactness axiom states that we have an exact sequence
+\begin{equation*}
+\begin{tikzcd}
+h^\ast(C_f) \arrow[r] & h^\ast(X) \arrow[r] & h^\ast(A).
+\end{tikzcd}
+\end{equation*}
+\item \textbf{Finite wedge axiom.} For any finite set $I$, and any $X:I\to\tilde{\UU}$, the canonical map
+\begin{equation*}
+h^\ast\Big(\bigvee\nolimits_{(i:I)} X_i\Big) \to \prd{i:I} h^\ast(X_i)
+\end{equation*}
+is an isomorphism of graded abelian groups. Note that we require $I$ to be a finite set to avoid the axiom of choice.
+\end{enumerate}
+The graded abelian group $h^\ast(\sphere{0})$ is called the \define{coefficient group} of $h^\ast$. 
+\end{defn}
+The axiom of homotopy invariance is unnecessary to state, since homotopic maps in $\tilde{\UU}$ are equal. Also note that, since $\mathrm{Ab}^\Z$ is a $1$-category in the sense of \cite{AhrensKapulkinShulman}, we have a $1$-category of generalized cohomology theories.
+
+Since the mapping cone of $X\to C_f$ is just the suspension of $A$, we get from the exactness axiom a commuting triangle
+\begin{equation*}
+\begin{tikzcd}[column sep=1em]
+h^\ast(A) \arrow[rr] & & h^\ast(C_f) \arrow[dl] \\
+& h^\ast(X) \arrow[ul]
+\end{tikzcd}
+\end{equation*}
+in which the top map is of degree $-1$, and which is exact at each point.
+
+Let $\spectrum{E}$ be a spectrum, and let $X$ be a type. Then we define the
+\define{mapping spectrum} $\mapsp(X,\spectrum{E})$ by taking
+\begin{equation*}
+\mapsp(X,\spectrum{E})_n \defeq X \to_\ast E_n.
+\end{equation*}
+The loop space $\loopspace{X\to_\ast E_{n+1}}$ is by function extensionality
+equivalent to the space $X\to\loopspace{E_{n+1}}$, so post-composition by the
+pointed equivalence $\varepsilon_n : E_n \simeq_\ast \loopspace{E_{n+1}}$ gives
+the mapping spectrum the structure of a spectrum. 
+
+The \define{generalized cohomology theory associated to a spectrum $\spectrum{E}$} is defined to be the contravariant functor $\tilde{E}^\ast$ given by $X\mapsto \bigoplus_n E^n(X)$, where
+\begin{equation*}
+\tilde{E}^n(X)\defeq \pi_{-n}(\mapsp(X,\spectrum{E})).
+\end{equation*}
+In other words, $E^n(X)=\pi_0(X\to_\ast E_n)$. The unreduced generalized cohomology
+theory associated to $\spectrum{E}$ is simply given by $E^\ast(X)\defeq \tilde{E}^\ast(X_+)$,
+where $X_+$ is the type $X+\unit$, with the base point taken to be $\ast:\unit$.
+
+For example, the generalized cohomology theory associated
+to the Eilenberg-Mac Lane spectrum $K(G)$ is the `ordinary' cohomology theory
+with coefficients in the abelian group $G$. The generalized cohomology theory
+associated to the Bott periodicity spectra $\spectrum{O}$, $\spectrum{U}$, and
+$\spectrum{Sp}$ give real, complex and quaternionic K-theory. 
+
+\begin{proposal}\label{p:brown}
+To formalize Brown's representability theorem (Theorem 1 of \cite{Brown62}) in
+homotopy type theory. This states that any generalized cohomology theory
+is represented by a spectrum. I plan to follow the proof of Theorem 3.4.5 of
+\cite{Kochman96}, which establishes the classifying spectrum of $h^\ast$ as a 
+sequence of certain CW-complexes.
+\end{proposal}
+
+\begin{defn}
+A \define{(reduced) generalized homology theory} \cite{Whitehead62,Kochman96} is a pair $(h_\ast,\sigma)$ consisting of a functor $h_\ast :\tilde{\UU}\to\mathrm{Ab}^\Z$ into the category of graded abelian groups, and a natural equivalence $\sigma:h_\ast\cong h_\ast(\susp(\blank))$ of degree $1$, satisfying the following axioms:
+\begin{enumerate}
+\item \textbf{Exactness axiom.} For any map $f:A\to X$, an exact sequence
+\begin{equation*}
+\begin{tikzcd}
+h_\ast(A) \arrow[r] & h_\ast(X) \arrow[r] & h_\ast(C_f).
+\end{tikzcd}
+\end{equation*}
+\item \textbf{Finite wedge axiom.} For any finite set $I$, and any $X:I\to\tilde{\UU}$, the canonical map
+\begin{equation*}
+\Big(\bigoplus\nolimits_{(i:I)} h_\ast(X_i)\Big) \to h^\ast\Big(\bigvee\nolimits_{(i:I)} X_i\Big)
+\end{equation*}
+is an isomorphism of graded rings.
+\end{enumerate}
+The graded abelian group $h_\ast(\sphere{0})$ is called the \define{coefficient group} of $h_\ast$. 
+\end{defn}
+
+Before we introduce generalized homology theories, recall that the smash product $\smashpr{A}{B}$ is given as the homotopy pushout of the span $\unit \leftarrow \wedgepr{A}{B} \rightarrow A\times B$.
+Note that the pushout of the span of $\bool \leftarrow A+B \rightarrow \wedgepr{A}{B}$ is contractible (this follows by the pasting lemma for pushouts, since the composite $\bool \to A+B \to \bool$ is an equivalence),
+so again via the pasting lemma for pushouts the smash product may be written alternatively as the pushout
+\begin{equation*}
+\begin{tikzcd}
+A+B \arrow[r] \arrow[d] & A\times B \arrow[d] \\
+\bool \arrow[r] & \smashpr{A}{B}.
+\end{tikzcd}
+\end{equation*}
+This was an observation by Buchholtz, and this presentation of the smash product is easier to work with since its defining span does not involve higher inductive types. 
+
+The smash product is left adjoint to the pointed exponent, i.e. we have a natural equivalence
+\begin{equation*}
+\eqv{(\smashpr{A}{B}\to_\ast C)}{(A\to_\ast(B\to_\ast C))}.
+\end{equation*}
+Note that it follows, although it needs to be formalized, that $\smashpr{(\blank)}{B}$ preserves $\unit$ (the initial pointed type), pushouts of pointed types, and hence cofibers. Recall that $\smashpr{A}{\sphere{1}}=\susp{A}$ for any type $A$, and that the
+smash product is commutative and associative up to homotopy. 
+These facts have been reproduced
+in homotopy type theory \cite{Brunerie16}, although they have not yet been formally
+verified in a proof assistant.
+
+Given a type $X$ and a pre-spectrum $\spectrum{E}$, we can define the smash product $\smashpr{\spectrum{E}}{X}$ as the
+$\Z$-indexed family $\smashpr{E_n}{X}$. The structure maps $\smashpr{E_n}{X}\to_\ast\loopspace{\smashpr{E_{n+1}}{X}}$ can be obtained via the following natural equivalences
+\begin{align*}
+(\smashpr{E_n}{X}\to_\ast\loopspace{\smashpr{E_{n+1}}{X}})
+& \eqvsym (\susp(\smashpr{E_n}{X}) \to_\ast \smashpr{E_{n+1}}{X}) \\
+& \eqvsym (\smashpr{(\susp(E_n))}{X} \to_\ast \smashpr{E_{n+1}}{X})
+\end{align*}
+Now we can apply the functorial action of $\smashpr{(\blank)}{X}$ to the transpose of $\varepsilon_n:E_n\to_\ast\loopspace{E_{n+1}}$ to obtain the structure map $\varepsilon_n:\smashpr{E_n}{X}\to_\ast\loopspace{\smashpr{E_{n+1}}{X}}$. 
+
+The resulting pre-spectrum $\smashpr{\spectrum{E}}{X}$ is in general not a spectrum, so we need to spectrify it. For the \define{generalized homology theory} $E_\ast$ associated to $\spectrum{E}$, we define 
+\begin{equation*}
+E_n(X) \defeq \pi_n(\spectrify(\smashpr{\spectrum{E}}{X})).
+\end{equation*}
+In other words, $E_n(X)$ is the colimit
+\begin{equation*}
+\begin{tikzcd}
+\pi_0(E_{-n}\wedge X) \arrow[r] & \pi_{1}(E_{1-n}\wedge X) \arrow[r] & \pi_{2}(E_{2-n}\wedge X) \arrow[r] & \cdots
+\end{tikzcd}
+\end{equation*}
+
+\begin{proposal}\label{p:generalized_homology}
+To verify the axioms for homology for the generalized homology associated to a spectrum $\spectrum{E}$, and to formalize Brown's representability theorem for generalized homology theories.
+\end{proposal}
+
+The homology theory associated to the sphere spectrum is also called the \define{homology theory of stable homotopy theory}, see for instance Kochman \cite{Kochman96}.
+
+\begin{proposal}\label{p:smash_spectra}
+To define the smash product for spectra. Specifically, following the list of
+desiderata given by Rudyak in Theorem 2.1 of \cite{Rudyak98}, to define for any two
+spectra $\spectrum{E}$ and $\spectrum{F}$, a spectrum $\smashpr{\spectrum{E}}{\spectrum{F}}$,
+such that
+\begin{enumerate}
+\item the smash product of spectra is functorial in both arguments,
+\item there are natural equivalences
+\begin{align*}
+\alpha & : \smashpr{(\smashpr{\spectrum{E}}{\spectrum{F}})}{\spectrum{G}} \to \smashpr{\spectrum{E}}{(\smashpr{\spectrum{F}}{\spectrum{G}})} \\
+\tau & : \smashpr{\spectrum{E}}{\spectrum{F}}\to\smashpr{\spectrum{F}}{\spectrum{E}} \\
+l & : \smashpr{\spectrum{S}}{\spectrum{E}}\to\spectrum{E} \\
+r & : \smashpr{\spectrum{E}}{\spectrum{S}}\to\spectrum{E} \\
+\sigma & : \smashpr{\Sigma(\spectrum{E})}{\spectrum{F}}\to\Sigma(\smashpr{\spectrum{E}}{\spectrum{F}}),
+\end{align*}
+\item a natural equivalence
+\begin{equation*}
+\smashpr{\spectrum{E}}{X}\to \smashpr{\spectrum{E}}{\suspspec{X}},
+\end{equation*}
+so that we have in parcicular an equivalence $\suspspec(\smashpr{X}{Y})=\smashpr{\suspspec(X)}{\suspspec(Y)}$,
+\item for any $I$-indexed family $\spectrum{E}_i$ of spectra, the natural morphism
+\begin{equation*}
+\Big(\bigvee\nolimits_{(i:I)} (\smashpr{\spectrum{E}_i}{\spectrum{F}})\Big) \to \smashpr{\Big(\bigvee\nolimits_{(i:I)}\spectrum{E}_i\Big)}{\spectrum{F}}
+\end{equation*}
+is an equivalence,
+\item if $\spectrum{E}\to\spectrum{F}\to\spectrum{C}$ is a cofiber sequence of spectra, so is
+\begin{equation*}
+\begin{tikzcd}
+\smashpr{\spectrum{E}}{\spectrum{G}}\to\smashpr{\spectrum{F}}{\spectrum{G}} \to \smashpr{\spectrum{C}}{\spectrum{G}}.
+\end{tikzcd}
+\end{equation*}
+\end{enumerate}
+Note that the requirement of homotopy invariance in \cite{Rudyak98} is automatically fulfilled in homotopy type theory for any binary operation on spectra which is definable in homotopy type theory, since everything in homotopy type theory is homotopy invariant.
+
+(It seems natural to require that $\smashpr{\blank}{\spectrum{E}}$ is left adjoint to the exponent. Why is that not on Rudyak's list?)
+\end{proposal}
+
+\begin{proposal}\label{p:ring_spectra}
+To define ring spectra in homotopy type theory, beginning with a multiplication $\mu:\smashpr{\spectrum{E}}{\spectrum{E}}\to\spectrum{E}$. 
+\end{proposal}
+
+\begin{proposal}\label{p:transfer_spectra}
+For any $n$-sheeted covering $P:Y\to B(\symmetric{n})$ with total space $X$, and any $f:B\to Y$, 
+let $A\defeq \sm{b:B}P(f(b))$ with the canonical map $g:A\to X$, define a map
+\begin{equation*}
+p^! : \suspspec(\mappingcone{f})\to\suspspec(\mappingcone{g}),
+\end{equation*}
+following Construction 4.1.1 of Adams \cite{Adams78}. Thus, we obtain a \define{transfer operation}
+on cohomology
+\begin{equation*}
+E^\ast(\suspspec(X/A))\to E^\ast(\suspspec(Y/B))
+\end{equation*}
+which is natural in $\spectrum{E}$.
+\end{proposal}
+
+\subsection{The classification of types}
+
+We can use ordinary cohomology $H^\ast$ with coefficients in $\Z$ to define the dimension of a type. We say
+that a type $X$ is \define{$n$-dimensional} if $H^n(X)$ is non-trivial, and
+$H^m(X)=0$ for all $m>n$. 
+
+\begin{proposal}\label{p:dimension}
+Prove in homotopy type theory that every $\omega$-compact type has a well-defined dimension. This should at least be true for finite CW-complexes.
+\end{proposal}
+
+We propose the following definition of bordism between
+compact types of the same dimension.
+
+\begin{defn}
+Let $X$ and $Y$ be types of dimension $n$. A bordism from $X$ to $Y$
+is a type $Z$ of dimension $n+1$, with maps $i:X\to Z$ and $j:Y\to Z$,
+together with an $n$-dimensional type $A$ with maps $f:A\to X$ and $g:A\to Y$, 
+such that the square
+\begin{equation*}
+\begin{tikzcd}
+A \arrow[r,"g"] \arrow[d,swap,"f"] & Y \arrow[d,"j"] \\
+X \arrow[r,swap,"i"] & Z
+\end{tikzcd}
+\end{equation*}
+commutes, and is a pushout.
+\end{defn}
+
+\begin{proposal}\label{p:bordism_relation}
+To show that this induces an equivalence relation, analogous to the bordism relation.
+\end{proposal}
+
+\begin{proposal}\label{p:duality}
+Given a homotopy pushout square of the form
+\begin{equation*}
+\begin{tikzcd}
+Z \arrow[r] \arrow[d] & Y \arrow[d] \\
+X \arrow[r] & \sphere{n},
+\end{tikzcd}
+\end{equation*}
+show that we get isomorphisms $\isom{H^i(X;G)}{H^{n-i-1}(Y;G)}$ of cohomology groups,
+Where $H^\ast(\blank;G)$ is ordinary cohomology with coefficients in a group $G$.
+The case where $X=\sphere{1}$ and $n=3$ is the case of classical knots.
+\end{proposal}
+
+\begin{comment}
+\section{Machinery}
+The goal of the current section is to set up a category of spaces with so much extra structure that the functor $\Omega^\infty$ yields an equivalence from the category of spectra to this new category of structure-laden spaces.
+
+How does a homotopy theorist tell whether a space $X$ is equivalent to a loop space $\Omega Y$? Note that a loop space is equivalent to a topological monoid or semigroup $X$, such that $\pi_0(X)$ is a group.
+
+The condition of strict associativity is very inconvenient from the point of view of a homotopy theorist, and the condition $\mu(\mu\times 1)\simeq\mu(1\times\mu)$ is not sufficient. Stasheff defined a sequence of spaces $K_m$ for $m\geq 2$ such that $K_m$ is a cell $E^{m-2}$ with an explicitly described subdivision of its boundary.
+\begin{enumerate}
+\item $K_2$ is a point.
+\item $K_3$ is an interval.
+\item $K_4$ is the disc $E^2$ with its boundary subdivided as a pentagon.
+\end{enumerate}
+He defined an $A_n$-space to be a space $X$ provided with maps $M_r:K_r\times X^r\to X$,
+for $2\leq r\leq n$ satisfying suitable conditions.
+\begin{enumerate}
+\item An $A_2$-space is a space $X$ with $M_2:X\times X\to X$.
+\item An $A_3$-space is a space $X$ with $M_2:X\times X\to X$ and $M_3:M_2(M_2\times )\simeq M_2(1\times M_2)$. 
+\item The definition is by induction. If $X$ is an $A_{n-1}$-space, so that it comes with maps $M_2,\cdots,M_{n-1}$, then Stasheff defines a map from $(\partial K_n)\times X^n\to X$. Then $X$ is an $A_n$-space if we have an extension
+\begin{equation*}
+\begin{tikzcd}
+(\partial K_n)\times X^n \arrow[r] \arrow[d] & X. \\
+K_n\times X^n \arrow[ur,densely dotted]
+\end{tikzcd}
+\end{equation*}
+\item An $A_\infty$-space is a space which has the structure of an $A_n$-space for all $n$. An $A_\infty$-space is an adequate substitute for a space with a multiplication which is strictly associative.
+\end{enumerate}
+Now one should have the following result: a space $X$ is equivalent to a loop space $\Omega Y$ if and only if $X$ is an $A_\infty$-space and $\pi_0(X)$ is a group. In other words, the functor $\Omega$ gives an equivalence from the category of connected complexes $(Y,y_0)$ to a suitably defined category of $A_\infty$-spaces. 
+
+In the theory of fiber bundles, a given topological group $G$ has a universal bundle
+\begin{equation*}
+\begin{tikzcd}
+G \arrow[r] & EG \arrow[r] & BG.
+\end{tikzcd}
+\end{equation*}
+The functor $B$ is essentially inverse to the functor $\Omega$. Stasheff defines the universal bundle and the classifying space when $G$ is an $A_\infty$-space. If $G$ is an $A_n$-space, one can still define a part of the `classifying space', which is of some interest. For example, we have
+\begin{equation*}
+\begin{tikzcd}
+S^1 \arrow[r] & S^{2n-1} \arrow[r] & \mathbb{C}P^{n-1}
+\end{tikzcd}
+\end{equation*}
+To say what a double loop space is, we want an infinity of higher homotopies. Some of these appear in the construction of homology operations on $H_\ast(\Omega^nY;\mathbb{Z}_p)$.
+
+A topological PROP $\mathcal{P}$ (the name PROP comes from `product and permutation category') consists of spaces $P_{a,b}$ indexed by $a,b\in\mathbb N$, and maps
+\begin{equation*}
+P_{a,b}\times X^b\to X^a
+\end{equation*}
+Stasheff's complexes $K_n$ have the role of the $P_{1,n}$.
+
+Alternatively, an action of the PROP $\mathcal{P}$ on a space $X$ consists of maps
+\begin{equation*}
+P_{a,b}\to (X^a)^{(X^b)}.
+\end{equation*}
+Hence we demand that $P_{a,b}$ are the hom-sets of a topological category with objects $\mathbb N$, with continuous composition maps
+\begin{equation*}
+P_{a,b}\times P_{b,c}\to P_{a,c}.
+\end{equation*}
+Moreover, there should be continuous maps
+\begin{equation*}
+\times:P_{a,b}\times P_{c,d}\to P_{a+c,b+d},
+\end{equation*}
+satisfying
+\begin{enumerate}
+\item strictly associativity, 
+\item the point $\mathrm{id}:P_{0,0}$ is a strict unit for $\times$,
+\item $1_a\times 1_b=1_{a+b}$,
+\item $(f\times g)(h\times k)=(fh\times gk)$ whenever sensible. In other words, $\times$ is required to be a functor. 
+\end{enumerate}
+Observe that the symmetric group $\Sigma_a$ acts on $X^a$. The function
+\begin{equation*}
+\rho\mapsto\rho^\ast : \Sigma_a\to (X^a)^{(X^a)}
+\end{equation*}
+is an antihomomorphism of monoids. We demand that there should be given an antihomomorphism of monoids
+\begin{equation*}
+\rho\mapsto\rho^\ast : \Sigma_a\to P_{a,a}
+\end{equation*}
+This should satisfy
+\begin{enumerate}
+\item if $\rho\in\Sigma_a$ and $\sigma\in\Sigma_b$, then $\rho^\ast\times\sigma^\ast=(\rho\times\sigma)^\ast$. 
+\item if $f\in P_{a,b}$ and $g\in P_{c,d}$, then $\rho^\ast(f\times g)=(g\times f)\sigma^\ast$, where $\rho:X^a\times X^c\to X^c\times X^a$ and $\sigma^\ast : X^b\times X^d\to X^d\times X^b$ are the obvious permutations.  
+\end{enumerate}
+In an operad, one only has the parameter spaces $P_{1,a}$; therefore the operations of composites and cartesian products do not exist separately. There is only the combined operation
+\begin{equation*}
+f(g_1\times\cdots\times g_a),
+\end{equation*}
+where $f\in P_{1,a}$ and $g_i\in P_{1,b_i}$. The most fundamental example of an
+operad is the endomorphism operad $\mathrm{End}_X:=\{\mathrm{Map}(X^n,X)\}_{n\geq 1}$, where $\mathrm{Map}(X^n,X)$ is the space of continuous maps from $X^n$ to $X$, given the compact-open topology. An algebra $A$ over an operad $O$ consists of a space $A$, with a map $O\to\mathrm{End}_A$ of operads. In other words, it consists of a coherent system of maps $O(n)\times A^n\to A$. A major motivation for the development of operads was the desire to have a homotopy invariant characterization of based loop spaces and iterated loop spaces. 
+
+Given an operad, we can construct a PROP by allowing the operad to `generate freely'. If we work without permutations, we define
+\begin{equation*}
+P_{a,b} = \bigcup_{b_1+\cdots+b_a=b} P_{1,b_1}\times\cdots\times P_{1,b_a}.
+\end{equation*}
+With permutations, we take
+\begin{equation*}
+P_{a,b} = \bigcup_{b_1+\cdots+b_a=b} P_{1,b_1}\times\cdots\times P_{1,b_a}\times_{G}\Sigma_b
+\end{equation*}
+where $G=\Sigma_{b_1}\times\cdots\times \Sigma_{b_a}$. There are more PROPs than operads.
+
+There are two kinds of operads that are particularly important: the tree operads and the little cubes (or disks) operad.
+In the tree operad $\mathcal{T}$, the set $\mathcal{T}(n)$ is the set of (rooted, finite, non-planar trees) with exactly $n$ leaves (labeled $1$ through $n$). This forms an operad by grafting the root of a tree $g$ to a given leaf of $f$. 
+
+The little $n$-cubes operad is an operad which acts on every $n$-fold loop space. It consists of the sets $C_n(j)$, the set of an ordered collection of $j$ $n$-cubes linearly embedded in the standard $n$-dimensional unit cube $I^n$ with disjoint interiors and axis parallel to those of $I^n$. Let $X=\Omega^nY$. Then
+\begin{equation*}
+X^b = (Y,y_0)^{(\bigvee_{1}^b (S^n,s_0))}
+\end{equation*}
+Then each $p:(S^n,s_0) \to \bigvee_1^b (S^n,s_0)$ induces a map $p^\ast : X^b\to X$.
+The space $P_{1,b}$ is the subspace of 
+$(S^n,s_0)\to \bigvee_{1}^b (S^n,s_0)$ in which each $p$ is constant on the edge
+of the cube, and maps  non-overlapping little cuboids (numbered $1$ through $b$) with their edges parallel to the axis,
+mapping the $i$-th little cube to $S^n$. The action of the symmetry group of $\Sigma_b$ on $P_{1,b}$ is free.
+A space $X$ is an $E_n$-space if it comes with an action of the little $n$-cubes operad.
+
+\bigskip
+\noindent\textbf{Pretheorem.}
+\begin{enumerate}
+\item $\Omega^n$ can be made into a functor, defined on $(n-1)$-connected spaces $Y$, taking values in $E_n$-spaces such that $\pi_0(X)$ is a group.
+\item There is a functor $B^n$ `inverse to $\Omega^n$.
+\item A natural transformation
+
+\end{enumerate}
+
+May's construction of the functor $B^n$ is by a variant of the bar construction.
+The original bar construction was introduced by Eilenberg and Mac Lane, and serves to compute the homology of classifying spaces.
+
+For instance, let $R$ be a ring, and let $A$ be an $R$-algebra. Let $C$ be the category of $R$-modules. Then we define the functor $T:C\to C$ by $T(M):= A\otimes_R M$. Then we have a multiplication $\mu:T^2\to T$ induced by the map $A\otimes_R A\to A$, and a unit $\eta : 1\to T$ induced by the map $R\to A$, satisfying the usual axioms for a monad. An $A$-module (or, $T$-algebra) is the same thing as an $R$-module $M$ with a map $\nu : A\otimes_R M\to M$. The classical bar construction is a tool to compute $\mathrm{Tor}_A(L,M)$. A $T$-functor (or right module functor) is a functor $S:C\to C'$ with a natural transformation $\lambda : ST\to S$, such that $\lambda\circ (\lambda_{T({-})})=\lambda\circ (S\mu)$ and $\lambda\circ (S\eta)=1$. 
+
+We can make these considerations for any adjoint pair of functors. In particular, we have this for the $\Sigma^n\vdash \Omega^n$ adjunction. For any operad $P$, we can construct a functor $P:C\to C$ on the category of compactly generated spaces, so that an action $P\to \mathrm{End}_X$ is the same thing as a map $PX\to X$, making $X$ a $P$-algebra. Then we define
+\begin{equation*}
+\mathcal{P}X:= \Big(\bigsqcup_n P_{1,n} \times X^n \Big)/\sim
+\end{equation*}
+where $\sim$ is a suitable equivalence relation.
+\end{comment} 
+
+\section{Spectral sequences}
+Serre showed how to apply the machinery of spectral sequences in the context
+of (Serre) fibrations. By the homotopy interpretation of type theory
+of Awodey and Warren \cite{AwodeyWarren}, it is to be expected that the apparatus
+of spectral sequences also carries over to the setting of type families in a
+similar way. In the following discussion of spectral sequences, we follow
+McCleary \cite{McCleary01}, Bott and Tu \cite{BottTu}, and Shulman \cite{Shulman13Spectral},
+to make at least plausible that the machinery of spectral sequences can be used
+effectively in homotopy type theory to compute (co)homology groups and stable
+homotopy groups.
+
+The overall proposal here is to formalize the necessary homological algebra 
+using sets in homotopy type theory, in order to compute the graded cohomology
+groups of a range of (filtered) types, e.g. following Chapters 1-3 of McCleary \cite{McCleary01}. 
+It is worth stressing that we work in
+a single formal system, that of homotopy type theory, in which we can 
+work directly with (synthetic representations of) spaces and develop the
+algebraic tools of algebraic topology. This is a new situation, both for
+algebra (where we can actually treat isomorphic objects as equal!) and for
+homotopy theory. 
+In pre-univalent, intensional type theories development of the 
+standard tool-set of algebra has got stuck on a satisfactory treatment of quotients,
+for which the standard remedy was to resort to setoids.  
+
+\subsection{The target of a spectral sequence}
+To compute the (co)homology of a (pointed) type $X$, 
+it can help to know that it is approximated by a sequence of types, i.e., that
+$X$ comes with a filtration. 
+In this subsection we define the target ring of a spectral sequence, i.e., the
+ring we want to compute via spectral sequences. 
+
+\begin{defn}
+Let $X$ be a pointed type. A \define{descending filtration} $F^\ast$ of $X$ is a pair
+$(FX,\tau)$ consisting of a $\Z$-indexed type sequence
+\begin{equation*}
+\begin{tikzcd}
+\cdots \arrow[r] & F^pX \arrow[r] & F^{p+1}X \arrow[r] & \cdots
+\end{tikzcd}
+\end{equation*}
+of pointed types, together with a cone $\tau:\Delta(X)\Rightarrow FX$ with vertex $X$ in the
+category of pointed types. 
+%The filtration is called \define{exhaustive} if $\tau$ is a limiting cone. Also, since $FX$ is assumed to be a diagram in the category of pointed types we have a cocone $FX\Rightarrow\Delta(\unit)$ with vertex $\unit$. We say that the filtration is \define{[What would be a good name?]} if this cocone is colimiting.
+
+An \define{ascending filtration} of $X$ is a pair $(FX,\tau)$ consisting of a $\Z$-indexed type sequence $FX$ and a cocone $\tau:FX\Rightarrow\Delta(X)$. 
+%We say that the filtration is \define{[something]} if $\tau$ is colimiting, and we say that it is \define{[something]} if the canonical cone with vertex $\unit$ is limiting. 
+\end{defn}
+
+The two main sources of filtrations come from the skeleta of CW-complexes
+(giving an ascending filtration), and from the Postnikov tower of a type
+(giving a descending filtration). The \define{Postnikov tower} of a type $X$ is the
+sequence where $F^pX\defeq \trunc{-p}{X}$ for $p\leq 2$ and $F^pX=\unit$ otherwise. 
+Also note that pointed connected types
+can be approximated by the join construction, giving a third class of ascending filtrations.
+
+Given an ascending filtration $F^\ast$ on a type $X$, and a cohomology theory $h^\ast$, 
+we have the map $h^\ast(X)\to h^\ast(F^pX)$ for any $p:\Z$, and we
+may define $F^{p}h^\ast(X)$ to be the kernel of this map. 
+Note that this reverses the direction of the sequence: we obtain a sequence
+\begin{equation*}
+\cdots \subseteq F^{p+1}h^\ast(X) \subseteq F^ph^\ast(X) \subseteq \cdots
+\end{equation*}
+Thus, we obtain an ascending filtration $F^\ast$ of the cohomology ring $h^\ast(X)$. 
+
+Given a $\Z$-indexed filtration of $F^\ast$ of any graded module $H^\ast$, with inclusions
+$F^{p+1}H^\ast\subseteq F^{p}H^\ast$, we can define the \define{associated graded module}
+\begin{equation*}
+E_T^p(H^\ast)\defeq F^pH^\ast/F^{p+1}H^\ast.
+\end{equation*}
+In some cases, $H^\ast$ may be recovered from the associated graded module as the direct sum
+$\bigoplus_{p:\Z} E_T^p(H^\ast)$.
+In \autoref{p:recover} below, we propose a case where this should be possible.
+
+Observe that the module $E^p_T(H^\ast)$ is bigraded, using the
+grading of $H^\ast$. We define
+\begin{equation*}
+E^{p,q}_T=F^pH^{p+q}/F^{p+1}H^{p+q},
+\end{equation*}
+so that $E_T^p(H^\ast)=\bigoplus_q E_T^{p,q}$.
+Spectral sequences are machinery to compute $E^{p,q}_T$. In other words,
+$E_T^{\ast,\ast}$ is the \define{target} of a spectral sequence%
+\footnote{McCleary \cite{McCleary01} writes $E_0^{p,q}$ where we write $E_T^{p,q}$.
+However, the groups $E_0^{p,q}$ aren't on the $0$-th page of a spectral sequence,
+so we prefer the notation $E_T^{p,q}$ to signify that it is the target of a spectral sequence.}.
+
+\begin{proposal}\label{p:recover}
+Suppose that $X$ has an ascending filtration $(FX,\tau)$, in which each $F^pX$ is $\omega$-compact, each
+$F^pX \to F^{p+1}X$ is $(p-1)$-connected, $F^pX=\unit$ for $p<0$, and $\tau$ is a colimiting cocone.
+Can we show in homotopy type theory that each (ordinary) cohomology group $H^k(X)$ is finitely generated? Moreover,
+can we show that
+\begin{equation*}
+H^\ast(X)\cong \bigoplus_{p:\Z} E^p_\infty(H^\ast(X))?
+\end{equation*}
+\end{proposal}
+
+\begin{proposal}\label{p:filtrations}
+Given an ascending filtration of $X$, we can turn it into a descending filtration
+using cofibers. For each $i_n : X_n\to X$ we take $Y_n\defeq C_{i_n}$. This way,
+we naturally obtain a sequence
+\begin{equation*}
+\begin{tikzcd}
+\cdots \arrow[r] & C_{i_n} \arrow[r] & C_{i_{n+1}} \arrow[r] & \cdots
+\end{tikzcd}
+\end{equation*}
+We should be able to show that the limit of this sequence is $X$, and that its
+colimit is $\unit$.
+
+Similarly, we can go from descending filtrations to ascending filtrations by
+taking fibers of the maps $X_n\to X$. 
+
+If we apply cofibers to a descending sequence, can we show that we get a sequence ascending
+to $\susp{X}$, and if we apply fibers to an ascending sequence can we show that we get
+a descending sequence to $\loopspace{X}$? 
+\end{proposal}
+
+\begin{proposal}\label{p:general_filtrations}
+The definition of filtration could be generalized in a straightforward way,
+by replacing $\Z$-indexed diagrams by diagrams over an arbitrary graph. We can
+similarly work under the assumption that $X$ is the limit and $\unit$ is the
+colimit of such a diagram (or vice versa). This might already be helpful for
+the formalization, because sometimes filtrations are naturally $(\N,\leq)$-
+or $(\N,\geq)$-indexed, and we want to fit them in the same theory.
+
+How much of the theory of spectral sequences can be reproduced under such a 
+generalization, and would there be any natural applications for this?
+\end{proposal}
+
+\subsection{From filtered spaces to exact couples}
+We return to the case of a filtration on a space to see how one gets an exact
+couple from a filtration. \define{Exact couples} are triangles
+\begin{equation*}
+\begin{tikzcd}[column sep=small]
+A \arrow[rr,"i"] & & A \arrow[dl,"j"] \\
+& E \arrow[ul,"k"]
+\end{tikzcd}
+\end{equation*}
+of modules or graded modules, which are exact at each vertex of the triangle.
+Exact couples were introduced by Massey in \cite{Massey52}, and they form
+a $1$-category in which a morphism $(A,E,i,j,k)\to(A',E',i',j',k')$ consists
+of morphisms $f:A\to A'$ and $g:E\to E'$ such that the obvious squares commute.
+
+First we obtain an exact couple of homotopy groups
+from the iterated fiber sequence associated to a descending filtration. Second,
+we obtain for every cohomology theory an exact couple of cohomology groups from the iterated cofiber sequence
+associated to an ascending filtration. It will be clear that there is also
+an exact couple of homology groups for every homology theory.
+
+In \cite{Shulman13Spectral}, Shulman observes that from a descending filtration 
+$FX$ of $X$, we obtain a sequence of fiber sequences
+\begin{equation*}
+Y_p \hookrightarrow F^{p+1}X\fibration F^pX,
+\end{equation*}
+each of them gives a long exact sequence of homotopy groups
+\begin{equation*}
+\begin{tikzcd}[row sep=tiny,column sep=small]
+& \vdots & \vdots & \vdots & \vdots \\
+\cdots \arrow[r] & \pi_k(Y_{p+1}) \arrow[r] & \pi_k(F^{p+2}X) \arrow[r] & \pi_k(F^{p+1}X) \arrow[r] & \pi_{k-1}(Y_{p+1}) \arrow[r] & \cdots \\
+\cdots \arrow[r] & \pi_k(Y_p) \arrow[r] & \pi_k(F^{p+1}X) \arrow[r] & \pi_k(F^pX) \arrow[r] & \pi_{k-1}(Y_p) \arrow[r] & \cdots \\
+& \vdots & \vdots & \vdots & \vdots
+\end{tikzcd}
+\end{equation*}
+For simplicity, we assume that each of the homotopy groups (in particular those
+at level $1$ and $0$) are abelian groups. Now we can gather these abelian 
+groups to obtain $(\Z\times \Z)$-graded abelian groups. From the long exact
+sequence we get a triangle
+\begin{equation*}
+\begin{tikzcd}[column sep=-2em]
+\bigoplus_{p,q} \pi_{p+q}(F^pX) \arrow[rr] & & \bigoplus_{p,q} \pi_{p+q}(F^pX) \arrow[dl] \\
+& \bigoplus_{p,q} \pi_{p+q}(Y_p) \arrow[ul]
+\end{tikzcd}
+\end{equation*}
+This triangle is exact at every point, so it is an exact couple.
+
+Analogous to Shulman's iterated extensions, we get a sequence of cofiber sequences
+\begin{equation*}
+F^{p+1}X\to F^pX \to C_p.
+\end{equation*}
+For example, when $F^\ast$ is the filtration of skeleta of $X$, then the cofiber
+of $F^pX\to F^{p+1}X$ is the Thom space of the sphere bundle $\xi$ on $B$ that
+is part of the data of the attaching maps, as we explain in \autoref{sec:sphere_bundles}.
+From this cofiber sequence we get long exact sequences for any homology or cohomology theory. The following
+diagram indicates the long exact sequences for a cohomology theory $h^\ast$.
+\begin{equation*}
+\begin{tikzcd}[row sep=tiny,column sep=small]
+& \vdots & \vdots & \vdots & \vdots \\
+\cdots \arrow[r] & h^k(C_{p+1}) \arrow[r] & h^k(F^{p+1}X) \arrow[r] & h^k(F^{p+2}X) \arrow[r] & h^{k-1}(C_{p+1}) \arrow[r] & \cdots \\
+\cdots \arrow[r] & h^k(C_p) \arrow[r] & h^k(F^pX) \arrow[r] & h^k(F^{p+1}X) \arrow[r] & h^{k-1}(C_p) \arrow[r] & \cdots \\
+& \vdots & \vdots & \vdots & \vdots
+\end{tikzcd}
+\end{equation*}
+We sum the columns of this list of long exact sequences, to obtain an exact couple of the form
+\begin{equation*}
+\begin{tikzcd}[column sep=-2em]
+\bigoplus_{p,q}h^{p+q}(F^pX) \arrow[rr,"i"] & & \bigoplus_{p,q}h^{p+q}(F^pX) \arrow[dl,"j"] \\
+& \bigoplus_{p,q}h^{p+q}(C_p). \arrow[ul,"k"]
+\end{tikzcd}
+\end{equation*}
+The maps $i$, $j$ and $k$ are bigraded homomorphisms with bidegrees $(1,-1)$, $(0,1)$, and $0$, respectively.
+
+\subsection{From exact couples to spectral sequences}
+Given an exact couple, we define the differential $d\defeq j\circ k$ on
+$E$. Note that $d^2=j(kj)k=0$, so this is indeed a differential. 
+Recall that a \define{differential complex} is a module $A$ together with a \define{differential operator} $d:A\to A$, which is a homomorphism such that $d^2=0$. A \define{graded differential complex} is a differential complex in which the differential operator is a graded map (of any degree). In particular, the pair $(E,d)$ obtained from an exact couple is a graded differential complex.
+Given a (graded) differential complex $(A,d)$, we define its \define{homology group}
+\begin{equation*}
+H(A,d)\defeq\ker(d)/\im(d).
+\end{equation*}
+Note that $H(A,d)$ inherits the grading of $(A,d)$.
+
+From an exact couple we obtain its derived couple, which will again be an exact couple:
+\begin{equation*}
+\begin{tikzcd}[column sep=small]
+A' \arrow[rr,"{i'}"] & & A' \arrow[dl,"{j'}"] \\
+& E' \arrow[ul,"{k'}"]
+\end{tikzcd}
+\end{equation*}
+Here $A'\defeq\im(i)$, and $E'\defeq H(E,d)$. 
+\begin{enumerate}
+\item The map $i':A'\to A'$ is defined as a lift
+\begin{equation*}
+\begin{tikzcd}
+\im(i) \arrow[r,densely dotted,"{i'}"] \arrow[d] & \im(i) \arrow[d] \\
+A \arrow[r,swap,"i"] & A.
+\end{tikzcd}
+\end{equation*}
+If $i$ was a bigraded map of degree $(n_i,m_i)$, then it follows from the above
+diagram that the degree of $i'$ is also $(n_i,m_i)$.
+\item The map $j':A'\to E'$ is defined as an extension
+\begin{equation*}
+\begin{tikzcd}
+0 \arrow[r] & \ker(i) \arrow[r] \arrow[d,swap,"j"] & A \arrow[r,"i"] \arrow[d,"j"] & \im(i) \arrow[r] \arrow[d,densely dotted,"{j'}"] & 0 \\
+0 \arrow[r] & \im(d) \arrow[r] & \ker(d) \arrow[r] & H(E,d) \arrow[r] & 0
+\end{tikzcd}
+\end{equation*}
+where the rows are short exact sequences. If the bidegrees of $i$ and $j$ are
+$(n_i,m_i)$ and $(n_j,m_j)$, respectively, then it follows that the bidegree of
+$j'$ is $(n_j-n_i,m_j-m_i)$. To see this, note that the commutativity of the
+right square implies that $(n_j,m_j)=(n_i,m_i)+(n_{j'},m_{j'})$. 
+\item The map $k':E'\to A'$ is defined as an extension
+\begin{equation*}
+\begin{tikzcd}
+0 \arrow[r] & \im(d) \arrow[r] \arrow[d,swap,"k"] & \ker(d) \arrow[r] \arrow[d,"k"] & H(E,d) \arrow[r] \arrow[d,densely dotted,"{k'}"] & 0 \\
+0 \arrow[r] & 0 \arrow[r] & \im(i) \arrow[r,swap,"1"] & \im(i) \arrow[r] & 0.
+\end{tikzcd}
+\end{equation*}
+If the bidegree of $k$ is $(n_k,m_k)$, then the bidegree of $k'$ is also $(n_k,m_k)$.
+\end{enumerate}
+Since the derived couple of an exact couple is again an exact couple, we can repeat this process to obtain exact
+couples 
+\begin{equation*}
+(A_r,E_r,i_r,j_r,k_r)
+\end{equation*}
+for every $r:\N_1$. Furthermore, the construction of derived couples is functorial,
+so a morphism between exact couples determines a morphism between their derived
+exact couples.
+
+If we start out with $i$, $j$ and $k$ of bidegrees $(1,-1)$, $(1,0)$ and $(0,0)$, we see that the bidegrees of $i_r$, $j_r$, and $k_r$ are $(1,-1)$, $(r,1-r)$, and $(0,0)$, respectively. In particular, it follows that the bidegree of the differential $d_r=j_r\circ k_r$ is $(r,1-r)$. Thus, we get a cohomological spectral sequence.
+
+\begin{defn}
+A \define{(cohomological) spectral sequence} is a triple $(E,d,\alpha)$ consisting of 
+\begin{enumerate}
+\item a sequence of $(\Z\times\Z)$-graded modules $E_r^{\ast,\ast}$, usually indexed by $r=2,3,\ldots$,
+\item differentials $d_r : E^{p,q}_r \to E^{p+r,q+1-r}_r$, making $E_r^{\ast,\ast}\defeq\bigoplus_{p,q} E^{p,q}_r$ into a graded differential complex, so that $d_r$ is a homomorphism of bidegree $(r,1-r)$,
+\item and isomorphisms
+\begin{equation*}
+\alpha_r^{p,q}:E^{p,q}_{r+1} \cong H(E^{p,q}_r,d_r).
+\end{equation*}
+\end{enumerate}
+A \define{homological spectral sequence} is defined similarly, but the degree of the differential $d_r$ is $(-r,r-1)$.
+
+A \define{morphism $f:(E,d,\alpha)\to(\bar{E},\bar{d},\bar{\alpha})$ of (cohomological) spectral sequences} consists of a homomorphism
+\begin{equation*}
+f_r^{p,q}:E_r^{p,q}\to\bar{E}_r^{p,q}
+\end{equation*}
+of modules, for each $p$, $q$, and $r$, such that the squares
+\begin{equation*}
+\begin{tikzcd}[column sep=4.5em]
+E_r^{p,q} \arrow[d,swap,"d_r"] \arrow[r,"f_r^{p,q}"] & \bar{E}_r^{p,q} \arrow[d,"\bar{d}_r"] \\
+E_r^{p+r,q+1-r} \arrow[r,swap,"f_r^{p+q,q+1-r}"] & \bar{E}_r^{p+r,q+1-r}
+\end{tikzcd}
+\quad
+\text{and}
+\quad
+\begin{tikzcd}[column sep=4.5em]
+E_{r+1}^{p,q} \arrow[d,swap,"\alpha_r^{p,q}"] \arrow[r,"f_{r+1}^{p,q}"] & \bar{E}_{r+1}^{p,q} \arrow[d,"\bar{\alpha}_r^{p,q}"] \\
+H(E_r^{p,q},d_r) \arrow[r,swap,"{H(f_r^{p,q},d_r)}"] & H(\bar{E}_r^{p,q},d_r)
+\end{tikzcd}
+\end{equation*}
+commute. Morphisms of homological spectral sequences are defined similarly, and
+the construction from exact couples to spectral sequences (in both the homoligcal
+and cohomological cases) is functorial.
+\end{defn}
+
+Note that if we start with an exact couple $(A,E,i,j,k)$ of bigraded modules, in which $i$, $j$, and $k$ have bidegrees $(-1,1)$, $(0,1)$, and $(0,0)$, respectively, then the bidegrees of $i_r$, $j_r$, and $k_r$ will be $(-1,1)$, $(-r,r-1)$, and $(0,0)$ respectively. Hence we see that we get a homological spectral sequence in this case.
+
+%Note that for any $r$, knowledge about $E^{\ast,\ast}_r$ and $d_r$ determines $E^{\ast,\ast}_{r+1}$, but not $d_{r+1}$. 
+
+A spectral sequence may be described equivalently as a bigraded module $E_2$
+with a collection
+\begin{equation*}
+B_2\subseteq B_3 \subseteq \cdots \subseteq B_n \subseteq \cdots\cdots \subseteq Z_n \subseteq \cdots \subseteq Z_3 \subseteq Z_2 \subseteq E_2
+\end{equation*} 
+of bigraded submodules, and isomorphisms $Z_n/Z_{n+1}\cong B_{n+1}/B_n$ \cite{McCleary01}.
+
+To see that we get this data from a spectral sequence, we start with 
+$Z_2=\ker d_2$ and $B_2=\im d_2$. The condition that $d_2\circ d_2=0$ gives us 
+that $B_2\subseteq Z_2$. 
+The bigraded module $E_3$, being isomorphic to $Z_2/B_2$, is a subquotient of $E_2$.
+Now note that the submodules $\ker d_3$ and $\im d_3$ are submodules of the 
+subquotient $E_3$, so they can be written as subquotients of $E_2$ of the form 
+$Z_3/B_2$ and $B_3/B_2$, respectively, 
+where $B_2\subseteq B_3\subseteq Z_3\subseteq Z_2$. Thus, we have a surjective
+homomorphism $d_3:
+Z_2/B_2\to B_3/B_2$ with kernel $Z_3/B_2$. It follows that
+\begin{equation*}
+Z_2/Z_3\cong (Z_2/B_2)/(Z_3/B_2) \cong B_3/B_2.
+\end{equation*}
+Now we can inductively repeat this process to obtain the submodules $B_n$ and $Z_n$ as described.
+Conversely, one can also construct a spectral sequence from the specified data.
+
+Using the tower $Z_\ast$ obtained as above, we say that an element of $E_2$ \define{survives
+to the $r$-th stage} if it is an element of $Z_r$. The subgroup $Z_\infty\defeq\bigcap_n Z_n$
+is the subgroup of elements that \define{survive forever}. 
+Similarly, the elements of $E_2$ that
+lie in $B_r$, are said to be \define{boundaries by the $r$-th stage}, and the
+subgroup $B_\infty\defeq\bigcup_n B_n$ is the subgroup of elements that
+\define{eventually bound}. 
+Now we define the bigraded module $E_\infty\defeq Z_\infty/B_\infty$.
+
+\begin{proposal}\label{p:derived_couple_invariance}
+To prove in homotopy type theory, following Massey's result in \S 10 of \cite{Massey52}, 
+that the first derived couple (and hence all further derived couples) associated to a CW-complex is invariant of the 
+cell decomposition.
+\end{proposal}
+
+\subsection{Convergence of spectral sequences}
+So far, we have constructed a spectral sequence starting from a filtered type
+$X$. We have, however, not said anything yet about how a spectral sequence
+actually leads to any computation about $h^\ast(X)$. We address this question
+here.
+
+\begin{defn}
+A spectral sequence $(E,d,\alpha)$ is said to \define{converge}
+to a graded module $H^\ast$, if $H^\ast$ has a decreasing filtration $F^\ast$, and isomorphisms
+\begin{equation*}
+E^{p,q}_\infty \cong F^pH^{p+q}/F^{p+1}H^{p+q}.
+\end{equation*}
+It is common to write $E_2^{\ast,\ast}\Rightarrow H^\ast$ if $(E,d,\alpha)$ converges to $H^\ast$,
+although in the formalization it is probably better to write $(E,d,\alpha)\Rightarrow F^\ast H^\ast$. 
+\end{defn}
+
+There is a similar notion of convergence of spectral sequences involving filtrations of ascending type.
+Generally, the target of computation with a spectral sequence is a graded module $H^\ast$ to which $(E,d)$ converges.
+
+The notion of convergence is not perfect: the filtration doesn't need to uniquely
+determine $H^\ast$. 
+
+\begin{defn}
+A \define{filtered differential $\Z$-graded module} of descending type consists of
+\begin{enumerate}
+\item a module $A^k$ for every $k:\Z$,
+\item a decreasing filtration $FA^k$ of $A^k$, i.e.,
+\begin{equation*}
+\cdots\subseteq F^{p+1}A^k \subseteq F^pA^k \subseteq \cdots\cdots\subseteq A^k
+\end{equation*}
+\item a differential $d_k:A^k\to A^{k+1}$ of degree $1$, such that $d_k$ restricts
+to a natural transformation $Fd_k :FA^k\to FA^{k+1}$ of filtrations. In other
+words, we require that $d_k(F^p A^k)\subseteq F^p A^{k+1}$ for each $p:\Z$. 
+\end{enumerate}
+\end{defn}
+
+Note that in the cohomological case, the filtrations of differential graded
+modules are often of descending type, whereas in the homological case they are
+often of ascending type.
+
+\begin{defn}
+The filtration $FA$ is said to be \define{bounded} if for each $k:\Z$ there
+are $l_k,u_k:\Z$, such that
+\begin{equation*}
+F^{l_k}A^k=0,\qquad\text{and}\qquad F^{u_k}A^k=A^k.
+\end{equation*}
+\end{defn}
+
+We can now formulate our first convergence theorem for spectral sequences.
+
+\begin{thm}[McCleary \cite{McCleary01}, Theorem 2.6]
+Each filtered differential graded module $(A,F,d)$ determines a spectral sequence
+$(E,d,\alpha)$ such that
+\begin{equation*}
+E_1^{p,q} \cong H^{p+q}(F^pA/F^{p+1}A).
+\end{equation*}
+If the filtration $F$ on $A$ is bounded, then the spectral sequence $(E,d,\alpha)$
+converges to $H(A,d)$, i.e.,
+\begin{equation*}
+E_{\infty}^{p,q}\cong F^pH^{p+q}(A,d)/F^{p+1}H^{p+1}(A,d).
+\end{equation*}
+\end{thm}
+
+\subsection{The Atiyah-Hirzebruch spectral sequence}
+Given a spectrum $\spectrum{E}$ and a type $X$, the Atiyah-Hirzebruch spectral
+sequences are half-plane spectral sequences $E^{\ast,\ast}_\ast$ and $E_{\ast,\ast}^\ast$ with
+\begin{equation*}
+E^{p,q}_2\cong H^p(X;E_q(\ast)),\qquad\text{and}\qquad E_{p,q}^2\cong H_p(X;E_q(\ast)),
+\end{equation*}
+converging conditionally to $E^\ast(X)$ and strongly to $E_\ast(X)$, respectively.
+
+\begin{proposal}\label{p:atiyah_hirzebruch_ss}
+To construct the Atiyah-Hirzebruch spectral sequence associated to a spectrum.
+\end{proposal}
+
+\subsection{The Serre spectral sequence}
+
+\subsection{The Adams spectral sequence}
+The Adams spectral sequence the basic tool to compute the homotopy groups of
+spectra, and hence to compute the stable homotopy groups of types, via its
+mod $p$ homology groups. The Adams spectral sequence has been used to compute
+a range of stable homotopy groups of spheres, and it has been used to compute
+all the homotopy groups of most Thom spectra \cite{Kochman96}. 
+
+Before we can introduce the Adams spectral sequence, we must introduce the
+Steenrod operations on the mod $p$ cohomology, for a prime $p$.
+These are natural transformations
+\begin{align*}
+\Sq{i} & : H^n(\blank;\Z/2) \to H^{n+i}(\blank;\Z/2) \\
+P^i & : H^n(\blank;\Z/p) \to H^{n+2i(p-1)}(\blank;\Z/p)\tag{$p>2$}
+\end{align*}
+satisfying the axioms of Steenrod and Epstein \cite{Steenrod62}. The axioms for the Steenrod squares $\Sq{i}$
+are as follows:
+\begin{enumerate}
+\item $\Sq{0}=1$,
+\item If $x:H^n(X;\Z/2)$, then $\Sq{n}(x)=x^2$,
+\item If $x:H^n(X;\Z/2)$ and $i>n$, then $\Sq{i}(x)=0$,
+\item \textbf{The Cartan formula.} For any $x,y:H^\ast(X;\Z/2)$ and any $i:\N$, we have
+\begin{equation*}
+\Sq{i}(xy)=\sum_{k=0}^i \Sq{k}(x)\Sq{i-k}(y).
+\end{equation*}
+\end{enumerate}
+
+In \S 5.1 of \cite{Brunerie16}, Brunerie represents the cup product on ordinary cohomology
+with coefficients in $\Z$ via a map ${\cupsym} : \smashpr{K(\Z,n)}{K(\Z,m)}\to
+K(\Z,n+m)$. We propose to similarly define the all the Steenrod operations on ordinary cohomology
+mod $p$, for any prime $p$.
+
+\begin{proposal}\label{p:steenrod_operations}
+Implement the Steenrod operations in homotopy type theory as maps
+\begin{align*}
+sq^i & : K(\Z/2,n) \to_\ast K(\Z/2,n+i) \\
+p^i & : K(\Z/p,n)\to_\ast K(\Z/p,n+2i(p-1)).
+\end{align*}
+The homology operations can then be obtained by post-composition. Thus, the
+axioms for the Steenrod squares $sq^i$ must be
+\begin{enumerate}
+\item There is a pointed homotopy $sq^0\htpy_\ast\idfunc$.
+\item The operation $sq^n:K(\Z/2,n)\to K(\Z/2,2n)$ are pointed homotopic to
+the cup square.
+\item The operation $sq^i:K(\Z/2,n)\to K(\Z/2,n+i)$ factors through $\unit$,
+for $i>n$. 
+\item A pointed homotopy
+\begin{equation*}
+sq^i(\cuppr{\blank}{\blank})\htpy_\ast \sum_{k=0}^i \cuppr{sq^k(\blank)}{sq^{i-k}(\blank)},
+\end{equation*}
+where the sum refers to an application of the H-space structure of the type $K(\Z/2,n+m)$. 
+\end{enumerate}
+We require analogous structure for the Steenrod powers $p^i$. 
+\end{proposal}
+
+\section{Sphere bundles and vector bundles over types}
+
+\subsection{Sphere bundles and their Thom spaces}\label{sec:sphere_bundles}
+For any type $X$, we let $\UU_X$ be the connected component of $\UU$ that contains
+$X$. An $X$-bundle over a type $B$ is then simply a map $B\to\UU_X$. For example,
+the type of \define{$n$-sheeted covers} of a type $B$ is just the type $B\to\UU_{\finset{n}}$,
+where $\finset{n}$ is the canonical type with $n$ elements. 
+
+\begin{proposal}\label{p:finite_subgroups}
+To show that if $G$ is a finite group with a subgroup $S$, then $BS\to BG$ is
+an $n$-sheeted covering, where $n=|G|/|S|$ is the index of $S$. Is this an
+equivalence from subgroups of index $n$ to $n$-sheeted coverings, or maybe even
+an equivalence from subgroups to finitely sheeted coverings?
+\end{proposal}
+
+The type of
+\define{$n$-sphere bundles} over $B$ is the type $B\to\UU_{\sphere{n}}$.
+The type $\UU_{\sphere{n}}$ is classically known as the type $\mathcal{BG}_{n+1}$, see for instance Rudyak \cite{Rudyak98}.
+The universal sphere bundle on $\mathcal{BG}_{n+1}$ is simply the map $A\mapsto A$,
+or equivalently it is the pullback of the universal fibration of $\UU$ along 
+the inclusion $\mathcal{BG}_{n+1}\to\UU$. Its total space is usually denoted
+by $\mathcal{BF}_{n}$. Thus, we have a fibration sequence
+\begin{equation*}
+\sphere{n}\hookrightarrow \mathcal{BF}_n \twoheadrightarrow \mathcal{BG}_{n+1}.
+\end{equation*}
+
+The \define{Whitney sum} of two sphere bundles $\xi_1$ and $\xi_2$ over $B$ is given
+by the fiberwise join. Explicitly, we define
+\begin{equation*}
+(\xi_1\oplus\xi_2)(b) \defeq \join{\xi_1(b)}{\xi_2(b)}.
+\end{equation*}
+When $\xi_1$ is an $n$-sphere bundle and $\xi_2$ an $m$-sphere bundle, then
+the Whitney sum is an $(n+m+1)$-sphere bundle. 
+
+Classically, when $\xi$ is an $n$-plane bundle, we can turn it into an
+$n$-sphere bundle by taking the one-point compactification fiberwise. 
+The one-point compactification of an $n$-dimensional vector space is just
+the suspension of its unit sphere. Thus, we can present this construction
+in homotopy type theory by replacing the classical $n$-plane bundles by
+$\sphere{n-1}$-bundles. 
+
+In the setting of homotopy type theory, when $\xi$ is an $n$-sphere bundle over
+$B$, we can construct an $(n+1)$-sphere
+bundle $\xi^+$ over $B$ by taking the suspensions of the fibers of $\xi$,
+i.e., by taking the Whitney sum $\xi\oplus \eta$, where $\eta$ is the trivial
+$\sphere{0}$-bundle.
+%Equivalently, we can obtain $\xi^+$ by joining $p:(\sm{a:A}\xi(A))\to A$ with the first projection $A\times\sphere{0}\to A$. 
+This is the same as the suspension
+in the slice over $B$, i.e., we have a pushout diagram
+\begin{equation*}
+\begin{tikzcd}[column sep=large]
+\sm{b:B}\xi(b) \arrow[d,swap,"\pi_1"] \arrow[r,"\pi_1"] & B \arrow[d,"b\mapsto\pairr{b,\south}"] \\
+B \arrow[r,swap,"b\mapsto\pairr{b,\north}"] & \sm{b:B}\xi^+(b).
+\end{tikzcd}
+\end{equation*}
+
+The \define{Thom space} $\Thom(\xi)$ associated to an $n$-sphere bundle $\xi:B\to\mathcal{BG}_{n+1}$
+is obtained by identifying all the infinities in the associated $(n+1)$-sphere bundle $\xi^+$ over $B$.
+In other words, we define $\Thom(\xi)$ as the following pushout
+\begin{equation*}
+\begin{tikzcd}[column sep=huge]
+B \arrow[d] \arrow[r,"b\mapsto\pairr{b,\north}"] & \sm{b:B}\xi^+(b) \arrow[d] \\
+\unit \arrow[r] & \Thom(\xi)
+\end{tikzcd}
+\end{equation*}
+Note that this construction directly generalizes the construction of a wedge
+of spheres (that are allowed to vary along the paths in the base space $B$).
+More precisely, if $\xi$ is a trivial sphere bundle on a set $B$, then $\Thom(\xi)$
+is the wedge of the spheres $\xi^+(b)$.
+Thus, in full generality where $\xi:B\to\mathcal{BG}_{n+1}$ over an arbitrary type $B$ it also seems reasonable to think of the Thom space $\Thom(\xi)$ as $\bigvee_{(b:B)}\xi^+(b)$. 
+
+By the pasting lemma for pushouts, we see that the Thom space $\Thom(\xi)$ can
+also be presented as a pushout
+\begin{equation*}
+\begin{tikzcd}[column sep=large]
+\sm{b:B}\xi(b) \arrow[d,swap] \arrow[r,"\pi_1"] & B \arrow[d] \\
+\unit \arrow[r] & \Thom(\xi).
+\end{tikzcd}
+\end{equation*}
+In other words, the Thom space of a sphere bundle is just the mapping cone of
+its projection. Thus, we see that the Thom space of the tautological $0$-sphere
+bundle on $\rprojective{n}$ is $\rprojective{n+1}$, and that the Thom space
+of the tautological $1$-sphere bundle on $\cprojective{n}$ is $\cprojective{n+1}$.
+We also see from this presentation of the Thom space, that $\Thom(\xi)=B$ whenever
+the total space of $\xi$ is contractible.
+
+For instance, the space $MO(1)$ is defined as the Thom space of the tautological
+$0$-sphere bundle over $\rprojective{\infty}$. Since this tautological bundle
+as a contractible total space, we see that $MO(1)=\rprojective{\infty}$.
+
+Recall that for any $n$-sphere bundle $\xi:B\to\mathcal{BG}_{n+1}$ and any
+map $(\sm{b:B}\xi(b))\to X$, we can obtain a new type $Y$ by attaching $(n+1)$-cells
+via the pushout of the span $B \leftarrow (\sm{b:B}\xi(b)) \rightarrow X$. The cofiber of
+the inclusion map $i:X\to Y$ is then the Thom space $\Thom(\xi)$, by the pasting
+lemma for pushouts
+\begin{equation*}
+\begin{tikzcd}
+\sm{b:B}\xi(b) \arrow[d,swap,"\pi_1"] \arrow[r] \arrow[dr,phantom,near end,"\ulcorner"] & X \arrow[d,"i"] \arrow[r] \arrow[dr,phantom,very near end,"\ulcorner"] & \unit \arrow[d] \\
+B \arrow[r] & Y \arrow[r] & \Thom(\xi)
+\end{tikzcd}
+\end{equation*}
+
+\begin{proposal}\label{p:smash_thom}
+Show that the Thom space of a Whitney sum $\xi_1\oplus\xi_2$ is the smash product
+$\smashpr{\Thom(\xi_1)}{\Thom(\xi_2)}$. 
+\end{proposal}
+
+\begin{proposal}\label{p:transfer_sphere_bundle}
+To define the transfer homomorphism for sphere bundles, and derive their formal
+properties, along the following lines.
+
+Given an $n$-sheeted cover $p:B\to C$ and an $m$-sphere bundle $\xi:B\to B\mathcal{G}_{m+1}$,
+we define the transfer $p_!\xi$ of $\xi$ to be the $(n(m+1)-1)$-sphere bundle given 
+as an `indexed join'
+\begin{equation*}
+p_!\xi(c)\defeq \bigjoin{\pairr{b,\alpha}:\fib{p}{c}}\xi(b).
+\end{equation*}
+To do this, we need to define an indexed join operation, which acts on a type
+family $P:A\to \UU$ indexed by an arbitrary finite type $A$. That is, $A$ is in
+the image of the map $n\mapsto\finset{n}$. 
+Thus, we need to define for every $n:\N$ an operation
+\begin{equation*}
+\bigjoinsym : \prd{A:\UU}{p:\brck{\finset{n}=A}}(A\to\UU)\to\UU.
+\end{equation*}
+The type $\sm{A:\UU}\brck{\finset{n}=A}$ is the connected component of the universe
+of the type $\finset{n}$, so we might define via the approximating sequence obtained
+from the join construction. That is, we propose to define a natural transformation
+%\begin{small}
+\begin{equation*}
+\begin{tikzcd}[column sep=small]
+((\finset{n}\to\UU)\to\UU) \arrow[r] \arrow[d,xshift=.7ex,->>] & ((\gamma_{\symmetric{n}}^1(\blank)\to\UU)\to\UU) \arrow[d,xshift=.7ex,->>] \arrow[r] & ((\gamma_{\symmetric{n}}^2(\blank)\to\UU)\to\UU) \arrow[d,xshift=.7ex,->>] \arrow[r] & \cdots \\
+K(\symmetric{n},1)^0_\ast \arrow[r] \arrow[u,xshift=-.7ex,densely dotted] & K(\symmetric{n},1)^1_\ast \arrow[r] \arrow[u,xshift=-.7ex,densely dotted] & K(\symmetric{n},1)^2_\ast \arrow[r] \arrow[u,xshift=-.7ex,densely dotted] & \cdots
+\end{tikzcd}
+\end{equation*}
+%\end{small}
+To indicate how to obtain the section of $(\gamma_{\symmetric{n}}^1(\blank)\to\UU)\to\UU$ over $K(\symmetric{n},1)^1_\ast$, note that the type $K(\symmetric{n},1)^1_\ast$ is the suspension of $\symmetric{n}$. Thus, we have to give an equivalence
+\begin{equation*}
+\eqv{\Big(\bigjoin{i:\finset{n}}{A^i}\Big)}{\Big(\bigjoin{i:\finset{n}}{A^{\pi(i)}}\Big)}
+\end{equation*}
+for every permutation $\pi:\symmetric{n}$. 
+\end{proposal}
+
+\subsection{Grassmannians}
+Classically, a vector bundle $p:E\to B$ is a map such that $p^{-1}(b)$ is homeomorphic to $\bbR^n$ for some $n$, satisfying the local triviality condition. The local triviality condition provides for every path in the base space a linear isomorphism of fibers. The group $GL_n$ of linear isomorphisms of $n$-dimensional vector spaces over $\bbR$ is just the group of invertible $(n\times n)$-matrices. It can be topologized as a subspace of $\bbR^{n^2}$. The group operations are of course continuous, so $GL_n$ forms a topological group, and in particular an H-space.
+
+The subgroup $O(n)$ of orthogonal matrices (i.e. the matrices for which the transpose is the inverse) is a compact subgroup of $GL_n$, and moreover $O(n)$ is a deformation retract of $GL_n$. Thus, for every vector bundle we can make sure that the linear isomorphisms that glue the fibers together are all orthogonal. Furthermore, the (continuous) group homomorphism $\mathrm{det}:O(n)\to \{1,-1\}$ which takes the determinant, splits $O(n)$ into two homeomorphic subsets. Both are copies of $SO(n)$, the topological group of special orthogonal matrices.  
+
+We seek a synthetic approach to vector bundles. The condition of local triviality is not something we can (or want to) formalize in type theory. The orthogonal groups are deloopable spaces, with $BO(n)$ being the Grassmannian $G^n(\bbR^\infty)$. Loosely speaking, because paths in the Grassmannians correspond to linear isomorphisms, we find that vector bundles are classified by the Grassmannians. Both the (special) orthogonal groups and the Grassmannians can be given the structure of CW-complexes, so they ought to be formalizable as higher inductive types. 
+
+Our goal is to define the following fibration sequences
+\begin{align*}
+O(n) & \hookrightarrow V^{n}(\bbR^m) \fibration G^{n}(\bbR^m) \\
+U(n) & \hookrightarrow V^{n}(\bbC^m) \fibration G^{n}(\bbC^m) \\
+Sp(n) & \hookrightarrow V^{n}(\bbH^m) \fibration G^{n}(\bbH^m)
+\end{align*}
+By taking sequential colimits this gives the Grassmannians $G^n(\bbR^\infty)$, $G^n(\bbC^\infty)$ and $G^n(\bbH^\infty)$, the classifying spaces of $O(n)$, $U(n)$, and $Sp(n)$, respectively. In particular, we need to construct $O(n)$, $U(n)$, and $Sp(n)$, and their loop space structures. 
+
+The orthogonal groups fit in the following fibration sequences
+\begin{align*}
+O(n) & \hookrightarrow O(n+1) \fibration \sphere{n} \\
+U(n) & \hookrightarrow U(n+1) \fibration \sphere{2n+1} \\
+Sp(n) & \hookrightarrow Sp(n+1) \fibration \sphere{4n+3}.
+\end{align*}
+That is, for every $n:\N$ we have a canonical $O(n)$-bundle over $\sphere{n}$, for which the total space is $O(n+1)$, and similarly for the complex and quaternionic cases.
+
+From the above table of fibration sequences, we see that there must be a fibration sequence $SO(2)\hookrightarrow SO(3) \fibration \sphere{2}$. Classically, $SO(3)$ is homeomorphic to $\rprojective{3}$, and $SO(2)$ is just the circle. This means that we should be able to give $\rprojective{3}$ the structure of a principal H-space. Also, since $\rprojective{3}=\join[\rprojective{\infty}]{\sphere{1}}{\sphere{1}}$, we should be able to construct a fiber sequence
+\begin{equation*}
+\sphere{1}\hookrightarrow (\join[\rprojective{\infty}]{\sphere{1}}{\sphere{1}}) \fibration\susp{\sphere{1}}.
+\end{equation*}
+This is written in such a way that it reminds us of the Hopf-fibration $\sphere{1}\hookrightarrow\join{\sphere{1}}{\sphere{1}}\fibration\susp{\sphere{1}}$, which comes from the H-space structure of $\sphere{1}$. 
+
+We follow Hatcher \cite{HatcherAT} to describe the cell structure of $SO(n)$. 
+
+\begin{proposal}\label{p:o_u_sp}
+Define the spaces $O(n)$, $U(n)$ and $Sp(n)$ in homotopy type theory. Show that
+they are deloopable. Define the Stiefel manifolds, and relate the construction
+of the finite grassmannians and the stiefel manifolds to the join construction.
+\end{proposal}
+
+\begin{proposal}\label{p:j_homomorphism}
+Show that $\pi_i(SO)=\pi_i(SO(n))$ for $n>i+1$. Define the J-homomorphism
+\begin{equation*}
+\pi_i(SO(n))\to \pi_{n+i}(\sphere{n}).
+\end{equation*}
+This defines $J:\pi_k(SO)\to\pi_i^S(\sphere{0})$. Describe its image (consult
+the Adams conjecture).
+\end{proposal}
+
+\begin{proposal}\label{p:bott_periodicity}
+Formalize the Bott periodicity results in homotopy type theory.
+\end{proposal}
+
+\subsection{The Thom spectrum}
+Among the most impressive results of homotopy theory is the classification 
+of manifolds up to bordism by Thom \cite{Thom54}. 
+
+The Thom spectrum $\spectrum{MO}$ is defined by $MO_n\defeq\Thom(\gamma^n)$,
+where $\gamma^n$ is the tautological bundle over the $b$-th Grassmannian $BO(n)$.
+
+\subsection{Thom classes}
+
+\subsection{Stiefel-Whitney classes}
+In the study of Stiefel-Whitney classes, we are interested in cohomology with
+coefficients in $\Z/2$. That is, we take the cohomology defined by the 
+Eilenberg-Mac Lane spectrum $K(\Z/2,n)$.
+
+\begin{proposal}\label{p:stiefel_whitney_class}
+To construct the unique
+\begin{equation*}
+w(\xi)\in \bigoplus_{i=0}^\infty H^i(\xi;\Z/2)
+\end{equation*}
+satisfying the following four axioms:
+\begin{enumerate}
+\item The class $w_0(\xi)\in H^0(\xi;\Z/2)$ is the unit element,
+and $w_i(\xi)=0$ for $i>n$, if $\xi$ is an $n$-plane bundle. 
+\item Let $\eta$ be a vector bundle over $Y$ and let $f:X\to Y$ be any map.
+Then
+\begin{equation*}
+w(f^\ast\eta)=f^\ast w(\eta).
+\end{equation*}
+\item If $\xi$ and $\eta$ are vector bundles over the same base space, then 
+\begin{equation*}
+w(\dirsum{\xi}{\eta})=w(\xi)w(\eta).
+\end{equation*}
+\item The double cover of the circle has non-trivial Stiefel-Whitney class.
+\end{enumerate}
+It follows that the trivial vector bundle $\varepsilon$ has $w_i(\varepsilon)=0$ for $i>0$, and hence that $w(\dirsum{\varepsilon}{\eta})=w(\eta)$. 
+\end{proposal}
+
+\begin{proposal}\label{p:hspace_structure_on_spheres}
+To show in homotopy type theory that if there exists an H-space structure on $\sphere{n}$, 
+then $n$ must be of the form $2^m$.
+\end{proposal}
+
+\section{Conclusion}
+We span a lot of ground in the proposed program. Our hope is that homotopy type
+theory can contribute to the modern field around the computation of the homotopy
+groups of spheres, but homotopy type theory is such a young field that a lot of
+the basic background still needs to be sorted out. In particular, since we hope
+to provide formally verified proofs along with the development of the theory,
+there is no way around addressing basic questions about homotopy coequalizers
+and higher modalities. 
+
+The topics of spectra, spectral sequences, stable homotopy and generalized 
+homology and cohomology can be formalized within the framework of homotopy type
+theory, and we have seen that these are quite natural concepts to consider
+within univalent mathematics. 
+
+However, as soon as we want to actually do something with these tools, we need
+a wealth of spaces that simply aren't there yet. Even though many classically
+important spaces have been given the structure of a CW-complex, it has proven
+quite tricky to find their counterparts in homotopy type theory. We recognize
+that part of the success of the proposed research depends on our ability to
+find the appropriate higher inductive types, in particular the orthogonal groups,
+the unitary groups, the symplectic groups, the Stiefel manifolds, the Grassmannians,
+the Thom spectra, and the spectra of Brown's representations of cohomology theories.
+
+The real and complex projective spaces have only recently been defined by 
+Buchholtz and Rijke, and their definitions did not exactly follow the classical
+description from their CW-structures. It turned out that explicitly describing
+the attaching maps is harder than in the classical setting, so we needed a
+workaround. It is to be anticipated that defining the listed spaces in homotopy
+type theory will be the hardest challenge of the proposed subjects.
+
+\printbibliography
+
+\appendix
+\section{Proposed outline of the dissertation\footnote{The starred topics are the focus of my future work.}}\label{outline}
+\begin{enumerate}[label=\arabic*.]
+\item \textbf{Introduction.} We give a brief history of the field, and mention
+some of the current published work. We give an outline of the original work of
+this dissertation relative to the state of the art of homotopy type theory
+\item \textbf{Basic homotopy type theory.}
+\begin{enumerate}[label*=\arabic*.]
+\item \textbf{Dependent type theory with $\Pi$, $\Sigma$, $\idtypevar{}$, $\N$ and $\UU$.} We cover basic theorems regarding the type constructors. In particular, we introduce the notion of equivalence, and we explain the encode-decode method. We introduce the truncation levels, the notion of being local at a family of maps, and derive basic properties.
+\item \textbf{Homotopy limits and colimits} We define what diagrams over a graph are. We show that their limit always exist, and that their homotopy colimit exists given that homotopy coequalizers exist. We introduce homotopy coequalizers as higher inductive types, and we show that homotopy colimits of general diagrams exist once homotopy coequalizers exist. We also introduce reflexive homotopy coequalizers, and we show that they can be obtained as the pushout of the source and target maps.
+We cover specific examples such as pushouts, suspensions, the join and the smash product, and introduce CW-complexes. We also introduce sequential colimits.
+\item \textbf{The descent property and the flattening lemma.} We prove that univalence is equivalent to the descent property. We show that coequalizers commute with $\Sigma$, and give applications to colimits of more general diagrams, in particular pushouts and sequential colimits.
+\item \textbf{The join construction.} We construct the image of a map by iteratively joining it with itself. We show that the image of a map from a small type into a locally small type is small. We show that the $\modal$-separated types can be constructed using this theorem
+\item \textbf{Localization.} We define localization as a higher inductive type. We introduce $\omega$-compactness, and show that localization at a family of maps between $\omega$-compact types exists if the universe is closed under homotopy coequalizers.
+\item \textbf{Synthetic homotopy theory.} We state basic theorems of synthetic homotopy theory, including the fundamental group of the circle, the Blakers-Massey theorem, and we review Brunerie's calculation of $\pi_4(\sphere{3})$. 
+\item \textbf{*Coinductive types.} We introduce coinductive types as final coalgebras for the polynomial endofunctors generated by (indexed) containers. We compute the identity types of coinductive types. We calculate the final coalgebra for the polynomial endofunctor generated by the universal bundle of a pointed connected type.
+\end{enumerate}
+\item \textbf{Higher modalities.}
+\begin{enumerate}[label*=\arabic*.]
+\item \textbf{Four equivalent definitions of higher modalities.} We define higher modalities, modalities with unique dependent eliminators, $\Sigma$-closed reflective subuniverses, and stable orthogonal factorization systems, and show that all of these are equivalent structures.
+\item \textbf{Separated types.} We give several characterizations of separatedness, and prove them equivalent. We show that in a univalent universe with a natural numbers object and closed under pushouts, the modality of separated types always exists.
+\item \textbf{Localization at families of maps.} The study localization at a family of maps, give several examples, and show that localization at a family of types is always a modality. Furthermore, we show that localization at a family of maps between $\omega$-compact types can always be constructed in a univalent universe with a natural numbers object and closed under pushouts.
+\item \textbf{Lex modalities.} We give Shulman's characterizations of lex modalities, and show that localizing at a mere proposition always gives a lex modality.
+\item \textbf{*The poset of all modalities.} From the four characterizations of higher modalities it follows that the type of all higher modalities forms a set, which is ordered by inclusion. We study this poset and several operations on it.
+\end{enumerate}
+\item \textbf{The internal graph model of type theory.}
+\begin{enumerate}[label*=\arabic*.]
+\item \textbf{Internal models of type theory.} We give a description of what counts as an internal model of type theory, for our purposes. This involves stating what a type-valued pre-category is, and then adding to that the structure of type dependency. We will show that from a univalent universe one can obtain an instance of such an internal model.
+\item \textbf{The structure of type dependency of the graph model.} We show that for any internal model $\mathcal{M}$ there is the model $\mathrm{Gph}(\mathcal{M})$ of graphs internal to $\mathcal{M}$. There are two flavors of this: graphs and reflexive graphs. They are truncated versions of a supposed model of cubical types. We describe the non-recursive higher inductive types as a left adjoint to the discrete graph functor, and show that the descent theorem provides a slice-wise equivalence of models.
+\item \textbf{Cartesian conditions on the families of graphs.} Morphisms of graphs are natural transformations of presheaves. We can ask for the condition that certain naturality squares are always pullbacks. We do this in the case for the source and target morphisms. We show that we obtain the diagrams on graphs, contravariant diagrams on graphs, and equifibered families of graphs this way, each of them forming an instance of the structure of type dependency. We show that the equifibered families form a model of type theory with all the usual type constructors.
+\item \textbf{*The left and right adjoints to the inclusion of cartesian families.} The inclusion of the cartesian families into arbitrary families has both a left and a right adjoint. We give descriptions of these. This boils down to proving a generalized flattening lemma, which works not only for equifibered families, but for arbitrary families.
+\item \textbf{*Identity types of homotopy colimits.} We show how to obtain the
+identity type of a homotopy colimit as a certain (recursive) higher inductive type.
+We give an approximation of this higher inductive type by non-recursive higher inductive types. We compare this with the James construction.
+\end{enumerate}
+\item \textbf{Infinite loop spaces, stable homotopy theory, and generalized homology and cohomology theories}
+\begin{enumerate}[label*=\arabic*.]
+\item \textbf{*Spectra.} We define spectra and indexed spectra, study spectrifications, and a range of constructions of spectra, including the mapping spectra, wedge products and smash products of spectra.
+\item \textbf{*Stable homotopy theory.} We define the homotopy groups of spectra, and deduce the long exact sequence of a fiber sequence of spectra. We show that $\pi_\ast^S(\sphere{0})$ is a graded commutative ring.
+\item \textbf{*Generalized (co)homology theories.} We associate to each spectrum its associated homology and cohomology theories, and prove Brown's representability theorem.
+\item \textbf{*The BarraTT-Priddy theorem.} Define the Quillen plus construction $X\mapsto X^+$ using its description of attaching $2$- and $3$-cells.. Show that $\colim_n(\loopspace[n]{\sphere{n}})= B(\Sigma_\infty)^+$, where $\Sigma_\infty$ is the colimit of the symmetric groups $\symmetric{n}$. 
+\item \textbf{*Rational homotopy theory.} We give the rationalization of a space as a certain higher inductive type, following its classical definition as a CW-complex. Prove basic results of rational homotopy theory. 
+\end{enumerate}
+\item \textbf{Spectral sequences.}
+\begin{enumerate}[label*=\arabic*.]
+\item \textbf{*Homological algebra using sets in homotopy type theory.} We develop some homological algebra, but focus on those aspects that are particular to homotopy type theory.
+\item \textbf{*From filtered spaces to spectral sequences.} Filtered types, exact couples, spectral sequences, convergence.
+\item \textbf{*The Atiyah-Hirzebruch spectral sequence.} 
+\item \textbf{*The Serre spectral sequence.} 
+\item \textbf{*Computations with spectral sequences.} We compute the cohomology of $\rprojective{n}$ and $\cprojective{n}$ using the fiber sequences $\sphere{0}\hookrightarrow\sphere{n}\fibration\rprojective{n}$ and $\sphere{1}\hookrightarrow\sphere{2n+1}\fibration\cprojective{n}$, respectively. Similarly, we compute the cohomology of the Grassmannians. 
+\end{enumerate}
+\item \textbf{The Adams spectral sequence}
+\begin{enumerate}[label*=\arabic*.]
+\item \textbf{*The Steenrod operations on cohomology.} Show that the mod $p$ cohomology groups are $\mathcal{A}_p$-algebras, where $\mathcal{A}_p$ is the mod $p$ Steenrod algebra.
+\item \textbf{*The Adams spectral sequence.}
+\item \textbf{*Some computations on the homotopy groups of spheres}
+\end{enumerate}
+\item \textbf{Classifying types}
+\begin{enumerate}[label*=\arabic*.]
+\item \textbf{*A characterization of loop spaces.} First, we show that the type of pointed connected types is equivalent to the type of principal H-spaces. We connect the principal H-space structure of a pointed set to a transitive action of the set on itself. We use the principal H-space structure to prove that the associated pointed connected type is its classifying type. An instance of the join construction provides an approximation of the classifying space.
+\item \textbf{*The periodic table of higher groups}
+\item \textbf{The real, complex, and *quaternionic projective spaces.} We show that $\sphere{0}$, $\sphere{1}$ and $\sphere{3}$ can be given the structure of a principal H-space. The join construction can be used to define the real, complex and quaternionic projective spaces. We derive their basic properties.
+\item \textbf{*The orthogonal groups, the unitary groups, and the symplectic groups.}
+\item \textbf{*Vector bundles over types.} Define the basic operations of K-theory.
+\item \textbf{*The Thom spectrum.}
+\end{enumerate}
+\item \textbf{*BoTT Periodicity.} 
+\begin{enumerate}[label*=\arabic*.]
+\item Give a purely homotopy theoretic proof of the
+Bott periodicity theorem, by showing that $\loopspace[8]{\Z\times BO}=\Z\times BO$
+and $\loopspace[2]{\Z\times BU}=\Z\times BU$.
+\item \textbf{*The J-homomorphism} Describe the J-homomorphism and its image.
+\end{enumerate}
+\item \textbf{Characteristic classes}
+\begin{enumerate}[label*=\arabic*.]
+\item \textbf{*Stiefel-Whitney classes.} Define Stiefel-Whitney classes and show that the axioms of Stiefel-Whitney classes are satisfied. Show their relation to the Thom classes.
+\item \textbf{*Basic obstruction theory.}
+\end{enumerate}
+\end{enumerate}
+
+
+\end{document}

@@ -1,0 +1,56 @@
+\chapter{Introduction}
+The study of homotopy theoretic phenomena in the language of type theory \cite{hottbook} is 
+sometimes loosely called `synthetic homotopy theory' \cite{Brunerie16}. 
+Homotopy theory in type theory \cite{Awodey12} is only one of the
+many aspects of homotopy type theory, which also includes the study of the
+set theoretic semantics (models of homotopy type theory and univalence in a
+meta-theory of sets or categories \cite{Awodey14,AwodeyWarren,BezemCoquandHuber,KapulkinLeFanuLumsdaine,Shulman15,Voevodsky15}), type theoretic semantics (internal models of homotopy type
+theory), and computational semantics \cite{AngiuliHarperWilson}, as well as the study of various questions
+in the internal language of homotopy type theory which are not necessarily 
+motivated by homotopy theory, or questions related to the development of
+formalized libraries of mathematics based on homotopy type theory.
+This thesis concerns the development of synthetic homotopy theory.
+
+Homotopy type theory is based on Martin-L\"of's theory of dependent types \cite{MartinLof84}, which
+was developed during the 1970's and 1980's.
+The novel additions of homotopy type theory are Voevodsky's univalence axiom \cite{Voevodsky06,Voevodsky10},
+and higher inductive types \cite{Lumsdaine11Blog,Shulman11Blog,hottbook}. The univalence axiom characterizes the identity
+type on the universe, and thereby establishes the universe as an object classifier \cite{RijkeSpitters}.
+Higher inductive types are a generalization of inductive types, in which both
+point constructors (generators) and path constructors (relations) may be specified.
+A simple class of higher inductive types, which includes most known higher inductive
+types, are the homotopy coequalizers. When the universe is assumed to be closed
+under homotopy coequalizers, it is also closed under pushouts \cite{hottbook}, 
+sequential colimits \cite{hottbook}, and propositional truncation truncation \cite{VanDoorn15}.
+For instance, we get the $n$-spheres \cite{Lumsdaine12Blog} by setting $\sphere{-1}\defeq\emptyt$ and
+by inductively defining the $(n+1)$-sphere $\sphere{n+1}$ to be the pushout
+of the span $\unit \leftarrow\sphere{n}\rightarrow\unit$. 
+Then we can attach $(n+1)$-cells to a type $X$.
+Let $f:(\sm{a:A}B(a))\to X$ be a family of attaching maps
+for some $\sphere{n}$-bundle $B:A\to\sm{S:\UU}\brck{\sphere{n}=S}$. We
+attach the $(n+1)$-disks indexed by $A$ to $X$ by taking the homotopy pushout
+\begin{equation*}
+\begin{tikzcd}
+\sm{a:A}B(a) \arrow[r,"f"] \arrow[d,swap,"\pi_1"]  & X \arrow[d,"\inr"] \\
+A \arrow[r,swap,"\inl"] & P. \arrow[ul,phantom,very near start,"\ulcorner"]
+\end{tikzcd}
+\end{equation*}
+
+Unless otherwise specified, we shall assume a univalent universe that is closed
+under the usual type constructors, including a natural numbers object, and
+homotopy coequalizers. The model in cubical sets by Coquand et al. \cite{BezemCoquandHuber} is a
+constructive model for this setup, although the fact that it is closed under
+homotopy coequalizers is currently unpublished.
+
+We will follow the notation of \cite{hottbook}.
+Also, it is worth pointing out that when we give two equivalent descriptions
+of the same thing, we mean that their types are homotopy equivalent
+(rather than just logically equivalent), and usually
+we have a canonical equivalence in mind. A basic
+example: dependent types over $A$ may be described equivalently as maps into
+$A$. By this we mean that the types $A\to\UU$ and $\sm{B:\UU}B\to A$ are 
+homotopy equivalent, where the equivalence sends $P:A\to\UU$ to the map
+$\pi_1:(\sm{a:A}\P(a))\to A$.
+
+\paragraph{Acknowledgements}
+I gratefully acknowledge the support of the Air Force Office of Scientific Research through MURI grant FA9550-15-1-0053. Any opinions, findings and conclusions or recommendations expressed in this material are those of the authors and do not necessarily reflect the views of the AFOSR.

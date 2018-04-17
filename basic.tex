@@ -1,0 +1,1449 @@
+\chapter{Basic concepts of homotopy type theory}
+
+\section{Dependent type theory with a univalent universe}
+
+\subsection{Martin-L\"of type theory}
+
+We will write $\tr{B}{p}{b}$ for the transport of $b:B(x)$ along $p:\id[A]{x}{y}$ with respect to a type family $B$ over $A$.
+
+\subsection{The fundamental theorem of identity types}
+Consider a family
+\begin{equation*}
+f : \prd{x:A}B(x)\to C(x)
+\end{equation*}
+of maps. Such $f$ is also called a \define{fiberwise map} or \define{fiberwise transformation}.
+
+\begin{defn}[Definition 4.7.5 of \cite{hottbook}]
+We define a map
+\begin{equation*}
+\total{f}:\sm{x:A}B(x)\to\sm{x:A}C(x).
+\end{equation*}
+by $\lam{(x,y)}(x,f(x,y))$.
+\end{defn}
+
+\begin{lem}[Theorem 4.7.6 of \cite{hottbook}]\label{lem:fib_total}
+For any fiberwise transformation $f:\prd{x:A}B(x)\to C(x)$, and any $a:A$ and $c:C(a)$, there is an equivalence
+\begin{equation*}
+\eqv{\fib{f(a)}{c}}{\fib{\total{f}}{\pairr{a,c}}}.
+\end{equation*}
+\end{lem}
+
+\begin{thm}[Theorem 4.7.7 of \cite{hottbook}]\label{thm:fib_equiv}
+Let $f:\prd{x:A}B(x)\to C(x)$ be a fiberwise transformation. The following are logically equivalent:
+\begin{enumerate}
+\item For each $x:A$, the map $f(x)$ is an equivalence. In this case we say that $f$ is a \define{fiberwise equivalence}.
+\item The map $\total{f}:\sm{x:A}B(x)\to\sm{x:A}C(x)$ is an equivalence.
+\end{enumerate}
+\end{thm}
+
+\begin{thm}\label{thm:id_fundamental}
+Let $A$ be a type with $a:A$, and let $B$ be be a type family over $A$ with $b:B(a)$.
+Then  the following are logically equivalent:
+\begin{enumerate}
+\item The canonical family of maps
+\begin{equation*}
+\rec{a{=}}(b):\prd{x:A} (a=x)\to B(x)
+\end{equation*}
+is a fiberwise equivalence.
+\item The total space
+\begin{equation*}
+\sm{x:A}B(x)
+\end{equation*}
+is contractible.
+\end{enumerate}
+\end{thm}
+
+\begin{proof}
+By \autoref{thm:fib_equiv} it follows that the fiberwise transformation $\rec{a{=}}(b)$ is a fiberwise equivalence if and only if it induces an equivalence
+\begin{equation*}
+\eqv{\Big(\sm{x:A}a=x\Big)}{\Big(\sm{x:A}B(x)\Big)}
+\end{equation*}
+on total spaces. We have that $\sm{x:A}a=x$ is contractible. Now it follows by the 3-for-2 property of equivalences, applied in the case
+\begin{equation*}
+\begin{tikzcd}
+\sm{x:A}a=x \arrow[rr,"\total{\rec{a{=}}(b)}"] \arrow[dr,swap,"\eqvsym"] & & \sm{x:A}B(x) \arrow[dl] \\
+& \unit
+\end{tikzcd}
+\end{equation*}
+that $\total{\rec{a{=}}(b)}$ is an equivalence if and only if $\sm{x:A}B(x)$ is contractible.
+\end{proof}
+
+\subsection{The hierarchy of homotopical complexity}
+
+\section{Extensionality axioms}
+
+\subsection{Function extensionality}
+
+\subsection{Homotopy limits}
+
+\subsection{The univalence axiom}
+
+The univalence axiom characterizes the identity type of the universe. Roughly speaking, it asserts that equivalent types are equal. It is considered to be an \emph{extensionality principle}\index{extensionality principle!types} for types. In the following theorem we introduce the univalence axiom and give two more equivalent ways of stating this.
+
+\begin{thm}\label{thm:univalence}
+The following are equivalent:
+\begin{enumerate}
+\item The \define{univalence axiom}\index{univalence axiom|textbf}: for any $A:\UU$ the map\index{equiv_eq@{$\equiveq$}|textbf}
+\begin{equation*}
+\equiveq\defeq \ind{A=}(\idfunc[A]) : \prd{B:\UU} (\id{A}{B})\to(\eqv{A}{B}).
+\end{equation*}
+is a fiberwise equivalence.\index{identity type!universe} If this is the case, we write
+$\eqequiv$\index{eq equiv@{$\eqequiv$}|textbf}
+for the inverse of $\equiveq$.
+\item The type
+\begin{equation*}
+\sm{B:\UU}\eqv{A}{B}
+\end{equation*}
+is contractible for each $A:\UU$.
+\item The principle of \define{equivalence induction}\index{equivalence induction}\index{induction principle!for equivalences}: for every $A:\UU$ and for every type family
+\begin{equation*}
+P:\prd{B:\UU} (\eqv{A}{B})\to \type,
+\end{equation*}
+the map
+\begin{equation*}
+\Big(\prd{B:\UU}{e:\eqv{A}{B}}P(B,e)\Big)\to P(A,\idfunc[A])
+\end{equation*}
+given by $f\mapsto f(A,\idfunc[A])$ has a section.
+\end{enumerate}
+\end{thm}
+
+\begin{proof}
+The equivalence of (i) and (ii) is a direct consequence of \cref{thm:id_fundamental}. 
+To see that (ii) and (iii) are equivalent, note that we have a commuting triangle
+\begin{equation*}
+\begin{tikzcd}[column sep=-1em]
+\prd{t:\sm{B:\UU}\eqv{A}{B}}P(t) \arrow[rr,"\ind{\Sigma}"] \arrow[dr,"\varphi","{f\mapsto f((A,\idfunc[A]))}"'] & & \prd{B:\UU}{e:\eqv{A}{B}} P((B,e)) \arrow[dl,"{f\mapsto f(A,\idfunc[A])}","\psi"'] \\
+& P((A,\idfunc[A]))
+\end{tikzcd}
+\end{equation*}
+The map $\ind{\Sigma}$ has a section. Therefore it follows from \cref{ex:3_for_2} that $\varphi$ has a section if and only if $\psi$ has a section. By \cref{thm:contractible} it follows that $\varphi$ has a section if and only if $\sm{B:\UU}\eqv{A}{B}$ is contractible. 
+\end{proof}
+
+From now on we will assume that the univalence axiom holds. Our first application of the univalence axiom is to show that the identity type $\idtypevar{A}:A\to (A\to\UU)$ is an embedding. 
+
+\begin{thm}
+Assuming the univalence axiom on $\UU$, the map
+\begin{equation*}
+\idtypevar{A}:A\to (A\to\UU)
+\end{equation*}
+is an embedding, for any type $A:\UU$.\index{identity type!is an embedding|textit}
+\end{thm}
+
+\begin{proof}
+Let $a:A$. By function extensionality it suffices to show that the canonical map
+\begin{equation*}
+(a=b)\to \idtypevar{A}(a)\htpy\idtypevar{A}(b)
+\end{equation*}
+that sends $\refl{a}$ to $\lam{x}\refl{(a=x)}$ is an equivalence for every $b:A$, and by univalence it therefore suffices to show that the canonical map
+\begin{equation*}
+(a=b)\to \prd{x:A}\eqv{(a=x)}{(b=x)}
+\end{equation*}
+that sends $\refl{a}$ to $\lam{x}\idfunc[(a=x)]$ is an equivalence for every $b:B$. To do this we employ the type theoretic Yoneda lemma, \autoref{thm:yoneda}.
+
+By the type theoretic Yoneda lemma\index{Yoneda lemma} we have an equivalence
+\begin{equation*}
+\Big(\prd{x:A} (b=x)\to (a=x)\Big)\to (a=b)
+\end{equation*}
+given by $\lam{f} f(b,\refl{b})$, for every $b:A$. Note that any fiberwise map $\prd{x:A}(b=x)\to (a=x)$ induces an equivalence of total spaces by \autoref{ex:contr_equiv}, since their total spaces are are both contractible by \autoref{cor:contr_path}. It follows that we have an equivalence
+\begin{equation*}
+\varphi_b:\Big(\prd{x:A} \eqv{(b=x)}{(a=x)}\Big)\to (a=b)
+\end{equation*}
+given by $\lam{f} f(b,\refl{b})$, for every $b:A$. 
+
+Note that $\varphi_a(\lam{x}\idfunc[(a=x)])\jdeq\refl{a}$. Therefore it follows by another application of \autoref{thm:yoneda} that the unique family of maps 
+\begin{equation*}
+\alpha_b:(a=b)\to \Big(\prd{x:A} \eqv{(b=x)}{(a=x)}\Big)
+\end{equation*}
+that satisfies $\alpha_a(\refl{a})=\lam{x}\idfunc[(a=x)]$ is a fiberwise section of $\varphi$. 
+It follows that $\alpha$ is a fiberwise equivalence. Now the proof is completed by reverting the direction of the fiberwise equivalences in the codomain.
+\end{proof}
+
+It is a trivial observation, but nevertheless of fundamental importance, that by the univalence axiom the identity types of $\UU$ are equivalent to types in $\UU$, because it provides an equivalence $\eqv{(A=B)}{(\eqv{A}{B})}$, and the type $\eqv{A}{B}$ is in $\UU$ for any $A,B:\UU$. Since the identity types of $\UU$ are equivalent to types in $\UU$, we also say that the universe is \emph{locally small}.
+
+\begin{defn}
+\begin{enumerate}
+\item A type $A$ is said to be \define{essentially small}\index{essentially small!type|textbf} if there is a type $X:\UU$ and an equivalence $\eqv{A}{X}$. We write\index{ess_small(A)@{$\esssmall(A)$}|textbf}
+\begin{equation*}
+\esssmall(A)\defeq\sm{X:\UU}\eqv{A}{X}.
+\end{equation*}
+\item A map $f:A\to B$ is said to be \define{essentially small}\index{essentially small!map|textbf} if for each $b:B$ the fiber $\fib{f}{b}$ is essentially small.
+We write\index{ess_small(f)@{$\esssmall(f)$}|textbf}
+\begin{equation*}
+\esssmall(f)\defeq\prd{b:B}\esssmall(\fib{f}{b}).
+\end{equation*}
+\item A type $A$ is said to be \define{locally small}\index{locally small!type} if for every $x,y:A$ the identity type $x=y$ is essentially small.
+We write\index{loc_small(A)@{$\locsmall(A)$}|textbf}
+\begin{equation*}
+\locsmall(A)\defeq \prd{x,y:A}\esssmall(x=y).
+\end{equation*}
+\end{enumerate}
+\end{defn}
+
+\begin{lem}\label{lem:isprop_ess_small}
+The type $\esssmall(A)$ is a proposition for any type $A$.\index{essentially small!is a proposition|textit}
+\end{lem}
+
+\begin{proof}
+Let $X$ be a type. Our goal is to show that the type
+\begin{equation*}
+\sm{Y:\UU}\eqv{X}{Y}
+\end{equation*}
+is a proposition. Suppose there is a type $X':\UU$ and an equivalence $e:\eqv{X}{X'}$, then the map
+\begin{equation*}
+(\eqv{X}{Y})\to (\eqv{X'}{Y})
+\end{equation*}
+given by precomposing with $e^{-1}$ is an equivalence. This induces an equivalence on total spaces
+\begin{equation*}
+\eqv{\Big(\sm{Y:\UU}\eqv{X}{Y}\Big)}{\Big(\sm{Y:\UU}\eqv{X'}{Y}\Big)}
+\end{equation*}
+However, the codomain of this equivalence is contractible by \cref{thm:univalence}. Thus it follows by \cref{cor:contr_prop} that the asserted type is a proposition.
+\end{proof}
+
+\begin{cor}
+For each function $f:A\to B$, the type $\esssmall(f)$ is a proposition, and for each type $X$ the type $\locsmall(X)$ is a proposition.
+\end{cor}
+
+\begin{proof}
+This follows from the fact that propositions are closed under dependent products, established in \cref{thm:trunc_pi}.
+\end{proof}
+
+\begin{thm}\label{thm:fam_proj}
+For any small type $A:\UU$ there is an equivalence
+\begin{equation*}
+\eqv{(A\to \UU)}{\Big(\sm{X:\UU} X\to A\Big)}.
+\end{equation*}
+\end{thm}
+
+\begin{proof}
+Note that we have the function
+\begin{equation*}
+\varphi :\lam{B} \Big(\sm{x:A}B(x),\proj 1\Big) : (A\to \UU)\to \Big(\sm{X:\UU}X\to A\Big).
+\end{equation*}
+The fiber of this map at $(X,f)$ is by univalence and function extensionality equivalent to the type
+\begin{equation*}
+\sm{B:A\to \UU}{e:\eqv{(\sm{x:A}B(x))}{X}} \proj 1\htpy f\circ e.
+\end{equation*}
+By \cref{ex:triangle_fib} this type is equivalent to the type
+\begin{equation*}
+\sm{B:A\to \UU}\prd{a:A} \eqv{B(a)}{\fib{f}{a}},
+\end{equation*}
+and by `type theoretic choice', which was established in \cref{thm:choice}, this type is equivalent to
+\begin{equation*}
+\prd{a:A}\sm{X:\UU}\eqv{X}{\fib{f}{a}}.
+\end{equation*}
+We conclude that the fiber of $\varphi$ at $(X,f)$ is equivalent to the type $\esssmall(f)$. However, since $f:X\to A$ is a map between small types it is essentially small. Moreover, since being essentially small is a proposition by \cref{lem:isprop_ess_small}, it follows that $\fib{\varphi}{(X,f)}$ is contractible for every $f:X\to A$. In other words, $\varphi$ is a contractible map, and therefore it is an equivalence.
+\end{proof}
+
+\begin{rmk}
+The inverse of the map
+\begin{equation*}
+\varphi : (A\to \UU)\to \Big(\sm{X:\UU}X\to A\Big).
+\end{equation*}
+constructed in \cref{thm:fam_proj} is the map $(X,f)\mapsto \fibf{f}$.
+\end{rmk}
+
+\begin{thm}\label{thm:classifier}
+Let $f:A\to B$ be a map. Then there is an equivalence
+\begin{equation*}
+\eqv{\esssmall(f)}{\isclassified(f)},
+\end{equation*}
+where $\isclassified(f)$\index{is_classified(f)@{$\isclassified(f)$}|textbf} is the type of quadruples $(F,\tilde{F},H,p)$ consisting of maps
+$F:B\to \UU$ and $\tilde{F}:A\to \sm{X:\UU}X$, a homotopy $H:F\circ f\htpy \proj 1\circ \tilde{F}$,  such that the commuting square
+\begin{equation*}
+\begin{tikzcd}
+A \arrow[r,"\tilde{F}"] \arrow[d,swap,"f"] & \sm{X:\UU}X \arrow[d,"\proj 1"] \\
+B \arrow[r,swap,"F"] & \UU
+\end{tikzcd}
+\end{equation*}
+is a pullback square, as witnessed by $p$\footnote{The universal property of the pullback is not expressible by a type. However, we may take the type of $p:\isequiv(h)$, where $h:A\to B\times_\UU\big(\sm{X:\UU}X\big)$ is the map obtained by the universal property of the canonical pullback.}. If $f$ comes equipped with a term of type $\isclassified(f)$, we also say that $f$ is \define{classified}\index{classified by the universal family|textbf} by the universal family. 
+\end{thm}
+
+\begin{proof}
+From \cref{ex:sq_fib} we obtain that the type of pairs $(\tilde{F},H)$ is equivalent to the type of fiberwise transformations
+\begin{equation*}
+\prd{b:B}\fib{f}{b}\to F(b).
+\end{equation*}
+By \cref{cor:pb_fibequiv} the square is a pullback square if and only if the induced map
+\begin{equation*}
+\prd{b:B}\fib{f}{b}\to F(b)
+\end{equation*}
+is a fiberwise equivalence. Thus the data $(F,\tilde{F},H,pb)$ is equivalent to the type of pairs $(F,e)$ where $e$ is a fiberwise equivalence from $\fibf{f}$ to $F$. By \cref{thm:choice} the type of pairs $(F,e)$ is equivalent to the type $\esssmall(f)$. 
+\end{proof}
+
+\begin{rmk}
+For any type $A$ (not necessarily small), and any $B:A\to \UU$, the square\index{Sigma-type@{$\Sigma$-type}!as pullback of universal family|textit}
+\begin{equation*}
+\begin{tikzcd}[column sep=6em]
+\sm{x:A}B(x) \arrow[d,swap,"\proj 1"] \arrow[r,"{\lam{(x,y)}(B(x),y)}"] & \sm{X:\UU}X \arrow[d,"\proj 1"] \\
+A \arrow[r,swap,"B"] & \UU
+\end{tikzcd}
+\end{equation*}
+is a pullback square. Therefore it follows that for any family $B:A\to\UU$ of small types, the projection map $\proj 1:\sm{x:A}B(x)\to A$ is an essentially small map.
+To see that the claim is a direct consequence of \cref{lem:pb_subst} we write the asserted square in its rudimentary form:
+\begin{equation*}
+%\begin{gathered}[b]
+\begin{tikzcd}[column sep=6em]
+\sm{x:A}\mathrm{El}(B(x)) \arrow[d,swap,"\proj 1"] \arrow[r,"{\lam{(x,y)}(B(x),y)}"] & \sm{X:\UU}\mathrm{El}(X) \arrow[d,"\proj 1"] \\
+A \arrow[r,swap,"B"] & \UU.
+\end{tikzcd}%\\[-\dp\strutbox]\end{gathered}\qedhere
+\end{equation*}
+\end{rmk}
+
+In the following theorem we show that a type is small if and only if its diagonal is classified by $\UU$.
+
+\begin{thm}
+Let $A$ be a type. The following are equivalent:
+\begin{enumerate}
+\item $A$ is locally small.\index{locally small|textit}
+\item There are maps $I:A\times A\to\UU$ and $\tilde{I}:A\to\sm{X:\UU}X$, and a homotopy $H:I\circ \delta_A\htpy \proj 1\circ\tilde{I}$
+such that the commuting square
+\begin{equation*}
+\begin{tikzcd}
+A \arrow[r,"\tilde{I}"] \arrow[d,swap,"\delta_A"] & \sm{X:\UU}X \arrow[d,"\proj 1"] \\
+A\times A \arrow[r,swap,"{I}"] & \UU
+\end{tikzcd}
+\end{equation*}
+is a pullback square.\index{diagonal!of a type|textit}
+\end{enumerate}
+\end{thm}
+
+\begin{proof}
+In \cref{ex:diagonal} we have established that the identity type $x=y$ is the fiber of $\delta_A$ at $(x,y):A\times A$. Therefore it follows that $A$ is locally small if and only if the diagonal $\delta_A$ is essentially small.
+Now the result follows from \cref{thm:classifier}.
+\end{proof}
+
+\subsubsection{Move from RPn to here}
+Since the theorem is a statement about pointed $2$\nobreakdash-element sets, 
+we will invoke the following general lemma which computes equality of pointed types.
+
+\begin{lem}\label{lem:equiv_of_ptdtype}
+For any $A,B:\UU$ and any $a:A$ and $b:B$, we have an equivalence of type
+\begin{equation*}
+\eqv{\Big(\pairr{A,a}=\pairr{B,b}\Big)}{\Big(\sm{e:\eqv{A}{B}}e(a)=b\Big)}.
+\end{equation*}
+\end{lem}
+
+\begin{proof}[Construction]
+By Theorem 2.7.2 of \cite{hottbook}, the type on the left hand side is
+equivalent to the type $\sm{p:A=B}\tr{\universalfam}{p}{a}=b$.
+By the univalence axiom, the map 
+\begin{equation*}
+\equiveq_{A,B}:(A=B)\to (\eqv{A}{B})
+\end{equation*}
+is an equivalence for each $B:\UU$. 
+Therefore, we have an equivalence of type
+\begin{equation*}
+\eqv{\Big(\sm{p:A=B}\tr{\universalfam}{p}{a}=b\Big)}{\Big(\sm{e:\eqv{A}{B}}\tr{\universalfam}{\eqequiv(e)}{a}=b\Big)}
+\end{equation*} 
+Moreover, by equivalence induction (the analogue of path induction for 
+equivalences), we can compute the transport:
+\begin{equation*}
+\tr{\universalfam}{\eqequiv(e)}{a}=e(a).
+\end{equation*}
+It follows that $\eqv{(\tr{\universalfam}{\eqequiv(e)}{a}=b)}
+{(e(a)=b)}$.
+\end{proof}
+
+Furthermore, we will invoke the following general lemma which computes equality of pointed
+equivalences.
+
+\begin{lem}\label{lem:equiv_of_ptdequiv}
+For any $\pairr{e,p},\pairr{f,q}:\sm{e:\eqv{A}{B}}e(a)=b$, we have an equivalence of type
+\begin{equation*}
+\eqv{\Big(\pairr{e,p}=\pairr{f,q}\Big)}{\Big(\sm{h:e\htpy f} p=\ct{h(a)}{q}\Big)}.
+\end{equation*}
+\end{lem}
+
+\begin{proof}[Construction]
+The type $\pairr{e,p}=\pairr{f,q}$ is equivalent
+to the type $\sm{h:e=f}\tr{}{h}{p}=q$.
+Note that by the principle of function extensionality,
+the map $\htpyeq:(e=f)\to(e\htpy f)$
+is an equivalence. Furthermore, it follows by homotopy induction that for any 
+$h:e\htpy f$ we have an equivalence of type
+\begin{equation*}
+\eqv{(\tr{}{\eqhtpy(h)}{p}=q)}
+    {(p= \ct{h(a)}{q})}.\qedhere
+\end{equation*}
+\end{proof}
+
+\section{Higher inductive types}
+\subsection{Homotopy pushouts}
+
+\subsection{Sequential colimits}
+
+\subsection{Reflexive coequalizers}
+
+\subsection{Colimits of diagrams over graphs}
+
+\section{Descent}
+
+\subsection{Descent for pushouts}
+
+\subsection{Descent for sequential colimits}
+
+\subsection{Descent for reflexive coequalizers}
+
+\section{The join construction}
+In this section I will describe the join construction \cite{joinconstruction}, which uses iterated joins to construct the (homotopy) image of a map.
+
+\subsection{The homotopy image of a map}
+Let us state here the universal property of the image of $f$ with respect to embeddings.
+Recall that an embedding is a map for which the homotopy fibers are mere propositions.
+For any two maps $f:A\to X$ and $g:B\to X$ with a common codomain, we may consider
+the type
+\begin{equation*}
+\mathrm{Hom}_X(f,g)\defeq \sm{h:A\to B} f\htpy g\circ h
+\end{equation*}
+of maps $h:A\to B$ such that the triangle
+\begin{equation*}
+\begin{tikzcd}
+A \arrow[rr,"h"] \arrow[dr,swap,"f"] & & B \arrow[dl,"g"] \\
+& X,
+\end{tikzcd}
+\end{equation*}
+commutes. First, we observe that in the case where $g:B\to X$ is an embedding, it follows
+that $\mathrm{Hom}_X(f,g)$ is a mere proposition. 
+To see this, we apply the type theoretic principle of
+choice, which is sometimes refered to as $\choice{\infty}$, to compute
+\begin{align*}
+\sm{h:A\to B} f\htpy g\circ h
+& \eqvsym \prd{a:A}\sm{b:B} f(a)=g(b) \\
+& \jdeq \prd{a:A}\fib{g}{f(a)}.
+\end{align*}
+This is a product of mere propositions, and mere propositions are closed under
+dependent products. Thus, we see that any given $f:A\to X$ factors through
+an embedding $g:B\to X$ in at most one way.
+
+If we are given a second map $f':A'\to X$ with a commuting triangle
+\begin{equation*}
+\begin{tikzcd}
+A \arrow[rr,"i"] \arrow[dr,swap,"f"] & & A' \arrow[dl,"{f'}"] \\
+& X,
+\end{tikzcd}
+\end{equation*}
+we can precompose factorizations of $f'$ through $g$ with $i$ to obtain
+a factorization of $f$ through $g$. Explicitly, we have a map
+\begin{equation}\label{eq:precomp_triangle}
+\varphi^g_{i,I}:\mathrm{Hom}_X(f',g)\to\mathrm{Hom}_X(f,g)
+\end{equation}
+given by
+\begin{equation*}
+\varphi^g_{i,I}(h,H)\defeq \pairr{h\circ i, \lam{a}\ct{I(a)}{H(i(a))}},
+\end{equation*}
+where $I:f\htpy f'\circ i$ is the homotopy witnessing that $f$ factors through $f'$.
+
+\begin{defn}\label{defn:universal}
+Let $f:A\to X$ be a map. The \define{image} of $f$ is a quadruple $(\im(f),i_f,q_f,Q_f)$
+consisting of a type $\im(f)$, an embedding $i_f:\im(f)\to X$, and a commuting triangle
+\begin{equation*}
+\begin{tikzcd}
+A \arrow[rr,"q_f"] \arrow[dr,swap,"f"] & & \im(f) \arrow[dl,"{i_f}"] \\
+& X
+\end{tikzcd}
+\end{equation*}
+where $Q_f:f\htpy i_f\circ q_f$ witnesses that the triangle commutes, satisfying 
+\define{the universal property of the image} that for
+every embedding $g:B\to X$, the canonical map
+\begin{equation*}
+\varphi^g_{q_f,Q_f} : \mathrm{Hom}_X(i_f,g)\to\mathrm{Hom}_X(f,g)
+\end{equation*}
+defined in \autoref{eq:precomp_triangle} is an equivalence.
+\end{defn}
+
+Note that, since $\varphi^g_{e,E}$ is a map between mere propositions, to prove
+that it is an equivalence it suffices to find a map in the converse direction.
+As we shall see in the join construction, it is sometimes useful to consider
+the universal property of the image of $f$ without requiring that $m$ is an
+embedding. For example, in \autoref{lem:factor_join}
+we will show that this universal property is stable under the operation $\join{f}{\blank}$
+of joining by $f$. 
+
+In the special case where $X\jdeq \unit$ an embedding $m:Y\to \unit$ satisfies
+the universal property of the image of $f:A\to \unit$ precisely when for any
+mere proposition $B$, the precomposition map $\blank\circ i : (Y\to B)\to(A\to B)$
+is an equivalence. In this sense, the universal property of the image of a map
+is a generalization of the universal property of the propositional truncation.
+Indeed, the image of a map $f:A\to X$ can be seen as the propositional truncation
+in the slice over $X$.
+
+\subsection{The join of maps}\label{sec:join-maps}
+
+\begin{defn}
+Let $f:A\to X$ and $g:B\to X$ be maps into $X$. We define the type $\join[X]{A}{B}$ and the \define{join}\footnote{\emph{Warning}: By $\join{f}{g}$ we do \emph{not} mean the functorial action of the
+join, applied to $(f,g)$.} $\join{f}{g}:\join[X]{A}{B}\to X$ of
+$f$ and $g$, as indicated in the following diagram:
+\begin{equation*}
+\begin{tikzcd}
+A\times_X B \arrow[r,"\pi_2"] \arrow[d,swap,"\pi_1"] \arrow[dr, phantom, "{\ulcorner}", at end] & B \arrow[d,"\inr"] \arrow[ddr,bend left=15,"g"] \\
+A \arrow[r,swap,"\inl"] \arrow[drr,bend right=15,swap,"f"] & \join[X]{A}{B} \arrow[dr,densely dotted,swap,near start,"\join{f}{g}" xshift=1ex] \\
+& & X.
+\end{tikzcd}
+\end{equation*}
+\end{defn}
+
+\begin{thm}\label{defn:join-fiber}
+Let $f:A\to X$ and $g:B\to X$ be maps into $X$, and let $x:X$. Then there is
+an equivalence
+\begin{equation*}
+\eqv{\fib{\join{f}{g}}{x}}{\join{\fib{f}{x}}{\fib{g}{x}}}.
+\end{equation*}
+\end{thm}
+
+\begin{proof}[Construction]
+Recall that the fiber of the map $\join{f}{g}$ at $x:X$ can be obtained as
+the pullback
+\begin{equation*}
+\begin{tikzcd}
+\fib{\join{f}{g}}{x} \arrow[r] \arrow[d] & \unit \arrow[d,"x"] \\
+\join[X]{A}{B} \arrow[r,swap,"\join{f}{g}"] & X.
+\end{tikzcd}
+\end{equation*}
+By pulling back along the map $\fib{\join{f}{g}}{x}\to \join[X]{A}{B}$ we
+obtain the following cube
+\begin{small}
+\begin{equation*}
+\begin{tikzcd}[column sep=3em]
+& \makebox[5em]{$\sm{a:A}{b:B}(f(a)=g(b))\times (g(b)=x)$} \arrow[rr,start anchor={[xshift=6.3em]}] \arrow[dl,densely dotted] \arrow[dd] 
+  & & \fib{g}{x} \arrow[dd] \arrow[dl] \\
+\fib{f}{x} \arrow[rr,crossing over] \arrow[dd] & & \fib{\join{f}{g}}{x} \\
+  & \sm{a:A}{b:B}f(a)=g(b) \arrow[dl] \arrow[rr] & & B \arrow[dl] \\
+A \arrow[rr] & & \join[X]{A}{B} \arrow[from=uu,crossing over]
+\end{tikzcd}
+\end{equation*}
+\end{small}%
+in which he bottom square is the defining pushout of $\join[X]{A}{B}$. 
+The front, right and back squares are easily seen to be pullback squares, by the pasting lemma of pullbacks. Hence the dotted map, being the unique map such that the top and left squares commute, makes the left square a pullback. Hence the top square is a pushout by the descent theorem or by the flattening lemma for pushouts.
+
+However, to conclude the join formula we need to show that the square
+\begin{equation*}
+\begin{tikzcd}
+\big(\fib{f}{x}\big)\times\big(\fib{g}{x}\big) \arrow[r,"\pi_2"] \arrow[d,swap,"\pi_1"] & \fib{g}{x} \arrow[d] \\
+\fib{f}{x} \arrow[r] & \fib{\join{f}{g}}{x}
+\end{tikzcd}
+\end{equation*}
+is a pushout. This is be shown by giving a fiberwise equivalence of type
+\begin{equation*}
+\prd{a:A}{b:B}{p:g(b)=x} \eqv{(f(a)=x)}{(f(a)=g(b))}.
+\end{equation*}
+We then take this fiberwise equivalence to be post-composition with $\opp{p}$. 
+\end{proof}
+
+\begin{rmk}
+The join operation on maps with a common codomain is associative up to homotopy (this was formalized by Brunerie, see Proposition 1.8.6 of \cite{BruneriePhD}), and it is a commutative operation on the generalized elements of a type $X$. Furthermore, the unique map of type $\emptyt\to X$ is a unit for the join operation.
+\end{rmk}
+
+ In the following lemma we will show that the join of embeddings is again an embedding. This is a generalization of the statement that if $P$ and
+$Q$ are mere propositions, then $\join{P}{Q}$ is a mere proposition, and actually the more general statement reduces to this special case. Therefore, the embeddings form a `submonoid' of the `monoid' of generalized elements. The join $\join{P}{Q}$ on embeddings $P$ and $Q$ is the same as the union $P\cup Q$. In \autoref{thm:idempotents} below, we show that the mere propositions are precisely the idempotents for the join operation.
+
+\begin{lem}
+Suppose $f$ and $g$ are embeddings. Then $\join{f}{g}$ is also an embedding.
+\end{lem}
+
+\begin{proof}
+By \autoref{defn:join-fiber}, it suffices to show that if $P$ and $Q$ are mere
+propositions, then $\join{P}{Q}$ is also a mere proposition. It is equivalent
+to show that $\join{P}{Q}\to\iscontr(\join{P}{Q})$. Recall that $\iscontr(\blank)$
+is a mere proposition. So it suffices to show that
+\begin{align*}
+& P \to \iscontr(\join{P}{Q}) \\
+& Q \to \iscontr(\join{P}{Q}).
+\end{align*}
+By symmetry, it suffices to show only $P\to\iscontr(\join{P}{Q})$. Let $p:P$. 
+Then $P$ is contractible, and therefore the projection $P\times Q\to Q$ is an
+equivalence. Hence it follows that $\inl:P\to \join{P}{Q}$ is an equivalence,
+which shows that $\join{P}{Q}$ is contractible.
+\end{proof}
+
+\subsection{The join construction}\label{sec:join-construction}
+
+The join construction gives, for any $f:A\to X$, an approximation of the image
+$\im(f)$ by a type sequence. 
+Before we give the join construction, we will show that the universal
+property of the image of $f$, is closed under
+the operation $\join{f}{\blank}$ of joining by $f$, and in \autoref{lem:factor_seq}
+we will also show that this property is closed under sequential colimits.
+
+Let $f:A\to X$ and $f':A'\to X$ be maps, and consider a commuting triangle
+\begin{equation*}
+\begin{tikzcd}
+A \arrow[rr,"i"] \arrow[dr,swap,"f"] & & A' \arrow[dl,"{f'}"] \\
+& X
+\end{tikzcd}
+\end{equation*}
+with $I:f\htpy f'\circ i$. Then we also obtain a commuting triangle
+\begin{equation*}
+\begin{tikzcd}
+A \arrow[rr,"\inl"] \arrow[dr,swap,"f"] & & \join[X]{A}{A'} \arrow[dl,"{\join{f}{f'}}"] \\
+& X
+\end{tikzcd}
+\end{equation*}
+We will write $C_l$ for the homotopy $f\htpy \join{f}{f'}\circ\inl$ witnessing that the
+above triangle commutes.
+
+\begin{lem}\label{lem:factor_join}
+For every embedding $g:B\to X$, if the map
+\begin{equation*}
+\varphi^g_{i,I}: \mathrm{Hom}_X(f',g)\to\mathrm{Hom}_X(f,g)
+\end{equation*}
+defined in \autoref{eq:precomp_triangle} is an equivalence, then so is 
+\begin{equation*}
+\varphi^g_{\inl,C_l}: \mathrm{Hom}_X(\join{f}{f'},g)\to\mathrm{Hom}_X(f,g).
+\end{equation*}
+\end{lem}
+
+\begin{proof}
+Suppose that $g:B\to X$ is an embedding, and that $\varphi^g_{i,I}$
+Since $\varphi^g_{\inl,C_l}$ is a map between mere propositions, it
+suffices to define a map in the converse direction.
+Some essential ingredients of the proof are illustrated in \autoref{fig}.
+\begin{figure}
+\begin{tikzcd}
+A\times_X A' \arrow[r,"\pi_2"] \arrow[d,swap,"\pi_1"] \arrow[dr, phantom, "{\ulcorner}", at end] & A' \arrow[d,"\inr"] \arrow[ddr,bend left=15,densely dotted,near end,"h"] \arrow[dddrr,end anchor={[xshift=.2em]},bend left=25,"{f'}"] \\
+A \arrow[ur,dashed,"i"] \arrow[r,swap,"\inl"] \arrow[drr,bend right=15,swap,near end,"j"] \arrow[ddrrr,bend right=25,end anchor={[xshift=.5em]},swap,"f"] & \join[X]{A}{A'} \arrow[dr,densely dotted,swap,near start,"k"] \\
+& & B \arrow[dr,end anchor={[xshift=.5em,yshift=-.2em]},swap,"g"] \\
+& & & \makebox[1.5em]{\centering $X$}
+\end{tikzcd}
+\caption{Diagram for the proof of \autoref{lem:factor_join}\label{fig}}
+\end{figure}
+
+Let $j:A\to B$ and $J:f\htpy g\circ j$. By our assumption on $f'$, we find
+$h:A'\to B$ and $H:f'\htpy g\circ h$. Now it follows that the square
+\begin{equation*}
+\begin{tikzcd}
+A\times_X A' \arrow[r] \arrow[d] & A' \arrow[d,"h"] \\
+A \arrow[r,swap,"j"] & B
+\end{tikzcd}
+\end{equation*}
+commutes, because that is equivalent (by the assumption that $g$ is an embedding)
+to the commutativity of the square
+\begin{equation*}
+\begin{tikzcd}
+A\times_X A' \arrow[r] \arrow[d] & A' \arrow[d,"{f'}"] \\
+A \arrow[r,swap,"f"] & X.
+\end{tikzcd}
+\end{equation*}
+Thus, we get from the universal property of $\join[X]{A}{A'}$ a map
+$k:\join[X]{A}{A'}$ and homotopies $j\htpy k\circ\inl$ and $h\htpy k\circ\inr$.
+It follows that $f\htpy (g\circ k)\circ \inl$ and $f'\htpy (g\circ k)\circ\inr$.
+Hence by uniqueness we obtain a homotopy $K:\join{f}{f'}\htpy k\circ g$.
+\end{proof}
+
+\begin{lem}\label{lem:factor_seq}
+Let $f:A\to X$ be a map, and consider a sequence $(A_n)_{n:\N}$ together with
+a cone with vertex $A$ and a cocone with vertex $X$, as indicated in the
+diagram 
+\begin{equation*}
+\begin{tikzcd}[column sep=large]
+& A \arrow[dl,swap,"i_0"] \arrow[d,swap,"i_1"] \arrow[dr,"i_2" near end] \arrow[drr,bend left=5,"i_3"] \\
+A_0 \arrow[dr,swap,near start,"f_0"] \arrow[r,"a_{0}"] & A_1 \arrow[d,swap,near start,"f_1"] \arrow[r,"a_1"] & A_2 \arrow[dl,swap,"f_2" xshift=.5em] \arrow[r,"a_2" near start] & \cdots \arrow[dll,bend left=5,"f_3"] \\
+& X
+\end{tikzcd}
+\end{equation*}
+with colimit
+\begin{equation*}
+\begin{tikzcd}
+A \arrow[r,"i_\infty"] & A_\infty \arrow[r,"f_\infty"] & X.
+\end{tikzcd}
+\end{equation*}
+Let $g:B\to X$ be an embedding. If $\varphi^g_{i_n,I_n}$ is an equivalence for each $n:\N$, then so is $\varphi^g_{i_\infty,I_\infty}$. 
+\end{lem}
+
+\begin{proof}
+To prove that $\varphi^g_{i_\infty,I_\infty}$ is an equivalence, it suffices to
+find a map in the converse direction. Let $j:A\to B$ be a map, and let
+$J:f\htpy g\circ j$ be a homotopy. Since each $\varphi^g_{i_\infty,I_\infty}$
+is an equivalence, we find for each $n:\N$ a map
+$h_n:A_n\to B$ and a homotopy $H_n: f_n\htpy g\circ h_n$. Then it follows that
+the maps $(h_n)_{n:\N}$ form a cocone on $(A_n)_{n:\N}$ with vertex $B$, so
+we obtain a map $h_\infty:A_\infty\to B$. It also follows that the homotopies
+$(H_n)_{n:\N}$ form a compatible family of homotopies, so that we obtain
+$H_\infty:f_\infty\htpy g\circ h_\infty$.
+\end{proof}
+
+\begin{thm}\label{thm:image}
+In Martin-L\"of type theory with a univalent universe $\UU$ that is closed under
+graph quotients we can define for every $f:A\to X$ with $A,X:\UU$ the image
+of $f$ with $\im(f):\UU$.
+\end{thm}
+
+\begin{proof}[Construction]
+Let $f:A\to X$ be a map in $\UU$.
+First, we define a sequence
+\begin{equation*}
+\begin{tikzcd}
+\im_\ast^0(f) \arrow[dr,swap,near start,"f^{\ast 0}"] \arrow[r,"i_{0}"] & \im_\ast^1(f) \arrow[d,swap,near start,"f^{\ast 1}"] \arrow[r,"i_1"] & \im_\ast^2(f) \arrow[dl,swap,"f^{\ast 2}" xshift=.5em] \arrow[r,"i_2"] & \cdots \arrow[dll,"f^{\ast 3}"] \\
+& X.
+\end{tikzcd}
+\end{equation*}
+We take $\im_\ast^0(f)\defeq \emptyt$, with the unique map into $X$. Then we take $\im_\ast^{n+1}(f)\defeq \join[X]{A}{\im_\ast^n(f)}$, and
+$f^{\ast(n+1)}\defeq \join{f}{f^{\ast n}}$. The type $\im_\ast^n(f)$ is called the \define{$n$-th image approximation}, 
+and the function $f^{\ast n}$ is called the \define{$n$-th join-power of $f$}. 
+
+The \define{image} $\im(f)$ of $f$ is defined to be the sequential colimit
+$\im_\ast^\infty(f)$. 
+The embedding $i_f:\im(f)\to X$ is defined to be the map $f^{\ast\infty}$. 
+Furthermore we have a canonical map $q_f:A\to \im(f)$ for which the triangle
+\begin{equation*}
+\begin{tikzcd}
+A \arrow[dr,swap,"f"] \arrow[rr,"q_f"] & & \im(f) \arrow[dl,"i_f"] \\
+& X
+\end{tikzcd}
+\end{equation*}
+commutes. This satisfies the universal property of the image with respect
+to embeddings by \autoref{lem:factor_join,lem:factor_seq}. Thus it remains to show that
+$f^{\ast\infty}$ is an embedding, i.e.~that for any $x:X$, the type $\fib{f^{\ast\infty}}{x}$ is a
+mere proposition. 
+
+Using the equivalence $\eqv{\isprop(T)}{(T\to\iscontr(T))}$ 
+we can reduce the goal of showing that $\fib{f^{\ast\infty}}{x}$ is a mere proposition, to
+\begin{equation*}
+\fib{f^{\ast\infty}}{x}\to \iscontr (\fib{f^{\ast\infty}}{x}).
+\end{equation*}
+To describe such a fiberwise map, it is equivalent to define a commuting triangle
+\begin{equation*}
+\begin{tikzcd}
+\sm{x:X}\fib{f^{\ast\infty}}{x} \arrow[rr] \arrow[dr,swap,"\proj 1"] & & \sm{x:X} \iscontr (\fib{f^{\ast\infty}}{x}) \arrow[dl,"\proj 1"] \\
+& X
+\end{tikzcd}
+\end{equation*}
+Since $\iscontr(\blank)$ is a mere proposition, the projection on the right is an embedding. Since $f^{\ast\infty}$ satisfies the universal property of the image of $f$, we see that it is equivalent to show that
+\begin{equation*}
+\fib{f}{x}\to \iscontr (\fib{f^{\ast\infty}}{x}).
+\end{equation*}
+Let $a:A$ such that $f(a)=x$. then we need to show that $\fib{f^{\ast\infty}}{f(a)}$ is contractible.
+By Brunerie's flattening lemma, see \S 6.12 of \cite{hottbook}, it suffices to show that
+\begin{equation*}
+\tfcolim_n(\fib{f^{\ast n}}{f(a)})
+\end{equation*}
+is contractible. By \autoref{defn:join-fiber}, it follows that $\fib{f^{\ast n}}{f(a)}$ is equivalent
+to $(\fib{f}{f(a)})^{\ast n}$. The sequential colimit of these types is contractible, because
+the maps in this type sequence all factor through the unit type.
+\end{proof}
+
+Using the join construction, we can now give a new definition of the propositional truncation.
+
+\begin{defn}\label{defn:proptrunc}
+The \define{propositional truncation} $\trunc{-1}{A}$ of a type $A:\UU$ is defined to be 
+sequential colimit of the type sequence
+\begin{equation*}
+\begin{tikzcd}
+\emptyt \arrow[r] & A \arrow[r,"\inr"] & \join{A}{A} \arrow[r,"\inr"] & \join{A}{(\join{A}{A})} \arrow[r,"\inr"] & \cdots
+\end{tikzcd}\qedhere
+\end{equation*}
+\end{defn}
+
+\begin{cor}
+The propositional truncation $\trunc{-1}{A}$ of a type $A$ is a mere proposition satisfying the universal property of propositional truncation. 
+\end{cor}
+
+In the following application of the join construction we characterize
+the `canonical' idempotents of the join operation on maps. Note that in the
+definition of canonical idempotent below, there is no special status for
+$\inl:A\to \join[X]{A}{A}$ compared to $\inr:A\to\join[X]{A}{A}$. Indeed, the
+maps $\inl$ and $\inr$ are homotopic, and therefore one of them is an
+equivalence if and only if the other is an equivalence.
+
+\begin{thm}\label{thm:idempotents}
+For any map $f:A\to X$ in $\UU$ the following are equivalent:
+\begin{enumerate}
+\item $f$ is an embedding,
+\item $f$ is a \define{canonical idempotent} for the join operation on maps, 
+in the sense that the map $\inl:A\to\join[X]{A}{A}$ is an equivalence.
+\end{enumerate}
+\end{thm}
+
+\begin{proof}
+Recall that we have a commuting square
+\begin{equation*}
+\begin{tikzcd}[column sep=huge]
+A \arrow[r,"\inl"] \arrow[d,swap,"\eqvsym"] & \join[X]{A}{A} \arrow[d,"\eqvsym"] \\
+\sm{x:X}\fib{f}{x} \arrow[r,swap,"\total{\inl}"] & \sm{x:X}\join{\fib{f}{x}}{\fib{f}{x}}.
+\end{tikzcd}
+\end{equation*}
+It follows that $\inl:A\to\join[X]{A}{A}$ is an equivalence if and only if for
+each $x:X$, the map $\inl:\fib{f}{x}\to\join{\fib{f}{x}}{\fib{f}{x}}$ is an
+equivalence. 
+Since $f:A\to X$ is an embedding precisely when its fibers are mere 
+propositions, we see that it suffices to prove the statement fiberwise.
+More precisely, we show that for any $P:\UU$, the following are equivalent:
+\begin{enumerate}
+\item $P$ is a mere proposition,
+\item $P$ is a \define{canonical idempotent} for the join operation on types, 
+in the sense that the map $\inl:P\to \join{P}{P}$ is an equivalence.
+\end{enumerate}
+Suppose that $P$ is a mere proposition. 
+Then $\join{P}{P}$ is a mere proposition, and we have $P\to\join{P}{P}$.
+Moreover, we may use the universal property of the pushout to show that
+$\join{P}{P}\to P$, since any two maps of type $P\times P\to P$ are equal. 
+Therefore it follows that there is an equivalence $\eqv{P}{\join{P}{P}}$.
+This shows that if $P$ is a mere proposition, then $P$ is an idempotent for
+the join operation. Since any two maps of type $P\to\join{P}{P}$ are equal,
+it also follows that $P$ is canonically idempotent.
+
+For the converse, suppose that $\inl:P\to\join{P}{P}$ is an equivalence. 
+Since we know that $P^{\ast\infty}$ is a mere proposition, 
+we may show that $P$ is a mere proposition by constructing an equivalence of
+type $\eqv{P}{P^{\ast\infty}}$. 
+Since $P$ is the sequential colimit of the constant
+type sequence at $P$, it suffices to show that the natural transformation
+\begin{equation*}
+\begin{tikzcd}
+P \arrow[r,"{\idfunc[P]}"] \arrow[d,swap,"\inl"] & P \arrow[r,"{\idfunc[P]}"] \arrow[d,swap,"\inl"] & P \arrow[r,"{\idfunc[P]}"] \arrow[d,swap,"\inl"] & \cdots \\
+P^{\ast 1} \arrow[r,swap,"\inr"] & P^{\ast 2} \arrow[r,swap,"\inr"] & P^{\ast 3} \arrow[r,swap,"\inr"] & \cdots
+\end{tikzcd}
+\end{equation*}
+of type sequences is in fact a natural equivalence. In other words, we have
+to show that for each $n:\N$, the map $\inl:P\to P^{\ast n}$ is an equivalence.
+
+Of course, $\inl:P\to P^{\ast 1}$ is an equivalence. For the inductive step,
+suppose that $\inl:P\to P^{\ast n}$ is an equivalence. First note that
+we have a commuting triangle
+\begin{equation*}
+\begin{tikzcd}
+P \arrow[rr,"\inl"] \arrow[dr,swap,"\inl"] & & \join{P}{P} \arrow[dl,"{\idfunc[P] \circledast\inl}"] \\
+& P^{\ast(n+1)}
+\end{tikzcd}
+\end{equation*}
+where $\idfunc[P] \circledast\inl$ denotes the functorial action of the join, applied
+to $\idfunc[P]$ and $\inl:P\to P^{\ast n}$. Since both $\idfunc[P]$ and
+$\inl:P\to P^{\ast n}$ are assumed to be equivalences, it follows that
+$\idfunc[P]\circledast \inl$ is an equivalence. Therefore we get from the
+$3$-for-$2$ rule that $\inl:P\to P^{\ast (n+1)}$ is an equivalence. 
+\end{proof}
+
+\subsection{The modified join construction}\label{sec:modified-join}
+
+In this section we modify the join construction slightly, to construct the
+image of a map $f:A\to X$ where we assume $X$ to be only locally small, rather than
+small. To do this, we need to assume `global function extensionality', by which
+we mean that function extensionality holds for all types, regardless of their {size
+\footnote{Note that univalence implies function extensionality \emph{in} the universe $\UU$, but not necessarily global function extensionality.}}\footnote{In fact, we only need function extensionality for function types with a small domain and a locally small codomain.}.
+
+We use the modified join construction to construct some classes of quotients
+of low homotopy complexity: 
+set-quotients and the Rezk completion of a precategory. 
+We note that the modified join construction may also be used to construct
+the $n$-truncation for any $n:\N$. 
+
+There are at least two equivalent ways of defining the notion of local smallness.
+
+\begin{lem}
+Let $X$ be a (possibly large) type. Then the following are equivalent.
+\begin{enumerate}
+\item For every $x,y:X$ there is a type $(x='y):\UU$ and an equivalence
+\begin{equation*}
+e_{x,y}:\eqv{(x=y)}{(x='y)}.
+\end{equation*}
+\item For every $x,y:X$ there is a type $(x='y):\UU$; for every $x:X$ there
+is a term $r_x : (x='x)$, and the canonical map
+\begin{equation*}
+\prd{y:X} (x=y)\to (x='y)
+\end{equation*}
+given by path induction, taking the value $r_x$ at $\refl{x}$, is a fiberwise equivalence.
+\end{enumerate}
+In either case, we call $X$ \define{locally small} (with respect to $\UU$).
+\end{lem}
+
+\begin{proof}
+Suppose we have for every $x,y:X$ a type $(x='y)$ and an equivalence $e_{x,y}:\eqv{(x=y)}{(x='y)}$. Then we have $r_x\defeq e_{x,x}(\refl{x}):x='x$. Since we have a fiberwise equivalence $e_{x,y}$, it follows by Theorem 4.7.7 of \cite{hottbook} that the total space
+\begin{equation*}
+\sm{y:X}x='y
+\end{equation*}
+is contractible. Hence the canonical map taking $\refl{x}$ to $r_x$ is a fiberwise equivalence. Moreover, it follows by path induction that $e_{x,y}$ is this canonical map.
+
+The converse direction is trivial, and it is clear that we have defined mutual inverses between the two structures.
+\end{proof}
+
+\begin{rmk}
+Being locally small in the above sense is a property, since in a univalent universe
+any two witnesses of local smallness are equal.
+
+In the first of the two equivalent descriptions of local smallness it is clear that local smallness is a (large) mere proposition. The second of the two equivalent descriptions establishes that the equivalences are canonical, at least with respect to the choses proof of reflexivity.
+\end{rmk}
+
+\begin{eg}
+Examples of locally small types include all types in $\UU$, 
+the universe $\UU$ itself (by the univalence axiom), 
+mere propositions of any size, 
+and the exponent $A\to X$, for any $A:\UU$ and any locally small type $X$
+(by global function extensionality).
+\end{eg}
+
+To construct the image of $f:A\to X$, mapping a small type $A$ into a locally
+small type $X$, one can see that
+the fibers of $f$ are equivalent to small types. Indeed, by the
+local smallness condition, we have equivalences of type
+\begin{equation*}
+\eqv{\Big(\sm{a:A} f(a)=x\Big)}{\Big(\sm{a:A} f(a) =' x\Big)},
+\end{equation*}
+and the type on the right is small for every $x:X$. We will write
+$\fib'{f}{x}$ for this modified fiber of $f$ at $x$. Since the modified fibers
+are in $\UU$, we may $(-1)$-truncate them using \autoref{defn:proptrunc}. Therefore, we may define
+\begin{equation}\label{eq:im_by_trunc}
+\im'_t(f)\defeq\sm{x:X}\trunc{-1}{\fib'{f}{x}} 
+\end{equation}
+Of course, we have a commuting triangle
+\begin{equation*}
+\begin{tikzcd}
+A \arrow[r] \arrow[dr,swap,"f"] & \im'_t(f) \arrow[d,"\proj 1"] \\
+& X
+\end{tikzcd}
+\end{equation*}
+with the universal property of the image inclusion of $f$, which follows from
+Theorem 7.6.6 of \cite{hottbook}. 
+Although this image exists under our working assumptions, 
+it is not generally the case that $\im'_t(f)$ is a type in $\UU$.
+
+One might also try the join construction directly to construct the image of
+$f$. `The' join of two maps $f:A\to X$ and $g:B\to X$ into a locally small type
+$X$ is formed taken by first taking the pullback of $f$ and $g$, and then the 
+pushout of the two projections from the pullback.
+However, the pullback of $f$ and $g$ is the type $\sm{a:A}{b:B}f(a)=g(b)$, and
+this is not a type in $\UU$. Therefore, we may not just form the pushout
+of $A \leftarrow (\sm{a:A}{b:B}f(a)=g(b)) \rightarrow B$. 
+Hence we cannot follow the construction of the join of maps directly, in the
+setting where we only assume $\UU$ to be closed under graph quotients.
+
+Instead, we modify the definition of the join of maps, using the
+condition that $X$ is locally small. By this condition we have
+an equivalence of type $\eqv{(f(a)=g(b))}{(f(a)='g(b))}$, for any $a:A$ and 
+$b:B$. It therefore follows that the type
+\begin{equation}\label{eq:modified_pullback}
+A\times'_X B \defeq \sm{a:A}{b:B}f(a)='g(b)
+\end{equation} is
+still the pullback of $f$ and $g$. We call this type the \define{modified
+pullback} of $f$ and $g$.
+Since each of the types $A$, $B$ and $f(a)='g(b)$ is in $\UU$, it follows that
+the modified pullback $A\times_X'B$ is in $\UU$.
+
+\begin{thm}\label{thm:modified-join}
+Let $\UU$ be a univalent universe in Martin-L\"of type theory with global function extensionality, 
+and assume that $\UU$ is closed under graph quotients. 
+
+Let $A:\UU$ and let $X$ be any type which is locally small with respect to $\UU$.
+Then we can construct a small type $\im'(f):\UU$, a surjective map $q'_f:A\to\im'(f)$, and an embedding $i'_f:\im'(f)\to X$ such that the triangle
+\begin{equation*}
+\begin{tikzcd}
+A \arrow[r,"{q'_f}"] \arrow[dr,swap,"f"] & \im'(f) \arrow[d,"{i'_f}"] \\
+& X
+\end{tikzcd}
+\end{equation*}
+commutes, and $i_f:\im'(f)\to X$ has the universal property of the image inclusion of $f$, in the sense of \autoref{defn:universal}.
+\end{thm}
+
+\begin{proof}
+We define the modified join $f \ast' g$ of $f$ and $g$ as the pushout of the
+modified pullback, as indicated in the diagram
+\begin{equation*}
+\begin{tikzcd}
+A\times_X' B \arrow[r,"\pi_2"] \arrow[d,swap,"\pi_1"] \arrow[dr, phantom, "{\ulcorner}", at end] & B \arrow[d,"\inr"] \arrow[ddr,bend left=15,"g"] \\
+A \arrow[r,swap,"\inl"] \arrow[drr,bend right=15,swap,"f"] & A\ast_X' B \arrow[dr,densely dotted,swap,near start,"{f \ast' g}" xshift=1ex] \\
+& & X.
+\end{tikzcd}
+\end{equation*}
+Note that this is where we need to know that we can use the induction principle
+of graph quotients to define maps from graph quotients into locally small types.
+
+Now we can consider, for any $f:A\to X$ from $A:\UU$ into a locally small type
+$X$, the modified join powers $f^{\ast'n}$ of $f$. The existence of each of
+them follows from the assumption that $\UU$ is closed under graph quotients.
+By an argument completely analogous to the argument given in the original join
+construction, it follows that the sequential colimit
+$i'_f\defeq f^{\ast'\infty}$ is an embedding with the universal property of the image 
+inclusion of $f$. 
+\end{proof}
+
+\subsection{Direct applications of the modified join construction}
+
+Recall that $\prop_\UU$ is the type $\sm{P:\UU}\isprop(P)$. A $\prop_\UU$-valued
+equivalence relation on a type $A$, is a binary relation $R:A\to A\to\prop_\UU$
+that is reflexive, symmetric and transitive in the expected sense.
+A more thorough discussion on set-quotients can be found in \S 6.10 of
+\cite{hottbook}.
+
+\begin{cor}\label{cor:setquotients}
+For any $\prop_\UU$-valued equivalence relation $R:A\to A\to\prop_\UU$ over a type
+$A:\UU$, we get from the construction in \autoref{thm:modified-join} a type $A/R:\UU$
+with the universal property of the quotient.
+\end{cor}
+
+\begin{proof}
+In \S 10.1.3 of \cite{hottbook}, it is shown that the subtype 
+\begin{equation*}
+\sm{P:A\to\UU} \trunc{-1}{\sm{a:A} R(a)=P}
+\end{equation*} 
+of the type $A\to\prop_\UU$ has the universal property of the set-quotient.
+Note that this is the image of $R$, as a function from $A$ to the locally small
+type $A\to\prop_\UU$. 
+
+Since the type $\im'(R):\UU$, which we obtain from \autoref{thm:modified-join},
+has the universal property of the image, the universal property of the
+set-quotient follows from an argument analogous to that given in \S 6.10 of \cite{hottbook}.
+\end{proof}
+
+By a small (pre)category $A$ we mean a (pre)category $A$ for which the type
+$\mathsf{obj}(A)$ of objects is in $\UU$, and for which the type
+$\mathsf{hom}_A(x,y)$ of morphisms from $x$ to $y$ is also in $\UU$, for any
+$x,y:\mathsf{obj}(A)$. Pre-categories and Rezk-complete categories were introduced
+in Homotopy Type Theory in \cite{AKS}.
+
+\begin{cor}\label{cor:rezkcompletion}
+The Rezk completion $\hat{A}$ of any small precategory $A$ can be constructed in any 
+univalent universe that is closed under graph quotients,
+and $\hat{A}$ is again a small category. 
+\end{cor}
+
+\begin{proof}
+In the first proof of Theorem 9.9.5 of \cite{hottbook}, the Rezk completion of
+a precategory $A$ is constructed as the image of the action on objects of the
+Yoneda embedding $\mathbf{y}:A\to\mathbf{Set}^{\op{A}}$.
+
+The hom-set $\mathbf{Set}^{\op{A}}(F,G)$ is the type of natural transformations
+from $F$ to $G$. It is clear from Definition 9.9.2 of \cite{hottbook}, that the
+type $\mathbf{Set}^{\op{A}}(F,G)$ is in $\UU$ for any two presheaves $F$ and $G$
+on $A$. In particular, the type $F\cong G$ of isomorphisms from $F$ to $G$
+is small for any two presheaves on $A$.
+
+Since $\mathbf{Set}$ is a category, it follows from Theorem 9.2.5 of
+\cite{hottbook} that the presheaf pre-category $\mathbf{Set}^{\op{A}}$ is a category.
+Since the type of isomorphisms between any two objects is
+small, it follows that the type of objects of
+$\mathbf{Set}^{\op{A}}$ is locally small. 
+
+Hence we can use \autoref{thm:modified-join} to construct the image of the
+action on objects of the Yoneda-embedding. The image constructed in this way
+is of course equivalent to the type $\hat{A}_0$ defined in the first proof of
+Theorem 9.9.5. Hence the arguments presented in the rest of that proof apply
+as well to our construction of the image. We therefore conclude that the Rezk completion
+of any small precategory is a small category.
+\end{proof}
+
+\subsection{The join extension and connectivity theorems}
+
+Some basic results about the join of maps include a generalization of Lemma 8.6.1 of
+\cite{hottbook}, which we call the join extension theorem (\autoref{thm:join-extension}), and a closely
+related theorem which we call the join connectivity theorem (\autoref{thm:join-connectivity}).
+The idea of the join connectivity theorem came from Proposition 8.15 in 
+Rezk's notes on homotopy toposes \cite{Rezk}.
+We use the join connectivity theorem in 
+\autoref{thm:joinconstruction-connectivity} to conclude that the connectivity 
+of the approximations of the image inclusion increases.
+In this sense, our approximating sequence of the image is very nice:
+after $n$ steps of the approximation, only stuff of homotopy level higher than
+$n$ is added.
+
+Lemma 8.6.1 of \cite{hottbook} states that if $f:A\to B$ is an $m$-connected map,
+and if $P:B\to\UU$ is a family of $(m+n+2)$-truncated types,
+then precomposing by $f$ gives an $n$-truncated map of type
+\begin{equation*}
+\Big(\prd{b:B}P(b)\Big)\to\Big(\prd{a:A}P(f(a))\Big).
+\end{equation*}
+The general join extension theorem states that if $f:A\to B$ is an $M$-connected
+map for some type $M$, and $P:B\to\UU$ is a family of $(\join{M}{N})$-local 
+types, then the mentioned precomposition is an $N$-local map 
+(we recall the terminology shortly). 
+Note that, if one takes spheres $\Sn^m$ and $\Sn^n$ for $M$ and $N$, 
+one retrieves Lemma 8.6.1 of \cite{hottbook} as a simple corollary.
+
+We conclude this section with \autoref{thm:joinconstruction-connectivity},
+asserting that $f^{\ast n}$ factors through an $(n-2)$-connected map to
+$\im(f)$, for each $n:\N$.
+
+\begin{defn}\label{defn:local}
+For a given type $M$, a type $A$ is said to be \define{$M$-local} if the map
+\begin{equation*}
+\lam{a}{m}a : A \to (M \to A)  
+\end{equation*}
+is an equivalence.
+\end{defn}
+
+In other words, the type $A$ is $M$-local if each $f:M\to A$ has a unique extension along the
+map $M\to\unit$, as indicated in the diagram
+\begin{equation*}
+\begin{tikzcd}
+M \arrow[r,"f"] \arrow[d] & A \\
+\unit. \arrow[ur,densely dotted]
+\end{tikzcd}
+\end{equation*}
+Note that being $M$-local in the above sense is a mere proposition, so that the
+type of all $M$-local types in $\UU$ is a subuniverse of $\UU$%
+\footnote{When $\UU$ is assumed to be closed under recursive higher inductive
+types, there exists an operation $\modal_M : \UU\to\UU$, 
+which maps a type $A$ to the universal $M$-local type $\modal_M(A)$
+with a map of type $A\to\modal_M(A)$. This operation is called 
+\define{localization at $M$}, and it is a modality. 
+This is just a special case of localization. There is a more general
+notion of localization at a family of maps, see%
+~\cite{RijkeShulmanSpitters}, for which the localization operation
+is a reflective subuniverse, but \emph{not generally} a modality.
+The survey article \cite{RijkeShulmanSpitters} contains much
+more information about local types and the operation of localization.%
+}. 
+Recall that a type is $\sphere{n+1}$-local precisely when it is $n$-truncated,
+for each $n\geq -2$ (taking the $(-1)$-sphere to be the empty type).
+
+Dually, a type $A$ is said to be \define{$M$-connected} if every $M$-local
+type is $A$-local. That is, if for every $M$-local type $B$, the map
+\begin{equation*}
+\lam{b}{a}{b} : B \to (A \to B)
+\end{equation*}
+is an equivalence. A map is said to be $M$-connected if its fibers are $M$-connected.
+Thus in particular, $M$ itself is $M$-connected, and the unit type $\unit$ is $M$-connected for every $M$. 
+Usually, a type $A$ is said to be $M$-connected if its localization
+$\modal_M(A)$ is contractible. 
+Since we have not assumed that the universe is closed under a general class of recursive higher inductive types, we cannot simply assume that the operation $\modal_M:\UU\to\UU$ of localizing at $M$ is available. For a detailed discussion on localization, see \cite{RijkeShulmanSpitters}.
+
+In the present article, we focus on the interaction
+of the join operation with the notions of being local and of connectedness.
+
+\begin{defn}
+Let $M$ be a type. We say that a type $X$ has the \define{$M$-extension property}
+with respect to a map $F:A\to B$, if the map
+\begin{equation*}
+\lam{g}{a} g(F(a)) : (B\to X)\to (A\to X)
+\end{equation*}
+is $M$-local. In the case $M\jdeq\unit$, we say that $X$ is $F$-local.
+\end{defn}
+
+\begin{lem}\label{lem:equivalent-extension-problems}
+For any three types $A$, $A'$ and $B$, the type $B$ is $(\join{A}{A'})$-local
+if and only if for any any $f:A\to B$, the type
+\begin{equation*}
+\sm{b:B}\prd{a:A}f(a)=b
+\end{equation*}
+is $A'$-local.
+\end{lem}
+
+\begin{proof}
+To give $f:A\to B$ and $(f',H):A'\to\sm{b:B}\prd{a:A}f(a)=b$ is equivalent to giving a map $g:\join{A}{A'}\to B$. Concretely, the equivalence is given by substituting in $g:\join{A}{A'}\to B$ the constructors of the join, to obtain $\pairr{g\circ\inl,g\circ\inr,\apfunc{g}\circ\glue}$. 
+
+Now observe that the fiber of precomposing with the unique map $!_{\join{A}{A'}} : \join{A}{A'}\to\unit$ at $g : \join{A}{A'}\to B$, is equivalent to
+\begin{equation*}
+\sm{b:B}\prd{t:\join{A}{A'}}g(t)=b.
+\end{equation*}
+Similarly, the fiber of precomposing with the unique map $!_{A'} : A'\to\unit$ at $\pairr{g\circ\inr,\apfunc{g}\circ\glue} : A'\to\sm{b:B}\prd{a:A}f(a)=b$ is equivalent to
+\begin{equation*}
+\sm{b:B}{h:\prd{a:A}g(\inl(a))=b}\prd{a':A'}\pairr{g(\inr(a')),\apfunc{g}(\glue(a,a'))}=\pairr{b,h}.
+\end{equation*}
+By the universal property of the join, these types are equivalent.
+\end{proof}
+
+\begin{lem}\label{lem:join-local}
+Suppose $A$ is an $M$-connected type, and that $B$ is an $(\join{M}{N})$-local type. Then $B$ is $(\join{A}{N})$-local.
+\end{lem}
+
+\begin{proof}
+Let $B$ be a $(\join{M}{N})$-local type. Our goal of showing that $B$ is
+$(\join{A}{N})$-local is equivalent to showing that for any $f:N\to B$, 
+the type 
+\begin{equation*}
+\sm{b:B}\prd{a:A}f(a)=b
+\end{equation*}
+is $A$-local. 
+Since $B$ is assumed to be $(\join{M}{N})$-local, we know that this type is 
+$M$-local. Since $A$ is $M$-connected, this type is also $A$-local.
+\end{proof}
+
+\begin{lem}\label{lem:N-extension-simple}
+Let $A$ be $M$-connected and let $B$ be $(\join{M}{N})$-local. Then the map
+\begin{equation*}
+\lam{b}{a}b:B\to B^A
+\end{equation*}
+is $N$-local. 
+\end{lem}
+
+\begin{proof}
+The fiber of $\lam{b}{a}b$ at a function $f:A\to B$ is equivalent to the type $\sm{b:B}\prd{a:A}f(a)=b$. Therefore, it suffices to show that this type is $N$-local. By \autoref{lem:equivalent-extension-problems}, it is equivalent to show that $B$ is $(\join{A}{N})$-local. This is solved in \autoref{lem:join-local}.
+\end{proof}
+
+\begin{thm}[Join extension theorem]\label{thm:join-extension}
+Suppose $f:X\to Y$ is $M$-connected, and let $P:Y\to\UU$ be a family of
+$(\join{M}{N})$-local types for some type $N$. Then precomposition by $f$, i.e.
+\begin{equation*}
+\lam{s}s\circ f : \Big(\prd{y:Y}P(y)\Big)\to\Big(\prd{x:X}P(f(x))\Big),
+\end{equation*}
+is an $N$-local map.
+\end{thm}
+
+\begin{proof}
+Let $g:\prd{x:X}P(f(x))$. Then we have the equivalences
+\begin{align*}
+\fib{(\blank\circ f)}{g} 
+& \eqvsym \sm{s:\prd{y:Y}P(y)}\prd{x:X}s(f(x))=g(x) \\
+& \eqvsym \sm{s:\prd{y:Y}P(y)}\prd{y:Y}{(x,p):\fib{f}{y}} s(y)= \tr{}{p}{g(x)} \\
+& \eqvsym \prd{y:Y}\sm{z:P(y)}\prd{(x,p):\fib{f}{y}} \tr{}{p}{g(x)}=z \\
+& \eqvsym \prd{y:Y}\fib{\lam{z}{(x,p)}z}{\lam{(x,p)}\tr{}{p}{g(x)}}.
+\end{align*}
+Therefore, it suffices to show for every $y:Y$, that $P(y)$ has the $N$-extension property with respect to the unique map of type $\fib{f}{y}\to\unit$. This is a special case of \autoref{lem:N-extension-simple}.
+\end{proof}
+
+\begin{thm}\label{thm:simple-join}
+Suppose $X$ is an $M$-connected type and $Y$ is an $N$-connected type. Then $\join{X}{Y}$ is an $(\join{M}{N})$-connected type.
+\end{thm}
+
+\begin{proof}
+It suffices to show that any $(\join{M}{N})$-local type is $(\join{X}{Y})$-local.
+Let $Z$ be an $(\join{M}{N})$-local type.
+Since $Z$ is assumed to be $(\join{M}{N})$-local, it follows by \autoref{lem:join-local} that $Z$ is $(\join{X}{N})$-local. By symmetry of the join, it also follows that $Z$ is $(\join{X}{Y})$-local.
+\end{proof}
+
+\begin{thm}[Join connectivity theorem]\label{thm:join-connectivity}
+Consider an $M$-connected map $f:A\to X$ and an $N$-connected map $g:B\to X$. Then $\join{f}{g}$ is $(\join{M}{N})$-connected.
+\end{thm}
+
+\begin{proof}
+This follows from \autoref{thm:simple-join} and \autoref{defn:join-fiber}.
+\end{proof}
+
+\begin{thm}\label{thm:joinconstruction-connectivity}
+Consider the factorization
+\begin{equation*}
+\begin{tikzcd}
+A_n \arrow[dr,swap,"f^{\ast n}"] \arrow[r,"q_n"] & \im(f) \arrow[d] \\
+& X
+\end{tikzcd}
+\end{equation*}
+of $f^{\ast n}$ through the image $\im(f)$. 
+Then the map $q_n$ is $(n-2)$-connected, for each $n:\N$.
+\end{thm}
+
+\begin{proof}
+We first show the assertion that, given a commuting diagram of the form
+\begin{equation*}
+\begin{tikzcd}
+A \arrow[r,"q"] \arrow[dr,swap,"f"] & Y \arrow[d,"m"] & A' \arrow[l,swap,"{q'}"] \arrow[dl,"{f'}"] \\
+& X
+\end{tikzcd}
+\end{equation*}
+in which $m$ is an embedding, then $\join{f}{f'}=\join{(m\circ q)}{(m\circ q')}=m\circ (\join{q}{q'})$.
+In other words, postcomposition with embeddings distributes over 
+the join operation.
+
+Note that, since $m$ is assumed to be an embedding, we have an equivalence of
+type $\eqv{f(a)=f'(a)}{q(a)=q'(a)}$, for every $a:A$. Hence the pullback of
+$f$ and $f'$ is equivalent to the pullback of $q$ along $q'$. Consequently, the
+two pushouts
+\begin{equation*}
+\begin{tikzcd}
+A\times_X A' \arrow[r,"\pi_2"] \arrow[d,swap,"\pi_1"] & A' \arrow[d] \\
+A \arrow[r] & \join[X]{A}{A'}
+\end{tikzcd}
+\qquad\text{and}\qquad
+\begin{tikzcd}
+A\times_Y A' \arrow[r,"\pi_2"] \arrow[d,swap,"\pi_1"] & A' \arrow[d] \\
+A \arrow[r] & \join[Y]{A}{A'}
+\end{tikzcd}
+\end{equation*}
+are equivalent. Hence the claim follows.
+
+As a corollary, we get that $q_n=q_f^{\ast n}$. Note that $q_f$ is surjective,
+in the sense that $q_f$ is $\bool$-connected, where $\bool$ is the type of booleans%
+\footnote{Recall that the $\bool$-local types are precisely the mere propositions.}.
+Hence it follows that $q_n$ is $\bool^{\ast n}$-connected. 
+
+Now recall that the $n$-th join power of $\bool$ is the $(n-1)$-sphere $\Sn^{n-1}$, and that
+a type is $(\Sn^{n-1})$-connected if and only if it is $(n-2)$-connected.
+\end{proof}
+
+\subsection{The construction of the $n$-truncation}\label{sec:truncation}
+
+In this section we will construct for any $n:\N$, the $n$-truncation on any univalent universe that contains
+a natural numbers object and is closed under graph quotients.
+We will do this via the modified join construction of \autoref{thm:modified-join}.
+Recall that a $(-2)$-truncated type is simply a contractible type, and that
+for $n\geq -2$ an $(n+1)$-truncated type is a type of which the identity types
+are $n$-truncated. The $(-2)$-truncation is easy to construct: it sends
+every type to the unit type $\unit$. Thus, we shall proceed by induction
+on the integers greater or equal to $-2$, and assume that the universe admits
+an $n$-truncation operation $\trunc{n}{\blank}:\UU\to\UU$ for a given $n$.
+
+A suggestive way to think of the type $\trunc{n+1}{A}$ is as the quotient of $A$ modulo the
+`$(n+1)$-equivalence relation' given by $\trunc{n}{a=b}$. 
+Indeed, by Theorem 7.3.12 of \cite{hottbook} we have that the canonical map
+\begin{equation*}
+\trunc{n}{a=b}\to(\tproj{n+1}{a}=\tproj{n+1}{b})
+\end{equation*}
+is an equivalence, and the unit $\tproj{n+1}{\blank}:A\to \trunc{n+1}{A}$ is
+a surjective map (it is in fact $(n+1)$-connected). 
+
+\begin{thm}\label{thm:truncation}
+In Martin-L\"of type theory with a univalent universe $\UU$ that is closed under
+graph quotients we can define, for every $n\geq -2$, an $n$-truncation operation
+\begin{equation*}
+\trunc{n}{\blank} : \UU\to\UU
+\end{equation*}
+and for every $A:\UU$ a map
+\begin{equation*}
+\tproj{n}{\blank}:A\to\trunc{n}{A},
+\end{equation*}
+such that for each $A:\UU$ the type $\trunc{n}{A}$ is an $n$-truncated type satisfying the (dependent) universal property of $n$-truncation, that for every $P:\trunc{n}{A}\to\UU$ such that every $P(x)$ is $n$-truncated,
+the canonical map
+\begin{equation*}
+\blank\circ\tproj{n}{\blank} : \Big(\prd{x:\trunc{n}{A}}P(x)\Big)\to\Big(\prd{a:A}P(\tproj{n}{a})\Big)
+\end{equation*}
+is an equivalence.
+\end{thm}
+
+\begin{proof}[Construction]
+As announced, we define the $n$-truncation operation by induction on $n\geq-2$,
+with the trivial operation as the base case. Let $n:\N$ and suppose we have
+an $n$-truncation operation as described in the statement of the theorem.
+
+We first define the reflexive relation $\mathscr{Y}_n(A) : A \to A \to \UU$ by
+\begin{equation*}
+\mathscr{Y}_n(A)(a,b) \defeq \trunc{n}{a=b}.
+\end{equation*}
+Note that the codomain $(A\to\UU)$ of $\mathscr{Y}_n(A)$ is locally small since it is the exponent of
+the locally small type $\UU$ by a small type $A$. Hence we we obtain the image
+of $\mathscr{Y}_n(A)$ from the modified join construction of \autoref{thm:modified-join}.
+This allows us to define
+\begin{align*}
+\trunc{n+1}{A} & \defeq \im'(\mathscr{Y}_n(A)) \\
+\tproj{n+1}{\blank} & \defeq q'_{\mathscr{Y}_n(A)}
+\end{align*}
+For notational reasons, we shall just write $\im(\mathscr{Y}_n(A))$ for $\im'(\mathscr{Y}_n(A))$. 
+
+We will show that $\trunc{n+1}{A}$ is indeed $(n+1)$-truncated in \autoref{cor:truncated} of \autoref{lem:modal_contr} below. Once this fact is established, it remains to verify the dependent universal property of $(n+1)$-truncation.
+By the join extension theorem \autoref{thm:join-extension} (using $N\defeq \emptyt$), it suffices to show that the map $\tproj{n+1}{\blank}:A\to\trunc{n+1}{A}$ is $\sphere{n+2}$-connected. Note that $\tproj{n+1}{\blank}$ is surjective, so the claim that $\tproj{n+1}{\blank}$ is $\sphere{n+2}$-connected follows from \autoref{lem:ap_connectivity}, where we show that for any surjective map $f:A\to X$, if the action on paths is $M$-connected for any two points in $A$, then $f$ is $\susp(M)$-connected. To apply this lemma, we also need to know that $\tproj{n}{\blank}:A\to\trunc{n}{A}$ is $\sphere{n+1}$-connected. This is shown in Corollary 7.5.8 of \cite{hottbook}.
+\end{proof}
+
+Before we prove that $\im(\mathscr{Y}_n(A))$ is $(n+1)$-truncated, we prove the stronger claim that $\im(\mathscr{Y}_n(A))$ has the desired identity types:
+
+\begin{lem}\label{lem:modal_contr}
+For every $a,b:A$, we have an equivalence
+\begin{equation*}
+\eqv{\trunc{n}{a=b}}{(\mathscr{Y}_n(A)(a)=\mathscr{Y}_n(A)(b))}.
+\end{equation*}
+\end{lem}
+
+\begin{proof}
+To characterize the identity type of $\im(\mathscr{Y}_n(A))$ we will apply
+the encode-decode method of \cite{LicataShulman}. Thus, we need to provide for every $b:A$ a type 
+family $Q_b:\im(\mathscr{Y}_n(A))\to\UU$ with a point $q_b:Q_b(\mathscr{Y}_n(A)(b))$,
+such that the total space
+\begin{equation*}
+\sm{P:\im(\mathscr{Y}_n(A))} Q_b(P)
+\end{equation*}
+is contractible. Moreover, it must be the case that $\eqv{Q_b(\mathscr{Y}_n(A)(a))}{\trunc{n}{a=b}}$ for any $a:A$. 
+
+To construct $Q_b$, note that for any $b:A$, the image inclusion $i:\im(\mathscr{Y}_n(A))\to (A\to\UU)$ defines 
+a type family $Q_b:\im(\mathscr{Y}_n(A))\to\UU$ by $Q_b(P)\defeq P(b)$. With this definition for $Q_b$ it follows that $Q_b(\mathscr{Y}_n(A)(a))\jdeq\mathscr{Y}_n(A)(a,b)\jdeq\trunc{n}{a=b}$, as desired. Moreover, we have a reflexivity term $\tproj{n}{\refl{b}}$ in $\trunc{n}{b=b}$, so it remains to prove that the total space 
+\begin{equation*}
+\sm{P:\im(\mathscr{Y}_n(A))}P(b)
+\end{equation*}
+of $Q_b$ is contractible. For the center of contraction we take the pair
+$\pairr{\mathscr{Y}_n(A)(b),\tproj{n}{\refl{b}}}$.
+Now we need to construct a term of type
+\begin{equation*}
+\prd{P:\im(\mathscr{Y}_n(A))}{y:P(b)} \pairr{\mathscr{Y}_n(A)(b),\tproj{n}{\refl{b}}}=\pairr{P,y}.
+\end{equation*}
+Since $\mathscr{Y}_n(A)(b,a)\jdeq\trunc{n}{b=a}$, it is equivalent to construct a term of type
+\begin{equation*}
+\prd{P:\im(\mathscr{Y}_n(A))}{y:P(b)}\sm{\alpha:\prd{a:A} \eqv{\trunc{n}{b=a}}{P(a)}} \alpha_b(\tproj{n}{\refl{b}})=y.
+\end{equation*}
+Let $P:\im(\mathscr{Y}_n(A))$ and $y:P(b)$. Then $P(a)$ is $n$-truncated for any $a:A$. Therefore, to construct a map
+$\alpha(P,y)_a:\trunc{n}{b=a}\to P(a)$, it suffices to construct a map of type $(b=a)\to P(a)$. This may be done by
+path induction, using $y:P(b)$. Since it follows that $\alpha(P,y)_b(\tproj{n}{\refl{b}})=y$, it only remains to show that each $\alpha(P,y)_a$ is an equivalence.  
+
+Note that the type of those $P:\im(\mathscr{Y}_n(A))$ such that for all $y:P(b)$ and all $a:A$ the map $\alpha(P,y)_a$ is an equivalence, is a subtype of $\im(\mathscr{Y}_n(A))$, we may use the universal property of the image of $\mathscr{Y}_n(A)$: it suffices to lift
+\begin{equation*}
+\begin{tikzcd}
+& \sm{P:\im(\mathscr{Y}_n(A))}\prd{y:P(b)}{a:A}\isequiv(\alpha(P,y)_a) \arrow[d] \\
+A \arrow[ur,densely dotted] \arrow[r,swap,"\mathscr{Y}_n(A)"] & \im(\mathscr{Y}_n(A)).
+\end{tikzcd}
+\end{equation*}
+In other words, it suffices to show that 
+\begin{equation*}
+\prd{x:A}{y:\mathscr{Y}_n(A)(x,b)}{a:A}\isequiv(\alpha(\mathscr{Y}_n(A)(x),y)_a).
+\end{equation*}
+Thus, we want to show that for any $y:\trunc{n}{x=b}$, the map $\trunc{n}{a=b}\to\trunc{n}{x=b}$ constructed above is an equivalence.
+Since the fibers of this map are $n$-truncated, and $\iscontr(X)$ of an $n$-truncated type $X$ is always $n$-truncated, we may assume that $y$ is of the form $\tproj{n}{p}$ for $p:x=b$. 
+Now it is easy to see that our map of type $\trunc{n}{b=a}\to\trunc{n}{x=a}$ is the unique map which
+extends the path concatenation $\ct{p}{\blank}$, as indicated in the diagram
+\begin{equation*}
+\begin{tikzcd}[column sep=8em]
+(b=a) \arrow[r,"\ct{p}{\blank}"] \arrow[d] & (x=a) \arrow[d] \\
+\trunc{n}{b=a} \arrow[r,densely dotted,swap,"{\alpha(\mathscr{Y}_n(A)(x),y)_a}"] & \trunc{n}{x=a}.
+\end{tikzcd}
+\end{equation*}
+Since the top map is an equivalence, it follows that the map $\alpha(\mathscr{Y}_n(A)(x),y)_a$ is an equivalence.
+\end{proof}
+
+\begin{cor}\label{cor:truncated}
+The image $\im(\mathscr{Y}_n(A))$ is an $(n+1)$-truncated type. 
+\end{cor}
+
+Before we are able to show that for any surjective map $f:A\to X$, if the action on paths is $M$-connected for any two points in $A$, then $f$ is $\susp(M)$-connected, we show that a type is $\susp(M)$-connected precisely when its identity types are $M$-connected.
+
+\begin{lem}\label{lem:local_id}
+Let $M$ be a type. Then a type $X$ is $(\join{\bool}{M})$-local
+if and only if all of its identity types are $M$-local. 
+\end{lem}
+
+\begin{proof}
+The map
+\begin{equation*}
+\lam{p}{m}p : (x=y)\to (M\to (x=y))
+\end{equation*}
+is an equivalence if and only if the induced map on total spaces
+\begin{equation*}
+\lam{\pairr{x,y,p}}\pairr{x,y,\lam{m}p} : \Big(\sm{x,y:X}x=y\Big)\to\Big(\sm{x,y:X}M\to (x=y)\Big)
+\end{equation*}
+is an equivalence. 
+Since the map $\lam{x}\pairr{x,x,\refl{x}}:X\to\sm{x,y:X}x=y$ is an equivalence,
+the above map is an equivalence if and only if the map
+\begin{equation*}
+\lam{x}\pairr{x,x,\lam{m}\refl{x}} : X\to\Big(\sm{x,y:X}M\to (x=y)\Big)
+\end{equation*}
+is an equivalence. For every $x:X$, the triple $\pairr{x,x,\lam{m}\refl{x}}$
+induces a map $\susp(M)\to X$. By uniqueness of the universal property,
+it follows that this map is the constant map $\lam{m}x$.
+Thus we see that $\lam{x}\pairr{x,x,\lam{m}\refl{x}}$ is an equivalence if
+and only if the map
+\begin{equation*}
+\lam{x}{m}x : X \to (\susp(M)\to X)
+\end{equation*}
+is an equivalence. 
+\end{proof}
+
+\begin{lem}\label{lem:ap_connectivity}
+Suppose $f:A\to X$ is a surjective map, with the property that for every
+$a,b:A$, the map
+\begin{equation*}
+\mapfunc{f}(a,b):(a=b)\to (f(a)=f(b))
+\end{equation*}
+is $M$-connected. Then $f$ is $\susp(M)$-connected. 
+\end{lem}
+
+\begin{proof}
+We have to show that $\fib{f}{x}$ is $\susp(M)$-connected for each $x:X$. 
+Since this is a mere proposition, and we assume that $f$ is surjective, it
+is equivalent to show that $\fib{f}{f(a)}$ is $\susp(M)$-connected for each $a:A$. 
+Let $Y$ be a $\susp(M)$-local type. 
+For every $g:\fib{f}{f(a)}\to Y$ be a map we have the point $\theta(g)\defeq g(a,\refl{f(a)})$ in $Y$,
+so we obtain a map
+\begin{equation*}
+\theta : (\fib{f}{f(a)}\to Y)\to Y
+\end{equation*}
+It is clear that $\theta(\lam{\pairr{b,p}}y)=y$, so it remains to show that
+for every $g:\fib{f}{f(a)}\to Y$ we have $\lam{\pairr{b,p}}\theta(g)=g$.
+That is, we must show that
+\begin{equation*}
+\prd{b:A}{p:f(a)=f(b)} g(a,\refl{f(a)})=g(b,p).
+\end{equation*}
+Using the assumption that $Y$ is $\susp(M)$-connected, it follows from
+\autoref{lem:local_id} that the type $g(a,\refl{f(a)})=g(b,p)$ is $M$-connected,
+for every $b:A$ and $p:f(a)=f(b)$.
+Therefore it follows, since the map $\mapfunc{f}(a,b):(a=b)\to(f(a)=f(b))$ is connected, that our goal is equivalent to
+\begin{equation*}
+\prd{b:A}{p:a=b} g(a,\refl{f(a)})=g(b,\mapfunc{f}(a,b,p)).
+\end{equation*}
+This follows by path induction. 
+\end{proof}
+
+\section{Synthetic homotopy theory}
+In this section I will give some basic definitions for the development of homotopy theory in type theory. This section does not contain original work.
+
+\subsection{Homotopy groups of types}
+

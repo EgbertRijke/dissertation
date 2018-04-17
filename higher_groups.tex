@@ -1,0 +1,416 @@
+\chapter{Higher group theory}
+In this section I describe joint work with Ulrik Buchholtz and Floris van Doorn \cite{highergroups}.
+
+\subsection{From RPn to higher groups}
+\begin{defn}
+For any type $X$, we define \define{the connected component of $X$ in $\UU$} to be the type \[\UU_X\defeq\sm{A:\UU}\sbrck{A=X}.\] In particular, we have the type \[\UU_{\sphere{0}}\jdeq\sm{A:\UU}\sbrck{A={\sphere{0}}}\] of $2$\nobreakdash-element sets.
+
+An \define{$X$\nobreakdash-bundle} over a type $A$ is defined to be a type family $B:A\to\UU_X$. 
+\end{defn}
+
+A term of type $\UU_X$ is formally a pair of a small type $A:\UU$ together with a term of type $\sbrck{A=X}$, but since the latter is a mere proposition we usually omit it, and consider the term itself as a small type.
+
+\section{The real projective spaces}
+In this section I describe joint work with Ulrik Buchholtz \cite{realprojective}, in which we defined the real projective spaces $\rprojective{n}$ in homotopy type theory. Furthermore, I answer a question posed by André Joyal during his visit of CMU in February 2018, regarding the complement of the tautological bundle on $\rprojective{n}$.
+
+\subsection{The type of $2$-element sets}
+\begin{thm}\label{thm:ptd_2elt_sets}
+The type
+\begin{equation*}
+\sm{A:\UU_{\sphere{0}}}A
+\end{equation*}
+of pointed $2$\nobreakdash-element sets is contractible.
+\end{thm}
+
+\begin{proof}
+We take $\pairr{\sphere{0},\north}$ as the center of contraction. We need to define
+an identification of type $\pairr{\sphere{0},\north}=\pairr{A,a}$, 
+for any $A:\UU_{\sphere{0}}$ and $a:A$. 
+
+Let $A:\UU_{\sphere{0}}$ and $a:A$. By \autoref{lem:equiv_of_ptdtype}, we have
+an equivalence of type
+\begin{equation*}
+\eqv{\Big(\pairr{\sphere{0},\north}=\pairr{A,a}\Big)}{\Big(\sm{e:\eqv{\sphere{0}}{A}}e(\north)=a\Big)}.
+\end{equation*}
+Hence we can complete the proof by constructing a term of type 
+\begin{equation}\label{eq:Sn0_ptdequiv}
+\sm{e:\eqv{\sphere{0}}{A}}e(\north)=a.
+\end{equation} 
+
+It is time for a little trick. Instead of constructing a term the type in
+\autoref{eq:Sn0_ptdequiv}, we will show that this type is contractible.
+Since being contractible is a mere proposition, 
+this allows us to eliminate the assumption $\sbrck{\sphere{0}=A}$
+into the assumption $p:\sphere{0}=A$. Note that the end point of $p$ is free.
+Therefore we eliminate $p$ into $\refl{\sphere{0}}$. 
+Thus, we see that it suffices to show that the type
+\begin{equation*}
+\sm{e:\eqv{\sphere{0}}{\sphere{0}}}e(\north)=a
+\end{equation*}
+is contractible for any $a:\sphere{0}$. 
+
+This can be done by case analysis on $a:\sphere{0}$. Since we have the equivalence
+$\bneg:\eqv{\sphere{0}}{\sphere{0}}$ that swaps $\north$ and $\south$, it follows
+that $\sm{e:\eqv{\sphere{0}}{\sphere{0}}}e(\north)=\north$ is contractible if and only
+if $\sm{e:\eqv{\sphere{0}}{\sphere{0}}}e(\north)=\south$ is contractible. Therefore, we
+only need to show that the type
+\begin{equation*}
+\sm{e:\eqv{\sphere{0}}{\sphere{0}}}e(\north)=\north
+\end{equation*}
+is contractible. 
+For the center of contraction we take $\pairr{\idfunc[\sphere{0}],\refl{\north}}$.
+It remains to construct a term of type
+\begin{equation*}
+\prd{e:\eqv{\sphere{0}}{\sphere{0}}}{p:e(\north)=\north} \pairr{e,p}=\pairr{\idfunc[\sphere{0}],\refl{\north}}.
+\end{equation*} 
+
+Let $e:\eqv{\sphere{0}}{\sphere{0}}$ and $p:e(\north)=\north$.
+By \autoref{lem:equiv_of_ptdequiv}, we have an equivalence of type
+\begin{equation*}
+\eqv{\Big(\pairr{e,p}=\pairr{\idfunc[\sphere{0}],\refl{\north}}\Big)}
+    {\Big(\sm{h:e\htpy \idfunc[\sphere{0}]} p=h(\north)\Big)}.
+\end{equation*}
+Hence it suffices
+to construct a term of the type on the right hand side.
+
+We define a homotopy $h:e\htpy \idfunc[\sphere{0}]$ by case analysis: we take
+$h(\north)\defeq p$. To define $h(\south)$, note that the type
+$\hfib{e}{\south}$ is contractible. Therefore, we have a center of contraction
+$\pairr{x,q}:\hfib{e}{\south}$. Recall that equality on $\sphere{0}$ is decidable,
+so we have a term of type $(x=\north)+(x=\south)$. Since $e(\north)=\north$,
+it follows that $\neg(x=\north)$. Therefore we have $x=\south$ and $e(x)=\south$.
+It follows that $e(\south)=\south$, which we use to define $h(\south)$. 
+\end{proof}
+
+The main application we have in mind for \autoref{thm:ptd_2elt_sets}, is
+a computation of the identity type of the type of $2$\nobreakdash-element sets, via
+the encode-decode method, \autoref{lem:encode-decode}.
+
+\begin{cor}\label{cor:id_U2}
+The canonical map
+\begin{equation*}
+\mathsf{enc}_{{\sphere{0}},\north} : \prd*{A:\UU_{\sphere{0}}} ({\sphere{0}}= A)\to A
+\end{equation*}
+is an equivalence.
+\end{cor}
+
+Another way of stating the following theorem, is by saying that the map
+$\unit\to\UU_{\sphere{0}}$ \emph{classifies} the ${\sphere{0}}$\nobreakdash-bundles.
+
+\begin{thm}\label{lem:classifyer_U2}
+Let $B:A\to\UU_{\sphere{0}}$ be a ${\sphere{0}}$\nobreakdash-bundle. Then the square
+\begin{equation*}
+\begin{tikzcd}
+\sm{x:A}B(x) \arrow[r] \arrow[d,swap,"\proj 1"] & \unit \arrow[d,"{\sphere{0}}"] \\
+A \arrow[r,swap,"B"] & \UU_{\sphere{0}}
+\end{tikzcd}
+\end{equation*}
+commutes via a homotopy $R_{A,B}:\prd{x:A}{y:B(x)} \eqv{B(x)}{\sphere{0}}$, and is a pullback square. 
+\end{thm}
+
+\begin{proof}[Construction]
+Since $B(x):\UU_{\sphere{0}}$ for any $x:A$, 
+we have by \autoref{cor:id_U2} the fiberwise equivalence
+\begin{equation*}
+\mathsf{enc}_{\sphere{0},\N}(B(x)):\eqv{(\sphere{0}=B(x))}{B(x)}
+\end{equation*} 
+indexed by $x:A$. 
+Hence it follows by Theorem 4.7.7 of \cite{hottbook} that the induced map
+of total spaces is an equivalence. It follows that the diagram
+\begin{equation*}
+\begin{tikzcd}
+\sm{x:A}B(x) \arrow[drr,bend left=15] \arrow[ddr,bend right=15,swap,"\proj 1"] \arrow[dr,densely dotted,"\eqvsym"] \\
+& \sm{x:A} ({\sphere{0}}=B(x)) \arrow[r] \arrow[d,swap,"\proj 1"] & \unit \arrow[d,"{\lam{\nameless}\sphere{0}}"] \\
+& A \arrow[r,swap,"B"] & \UU_{\sphere{0}}
+\end{tikzcd}
+\end{equation*}
+commutes. Since the inner square is a pullback square, it follows that the outer square is a pullback square.
+\end{proof}
+
+\subsection{Finite dimensional real projective spaces}
+\label{sec:fdrp}
+
+Classically, the $(n+1)$-st real projective space can be obtained by attaching an $(n+1)$-cell to the $n$-th real projective space. This suggests a way of defining the real projective spaces that involves simultaneously defining $\rprojective{n}$ and an attaching map $\alpha_n : \sphere{n}\to\rprojective{n}$. Then we obtain $\rprojective{n+1}$ as the mapping cone of $\alpha_n$, i.e., as a pushout
+\begin{equation*}
+\begin{tikzcd}
+\sphere{n} \arrow[r,"\alpha_n"] \arrow[d] & \rprojective{n} \arrow[d] \\
+\unit \arrow[r] & \rprojective{n+1},
+\end{tikzcd}
+\end{equation*}
+and we have to somehow find a way to define the attaching map $\alpha_{n+1}:\sphere{n+1}\to\rprojective{n}$ to continue the inductive procedure.
+However, it is somewhat tricky to obtain these attaching maps directly, and we have chosen to follow a closely related path towards the definition of the real projective spaces that takes advantage of the machinery of dependent type theory. 
+
+Observe that the attaching map $\alpha_n:\sphere{n}\to\rprojective{n}$ is just the tautological bundle (or the quotient map that identifies the antipodal points). This suggests that we may proceed by defining simultaneously the real projective space $\rprojective{n}$ and its tautological bundle $\tautfam[\R]{n}$. The tautological bundle on $\rprojective{n}$ is an $\sphere{0}$-bundle, so it can be described as a map $\rprojective{n}\to\UU_{\sphere{0}}$. We perform this construction in \autoref{defn:realprojective} using the properties of the type of 2-element types developed in \autoref{sec:UUS0}, and in \autoref{thm:Sn_totalcov} we show that the total space of the tautological bundle on $\rprojective{n}$ is the $n$-sphere. 
+
+\begin{defn}\label{defn:realprojective}
+We define simultaneously for each $n:\N_{-1}$, 
+the \define{$n$-dimensional real projective space} $\rprojective{n}$, 
+and the \define{tautological bundle} $\tautfam[\R]{n}:\rprojective{n}\to \UU_{\sphere{0}}$.
+\end{defn}
+
+\begin{proof}[Construction]
+The construction is by induction on $n:\N_{-1}$.
+For the base case $n\defeq -1$, 
+we take $\rprojective{-1}\defeq\emptyt$. 
+Then there is a unique map of type $\rprojective{-1}\to \UU_{\sphere{0}}$, which we
+take as our definition of $\tautfam[\R]{-1}$.
+
+For the inductive step, suppose $\rprojective{n}$ and $\tautfam[\R]{n}$ are defined. Then we define $\rprojective{n+1}$ to be the pushout
+\begin{equation*}
+\begin{tikzcd}
+{\sm{x:\rprojective{n}}\tautfam[\R]{n}(x)} \arrow[d,swap,"\proj 1"] \arrow[r] & \unit \arrow[d,"\base"] \\
+\rprojective{n} \arrow[r,swap,"\inr"] & \rprojective{n+1}
+\end{tikzcd}
+\end{equation*}
+In other words, 
+$\rprojective{n+1}$ is the \emph{mapping cone} of the tautological bundle, 
+when we view the tautological bundle as the projection 
+$\proj 1:(\sm{x:\rprojective{n}}\tautfam[\R]{n}(x))\to\rprojective{n}$. 
+
+To define $\tautfam[\R]{n+1}:\rprojective{n+1}\to \UU_{\sphere{0}}$
+we use the universal property of $\rprojective{n+1}$. 
+Therefore, it suffices to show that the outer square in the diagram
+\begin{equation}\label{eq:diagram}
+\begin{tikzcd}
+{\sm{x:\rprojective{n}}\tautfam[\R]{n}(x)} \arrow[d,swap,"\proj 1"] \arrow[r] & \unit \arrow[d,swap,"\base"] \arrow[ddr,bend left=15,"\sphere{0}"]\\
+\rprojective{n} \arrow[drr,bend right=15,swap,"{\tautfam[\R]{n}}"] \arrow[r,swap,"\inr"] & \rprojective{n+1} \arrow[dr,densely dotted] \\
+& & \UU_{\sphere{0}}
+\end{tikzcd}
+\end{equation}
+commutes. Indeed, in \autoref{lem:classifyer_U2} we have constructed a homotopy 
+\begin{equation*}
+R_n\defeq R_{\rprojective{n},\tautfam[\R]{n}}:\prd{x:\rprojective{n}}{y:\tautfam[\R]{n}} \eqv{\tautfam[\R]{n}(x)}{\sphere{0}},
+\end{equation*}
+and in fact, this square is a pullback.
+\end{proof}
+
+\begin{eg}
+We have $\rprojective{-1}=\emptyt$, $\rprojective{0}=\unit$, and $\rprojective{1}=\sphere{1}$. 
+\end{eg}
+
+\begin{thm}\label{thm:Sn_totalcov}
+For each $n:\N_{-1}$, there is an equivalence
+\begin{equation*}
+e_n:\eqv{\sphere{n}}{\sm{x:\rprojective{n}}\tautfam[\R]{n}(x)}.
+\end{equation*}
+\end{thm}
+
+In other words, $\rprojective{n+1}$ is obtained from $\rprojective{n}$ by attaching a single $(n+1)$\nobreakdash-disk, i.e., as a pushout
+\begin{equation*}
+\begin{tikzcd}
+\sphere{n} \arrow[r] \arrow[d,swap,"\proj1\circ e_n"] & \unit \arrow[d] \\
+\rprojective{n} \arrow[r] & \rprojective{n+1}.
+\end{tikzcd}
+\end{equation*}
+
+\begin{proof}
+For $n\jdeq -1$, we have $\rprojective{-1}\jdeq\emptyt$ and the unique tautological bundle $\tautfam[\R]{-1}$. Therefore the type $\sm{x:\rprojective{-1}}\tautfam[\R]{-1}(x)$ is equivalent to the empty type, which is $\sphere{-1}$ by definition. This gives the base case.
+
+Now assume that we have an equivalence $e_n:\eqv{\sphere{n}}{\sm{x:\rprojective{n}}\tautfam[\R]{n}(x)}$. 
+Our goal is to construct the equivalence
+\begin{equation*}
+e_{n+1}:\eqv{\sphere{n+1}}{\sm{x:\rprojective{n+1}}\tautfam[\R]{n+1}(x)}.
+\end{equation*}
+such that the square
+\begin{equation}\label{eq:Sn_totalcov_natural}
+\begin{tikzcd}
+\sphere{n} \arrow[d,swap,"e_{n}"] \arrow[r,"\inl"] & \sphere{n+1} \arrow[d,"e_{n+1}"] \\
+\sm{x:\rprojective{n}}\tautfam[\R]{n}(x) \arrow[r] & \sm{x:\rprojective{n+1}}\tautfam[\R]{n+1}(x)
+\end{tikzcd}
+\end{equation}
+commutes. By the functoriality of the join (or equivalently, by equivalence induction on $e_n$), it suffices to find an equivalence
+\begin{equation*}
+\alpha:\eqv{\join{\Big(\sm{x:\rprojective{n}}\tautfam[\R]{n}(x)\Big)}{\sphere{0}}}{\sm{x:\rprojective{n+1}}\tautfam[\R]{n+1}(x)},
+\end{equation*}
+such that the bottom triangle in the diagram
+\begin{equation*}
+\begin{tikzcd}
+\sphere{n} \arrow[r,"\inl"] \arrow[d,swap,"e_n"] & \sphere{n+1} \arrow[d,"\join{e_n}{\idfunc[\sphere{0}]}"] \\
+\sm{x:\rprojective{n}}\tautfam[\R]{n}(x) \arrow[r,"\inl"] \arrow[dr] & \join{\Big(\sm{x:\rprojective{n}}\tautfam[\R]{n}(x)\Big)}{\sphere{0}} \arrow[d,"\alpha"] \\
+& \sm{x:\rprojective{n+1}}\tautfam[\R]{n+1}(x)
+\end{tikzcd}
+\end{equation*}
+commutes.
+We construct this equivalence using the flattening lemma, \autoref{lem:flattening}, from which we get a pushout square:
+\begin{equation*}
+\begin{tikzcd}[column sep=0.5em]
+\sm{x:\rprojective{n}}{y:\tautfam[\R]{n}(x)}\tautfam[\R]{n}(x) \arrow[r] \arrow[d] & \sm{t:\unit}\sphere{0} \arrow[d] \\
+\sm{x:\rprojective{n}}\tautfam[\R]{n}(x) \arrow[r] & \sm{x:\rprojective{n+1}}\tautfam[\R]{n+1}(x)
+\end{tikzcd}
+\end{equation*}
+We can calculate this pushout by constructing a natural transformation of spans (diagrams in $\UU$ of the form $\cdot\leftarrow\cdot\rightarrow\cdot$), as indicated by the diagram in Fig.~\ref{fig:sphere-equiv}.
+\begin{figure*}
+  \centering
+\begin{tikzcd}[column sep=6em]
+\sm{x:\rprojective{n}}\tautfam[\R]{n}(x) \arrow[d,swap,"\idfunc"]
+  & \sm{x:\rprojective{n}}{y:\tautfam[\R]{n}(x)}\tautfam[\R]{n}(x) \arrow[l,swap,"\pairr{x,z}\mapsfrom\pairr{x,y,z}" yshift=1ex] \arrow[d,densely dotted,"u"] \arrow[r,"\pairr{x,y,z}\mapsto\pairr{\ttt,R_n(x,y,z)}" yshift=1ex] 
+  & \sm{t:\unit}\sphere{0} \arrow[d,"\proj 2"] \\
+\sm{x:\rprojective{n}}\tautfam[\R]{n}(x)
+  &
+\Big(\sm{x:\rprojective{n}}\tautfam[\R]{n}(x)\Big)\times\sphere{0} \arrow[l,"\pi_1"] \arrow[r,swap,"\pi_2"]
+  & \sphere{0}
+\end{tikzcd}
+\caption{Map of spans used in the proof of Thm~\ref{thm:Sn_totalcov}. The map $u$ is given by $\pairr{x,y,z}\mapsto\pairr{x,z,R_n(x,y,z)}$.}
+\label{fig:sphere-equiv}
+\end{figure*}
+To show that the map $u$ in Fig.~\ref{fig:sphere-equiv} is an equivalence, it suffices to show that $R_n(x,y,z)=R_n(x,y,z)$ for any $x$, $y$, and $z$, because then it follows that $u$ is homotopic to the total map of a fiberwise equivalence. More generally, it suffices to show that $R_{\UU_{\sphere{0}},T}(X,x,y)=R_{\UU_{\sphere{0}},T}(X,y,x)$, where $T$ is the tautological bundle on $\UU_{\sphere{0}}$. Since $\UU_{\sphere{0}}$ is connected and since our goal is a mere proposition, we only need to verify the claim at the base point $\sphere{0}$ of $\UU_{\sphere{0}}$. This boils down to verifying that the group multiplication of $\Zmodtwo$ is indeed commutative.
+\end{proof}
+
+\begin{cor}
+We obtain the fiber sequence
+\begin{equation*}
+\begin{tikzcd}
+\sphere{0} \arrow[r,hook] & \sphere{n} \arrow[r,->>] & \rprojective{n}.
+\end{tikzcd}
+\end{equation*}
+Hence, for each $k\geq 2$ we have $\pi_k(\sphere{n})=\pi_k(\rprojective{n})$. 
+\end{cor}
+
+\begin{proof}
+Since we have the double cover $\tautfam[\R]{n}:\rprojective{n}\to\UU_{\sphere{0}}$ with total space $\sphere{n}$, we obtain the long exact sequence
+\begin{equation*}
+\begin{tikzcd}
+  \cdots \arrow[r]
+  & \pi_{k+1}(\sphere{n}) \arrow[r] \arrow[d, phantom, ""{coordinate, name=Z}]
+  & \pi_{k+1}(\rprojective n) \arrow[dll, rounded corners,
+      to path={ -- ([xshift=8.5ex]\tikztostart.center)
+                |- (Z) [near end]\tikztonodes
+                -| ([xshift=-8ex]\tikztotarget.center) -- (\tikztotarget)}] \\
+  \pi_k(\sphere{0}) \arrow[r]
+  & \pi_k(\sphere{n}) \arrow[r] \arrow[d, phantom, ""{coordinate, name=W}]
+  & \pi_k(\rprojective n) \arrow[dll, rounded corners,
+      to path={ -- ([xshift=8.5ex]\tikztostart.center)
+                |- (W) [near end]\tikztonodes
+                -| ([xshift=-8ex]\tikztotarget.center) -- (\tikztotarget)}] \\
+  \pi_{k-1}(\sphere{0}) \arrow[r]
+  & \pi_{k-1}(\sphere{n}) \arrow[r]
+  & \cdots
+\end{tikzcd}
+\end{equation*}
+Since $\pi_k({\sphere{0}})=0$ for $k\geq 1$, we get the desired isomorphisms.
+\end{proof}
+
+\subsection{The infinite dimensional real projective space}
+\label{sec:idrp}
+
+Observe that from the definition of $\rprojective{n}$ and its tautological 
+cover, we obtain a commutative diagram of the form:
+\begin{equation*}
+\begin{tikzcd}[row sep=large,column sep=large]
+\rprojective{-1} \arrow[r,"\inr"] \arrow[dr,swap,"{\tautfam[\R]{-1}}"] 
+& \rprojective{0} \arrow[d,swap,near start,"{\tautfam[\R]{0}}"] \arrow[r,"\inr"] 
+& \rprojective{1} \arrow[dl,swap,"{\tautfam[\R]{1}}"] \arrow[r,"\inr"] 
+& \cdots \arrow[dll,"{\tautfam[\R]{2}}"]\\
+& \UU_{\sphere{0}}
+\end{tikzcd}
+\end{equation*}
+Using this sequence, we define the infinite dimensional real projective space
+and its tautological cover:
+
+\begin{defn}
+We define the \define{infinite real projective space} $\rprojective{\infty}$ to be the sequential colimit of the finite real projective spaces. The double covers on $\rprojective{n}$ define a cocone on the type sequence of real projective spaces, so we also obtain $\tautfam[\R]{\infty}:\rprojective{\infty}\to \UU_{\sphere{0}}$. 
+\end{defn}
+
+\begin{thm}\label{thm:RPoo_US0}
+The double cover $\tautfam[\R]{\infty}$ is an equivalence from $\rprojective{\infty}$ to $\UU_{\sphere{0}}$. 
+\end{thm}
+
+\begin{proof}
+We have to show that the fibers of $\tautfam[\R]{\infty}$ are contractible.
+Since being contractible is a mere proposition, and since the type $\UU_{\sphere{0}}$
+is connected, it suffices to show that the fiber
+\begin{equation*}
+\sm{x:\rprojective{\infty}}\sphere{0}=\tautfam[\R]{\infty}(x)
+\end{equation*}
+of $\tautfam[\R]{\infty}$ at $\sphere{0}:\UU_{\sphere{0}}$ is contractible.
+By \autoref{cor:id_U2} we have an equivalence of type
+\begin{equation*}
+\eqv{({\sphere{0}}=\tautfam[\R]{\infty}(x))}{\tautfam[\R]{\infty}(x)},
+\end{equation*}
+for every $x:\rprojective{\infty}$. 
+Therefore it is equivalent to show that the type
+\begin{equation*}
+\sm{x:\rprojective{\infty}}\tautfam[\R]{\infty}(x)
+\end{equation*}
+is contractible. The general version of the flattening lemma, as stated in
+Lemma 6.12.2 in \cite{hottbook}, can be adapted for sequential colimits, so
+we can pull the colimit out: it suffices to prove that
+\begin{equation*}
+\tfcolim_n\bigl(\sm{x:\rprojective{n}}\tautfam[\R]{n}(x)\bigr)
+\end{equation*}
+is contractible. 
+To do this, observe that the equivalences of \autoref{thm:Sn_totalcov} form
+a natural equivalence of type sequences as shown in Fig.~\ref{fig:type-sequences}.
+\begin{figure*}
+  \centering
+\begin{tikzcd}
+\sm{x:\rprojective{-1}}\tautfam[\R]{-1}(x) \arrow[r] \arrow[d,swap,"\eqvsym"]
+& \sm{x:\rprojective{0}}\tautfam[\R]{0}(x) \arrow[r] \arrow[d,swap,"\eqvsym"]
+& \sm{x:\rprojective{1}}\tautfam[\R]{1}(x) \arrow[r] \arrow[d,swap,"\eqvsym"]
+& \cdots \\
+\sphere{-1} \arrow[r] 
+& \sphere{0} \arrow[r]
+& \sphere{1} \arrow[r]
+& \cdots
+\end{tikzcd}
+\caption{Natural equivalence of type sequences for Thm~\ref{thm:RPoo_US0}.}
+\label{fig:type-sequences}
+\end{figure*}
+Indeed, the naturality follows from \autoref{eq:Sn_totalcov_natural}.
+
+Thus, the argument comes down to showing that $\sphere{\infty}\defeq\tfcolim_n(\sphere{n})$
+is contractible. This was first shown in homotopy type theory by Brunerie, and
+the argument is basically that the sequential colimit of a type sequence of
+strongly constant maps (viz., maps factoring through $\unit$) is always contractible.
+\end{proof}
+
+\begin{rmk}
+Note that by our assumption that the universe is closed under pushouts, it
+follows that each $\rprojective{n}$ is in $\UU$. 
+Since the universe contains a natural numbers object $\N$, 
+it also follows that the universe is closed under sequential colimits,
+and therefore we have $\rprojective{\infty}:\UU$. 
+Whereas a priori it is not clear that $\UU_{\sphere{0}}$ is equivalent to a 
+$\UU$-small type, this fact is contained in \autoref{thm:RPoo_US0}.
+\end{rmk}
+
+\subsection{The real projective spaces as classifying spaces}
+In this subsection I answer a question posed by André Joyal during his visit of CMU in February 2018, regarding the complement of the tautological bundle on $\rprojective{n}$. The question was to construct in homotopy type theory an $\sphere{n}$-bundle $\beta^n$ over $\rprojective{n+1}$, equipped with equivalences $\eqv{\sphere{n+1}}{\join{\beta^n(x)}{\gamma^n(x)}}$ for every $x:\rprojective{n+1}$, and moreover that $\rprojective{n+1}$ classifies types $X$ with an $\sphere{0}$-bundle and an $\sphere{n}$-bundle that become trivial when joined together. 
+
+\begin{defn}
+We construct for $n\geq 0$ an $\sphere{n-1}$-bundle $\orthcomp[\R]{n}$ on $\rprojective{n}$ such that
+\begin{equation*}
+\eqv{\join{\orthcomp[\R]{n}(x)}{\tautfam[\R]{n}(x)}}{\sphere{n}}.
+\end{equation*}
+\end{defn}
+
+\begin{constr}
+We will construct for any $n\geq 0$ a term of type
+\begin{equation*}
+\prd{x:\rprojective{n}} \sm{X:\BAut(\sphere{n-1})} \eqv{\join{X}{\tautfam[\R]{n}(x)}}{\sphere{n}}.
+\end{equation*}
+For the base case we have to define a term of type
+\begin{equation*}
+\prd{x:\rprojective{0}} \sm{X:\BAut(\sphere{-1})} \eqv{\join{X}{\sphere{0}}}{\sphere{0}}.
+\end{equation*}
+We simply choose $X\jdeq \emptyt$, and the canonical equivalence $\eqv{\join{\emptyt}{\sphere{0}}}{\sphere{0}}$. 
+
+For the inductive step suppose we have for every $x:\rprojective{n}$ a type $\orthcomp[\R]{n}(x)$ and an equivalence
+\begin{equation*}
+\eqv{\join{C(x)}{\tautfam[\R]{n}(x)}}{\sphere{n}}.
+\end{equation*}
+Our goal is to construct for every $x:\rprojective{n+1}$ a type $\orthcomp[\mathbb{R}]{n+1}(x)$ equipped with an equivalence
+\begin{equation*}
+\eqv{\join{\orthcomp[\mathbb{R}]{n+1}(x)}{\tautfam[\R]{n+1}(x)}}{\sphere{n+1}}.
+\end{equation*}
+We do this by the universal property of $\rprojective{n+1}$. Thus, it suffices to construct
+\begin{align*}
+B_{\pt} & : \sm{X:\BAut(\sphere{n})}\eqv{\join{X}{\sphere{0}}}{\sphere{n}}.\\
+B_i & : \prd{x:\rprojective{n}}\sm{X:\BAut(\sphere{n})}\eqv{\join{X}{\tautfam[\R]{n}(x)}}{\sphere{n}} \\
+B_p & : \prd{x:\rprojective{n}}{y:\tautfam[\R]{n}(x)} ... 
+\end{align*}
+\end{constr}
+
+\section{The complex projective spaces}
+
+\section{The quaternionic Hopf fibration}

@@ -1,0 +1,50 @@
+\documentclass[twosided]{memoir}
+
+\setsecnumdepth{subsection}
+\settocdepth{subsection}
+
+\usepackage{hott}
+
+\addbibresource{bibliography.bib}
+
+\title{Classifying types}
+\author{Egbert Rijke}
+\date{July 2018}
+
+\begin{document}
+
+\frontmatter
+
+\begin{titlingpage}
+\maketitle
+\end{titlingpage}
+
+\clearpage
+\thispagestyle{empty}
+\par
+\vspace*{.35\textheight}{\begin{flushright}With profound gratitude I dedicate this thesis to my parents.\par\end{flushright}}
+
+\clearpage
+\tableofcontents
+
+\include{intro}
+
+\mainmatter
+
+\include{basic}
+
+\include{higher_groups}
+
+\include{equifibrant}
+
+\include{modalites}
+
+\include{giraud}
+
+\include{simplicial}
+
+\backmatter
+
+\printbibliography
+
+\end{document}
