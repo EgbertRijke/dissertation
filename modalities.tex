@@ -1,559 +1,2415 @@
 \chapter{Modalities}
 
-Mike's observations:
+\section{Modalities, reflective subuniverses and factorization systems}\label{sec:modal-refl-subun}
+
+In this section we will introduce the following four notions of modality
+and prove that they are all equivalent:
 \begin{enumerate}
-\item Every factorization system $(\mathcal{E},\mathcal{M})$ has an underlying reflective
-subuniverse, for which the modal types are those such that $X\to \unit$ is
-in $\mathcal{M}$.  It is not clear whether every reflective subuniverse underlies
-a factorization system.  One natural definition takes $\mathcal{E}$ to be the maps
-inverted by the reflector $\modal$; another takes $\mathcal{M}$ to be the maps whose
-$\modal$-naturality square is a pullback.  These two classes of maps are
-always orthogonal, but factorizations do not always exist; i.e. they
-are a "prefactorization system".  The prefactorization systems
-obtained in this way from a reflective subuniverse are called
-*reflective*; they are precisely those for which $\mathcal{E}$ satisfies
-2-out-of-3.
-\item 
+\item Higher modalities
+\item Uniquely eliminating modalities
+\item $\Sigma$-closed reflective subuniverses
+\item Stable orthogonal factorization systems
+\end{enumerate}
+After their equivalence has been established, we will call all of them simply \emph{modalities}.
+
+The first three definitions have the following data in common: by a \define{modal operator} we mean a function $\modal:\UU\to\UU$, and by a \define{modal unit} we mean a family of functions $\modalunit^\modal:\prd*{A:\UU}A\to\modal A$.
+Given these data, we say a type $X$ \define{is modal} if $\modalunit[X]:X\to\modal X$ is an equivalence, and we write $\UU_\modal \defeq \sm{X:\UU} \ismodal(X)$ for the \define{subuniverse of modal types}.
+
+\begin{defn}\label{defn:highermod}
+A \define{higher modality} consists of a modal operator and modal unit together with
 \begin{enumerate}
-\item Every modality is, in particular, a reflective subuniverse, so the
-foregoing applies to it.  In this case, however, the putative explicit
-definitions of $\mathcal{E}$ and $\mathcal{M}$ are always a factorization system, with
-factorizations constructed by pulling back in the $\modal$-naturality square;
-thus we always obtain a reflective factorization system.  The
-modalities are precisely the reflective subuniverses that have \emph{stable
-units}, i.e. all the modal units $X\to\modal X$ are $\modal$-connected.  In \cite{CassidyHebertKelly}
-there are two weaker conditions on a reflective subcategory that
-ensure that the reflective prefactorization system has factorizations:
-being \emph{simple} (equivalent to the fact that factorizations can be
-constructed by pulling back in the $\modal$-naturality square) and being
-\emph{semi-left-exact}.  It is not clear whether in HoTT there exist
-semi-left-exact reflective subuniverses that are not modalities, or
-simple ones that are not semi-left-exact, or even reflective
-subuniverses that are not simple.
-\item Every modality also gives rise to a different factorization
-system, in which the right class is the maps with $\modal$-modal fibers and
-the left class is the maps with $\modal$-connected fibers.  This
-factorization system is \emph{stable}, i.e. the left class (and hence the
-factorizations) are stable under pullback.  Moreover, every stable
-factorization system arises in this way from a unique modality.
-\end{enumerate}
-\item The above two factorization systems associated to a modality do not
-in general coincide.  They can coincide only if the $\modal$-connected maps
-satisfy 2-out-of-3 (since the $\modal$-inverted maps always do), and only if
-the $\modal$-inverted maps are stable under pullback (since the $\modal$-connected
-maps always are).  However, both of these properties are sufficient
-to imply that $\modal$ is fully left exact, which in turn implies that the
-two factorization systems coincide.
-\item Another way of extending a reflective subuniverse to a
-factorization system is that if it's accessible, we can choose a
-generating family and then use the same generating family to generate
-a factorization system.  This works for any accessible reflective
-subuniverse, but in principle, at least, it seems as if the result may
-depend on the generating family chosen, and I don't see any reason for
-it to coincide with the reflective (pre)factorization system.  I also
-don't know whether anything special happens for modalites.
-\item If we have a factorization system $(\mathcal{E},\mathcal{M})$,
-with underlying reflective subuniverse $\modal$, then all maps between
-$\modal$-modal types are in $\mathcal{M}$, hence so are any of their pullbacks.  Thus,
-the reflective factorization system, if it exists, is the
-factorization system with the smallest class $\mathcal{M}$ that has a given
-underlying reflective subuniverse.  On the other hand, again for any
-$(\mathcal{E},\mathcal{M})$, any pullback of an $\mathcal{M}$-map is again in $\mathcal{M}$, hence all fibers of an
-$\mathcal{M}$-map are $\modal$-modal; thus the stable factorization system, if it exists
-(i.e. if $\modal$ is a modality), is the factorization system with the
-\emph{largest} class $\mathcal{M}$ that has a given underlying reflective subuniverse.
-\end{enumerate}
-
-In a presheaf topos, a natural transformation is cartesian if and only if it is right orthogonal to all maps between representables. 
-Question: What do we get if we localize inside an
-arbitrary presheaf topos at the maps between representables?  A
-general presheaf topos is not cohesive, so the discrete objects are
-not fully embedded and we can't produce a modality by "taking the
-colimit and then the discrete object".  But this localization seems to
-be trying to give us the closest possible approximation to such.  As
-an extreme example in the other direction, if the domain of presheaves
-is a discrete category, there are no nontrivial maps between
-representables, so every transformation is cartesian and the
-localization is the identity functor.
-
-\section{Modal descent}
-
-Felix Wellen introduced the notion of formally \'etale maps for an arbitrary modality $\modal$.
-The results in this section have been established in discussions with Felix Wellen and Mike Shulman.
-Preliminary ideas about modal descent were presented by the author in June 2017 at the Big Proofs meeting in Cambridge, UK, in joint work with Bas Spitters.
-
-\begin{defn}
-We say that a map $f:A\to B$ is \define{formally \'etale} if the square
+\item for every $A:\UU$ and every dependent type $P:\modal A\to\UU$, a
+function
 \begin{equation*}
-\begin{tikzcd}
-A \arrow[r,"f"] \arrow[d,swap,"\eta"] & B \arrow[d,"\eta"] \\
-\modal A \arrow[r,swap,"\modal f"] & \modal B
-\end{tikzcd}
+\mathsf{ind}^\modal_A:\big(\prd{a:A}\modal(P(\eta(a)))\big)\to\prd{z:\modal A}\modal(P(z)).
 \end{equation*}
-is a pullback square. We will write
+\item An identification
 \begin{equation*}
-\isetale(f)\defeq\ispullback(f,\eta_A,\natunit_\modal(f)).
+\mathsf{comp}^\modal_A(f,x):\id{\mathsf{ind}^\modal_A(f)(\eta(x))}{f(x)}
 \end{equation*}
+for each $f:\prd{x:A}\modal(P(\eta(x)))$.
+\item For any $x,y:\modal A$ the modal unit $\modalunit[(\id{x}{y})]:\id{x}{y}\to \modal(\id{x}{y})$ is an equivalence.
+\end{enumerate}
 \end{defn}
 
-It is immediate from the definition that any equivalence is formally \'etale, and that the formally \'etale maps are closed under composition.
+\begin{defn}\label{defn:modunique}
+A \define{uniquely eliminating modality} consists of
+a modal operator and modal unit such that the function
+\begin{equation*}
+\lam{f} f\circ\modalunit[A] : (\prd{x:\modal A}\modal(P(x)))\to(\prd{a:A}\modal(P(\modalunit[A](a))))
+\end{equation*}
+is an equivalence for any $A$ and any $P:\modal A\to\UU$.
+\end{defn}
 
-\begin{eg}\label{eg:etale_prop}
-We claim that a map $f:A\to B$ is formally \'etale with respect to propositional truncation if and only if $A\to \isequiv(f)$. Examples of maps that satisfy this condition include equivalences, maps between propositions, and any map of the form $\emptyt\to B$.
+\begin{defn}\label{defn:ssrs}
+A \define{reflective subuniverse} is a family $\ismodal:\UU\to\prop$, together with a
+modal operator and modal unit such that $\ismodal(\modal A)$ for
+every $A:\UU$, and for every $B:\UU$ satisfying
+$\ismodal(B)$, the function
+\begin{equation*}
+\lam{f} f\circ \modalunit[A]:(\modal A\to B)\to (A\to B)
+\end{equation*}
+is an equivalence.
+A reflective subuniverse is \define{$\Sigma$-closed} if whenever $\ismodal(X)$ and $\ismodal(P(x))$ for all $x:X$, we have $\ismodal(\sm{x:X}P(x))$.
+\end{defn}
 
-To see that if $f:A\to B$ is formally \'etale, then $A\to\isequiv(f)$, consider the pullback square
+Note that unlike \cref{defn:highermod,defn:modunique}, in \cref{defn:ssrs} the notion of ``modal type'' is part of the data.
+However, we will show in \cref{lem:subuniv-modal} that $\ismodal(A)$ if and only if $\modalunit[A]$ is an equivalence.
+
+\begin{defn}\label{defn:sofs}
+An \define{orthogonal factorization system} consists of
+predicates $\mathcal{L},\mathcal{R}:\prd*{A,B:\UU} (A\to B)\to\prop$ such that
+\begin{enumerate}
+\item $\mathcal{L}$ and $\mathcal{R}$ are closed under composition and contain all identities (i.e.\ they are subcategories of the category of types that contain all the objects), and
+\item the type $\fact_{\mathcal{L},\mathcal{R}}(f)$ of factorizations
 \begin{equation*}
 \begin{tikzcd}
-A \arrow[r] \arrow[d,swap,"f"] & \brck{A} \arrow[d,"\brck{f}"] \\
-B \arrow[r] & \brck{B},
+A \arrow[rr,"f"] \arrow[dr,swap,"f_{\mathcal{L}}"] & & B \\
+& \im_{\mathcal{L},\mathcal{R}}(f) \arrow[ur,swap,"f_{\mathcal{R}}"]
 \end{tikzcd}
 \end{equation*}
-and let $a:A$. Then both $\brck{A}$ and $\brck{B}$ are contractible, so $\brck{f}:\brck{A}\to\brck{B}$ is an equivalence. Since equivalences are stable under pullback it follows that $f$ is an equivalence.
-
-Now suppose that $A\to \isequiv(f)$. Since $\isequiv(f)$ is a proposition, we also have $\brck{A}\to\isequiv(f)$. To see that the gap map
+of $f$, with $f_{\mathcal{L}}$ in $\mathcal{L}$ and $f_{\mathcal{R}}$ in $\mathcal{R}$, is contractible.
+\end{enumerate}
+More precisely, the type $\fact_{\mathcal{L},\mathcal{R}}(f)$ is defined to
+be the type of
+tuples
 \begin{equation*}
-A \to B\times_{\brck{B}}\brck{A}
+(\im_{\mathcal{L},\mathcal{R}}(f),(f_{\mathcal{L}},p),(f_{\mathcal{R}},q),h)
 \end{equation*}
-is an equivalence, we will show that its fibers are contractible. Let $b:B$, $x:\brck{A}$ and $p:\bproj{b}=\brck{f}(x)$. Since $\brck{A}\to\isequiv(f)$, it follows that $f$ is an equivalence. Then $\brck{f}$ is also an equivalence, from which it follows that the naturality square is a pullback square. We conclude that the fibers of the gap map are contractible. 
+consisting of a type $\im_{\mathcal{L},\mathcal{R}}(f)$, a function $f_{\mathcal{L}}:A\to \im_{\mathcal{L},\mathcal{R}}(f)$ with
+$p:\mathcal{L}(f_{\mathcal{L}})$, a function $f_{\mathcal{R}}:\im_{\mathcal{L},\mathcal{R}}(f)\to B$ with $q:\mathcal{R}(f_{\mathcal{R}})$, and an identification $h:\id{f}{f_{\mathcal{R}}\circ f_{\mathcal{L}}}$. The type $\im_{\mathcal{L},\mathcal{R}}(f)$ is called
+the \define{$(\mathcal{L},\mathcal{R})$-image of $f$}.
+
+A type $X$ is said to be \define{$(\mathcal{L},\mathcal{R})$-modal} if
+the map $!:X\to\unit$ is in $\mathcal{R}$ (and hence $!_\mathcal{L}$
+is an equivalence).
+
+An orthogonal factorization system is said to be \define{stable} if the class
+$\mathcal{L}$ is stable under pullbacks (By
+\autoref{lem:ofs_rightstable}, $\mathcal{R}$ is always stable under pullbacks).
+\end{defn}
+
+\begin{rmk}
+  By univalence, the fact that $\mathcal{L}$ and $\mathcal{R}$ contain all identities implies that they each contain all equivalences.
+  Conversely, if $f\in \mathcal{L}\cap\mathcal{R}$, then $(\idfunc,f)$ and $(f,\idfunc)$ are both $(\mathcal{L},\mathcal{R})$-factorizations of $f$, and hence equal; which implies that $f$ is an equivalence.
+  Thus, $\mathcal{L}\cap\mathcal{R}$ consists exactly of the equivalences.
+\end{rmk}
+
+We now consider a few examples.
+Since we will eventually prove all the definitions to be equivalent, we can use any one of them to describe any particular example.
+
+\begin{eg}
+  The prime example is the \textbf{$n$-truncation modality} $\truncf n$ as studied in~\cite[Chapter 7]{TheBook}.
+  This can be given as a higher modality, using its induction principle and the fact that $\trunc n A$ is an $n$-type and the identity types of an $n$-type are again $n$-types (indeed, $(n-1)$-types).
+  The corresponding stable orthogonal factorization system, consisting of $n$-connected and $n$-truncated maps, is also constructed in~\cite[Chapter 7]{TheBook}; our construction in \cref{thm:sofs_from_ssrs} will be a generalization of this.
 \end{eg}
 
-\begin{lem}\label{lem:etale_modal}
-Any map between $\modal$-modal types is formally \'etale.
+\begin{eg}\label{eg:open}
+  Let $Q$ be a mere proposition.
+  The \textbf{open modality} determined by $Q$ is defined by $\open Q A = (Q\to A)$, with unit $\modalunit[A](x) = \lam{\nameless}x : A \to (Q \to A)$.
+  To show that this is a higher modality, suppose we have $P: (Q\to A) \to \UU$ and $f:\prd{a:A} Q \to P(\lam{\nameless} a)$.
+  Then for any $z:Q\to A$ and $q:Q$ we have $f(z(q),q) : P(\lam{\nameless} z(q))$.
+  And since $Q$ is a mere proposition, we have $z(q) = z(q')$ for any $q':Q$, hence $e(z,q) : (\lam{\nameless} z(q)) = z$ by function extensionality.
+  This gives
+  \[ \lam{z}{q} \trans{e(z,q)}{(f(z(q),q))} : \prd{z:Q\to A} Q \to P(z) \]
+  For the computation rule, we have
+  \begin{align*}
+    (\lam{z}{q} \trans{e(z,q)}{(f(z(q),q))})(\lam{\nameless} a) &= \lam{q} \trans{e(\lam{\nameless} a,q)}{(f(a,q))}\\
+    &= \lam{q} f(a,q) = f(a)
+  \end{align*}
+  by function extensionality, since $e(\lam{\nameless} a,q) = \refl{}$.
+  Finally, if $x,y:Q\to A$, then $(x=y) \simeq \prd{q:Q} x(q) = y(q)$, and the map
+  \[ \Big(\prd{q:Q} x(q) = y(q)\Big) \to \Big( Q \to \prd{q:Q} x(q) = y(q)\Big) \]
+  is (by currying) essentially precomposition with a product projection $Q\times Q\to Q$, and that is an equivalence since $Q$ is a mere proposition.
+\end{eg}
+
+\begin{eg}\label{eg:closed}
+  Again, let $Q$ be a mere proposition.
+  The \textbf{closed modality} determined by $Q$ is defined by $\closed Q A = Q \ast A$, the \emph{join} of $Q$ and $A$ (the pushout of $Q$ and $A$ under $Q\times A$).
+  We show that this is a $\Sigma$-closed reflective subuniverse.
+  Define a type $B$ to be modal if $Q \to \iscontr(B)$, and note that it is indeed the case that $Q\to\iscontr(Q\ast A)$, for any type $A$.
+  By the universal property of pushouts, a map $Q \ast A \to B$ consists of a map $f:A\to B$ and a map $g:Q\to B$ and for any $a:A$ and $q:Q$ an identification $p:f(a)=g(q)$.
+  But if $Q \to \iscontr(B)$, then $g$ and $p$ are uniquely determined, so this is just a map $A\to B$.
+  Thus $(\closed Q A \to B) \to (A\to B)$ is an equivalence, so we have a reflective subuniverse.
+  It is $\Sigma$-closed since the dependent sum of a contractible family of types over a contractible base is contractible.
+\end{eg}
+
+\begin{eg}\label{eg:dneg}
+  The \textbf{double negation modality} is defined by $A\mapsto \neg\neg A$, i.e.\ $(A\to \emptyt)\to \emptyt$, with $\modalunit(a) = \lam{g} g(a)$.
+  We show that this is a uniquely eliminating modality.
+  Since the map $\lam{f}f\circ \modalunit[A]$ that must be an equivalence has mere propositions as domain and codomain, it suffices to give a map in the other direction.
+  Thus, let $P: \neg\neg A \to \UU$ and $f:\prd{a:A} \neg \neg P(\lam{g} g(a))$; given $z:\neg\neg A$ we must derive a contradiction from $g:\neg P(z)$.
+  Since we are proving a contradiction, we can strip the double negation from $z$ and assume given an $a:A$.
+  And since $\neg\neg A$ is a mere proposition, we have $z = \lam{g} g(a)$, so that we can transport $f(a)$ to get an element of $\neg\neg P(z)$, contradicting $g$.
+\end{eg}
+
+\begin{eg}
+  The \textbf{trivial modality} is the identity function on $\UU$.
+  It coincides with $\open \top$ and with $\closed\bot$.
+
+  Dually, the \textbf{zero modality} sends all types to $\unit$.
+  It is equivalently the $(-2)$-truncation, and coincides with $\open\bot$ and with $\closed \top$.
+\end{eg}
+
+
+\paragraph*{Summary.}
+In each of \autoref{defn:highermod,defn:modunique,defn:ssrs,defn:sofs}
+we have defined what it means for a type to be modal. In each case, being
+modal is a family of mere propositions indexed by the universe, i.e.~a subuniverse.
+We will show in \autoref{thm:subuniv-highermod,thm:subuniv-modunique,thm:subuniverse-rs,thm:subuniv-sofs} that each kind of structure is completely determined by this subuniverse.
+(\autoref{thm:subuniverse-rs} is more general, not requiring $\Sigma$-closedness.)
+
+It follows that the type of all modalities of each
+kind is a subset of the set $\UU\to\prop$ of all subuniverses, and in particular is a set.
+This makes it easier to establish
+the equivalences of the different kinds of modalities.
+It suffices
+to show that any modality of one kind determines a modality of the next kind
+with the same modal types, which we will do as follows:
+\begin{center}
+\begin{tikzcd}
+  & \text{higher modality} \ar[dr,bend left,"\text{\autoref{thm:modunique_from_highermod}}"] \\
+  \parbox{3cm}{\centering stable factorization system} \ar[ur,bend left,"\text{\autoref{thm:highermod_from_sofs}}"] &&
+  \parbox{3cm}{\centering uniquely eliminating modality} \ar[dl,bend left,"\text{\autoref{thm:ssrs_from_modunique}}"] \\
+  & \parbox{3cm}{\centering $\Sigma$-closed reflective subuniverse} \ar[ul,bend left,"\text{\autoref{thm:sofs_from_ssrs}}"]
+\end{tikzcd}
+\end{center}
+Before \autoref{thm:sofs_from_ssrs} we take the opportunity to develop a bit more theory of reflective subuniverses, including closure under identity types (\autoref{lem:rs_idstable}) and dependent products
+(\autoref{lem:modal-Pi}), along with several equivalent characterizations of $\Sigma$-closedness (\autoref{thm:ssrs-characterize}).
+
+Of these equivalences, the most surprising is that a stable factorization system is uniquely determined by its underlying reflective subuniverse of types.
+This is false for stable factorization systems on arbitrary categories; the reason it holds here is that we are talking \emph{in type theory} about factorization systems \emph{on the category of types}.
+An analogous fact is true in classical set-based mathematics for stable factorization systems on the category of sets (although in that case there are much fewer interesting examples).
+We will also see in \cref{sec:semantics} that when type theory is interpreted in a higher category, the data of a reflective subuniverse or modality has to be interpreted ``fiberwise'', giving a richer structure than a single reflective subcategory.
+
+
+\subsection{Higher modalities}
+\label{sec:higher-modalities}
+
+We start by showing that a higher modality is determined by its modal types, and gives rise to a uniquely eliminating modality.
+
+\begin{lem}
+If $\modal$ is a higher modality, then any type of the form $\modal X$ is modal.
 \end{lem}
 
 \begin{proof}
-Suppose $f:X\to Y$ is a map between $\modal$-modal types. Then the top and bottom maps in the square
+  We want to show that the modal unit $\modalunit[\modal X]:\modal X\to\modal\modal X$
+is an equivalence. By the induction principle and the computation rule for
+higher modalities, we find a function $f:\modal \modal X\to\modal X$ with
+the property that $f\circ \modalunit[\modal X]\htpy\idfunc[\modal X]$. We wish to
+show that we also have $\modalunit[\modal X]\circ f\htpy\idfunc$. Since identity
+types of types of the form $\modal Y$ are declared to be modal, it is
+equivalent to find a term of type
 \begin{equation*}
-\begin{tikzcd}
-X \arrow[r] \arrow[d] & \modal X \arrow[d] \\
-Y \arrow[r] & \modal Y
-\end{tikzcd}
+\prd{x:\modal \modal X}\modal(\modalunit[\modal X](f(x))=x).
 \end{equation*}
-are equivalences. Therefore this square is a pullback square, so $f$ is formally \'etale.
+Now we are in the position to use the induction principle of higher modalites
+again, so it suffices to show that $\modalunit(f(\modalunit(x)))=\modalunit(x)$
+for any $x:\modal X$. This follows from the fact that $f\circ\modalunit=\idfunc$.
 \end{proof}
 
-The following theorem can be seen as a `modal flattening lemma'.
-\begin{thm}\label{thm:etale_flattening}
-Consider a pullback square
-\begin{equation*}
-\begin{tikzcd}
-E' \arrow[d,swap,"{p'}"] \arrow[r,"g"] & E \arrow[d,"p"] \\
-B' \arrow[r,swap,"f"] & B
-\end{tikzcd}
-\end{equation*}
-with $H:f\circ p'\htpy p\circ g$, where $X$ and $Y$ are modal types. Then the square
-\begin{equation*}
-\begin{tikzcd}
-\modal E' \arrow[r,"\tilde{g}"] \arrow[d,swap,"{\modal p'}"] & E \arrow[d,"p"] \\
-\modal B \arrow[r,swap,"\tilde{f}"] & B
-\end{tikzcd}
-\end{equation*}
-is a pullback square, where $\tilde{f}$ and $\tilde{g}$ are the unique extensions of $f$ and $g$ along the modal units of $B'$ and $E'$, respectively.
+\begin{thm}\label{thm:subuniv-highermod}
+The data of two higher modalites $\modal$ and $\modal'$
+are identical if and only if they have the same modal types.
 \end{thm}
 
 \begin{proof}
-Consider the diagram
+Another way of stating this, is that the function from the type of \emph{all}
+modalities on $\UU$ to the type $\UU\to\prop$ of predicates on $\UU$, given
+by mapping a modality to the predicate $\ismodal$, is an embedding. Thus, we
+need to show that for any predicate $\mathcal{M}:\UU\to\prop$, we can find at
+most one modality for which $\mathcal{M}$ is the class of modal types. This
+follows, once we demonstrate that,
+\begin{quote}
+for any $\mathcal{M}:\UU\to\prop$ closed under identity types,
+and for any type $X$, the type of tuples $(Y,p,\pi,I,C)$ ---
+consisting of a type $Y$ with $p$ witnessing that $Y$
+satisfies $\mathcal{M}$, a function $\pi:X\to Y$, a function
 \begin{equation*}
-\begin{tikzcd}
-E' \arrow[r,"{\mathsf{gap}(p',g,H)}"] \arrow[d,swap,"{p'}"] &[2.5em] \modal B'\times_{B} E \arrow[r,"\pi_2"] \arrow[d,swap,"\pi_1"] & E \arrow[d,"p"] \\
-B' \arrow[r,swap,"\modalunit"] & \modal B' \arrow[r,swap,"\tilde{f}"] & B
-\end{tikzcd}
+I_P:(\prd{x:X} P(\pi(x)))\to(\prd{y:Y} P(y))
 \end{equation*}
-In this diagram, the square on the right is a pullback by definition, and the outer rectangle is a pullback by assumption, so the square on the left is also a pullback. Therefore the gap map $E'\to \modal B'\times_B E$ is $\modal$-connected. Moreover, since the modal types are closed under pullbacks it follows that $\modal B'\times_B E$ is modal, and therefore it follows that $\pi_2:\modal B'\times_B E\to E$ is a modal map. Therefore the composite
-\begin{equation*}
-\begin{tikzcd}
-E' \arrow[r,"{\mathsf{gap}(p',g,H)}"] &[2.5em] \modal B'\times_{B} E \arrow[r,"\pi_2"] & E 
-\end{tikzcd}
-\end{equation*}
-factors $g$ as a $\modal$-connected map followed by a $\modal$-modal map. Of course, another such factorization is the composite $g\htpy \tilde{g}\circ\modalunit$. Since factorizations are unique, the claim follows.
+for every $P:Y\to\UU_{\mathcal{M}}$,
+which is a right inverse of precomposing with $\pi$, as is witnessed by the
+term $C$ --- is a mere proposition.
+\end{quote}
+
+We prove this statement in two parts. First, we show that the
+type of pairs $(I,C)$, with $I$ and $C$ of the indicated types, is a mere
+proposition for any $(Y,p,\pi)$. After that, we show that the type of triples
+$(Y,p,\pi)$ is also a mere proposition. These two facts combined prove the
+statement.
+
+Consider a type $Y$ satisfying $\mathcal{M}$, and a function $\pi:X\to Y$, and
+let $(I,C)$ and $(I',C')$ be two terms witnessing that $Y$ satisfies an induction
+principle with a computation rule. We want to show that $(I,C)=(I',C')$, and of
+course it suffices to show that $(I(s),C(s))=(I'(s),C(s))$ for any
+$P:Y\to\UU_{\mathcal{M}}$ and $s:\prd{x:X}P(\pi(x))$.
+
+To show that $I(s,y)=I'(s,y)$ for any $y:Y$, we use
+the induction principle $(I,C)$. So it suffices to show that
+$I(s,\pi(x))=I'(s,\pi(x))$. Both of these terms are equal to $s(x)$. Thus,
+we obtain a proof $J(s,y)$ that $I(s,y)=I'(s,y)$, with the property that
+$J(s,\pi(x))=\ct{C(s,x)}{\inv{C'(s,x)}}$.
+Now we need to show that $\trans{J(s)}{C(s)}=C'(s)$, which is equivalent
+to the property we just stated. This finishes the proof that the type of
+the induction principle and computation rule is a mere proposition.
+
+It remains to show that $(Y,\pi)=(Y',\pi')$, provided that $Y$ and $Y'$ are both
+in $\mathcal{M}$, and that both sides satisfy
+the induction principle and computation rule. It suffices to find an equivalence
+$f:Y\to Y'$ such that $f\circ \pi=\pi'$.
+
+From the induction principles of $Y$ resp. $Y'$, we obtain a function
+$f:Y\to Y'$ with the property that $f\circ \pi=\pi'$, and a function
+$f':Y'\to Y$ with the property that $f'\circ \pi'=\pi$.
+To show that $f'\circ f=\idfunc$ we use the induction principle
+of $Y$. Since the type $f'(f(y))=y$ is in $\mathcal{M}$, it suffices to show that
+$f'(f(\pi(y)))=\pi(y)$. This readily follows from the defining properties of $f$
+and $f'$. Similarly, we have $f\circ f'=\idfunc$.
 \end{proof}
 
-Using modal flattening we establish partial left exactness of the modality.
-
-\begin{cor}\label{cor:etale_lex}
-Consider a pullback square
-\begin{equation*}
-\begin{tikzcd}
-A' \arrow[d,swap,"{f'}"] \arrow[r] & A \arrow[d,"f"] \\
-B' \arrow[r] & B,
-\end{tikzcd}
-\end{equation*}
-where $f$ is assumed to be formally \'etale. Then the square
-\begin{equation*}
-\begin{tikzcd}
-\modal A' \arrow[d,swap,"{\modal f'}"] \arrow[r] & \modal A \arrow[d,"\modal f"] \\
-\modal B' \arrow[r] & \modal B,
-\end{tikzcd}
-\end{equation*}
-is again a pullback square.
-\end{cor}
-
-\begin{proof}
-Since $f$ is assumed to be formally \'etale, the square on the right in the diagram
-\begin{equation*}
-\begin{tikzcd}
-A' \arrow[r] \arrow[d,swap,"{f'}"] & A \arrow[r] \arrow[d,swap,"f"] & \modal A \arrow[d,"\modal f"] \\
-B' \arrow[r] & B \arrow[r] & \modal B
-\end{tikzcd}
-\end{equation*}
-is a pullback square. Therefore the outer rectangle is a pullback square by the pullback pasting lemma. Now the claim follows from modal flattening \cref{thm:etale_flattening}, using the outer rectangle.
-\end{proof}
-
-\begin{cor}\label{cor:etale_pb}
-Consider a pullback square
-\begin{equation*}
-\begin{tikzcd}
-E' \arrow[d,swap,"{p'}"] \arrow[r,"g"] & E \arrow[d,"p"] \\
-B' \arrow[r,swap,"f"] & B
-\end{tikzcd}
-\end{equation*} 
-and suppose that $p:E\to B$ is formally \'etale. Then $p':E'\to B'$ is formally \'etale.
-\end{cor}
-
-\begin{proof}
-Consider the commuting cube
-\begin{equation*}
-\begin{tikzcd}
-&[-.5ex] E' \arrow[dr] \arrow[d] \arrow[dl] \\
-\modal E' \arrow[d] & B' \arrow[dl] \arrow[dr] & E \arrow[dl,crossing over] \arrow[d] \\
-\modal B' \arrow[dr] & \modal E \arrow[d] \arrow[from=ul,crossing over] & B \arrow[dl] \\
-& \modal B.
-\end{tikzcd}
-\end{equation*}
-The vertical squares on the back right and front right are pullback squares by assumption.
-Then it follows from \cref{cor:etale_lex} that the vertical square on the front left is a pullback square.
-Therefore the square on the back left is a pullback square by the pullback pasting property.
-\end{proof}
-
-\begin{defn}
-Let $X$ be a type. We will define an operation
-\begin{equation*}
-\etmap:\Big(\sm{A:\UU_\modal}A\to\modal X\Big)\to\Big(\sm{Y:\UU}{g:Y\to X}\isetale(g)\Big)
-\end{equation*}
-\end{defn}
-
-\begin{constr}
-Given a map $f:A\to \modal X$ we take the pullback
-\begin{equation*}
-\begin{tikzcd}
-X\times_{\modal X}A \arrow[d,swap,"\pi_1"] \arrow[r,"\pi_2"] & A \arrow[d,"f"] \\
-X \arrow[r,swap,"\modalunit"] & \modal X.
-\end{tikzcd}
-\end{equation*}
-Then the map $\pi_1:X\times_{\modal X}A\to X$ is formally \'etale by \cref{lem:etale_modal,cor:etale_pb}.
-\end{constr}
-
-The following is a descent theorem for formally étale maps.
-
-\begin{thm}[Modal descent]
-For any modality $\modal$, and any type $X$, the operation
-\begin{equation*}
-\etmap:\Big(\sm{A:\UU_\modal}A\to\modal X\Big)\to\Big(\sm{Y:\UU}{g:Y\to X}\isetale(g)\Big)
-\end{equation*}
-is an equivalence.
+\begin{thm}\label{thm:modunique_from_highermod}
+A higher modality is a uniquely eliminating modality, with the
+same modal types.
 \end{thm}
 
 \begin{proof}
-If $g:Y\to X$ is formally \'etale, then the square
+Let $\modal$ be a modality with modal units $\modalunit[A]$. Our goal is to show
+that the pre-composition map
 \begin{equation*}
-\begin{tikzcd}
-Y \arrow[d,swap,"g"] \arrow[r,"\modalunit"] & \modal Y \arrow[d,"\modal g"] \\
-X \arrow[r,swap,"\modalunit"] & \modal X
-\end{tikzcd}
+\lam{s}s\circ\modalunit[A]:(\prd{x:\modal A}\modal(P(x)))\to(\prd{a:A}\modal(P(\modalunit[A](a))))
 \end{equation*}
-is a pullback square. Therefore $g:Y\to X$ is in the fiber of $\etmap$ at $\modal g : \modal Y\to\modal X$. 
+is an equivalence for each $A:\UU$ and $P:\modal A\to\UU$.
+By the given induction principle and computation rule, we obtain a
+right inverse $\mathsf{ind}^\modal_A$ of $\blank\circ\modalunit[A]$.
 
-It remains to show that for any map $f:A\to\modal X$ with modal domain, there is an equivalence $\eqv{A}{\modal (X\times_{\modal X} A)}$ such that the triangle
+To show that it is a left inverse, consider $s:\prd{x:\modal A}\modal(P(x))$.
+We need to find a homotopy
 \begin{equation*}
-\begin{tikzcd}
-A \arrow[dr,swap,"f"] \arrow[rr,"\eqvsym"] & & \modal (X\times_{\modal X} A) \arrow[dl,"\modal(\etmap(f))"] \\
-& \modal X
-\end{tikzcd}
+\prd{x:\modal A}\id{s(x)}{\mathsf{ind}^\modal_A(s\circ \modalunit_A)(x)}.
 \end{equation*}
-commutes. To see this, note that both $f\circ \pi_2$ and $\modal(\etmap(f))\circ \modalunit$ factor the same map as a $\modal$-connected map followed by a modal map, so the claim follows from uniqueness of factorizations.
+By assumption we have that $P(x)$ is
+modal for each $z:\modal A$ and hence it follows that $\id{s(x)}{\mathsf{ind}^\modal_A(s\circ \modalunit_A)(x)}$
+is modal for each $x$. Hence it suffices to find a function of type
+\begin{equation*}
+\prd{a:A}\id{s(\modalunit_A(a))}{\mathsf{ind}^\modal_A(s\circ \modalunit_A)(\modalunit_A(a))}.
+\end{equation*}
+This follows straight from the computation rule of higher modalities.
 \end{proof}
 
-\begin{cor}\label{cor:etale}
-The class of formally \'etale maps is precisely the class of maps that arise as pullbacks of maps between modal types.
-\end{cor}
+\subsection{Uniquely eliminating modalities}
+\label{sec:uniq-elim}
 
-\begin{cor}
-Suppose $P:X\to\UU_\modal$ is a family of modal types such that the projection map $\proj 1:\big(\sm{x:X}P(x)\big)\to X$ is formally \'etale. Then $P$ has a unique extension
-\begin{equation*}
-\begin{tikzcd}
-X \arrow[d,swap,"\modalunit"] \arrow[r,"P"] & \UU_\modal. \\
-\modal X \arrow[ur,densely dotted,swap,"\tilde{P}"] 
-\end{tikzcd}
-\end{equation*}
-It follows that the square commuting square
-\begin{equation*}
-\begin{tikzcd}
-\sm{x:X}P(x) \arrow[d,swap,"\proj 1"] \arrow[r] & \sm{t:\modal X}\tilde{P}(t) \arrow[d,"\proj 1"] \\
-X \arrow[r,swap,"\modalunit"] & \modal X
-\end{tikzcd}
-\end{equation*}
-is a pullback square. In particular the top map is $\modal$-connected, so this square is in fact a $\modal$-naturality square.
-\end{cor}
+Next, we show that a uniquely eliminating modality is determined by its modal types, and gives rise to a $\Sigma$-closed reflective subuniverse.
 
-\section{The reflective factorization system}
-
-In this section we investigate a second factorization system that can be obtained from any modality, of which the right class is the class of formally \'etale maps. The left class is the class of \emph{$\modal$-equivalences}.
-
-\begin{defn}
-We say that a map $f:A\to B$ is an \define{$\modal$-equivalence} if $\modal f:\modal A\to \modal B$ is an equivalence.
-\end{defn}
-
-\begin{rmk}
-The difference between the notions of $\modal$-equivalences and $\modal$-connected maps is best explained by an example. In the case of $n$-truncation, the $n$-equivalences are precisely the maps that induce isomorphisms on the first $n$ homotopy groups. The $n$-connected maps are the maps that induce isomorphisms on the first $n$ homotopy groups, and moreover induce an epimorphism on the $(n+1)$-st homotopy group. 
-
-We also note that the $n$-equivalences are not stable under pullbacks, whereas the $n$-connected maps are. Consider for instance the pullback square
-\begin{equation*}
-\begin{tikzcd}
-\loopspace {\sphere{n+1}} \arrow[r] \arrow[d] & \unit \arrow[d] \\
-\unit\arrow[r] & \sphere{n+1}
-\end{tikzcd}
-\end{equation*}
-Here the map on the right is an $n$-equivalence, since $\sphere{n+1}$ is $n$-connected. However, the map on the left is not an $n$-equivalence, since the $n$-th homotpy group of $\loopspace{\sphere{n+1}}$ is not trivial: it is the $(n+1)$-st homotopy group of $\sphere{n+1}$, which is $\Z$.
-\end{rmk}
-
-\begin{defn}
-The \define{reflective factorization system} associated to a modality $\modal$ consists of the $\modal$-equivalences as the left class, and the formally \'etale maps as the right class.
-\end{defn}
-
-Our goal in this section is to show that the reflective factorization system associated to a modality is an orthogonal factorization system.
-
-\begin{lem}\label{lem:3for2_mequiv}
-The $\modal$-equivalences satisfy the 3-for-2 property: given a commuting triangle
-\begin{equation*}
-\begin{tikzcd}
-A \arrow[rr,"h"] \arrow[dr,swap,"f"] & & B \arrow[dl,"g"] \\
-& C,
-\end{tikzcd}
-\end{equation*}
-if any two of $f$, $g$, and $h$ are $\modal$-equivalences, then so is the third.
+\begin{lem}
+Given a uniquely eliminating modality, $\modal X$ is modal for any type $X$.
 \end{lem}
 
 \begin{proof}
-Apply $\modal$ to the commuting triangle, and use the 3-for-2 property of equivalences.
+Using the elimination principle of $\modal \modal X$, we find a function
+$f:\modal \modal X\to\modal X$ and an identification $f\circ\modalunit[\modal X]=\idfunc[\modal X]$.
+By the uniqueness property, the type
+\begin{equation*}
+\sm{g:\modal \modal X\to\modal \modal X} g\circ\modalunit[\modal X]=\modalunit[\modal X]
+\end{equation*}
+is contractible. Since both $\idfunc[\modal \modal X]$ and $\modalunit[\modal X]\circ f$
+are in this type (with suitable identifications), we find that $f$ is also the
+right inverse of $\modalunit[\modal X]$. This shows that $\modalunit[\modal X]$ is an
+equivalence, so $\modal X$ is modal.
 \end{proof}
 
-\begin{lem}\label{lem:modal_equivalence}
-For a map $f : A \to B$ the following are equivalent:
-\begin{enumerate}
-\item $f$ is an $\modal$-equivalence.
-\item For any modal type $X$, the precomposition map
-\begin{equation*}
-\precomp{f} : (B \to X) \to (A \to X)
-\end{equation*}
-is an equivalence.
-\end{enumerate}
-\end{lem}
+\begin{thm}\label{thm:subuniv-modunique}
+The data of two uniquely eliminating modalities $\modal$ and $\modal'$ are equivalent if and only if both have the same modal types.
+\end{thm}
 
-\begin{proof} 
-Suppose first that $f$ is an $\modal$-equivalence, and let $X$ be $\modal$-modal. Then the square
+\begin{proof}
+We need to show that the type of uniquely eliminating modalities
+with a given class $\mathcal{M}:\UU\to\prop$ of modal types
+is a mere proposition. Since the types of the form $\modal X$ are modal,
+it suffices to show for any class $\mathcal{M}
+:\UU\to\prop$ and any type $X$, that
+\begin{quote}
+the type of tuples $(Y,p,\pi,H)$ --- consisting of a type $Y$
+with $p$ witnessing that $Y$ is in $\mathcal{M}$, a function $\pi:X\to Y$, and
+for each $P:Y\to\UU$ a term $H_P$ witnessing that the function
+\begin{equation*}
+\lam{s}s\circ \pi:(\prd{y:Y}\modal(P(y)))\to(\prd{x:X}\modal(P(\pi(x))))
+\end{equation*}
+is an equivalence --- is a mere proposition.
+\end{quote}
+Let $(Y,p,\pi,H)$ and $(Y',p',\pi',H')$ be such tuples. To show that they are
+equal, it suffices to show that $(Y,\pi)=(Y',\pi')$ because the other things
+in the list are terms of mere propositions. Furthermore, showing that
+$(Y,\pi)=(Y',\pi')$ is equivalent to finding an equivalence $f:\eqv{Y}{Y'}$ with
+the property that $f\circ\pi=\pi'$. By $H$, there is such a function, and by
+$H'$ there is a function $f':Y'\to Y$ such that $f'\circ\pi'=\pi$. Now the
+uniqueness gives that $f'\circ f$ is the only function from $Y$ to $Y$ such
+that $f'\circ f\circ\pi=\pi$ and of course $\idfunc[Y]$ is another such function.
+Therefore it follows that $f'\circ f=\idfunc$, and similarly it follows that
+$f\circ f'=\idfunc$.
+\end{proof}
+
+\begin{thm}\label{thm:ssrs_from_modunique}
+Any uniquely eliminating modality determines a $\Sigma$-closed reflective
+subuniverse with the same modal types.
+\end{thm}
+
+\begin{proof}
+It is immediate from the definition of uniquely eliminating modalities
+that every map $f:A\to B$ into a modal type $B$ has a homotopy unique extension to $\modal A$
+along the modal unit:
 \begin{equation*}
 \begin{tikzcd}
-X^B \arrow[r,"\precomp{f}"] \arrow[d,swap,"\precomp{\eta}"] & X^A \arrow[d,"\precomp{\eta}"] \\
-X^{\modal B} \arrow[r,swap,"\precomp{\modal f}"] & X^{\modal A}
+A \arrow[dr,"f"] \arrow[d,swap,"\modalunit_A"] \\ \modal A \arrow[r,densely dotted,swap,"\tilde f"] & B
 \end{tikzcd}
 \end{equation*}
-commutes. In this square the two vertical maps are equivalences by the universal property of modalization, and the bottom map is an equivalence since $\modal f$ is an equivalence. Therefore the map $\precomp{f}:X^B\to X^A$ is an equivalence, as desired.
-
-Conversely, assume that $\precomp{f} : X^B \to X^A$ is an equivalence for every $\modal$-modal type $X$. By the square above it follows that $\precomp{\modal f}:X^{\modal B}\to X^{\modal A}$ is an equivalence for every $\modal$-modal type $X$. The fiber of $\modal A^{\modal B}\to \modal A^{\modal A}$ at $\idfunc:\modal A\to \modal A$ is contractible, so we obtain a retraction $g$ of $\modal f$. To see that $g$ is also a section observe that the fiber of $\modal B^{\modal B}\to \modal B^{\modal A}$ at $\modal f$ is contractible. This fiber contains $(\idfunc[\modal B],\refl{\modal f})$. However, we also have an identification $p:\precomp{\modal f}(\modal f\circ g)=\modal f$, since
+Since the types of the form $\modal X$ are modal, we obtain a reflective subuniverse.
+It remains to verify  that the type $\sm{x:\modal X}\modal(P(x))$ is modal for
+any type $X$ and $P:X\to\UU$. We have the function
 \begin{equation*}
-\precomp{\modal f}(\modal f\circ g)\jdeq (\modal f \circ g)\circ \modal f\jdeq \modal f \circ (g\circ \modal f) = \modal f. 
+\varphi\defeq\lam{m}\pairr{f(m),g(m)}:\modal(\sm{x:\modal X}\modal(P(x)))\to\sm{x:\modal X}\modal(P(x)),
 \end{equation*}
-Therefore $(\modal f\circ g,p)$ is in the fiber of $\precomp{\modal f}:\modal B^{\modal B}\to \modal B^{\modal A}$ at $\modal f$. By the contractibility of the fibers it follows that $(\modal f\circ g,p)=(\idfunc[\modal B],\refl{\modal f})$, so it follows that $\modal f\circ g=\idfunc[\modal B]$. In other words, $g$ is both a retraction and a section of $\modal f$, so $\modal f$ is an equivalence.
+where
+\begin{align*}
+f & \defeq \ind{\modal}(\lam{x}{u} x) & & : \modal(\sm{x:\modal X}\modal(P(x)))\to \modal X \\
+g & \defeq \ind{\modal}(\lam{x}{u} u) & & : \prd{w:\modal(\sm{x:\modal X}\modal(P(x)))} \modal(P(f(w)))
+\end{align*}
+Our goal is to show that $\varphi$ is an inverse to the modal unit.
+
+Note that
+\begin{equation*}
+\varphi(\modalunit(x,y)) \jdeq \pairr{f(\modalunit(x,y)),g(\modalunit(x,y))} \jdeq \pairr{x,y},
+\end{equation*}
+so we see immediately that $\varphi$ is a left inverse of $\modalunit$.
+
+To show that $\varphi$ is a right inverse of $\modalunit$, note that the type
+of functions $h$ fitting in a commuting square of the fom
+\begin{equation*}
+\begin{tikzcd}[column sep=-3em]
+\modal(\sm{x:\modal X}\modal(P(x))) \arrow[rr,densely dotted,"h"] & & \modal(\sm{x:\modal X}\modal(P(x))) \\
+& \sm{x:\modal X}\modal(P(x)) \arrow[ul,"\modalunit"] \arrow[ur,swap,"\modalunit"]
+\end{tikzcd}
+\end{equation*}
+is contractible, and it contains the identity function. Therefore, it suffices
+to show that $(\modalunit\circ\varphi)\circ\modalunit=\modalunit$, but this follows
+from the fact that $\varphi$ is a left inverse of the modal unit.
 \end{proof}
 
-\begin{cor}\label{cor:mequiv_mconn}
-Every $\modal$-connected map is a $\modal$-equivalence.
-\end{cor}
+\subsection{\texorpdfstring{$\Sigma$}{Σ}-closed reflective subuniverses}
+\label{sec:ssrs}
 
-\begin{lem}\label{lem:rfs_factor}
-Every map factors as a $\modal$-equivalence followed by a formally \'etale map.
+Now we study reflective subuniverses in a bit more detail, and end by
+showing that $\Sigma$-closed ones give rise to stable factorization
+systems. $\Sigma$-closure is used in \autoref{thm:sofs_from_ssrs} to
+show that left maps and right maps are closed under composition.
+
+\subsubsection{Properties of reflective subuniverses}
+\label{sec:prop-rfsu}
+
+\begin{lem}\label{lem:reflective_uniqueness}
+  For any $\mathcal{M}:\UU\to\prop$ and any type $X$, the type of triples $(Y,f,I)$ consisting of $Y:\UU_{\mathcal{M}}$,
+  $f:X\to Y$ and $I:\prd{Z:\UU_{\mathcal{M}}}\isequiv(\lam{g}g\circ f:(Y\to Z)\to(X\to Z))$, is a mere proposition.
 \end{lem}
 
 \begin{proof}
-Consider a map $f:A\to B$, and the diagram
-\begin{equation*}
-\begin{tikzcd}
-A \arrow[ddr,bend right=15,swap,"f"] \arrow[drr,bend left=15,"\modalunit"] \arrow[dr,"\mathsf{gap}" description] \\
-& B\times_{\modal B} \modal A \arrow[d,swap,"\pi_1"] \arrow[r,"\pi_2"] & \modal A \arrow[d,"\modal f"] \\
-& B \arrow[r,swap,"\modalunit"] & \modal B.
-\end{tikzcd}
-\end{equation*}
-Then $\pi_1:B\times_{\modal B} \modal A\to B$ is a pullback of a map between modal types, so it is formally \'etale by \cref{cor:etale}. Furthermore, the map $\pi_2:B\times_{\modal B}\modal A\to \modal A$ is a pullback of a $\modal$-connected map, so it is $\modal$-connected. It follows from \cref{cor:mequiv_mconn} that it is a $\modal$-equivalence. Since the modal unit $\modalunit :A\to\modal A$ is also $\modal$-connected, and therefore a $\modal$-equivalence, we obtain by the 3-for-2 property of $\modal$-equivalences established in \cref{lem:3for2_mequiv} that the gap map is also a $\modal$-equivalence.
+Consider $(Y,f,I)$ and $(Y',f',I')$ of the described type. Since $I$ and $I'$
+are terms of a mere proposition, it suffices to show that $(Y,f)=(Y',f')$. In
+other words, we have to find an equivalence $g:Y\to Y'$ such that $g\circ f'=f$.
+
+By $I(Y')$, the type of
+pairs $(g,h)$ consisting of a function $g:Y\to Y'$ such that $h:g\circ f=f'$ is contractible. By
+$I'(Y)$, the type of pairs $(g',h')$ consisting of a function $g':Y'\to Y$
+such that $h':g'\circ f'=f$ is contractible.
+
+Now $g'\circ g$ is a function such that $g'\circ g\circ f=g'\circ f'=f$, as
+is $\idfunc[Y]$. By contractibility, it follows that $g'\circ g=\idfunc[Y]$.
+Similarly, $g\circ g'=\idfunc[Y']$.
 \end{proof}
 
-Recall that a map $i:A\to B$ is said to be \define{left orthogonal} to a map $f:X\to Y$, or that the map $f$ is \define{right orthogonal} to the map $i$,
-if each commuting square of the form
-\begin{equation*}
-\begin{tikzcd}
-A \arrow[r] \arrow[d,swap,"i"] & X \arrow[d,"f"] \\
-B \arrow[r] & Y
-\end{tikzcd}
-\end{equation*}
-has a unique diagonal filler. Following \cite{AnelBiedermanFinsterJoyal}, we note that this can be expressed conviniently as the condition that the square
-\begin{equation*}
-\begin{tikzcd}
-X^B \arrow[r,"f\circ\blank"] \arrow[d,swap,"\blank\circ i"] & Y^B \arrow[d,"\blank\circ i"] \\
-X^A \arrow[r,swap,"f\circ\blank"] & Y^A
-\end{tikzcd}
-\end{equation*}
-is a pullback square.
+\begin{thm}\label{thm:subuniverse-rs}
+The data of any two reflective subuniverses with the same modal types are the same.
+\end{thm}
+\begin{proof}
+  Given the modal types, the rest of the data of a reflective subuniverse consists of, for each type $X$, a triple $(Y,f,I)$ as in \cref{lem:reflective_uniqueness}.
+  Thus, by \cref{lem:reflective_uniqueness}, these data form a mere proposition.
+\end{proof}
 
-\begin{lem}\label{lem:rfs_orthogonal}
-The class of $\modal$-equivalences is left orthogonal to the class of formally \'etale maps.
+\begin{lem}\label{lem:subuniv-modal}
+  Given a reflective subuniverse, a type $X$ is modal if and only if $\modalunit[X]$ is an equivalence.
+\end{lem}
+\begin{proof}
+  Certainly if $\modalunit[X]$ is an equivalence, then $X$ is modal since it is equivalent to the modal type $\modal X$.
+  Conversely, if $X$ is modal then $\idfunc[X]$ has the same universal property of $\modalunit[X]$; so by \cref{lem:reflective_uniqueness} they are equivalent and hence $\modalunit[X]$ is an equivalence.
+\end{proof}
+
+\begin{lem}\label{thm:modalunit-retract-equiv}
+  Given a reflective subuniverse, if a modal unit $\modalunit[X]$ has a left inverse (i.e.\ a retraction), then it is an equivalence, and hence $X$ is modal.
+\end{lem}
+\begin{proof}
+  Suppose $f$ is a left inverse of $\modalunit[X]$, i.e.\ $f\circ \modalunit[X] = \idfunc[X]$.
+  Then $\modalunit[X]\circ f\circ \modalunit[X] = \modalunit[X]$, so $\modalunit[X]\circ f$ is a factorization of $\modalunit[X]$ through itself.
+  By uniqueness of such factorizations, $\modalunit[X]\circ f = \idfunc[\modal X]$.
+  Thus $f$ is also a right inverse of $\modalunit[X]$, hence $\modalunit[X]$ is an equivalence.
+\end{proof}
+
+\begin{lem}
+  Any reflective subuniverse is a functor up to homotopy: given $f:A\to B$ we have an induced map $\modal f : \modal A \to \modal B$, preserving identities and composition up to homotopy.
+  Moreover, $\modalunit$ is a natural transformation up to homotopy, i.e.\ for any $f$ we have $\modal f \circ \modalunit[A] = \modalunit[B] \circ f$.
+\end{lem}
+\begin{proof}
+  Define $\modal f$ to be the unique function such that $\modal f \circ \modalunit[A] = \modalunit[B] \circ f$, using the universal property of $\modalunit[A]$.
+  The rest is easy to check using further universal properties.
+\end{proof}
+
+\begin{lem}
+  Given a reflective subuniverse and any type $X$, the map $\modal \modalunit[X] : \modal X \to \modal\modal X$ is an equivalence.
+\end{lem}
+\begin{proof}
+  By naturality, we have $\modal \modalunit[X] \circ \modalunit[X] = \modalunit[\modal X] \circ \modalunit[X]$.
+  Hence $\modal \modalunit[X] = \modalunit[\modal X]$ by the universal property of $\modalunit[X]$, but $\modalunit[\modal X]$ is an equivalence by \cref{lem:subuniv-modal}.
+\end{proof}
+
+\begin{lem}\label{thm:rsu-galois}
+  Given a reflective subuniverse, a type $X$ is modal if and only if $(\blank \circ f) : (B\to X) \to (A\to X)$ is an equivalence for any function $f:A\to B$ such that $\modal f$ is an equivalence.
+\end{lem}
+\begin{proof}
+  If $\modal f$ is an equivalence and $X$ is modal, then by the universal property of $\modalunit$, we have a commutative square
+  \[
+  \begin{tikzcd}
+    (B\to X) \ar[r,"\blank\circ f"] & (A\to X) \\
+    (\modal B\to X) \ar[r,"\blank\circ\modal f"'] \ar[u,"{\blank\circ \modalunit[B]}"] &
+    (\modal A \to X) \ar[u,"{\blank\circ \modalunit[A]}"']
+  \end{tikzcd}
+  \]
+  in which all but the top map are equivalences; thus so is the top map.
+
+  Conversely, since $\modal\modalunit[X]$ is an equivalence, the hypothesis implies that
+  $(\blank \circ \modalunit[X]) : (\modal X\to X) \to (X\to X)$
+  is an equivalence.
+  In particular, its fiber over $\idfunc[X]$ is inhabited, i.e.\ $\modalunit[X]$ has a retraction; hence $X$ is modal.
+\end{proof}
+
+\begin{lem}\label{lem:sum_idempotent}
+Consider a reflective subuniverse with modal operator $\modal$, and let $P:X\to\UU$ for some type $X:\UU$.
+Then the unique map for which the triangle
+\begin{equation*}
+\begin{tikzcd}
+\sm{x:X}P(x) \arrow[d,swap,"\modalunit"] \arrow[dr,"{\lam{\pairr{x,y}}\modalunit(x,\modalunit(y))}"] \\
+\modal(\sm{x:X}P(x)) \arrow[r,densely dotted] & \modal(\sm{x:X}\modal(P(x)))
+\end{tikzcd}
+\end{equation*}
+commutes, is an equivalence.
+\end{lem}
+\begin{proof}
+  Since both codomains are modal, it suffices to show that ${\lam{\pairr{x,y}}\modalunit(x,\modalunit(y))}$ has the universal property of $\modalunit[\sm{x:X}P(x)]$, i.e.\ that any map $(\sm{x:X}P(x)) \to Y$, where $Y$ is modal, extends uniquely to $\modal(\sm{x:X}\modal(P(x)))$.
+  But we have
+  \begin{align*}
+    ((\sm{x:X}P(x)) \to Y)
+    &\simeq
+    \prd{x:X} P(x) \to Y\\
+    &\simeq
+    \prd{x:X} \modal(P(x)) \to Y\\
+    &\simeq
+    (\sm{x:X}\modal(P(x))) \to Y\\
+    &\simeq
+    \modal (\sm{x:X}\modal(P(x))) \to Y
+  \end{align*}
+  and it is easy to see that this is the desired precomposition map.
+\end{proof}
+
+\begin{lem}\label{lem:rs_idstable}
+  For any reflective subuniverse, if $X$ is modal, then so is the identity type $x=y$ for any $x,y:X$.
 \end{lem}
 
 \begin{proof}
-We have to show that for every $\modal$-equivalence $i:A\to B$, and every formally \'etale map $f:X\to Y$, the square
+Let $X$ be a modal type, and let $x,y:X$. We have a map
+$\modal(x=y)\to\unit$. The outer square in the diagram
 \begin{equation*}
 \begin{tikzcd}
-X^B \arrow[r] \arrow[d] & Y^B \arrow[d] \\
-X^A \arrow[r] & Y^A
+\modal(x=y) \arrow[ddr,bend right=15] \arrow[drr,bend left=15] \\
+& (x=y) \arrow[r] \arrow[d] \arrow[ul,"\modalunit"] \arrow[dr, phantom, "\lrcorner", very near start] & \unit \arrow[d,"x"] \\
+& \unit \arrow[r,swap,"y"] & X
 \end{tikzcd}
 \end{equation*}
-is a pullback square. Consider the commuting cube
-\begin{equation*}
-\begin{tikzcd}
-&[-1ex] X^B \arrow[dl] \arrow[d] \arrow[dr] \\
-(\modal X)^B \arrow[d] & X^A \arrow[dl] \arrow[dr] & Y^B \arrow[d] \arrow[dl,crossing over] \\
-(\modal X)^A \arrow[dr] & (\modal Y)^B \arrow[from=ul,crossing over] \arrow[d] & Y^A \arrow[dl] \\
-& (\modal Y)^A
-\end{tikzcd}
-\end{equation*}
-In this cube the top and bottom squares are pullback by the assumption that $f$ is formally \'etale and the fact that exponents of pullback squares are again pullback squares. Furthermore, the square in the front left is pullback, because the two vertical maps are equivalences by the assumption that $i:A\to B$ is a $\modal$-equivalence. Therefore we conclude that the square in the back right is also a pullback square, as desired.
+commutes, because both maps extend the map $(x=y)\to X$ along $\modalunit$, and
+such extensions are unique because $X$ is assumed to be modal.
+Hence the universal property of the pullback gives
+an inverse of $\modalunit:(x=y)\to\modal(x=y)$.
 \end{proof}
 
-\begin{cor}
-For any map $f:X\to Y$, the type of factorizations into a $\modal$-connected map followed by a formally \'etale map is contractible.
-\end{cor}
+\begin{lem}\label{lem:modal-Pi}
+Given a reflective subuniverse,
+if $P(x)$ is modal for all $x:X$, then so is $\prd{x:X}P(x)$.
+\end{lem}
 
-\section{Formally \'etale maps for the $n$-truncations}
-
-The $n$-equivalences are easily described: they are just the maps that induce isomorphisms on the first $n$ homotopy groups. In this section our goal is to characterize the formally \'etale maps for the $n$-truncations. We call those maps \define{formally $n$-\'etale}. Note that the case of propositional truncation has already been addressed in \cref{eg:etale_prop}.
-
-\begin{lem}\label{lem:etale_char}
-Let $\modal$ be a modality for which all propositions are modal, and consider a map $f:A\to B$. The following are equivalent:
-\begin{enumerate}
-\item $f$ is formally \'etale.
-\item The commuting square
+\begin{proof}
+By \cref{thm:modalunit-retract-equiv}, it suffices to define a left inverse of the modal unit
+$\modalunit:(\prd{x:A}P(x))\to \modal(\prd{x:A}P(x))$. By the universal property
+of dependent product, extending
+\begin{equation*}
+\begin{tikzcd}
+\prd{x:A}P(x) \arrow[r,"{\idfunc}"] \arrow[d,"\modalunit"] & \prd{a:A}P(a) \arrow[d,"{\psi\,\defeq\,\lam{f}{a}\modalunit[P(a)](f(a))}"] \\
+\modal(\prd{x:A}P(x)) \arrow[r,densely dotted] & \prd{a:A}\modal(P(a))
+\end{tikzcd}
+\end{equation*}
+is equivalent to extending
 \begin{equation*}
 \begin{tikzcd}[column sep=large]
-A\times_{\modal A} A \arrow[d,swap,"\pi_1"] \arrow[r,"{f\times_{\modal f} f}"] & B\times_{\modal B} B \arrow[d,"\pi_1"] \\
-A \arrow[r,swap,"f"] & B
+\prd{x:A}P(x) \arrow[r,"{\mathsf{ev}_a}"] \arrow[d,swap,"{\modalunit}"]
+& P(a) \arrow[d,"{\modalunit}"] \\
+\modal(\prd{x:A}P(x)) \arrow[r,densely dotted,swap,"{\modal(\mathsf{ev}_a)}"] & \modal(P(a))
 \end{tikzcd}
 \end{equation*}
-is a pullback square.
+for any $a:A$. Thus, we find
+\begin{equation*}
+f\defeq\lam{m}{a}\modal(\mathsf{ev}_a)(m):\modal(\prd{x:A}P(x))\to\prd{a:A}P(a).
+\end{equation*}
+as the solution to the first extension problem. In the first extension problem,
+the function $\psi$ is an equivalence by the assumption that each $P(a)$ is
+modal, so we obtain a retraction of the modal unit.
+\end{proof}
+
+\begin{lem}\label{thm:modal-pres-prod}
+Given any reflective subuniverse, the modal operator $\modal$ preserves cartesian products.
+\end{lem}
+
+\begin{proof}
+We have to show that the modal extension
+\begin{equation*}
+\begin{tikzcd}
+X\times Y \arrow[d,swap,"{\modalunit[X\times Y]}"] \arrow[dr,"\lam{\pairr{x,y}}\pairr{\modalunit[X](x),\modalunit[Y](y)}"] \\
+\modal(X\times Y) \arrow[r,densely dotted] & \modal X\times\modal Y
+\end{tikzcd}
+\end{equation*}
+is an equivalence.
+By \cref{lem:reflective_uniqueness} it suffices to show that $\lam{\pairr{x,y}}\pairr{\modalunit[X](x),\modalunit[Y](y)}$ has the same universal property of $\modalunit[X\times Y]$.
+But for any modal type $Z$ we have
+\begin{align*}
+  (X\times Y \to Z)
+  &\eqvsym X\to (Y\to Z)\\
+  &\eqvsym X\to (\modal Y\to Z)\\
+  &\eqvsym \modal X\to (\modal Y\to Z)\\
+  &\eqvsym \modal X\times \modal Y\to Z
+\end{align*}
+given by precomposition as desired.
+Here in the penultimate step we use the fact that $\modal Y\to Z$ is modal since $Z$ is, by \cref{lem:modal-Pi}.
+\end{proof}
+
+\begin{lem}\label{lem:modal-pres-prop}
+Given any reflective subuniverse, the modal operator preserves mere propositions.
+\end{lem}
+\begin{proof}
+  A type $P$ is a mere proposition if and only if the diagonal $P\to P\times P$ is an equivalence.
+  The result then follows from \cref{thm:modal-pres-prod}.
+\end{proof}
+
+By contrast, even modalities do not generally preserve $n$-types for any $n\ge 0$.
+For instance, the ``shape'' modality of~\cite{shulman:bfp-realcohesion} takes the topological circle, which is a 0-type, to the homotopical circle, which is a 1-type, and the topological 2-sphere, which is also a 0-type, to the homotopical 2-sphere, which is (conjecturally) not an $n$-type for any finite $n$.
+However, we will see in~\autoref{modaln-truncated} that lex modalities do preserve $n$-types for all $n$.
+
+\begin{rmk}
+  The basic properties of types and maps in homotopy type theory, such as being contractible, being a proposition, being an $n$-type, being an equivalence, and so on, are all constructed (perhaps inductively) out of identity types and $\Sigma$- and $\Pi$-types.
+  Thus, a $\Sigma$-closed reflective subuniverse is closed under them as well.
+  That is, if $A$ and $B$ are modal and $f:A\to B$, then the propositions ``$A$ is contractible'', ``$A$ is an $n$-type'', ``$f$ is an equivalence'', and so on, are all modal as well.
+\end{rmk}
+
+
+
+\subsubsection{$\Sigma$-closed reflective subuniverses}
+\label{sec:sigma-closed}
+
+\begin{defn}\label{defn:connected}
+Let $\mathcal{M}:\UU\to\prop$ be a reflective subuniverse with modal
+operator $\modal$. We say
+that a type $X$ is \define{$\modal$-connected} if $\modal X$ is contractible,
+and we say that a function $f:X\to Y$ is \define{$\modal$-connected} if each
+of its fibers is. Similarly, we say that $f$ is \define{modal} if each of its
+fibers is.
+\end{defn}
+
+Note that a type $X$ is modal or $\modal$-connected just when the map $X\to\unit$ is.
+
+\begin{eg}\label{eg:closed-connected}
+  Recall from \cref{eg:open} that the open modality associated to a proposition $Q$ is defined by $\open Q(A) \defeq (Q\to A)$.
+  We claim that $A$ is $\open Q$-connected if and only if $Q \to\iscontr(A)$.
+  In other words, $(Q \to\iscontr(A))\eqvsym \iscontr(Q\to A)$.
+  For on the one hand, if $Q\to \iscontr(A)$, then $Q\to A$; while any two $f,g:Q\to A$ can be shown equal by function extensionality, since if $Q$ then $A$ is contractible.
+  But on the other hand, if $\iscontr(Q\to A)$ and $Q$, then $\eqv{(Q\to A)}{A}$, hence $\iscontr(A)$.
+
+  Note that $Q \to\iscontr(A)$ is also the defining condition for the $\closed Q$-modal types from \cref{eg:closed}.
+  That is, the $\open Q$-connected types coincide with the $\closed Q$-modal types.
+  We will come back to this relationship in \cref{eg:artin}.
+\end{eg}
+
+The following theorem combines Lemma 7.5.7 and Theorem 7.7.4 of \cite{TheBook}.
+
+\begin{thm}\label{thm:ssrs-characterize}
+Given a reflective universe with modal operator $\modal$,
+the following are equivalent:
+\begin{enumerate}
+\item It is $\Sigma$-closed.
+\item It is uniquely eliminating.
+\item The modal units are $\modal$-connected.
+\end{enumerate}
+\end{thm}
+
+\begin{proof}
+Suppose first that $\modal$ is $\Sigma$-closed, let $X$ be a type and let
+$P:\modal X\to\UU_\modal$, i.e.\ $P(x)$ is modal for each $x:\modal X$.
+To show that $\modal$ is uniquely eliminating, we want
+\begin{equation*}
+\lam{s}s\circ\modalunit[X]:(\prd{x:\modal X}P(x))\to(\prd{x:X}P(\modalunit(x)))
+\end{equation*}
+to be an equivalence. Since the type $\prd{a:A}B(a)$ is equivalent to the type
+of functions $f:A\to\sm{a:A}B(a)$ such that $\proj1\circ f=\idfunc[A]$, we
+get the desired equivalence if the pre-composition map $\lam{j}j\circ\modalunit$
+gives an equivalence from diagonal fillers of the square
+\begin{equation*}
+\begin{tikzcd}
+X \arrow[r,densely dotted] \arrow[d,swap,"\modalunit"] & \sm{x:\modal X}P(x) \arrow[d,"\proj1"] \\
+\modal X \arrow[ur,densely dotted,"j"] \arrow[r,equals] & \modal X
+\end{tikzcd}
+\end{equation*}
+to the type of maps $X\to\sm{x:\modal X}P(x)$ such that the indicated square
+commutes.  But this is true by the universal property of $\modalunit$, since $\sm{x:\modal X}P(x)$ is modal by $\Sigma$-closedness.
+
+Now suppose that $\modal$ is uniquely eliminating.
+To show that the modal units are connected, we want a term of type
+\begin{equation*}
+\prd{x:\modal X}\iscontr(\modal(\hfib{\modalunit}{x})).
+\end{equation*}
+Using the dependent eliminators, it is easy to find a term
+$s:\prd{x:\modal X}\modal(\hfib{\modalunit}{x})$ with the property that
+$s\circ\modalunit(x)=\modalunit(x,\refl{\modalunit(x)})$. Now we need to show
+that
+\begin{equation*}
+\prd{x:\modal X}{w:\modal(\hfib{\modalunit}{x})}w=s(x).
+\end{equation*}
+Since the type $w=s(x)$ is modal, this is equivalent to
+\begin{equation*}
+\prd{x:\modal X}{x':X}{p:\modalunit(x')=x} \modalunit(x',p)=s(x).
+\end{equation*}
+Moreover, the type $\sm{x:\modal X}\modalunit(x')=x$ is contractible, so this
+is equivalent to
+\begin{equation*}
+\prd{x':X} \modalunit(x',\refl{\modalunit(x')})=s(\modalunit(x')),
+\end{equation*}
+of which we have a term by the defining property of $s$.
+
+Finally, suppose that all the modal units are $\modal$-connected, let $X$ be modal and let $P:X\to\UU_\modal$.
+To show that $\sm{x:X}P(x)$ is modal, we show that
+$\modalunit:(\sm{x:X}P(x))\to\modal(\sm{x:X}P(x))$ is an equivalence.
+Since $X$ is modal, we can extend $\proj 1$ along $\modalunit$ as indicated
+in the diagram
+\begin{equation*}
+\begin{tikzcd}
+\sm{x:X}P(x) \arrow[d,"\modalunit"] \arrow[dr,"\proj 1"] \\
+\modal(\sm{x:X}P(x)) \arrow[r,densely dotted,swap,"p"] & X
+\end{tikzcd}
+\end{equation*}
+The type of maps
+\begin{equation*}
+f:\modal(\sm{x:X}P(x))\to \sm{x:X}P(x)
+\end{equation*}
+such that $\proj1\circ f=p$ is equivalent to the type $\prd{z:\modal(\sm{x:X}P(x))}P(p(z))$.
+Using the assumption that $\modalunit$ is connected, we calculate
+\begin{align*}
+\prd{z:\modal(\sm{x:X}P(x))}P(p(z))
+& \eqvsym \prd{z:\modal(\sm{x:X}P(x))} \modal(\hfib{\modalunit}{z})\to P(p(z)) \\
+& \eqvsym \prd{z:\modal(\sm{x:X}P(x))} \hfib{\modalunit}{z}\to P(p(z)) \\
+& \eqvsym \prd{\pairr{x,y}:\sm{x:X}P(x)} P(x)
+\end{align*}
+We have the second projection $\proj 2$ of the latter type. We obtain a term
+\begin{equation*}
+q : \prd{z:\modal(\sm{x:X}P(x))}P(p(z))
+\end{equation*}
+such that $q(\eta(x,y))=y$. Therefore, we get the map $\pairr{p,q}:\modal(\sm{x:X}P(x))\to \sm{x:X}P(x)$ for which the diagram
+\begin{equation*}
+\begin{tikzcd}
+\sm{x:X}P(x) \arrow[dr,"\modalunit"] \arrow[ddr,bend right=15,swap,"\proj 1"] \arrow[rr,"\idfunc"] & & \sm{x:X}P(x) \arrow[ddl,bend left=15,"\proj 1"] \\
+& \modal(\sm{x:X}P(x)) \arrow[d,swap,"p"] \arrow[ur,densely dotted,"\pairr{p,q}"] \\
+& X
+\end{tikzcd}
+\end{equation*}
+commutes. In particular, $\pairr{p,q}$ is a left inverse of the modal unit.
+To see that it is also a right inverse, note that $\modalunit\circ\pairr{p,q}\circ\modalunit=\modalunit=\idfunc\circ\modalunit$; thus $\modalunit\circ\pairr{p,q}=\idfunc$ follows by uniqueness.
+Hence $\sm{x:X}P(x)$ is modal.
+\end{proof}
+
+\begin{lem}\label{thm:rsu-compose-cancel}
+  Given $f:A\to B$ and $g:B\to C$ and a reflective subuniverse $\modal$, if $f$ is $\modal$-connected, then $g$ is $\modal$-connected if and only if $g\circ f$ is $\modal$-connected.
+  That is, $\modal$-connected maps are closed under composition and right cancellable.
+\end{lem}
+\begin{proof}
+  For any $z:C$ we have
+  \begin{align*}
+    \modal(\hfib{g\circ f}{z})
+    & \eqvsym
+      \modal(\sm{p:\hfib{g}{z}}\hfib{f}{\proj1(p)}) \\
+    & \eqvsym
+      \modal(\sm{p:\hfib{g}{z}}\modal(\hfib{f}{\proj1(p)})) \\
+    & \eqvsym
+      \modal(\sm{p:\hfib{g}{z}}\unit) \\
+    & \eqvsym
+      \modal\hfib{g}{z}.
+  \end{align*}
+  using the fact that $f$ is $\modal$-connected.
+  Thus, one is contractible if and only if the other is.
+\end{proof}
+
+In general it is not true that if $g$ and $g\circ f$ are $\modal$-connected then $f$ is; this is one of the equivalent characterizations of lex modalities (\cref{thm:lex-modalities}).
+
+\begin{thm}\label{thm:sofs_from_ssrs}
+A $\Sigma$-closed reflective subuniverse determines a stable orthogonal factorization system with the same
+modal types.
+\end{thm}
+
+\begin{proof}
+Define $\mathcal{L}$ to be the class of $\modal$-connected
+maps and $\mathcal{R}$ to be the the class of modal maps.
+We first show that both $\mathcal{L}$ and $\mathcal{R}$ are closed under
+composition. Recall that for $f:X\to Y$ and $g:Y\to Z$, one has
+$\hfib{g\circ f}{z}=\sm{p:\hfib{g}{z}}\hfib{f}{\proj1(p)}$.
+Thus, by $\Sigma$-closedness, if $f$ and $g$ are both in $\mathcal{R}$ then so is $g\circ f$, so $\cR$ is closed under composition; while \cref{thm:rsu-compose-cancel} implies that $\cL$ is closed under composition.
+And since the fibers of an identity map are contractible, and contractible types are both modal and $\modal$-connected, both $\mathcal{L}$ and $\mathcal{R}$ contain all identities.
+
+% Next, we need to show that $\mathcal{L}(f)\land\mathcal{R}(f)\leftrightarrow
+% \isequiv(f)$. Since a function is an equivalence if and only if its fibers are
+% contractible, and since the contractible types are modal in any reflective
+% universe, it follows that $\isequiv(f)\to\mathcal{L}(f)\land\mathcal{R}(f)$.
+% Now suppose that $f$ is in $\mathcal{L}$ and in $\mathcal{R}$. Then its fibers
+% are modal, and the modal operator applied to its fibers results in a contractible
+% type, so it is an equivalence.
+
+To obtain a factorization system,
+it remains to show that the type of
+$(\mathcal{L},\mathcal{R})$-factorizations of any function $f$ is contractible.
+Since $\pairr{X,f}=\pairr{\sm{y:Y}\hfib{f}{y},\proj1}$, it is sufficient to
+show that $\fact_{\mathcal{L},\mathcal{R}}(\proj1)$ is contractible for any
+$\proj1:\sm{y:Y}P(y)\to Y$. But $\proj1$ factors as
+\begin{equation*}
+\begin{tikzcd}
+\sm{y:Y}P(y) \arrow[r,"p_\mathcal{L}"] & \sm{y:Y}\modal(P(y)) \arrow[r,"p_\mathcal{R}"] & Y
+\end{tikzcd}
+\end{equation*}
+where $p_\mathcal{L}\defeq\total{\modalunit[P(\blank)]}$ and $p_\mathcal{R}\defeq\proj1$.
+The fibers of $p_\mathcal{R}$ are $\modal(P(\blank))$, so it follows
+immediately that $p_\mathcal{R}$ is in $\mathcal{R}$.
+Moreover, since
+$\eqv{\hfib{\total{\modalunit}}{\pairr{y,u}}}{\hfib{\modalunit[P(y)]}{u}}$ and each $\modalunit$ is $\modal$-connected, it follows that $p_\mathcal{L}$ is in
+$\mathcal{L}$.
+
+Now consider any other factorization $(g,h,H)$ of $\proj1$ into
+an $\cL$-map $g:(\sm{y:Y}P(y))\to I$ followed by an $\cR$-map $h:I\to Y$. Since
+$I=\sm{y:Y}\hfib{h}{y}$, we have a commuting square
+\begin{equation*}
+\begin{tikzcd}
+\sm{y:Y}P(y) \arrow[r,"g"] \arrow[d,swap,"{\total{\gamma}}"]
+  & I \arrow[d,"h"] \\
+\sm{y:Y}\hfib{h}{y} \arrow[ur,equals] \arrow[r,swap,"\proj1"] & Y
+\end{tikzcd}
+\end{equation*}
+in which $\gamma(y,u)\defeq \pairr{g(y,u),H(y,u)}$.
+It follows that $(g,h,H)=(\total{\gamma},\proj1,\nameless)$.
+Thus suffices to show that there is a commuting triangle
+\begin{equation*}
+\begin{tikzcd}[column sep=0]
+& P(y) \arrow[dl,swap,"\modalunit"] \arrow[dr,"{\gamma_y}"] \\
+\modal(P(y)) \arrow[rr,equals] & & \hfib{h}{y}
+\end{tikzcd}
+\end{equation*}
+We will do this using \cref{lem:reflective_uniqueness}, by showing that $\gamma_y$ has the same universal property as $\modalunit[P(y)]$.
+This follows from the following calculation:
+\begin{align*}
+(\hfib{h}{y}\to Z) & \eqvsym ((\sm{w:\hfib{h}{y}}\modal(\hfib{g}{\proj1(w)}))\to Z) \\
+& \eqvsym ((\sm{w:\hfib{h}{y}}\hfib{g}{\proj1(w)})\to Z) \\
+& \eqvsym (\hfib{h\circ g}{y}\to Z) \\
+& \eqvsym (P(y)\to Z).
+\end{align*}
+which we can verify is given by precomposition with $\gamma_y$.
+
+It remains to show that our orthogonal factorization system is stable. Consider a pullback diagram
+\begin{equation*}
+\begin{tikzcd}
+A' \arrow[d,swap,"k"] \arrow[r,"f"] & A \arrow[d,"l"] \\
+B' \arrow[r,swap,"g"] & B
+\end{tikzcd}
+\end{equation*}
+in which $l$ is in $\mathcal{L}$. By the pasting lemma for pullbacks, it
+follows that $\hfib{k}{b}=\hfib{l}{g(b)}$ for each $b:B'$. Thus, it follows that
+$k$ is in $\mathcal{L}$.
+\end{proof}
+
+
+\subsubsection{Connected maps}
+\label{sec:connected-maps}
+
+The $\modal$-connected maps introduced in \cref{defn:connected} have a number of other useful properties.
+Most of these are stated in~\cite[\S7.5]{TheBook} for the special case of the $n$-truncation modality, but essentially the same proofs work for any modality.
+
+In fact, most of these properties are true about an arbitrary reflective subuniverse, although a few of the proofs must be different.
+Thus, for this subsection, let $\modal$ be a reflective subuniverse, not in general $\Sigma$-closed.
+
+\begin{lem} \label{lem:connected-map-equiv-truncation}
+If $f : A \to B$ is $\modal$-connected, then it induces an equivalence
+$\modal f : \eqv{\modal{A}}{\modal{B}}$.
+\end{lem}
+\begin{proof}
+  To define an inverse $g:\modal B \to \modal A$, by the universal property of $\modal B$, it suffices to define a map $B\to \modal A$.
+  But given $b:B$, we have a map $\proj1 : \hfib{f}{b} \to A$, hence $\modal\proj1 : \modal \hfib{f}{b} \to \modal A$.
+  And $\modal \hfib{f}{b}$ is contractible since $f$ is $\modal$-connected, so it has a point $c_b$, and we define $g(\modalunit[B](b)) = \modal \proj1(c_b)$.
+
+  Now by the universal property of $\modal A$ and $\modal B$, it suffices to show that the composites $g\circ \modal f \circ \modalunit[A]$ and $\modal f\circ g \circ \modalunit[B]$ are equal to $\modalunit[A]$ and $\modalunit[B]$ respectively.
+  In the first case, for $a:A$ we have
+  \begin{align*}
+    g(\modal f(\modalunit[A](a)))
+    &= g(\modalunit[B](f(a)))\\
+    &= \modal \proj1(c_{f(a)})\\
+    &= \modal \proj1(\modalunit[\hfib f b](a,\refl{f(a)}))\\
+    &= \modalunit[A](\proj1(a,\refl{f(a)}))\\
+    &= \modalunit[A](a).
+  \end{align*}
+  using in the third line the fact that $\modal(\hfib f b)$ is contractible.
+  And in the second case, for $b:B$ we have
+  \begin{align*}
+    \modal f(g(\modalunit[B](b)))
+    &= \modal f(\modal \proj1(c_b))\\
+    &= \modal(f\circ \proj1)(c_b)\\
+    &= \modal(\lam{u:\hfib f b} b)(c_b)\\
+    &= \modal(\lam{u:\unit} b)(\modalunit[\unit](\ttt))\\
+    &= \modalunit[B](b).\qedhere
+  \end{align*}
+\end{proof}
+
+The converse of \cref{lem:connected-map-equiv-truncation} is false in general, even for modalities; we will see in \cref{thm:lex-modalities} that it holds exactly when $\modal$ is lex.
+
+Recall that $\modaltype$ denotes the universe of modal types.
+Note that the projection $\proj1 : (\sm{x:A} P(x)) \to A$ is $\modal$-modal if and only if $P$ factors through $\modaltype$.
+The following generalizes the unique elimination property of $\modalunit$ to arbitrary $\modal$-connected maps.
+
+\begin{lem}\label{prop:nconnected_tested_by_lv_n_dependent types}
+For $f:A\to B$ and $P:B\to\type$, consider the following function:
+\begin{equation*}
+\lam{s} s\circ f :\Parens{\prd{b:B} P(b)}\to\Parens{\prd{a:A}P(f(a))}.
+\end{equation*}
+For a fixed $f$ and $n\ge -2$, the following are equivalent.
+\begin{enumerate}
+\item $f$ is $\modal$-connected.\label{item:conntest1}
+\item For every $P:B\to \modaltype$, the map $\lam{s} s\circ f$ is an equivalence.\label{item:conntest2}
+\item For every $P:B\to \modaltype$, the map $\lam{s} s\circ f$ has a section.\label{item:conntest3}
 \end{enumerate}
 \end{lem}
 
-\begin{rmk}
-The condition that the propositions need to be modal isn't sharp. The characterization of \'etale maps also works when the modality is $(-2)$-truncation. It holds for every modality of separated types, since any proposition is separated for any modality.
-\end{rmk}
+\begin{proof}
+First suppose $f$ is $\modal$-connected and let $P:B\to\modaltype$. Then:
+\begin{align*}
+  \prd{b:B} P(b) & \eqvsym \prd{b:B} \Parens{\modal{\hfib{f}b} \to P(b)}
+  \tag{since $\modal{\hfib{f}b}$ is contractible}\\
+  & \eqvsym \prd{b:B} \Parens{\hfib{f}b\to P(b)}
+  \tag{since $P(b)$ is modal}\\
+  & \eqvsym \prd{b:B}{a:A}{p:f(a)= b} P(b)\\
+  & \eqvsym \prd{a:A} P(f(a)).
+\end{align*}
+Thus,~\ref{item:conntest1}$\Rightarrow$\ref{item:conntest2}, and clearly~\ref{item:conntest2}$\Rightarrow$\ref{item:conntest3}.
+To show~\ref{item:conntest3}$\Rightarrow$\ref{item:conntest1}, let
+$P(b)\defeq \modal{\hfib{f}b}$.
+Then~\ref{item:conntest3} yields a map $c:\prd{b:B} \modal{\hfib{f}b}$ with
+$c(f(a))=\modalunit{\pairr{a,\refl{f(a)}}}$. To show that each $\modal{\hfib{f}b}$ is contractible, we will show that $c(b)=w$ for any $b:B$ and $w:\modal{\hfib{f}b}$.
+In other words, we must show that the identity function $\modal{\hfib{f}b} \to \modal{\hfib{f}b}$ is equal to the constant function at $c(b)$.
+By the universal property of $\modal{\hfib{f}b}$, it suffices to show that they become equal when precomposed with $\modalunit[\hfib{f}b]$, i.e.\ we may assume that $w = \modalunit\pairr{a,p}$ for some $a:A$ and $p:f(a)=b$.
+But now path induction on $p$ reduces our goal to the given $c(f(a))=\modalunit{\pairr{a,\refl{f(a)}}}$.
+\end{proof}
+
+\begin{cor}\label{thm:nconn-to-ntype-const}\label{connectedtotruncated}
+A type $A$ is $\modal$-connected if and only if the ``constant functions'' map
+$
+  B \to (A\to B)
+$
+is an equivalence for every modal type $B$.\qed
+\end{cor}
+
+Dually, we will prove in \cref{thm:detect-right-by-fibers} that when $\modal$ is a modality, if this holds for all $\modal$-connected $A$ then $B$ is modal.
+
+\begin{lem}\label{lem:nconnected_to_leveln_to_equiv}
+Let $B$ be a modal type and let $f:A\to B$ be a function.
+If $f$ is $\modal$-connected, then the induced function $g:\modal A\to B$ is an equivalence; the converse holds if $\modal$ is $\Sigma$-closed.
+\end{lem}
 
 \begin{proof}
-Suppose first that $f$ is formally \'etale, and consider the commuting cube
-\begin{equation*}
-\begin{tikzcd}
-& A\times_{\modal A} A \arrow[dl] \arrow[d] \arrow[dr] \\
-A \arrow[d] & B\times_{\modal B} B \arrow[dl] \arrow[dr] & A \arrow[dl,crossing over] \arrow[d] \\
-B \arrow[dr] & \modal A \arrow[from=ul,crossing over] \arrow[d] & B \arrow[dl] \\
-& \modal B
-\end{tikzcd}
-\end{equation*}
-Since the top, bottom, and both front squares are pullback squares, it follows that both back squares are pullback. This proves that (i) implies (ii).
+By \cref{lem:connected-map-equiv-truncation}, if $f$ is $\modal$-connected then $\modal f$ is an equivalence.
+But $g$ is the composite $\modalunit[B]^{-1}\circ \modal f$, hence also an equivalence.
 
-Now suppose that (ii) holds. Then the map
-\begin{equation*}
-\fib{\modalunit}{\modalunit(a)}\to \fib{\modalunit}{\modalunit(f(a))}
-\end{equation*}
-is an equivalence for every $a:A$. Since all propositions are assumed to be modal, it follows that
-\begin{equation*}
-\fib{\modalunit}{t}\to \fib{\modalunit}{\modal f(t)}
-\end{equation*}
-is an equivalence for every $t:\modal A$. Thus it follows that the square
-\begin{equation*}
-\begin{tikzcd}
-A \arrow[d,swap,"\modalunit"] \arrow[r] & B \arrow[d,"\modalunit"] \\
-\modal A \arrow[r] & \modal B
-\end{tikzcd}
-\end{equation*}
-is a pullback square.
+Conversely, by \cref{thm:ssrs-characterize}, $\modalunit$ is $\modal$-connected.
+Thus, since $f = g\circ \modalunit[A]$, if $g$ is an equivalence then $f$ is also $\modal$-connected.
 \end{proof}
+
+\begin{lem}\label{lem:nconnected_postcomp_variation}
+Let $f:A\to B$ be a function and $P:A\to\type$ and $Q:B\to\type$ be type families. Suppose that $g:\prd{a:A} P(a)\to Q(f(a))$
+is a family of $\modal$-connected functions.
+If $f$ is also $\modal$-connected, then so is the function
+\begin{align*}
+\varphi &:\Parens{\sm{a:A} P(a)}\to\Parens{\sm{b:B} Q(b)}\\
+\varphi(a,u) &\defeq \pairr{f(a),g_a(u)}.
+\end{align*}
+Conversely, if $\varphi$ and each $g_a$ are $\modal$-connected, and moreover $Q$ is fiberwise merely inhabited (i.e.\ we have $\brck{Q(b)}$ for all $b:B$), then $f$ is $\modal$-connected.
+\end{lem}
+
+\begin{proof}
+For any $b:B$ and $v:Q(b)$ we have
+{\allowdisplaybreaks
+\begin{align*}
+\modal{\hfib{\varphi}{\pairr{b,v}}} & \eqvsym \modal{\sm{a:A}{u:P(a)}{p:f(a)= b} \trans{p}{g_a(u)}= v}\\
+& \eqvsym \modal{\sm{w:\hfib{f}b}{u:P(\proj1(w))} g_{\proj 1 w}(u)= \trans{\opp{\proj2(w)}}{v}}\\
+& \eqvsym \modal{\sm{w:\hfib{f}b} \hfib{g(\proj1 w)}{\trans{\opp{\proj 2(w)}}{v}}}\\
+& \eqvsym \modal{\sm{w:\hfib{f}b} \modal{\hfib{g(\proj1 w)}{\trans{\opp{\proj 2(w)}}{v}}}}\\
+& \eqvsym \modal{\hfib{f}b}
+\end{align*}}%
+where the transportations along $f(p)$ and $f(p)^{-1}$ are with respect to $Q$, and we use \cref{lem:sum_idempotent} on the penultimate line.
+Therefore, if either of $\modal{\hfib{\varphi}{\pairr{b,v}}}$ or $\modal{\hfib{f}b}$ is contractible, so is the other.
+
+In particular, if $f$ is $\modal$-connected, then $\modal{\hfib{f}b}$ is contractible for all $b:B$, and hence so is $\modal{\hfib{\varphi}{\pairr{b,v}}}$ for all $(b,v):\sm{b:B} Q(b)$.
+On the other hand, if $\varphi$ is $\modal$-connected, then $\modal{\hfib{\varphi}{\pairr{b,v}}}$ is contractible for all $(b,v)$, hence so is $\modal{\hfib{f}b}$ for any $b:B$ such that there exists some $v:Q(b)$.
+Finally, since contractibility is a mere proposition, it suffices to merely have such a $v$.
+\end{proof}
+
+\begin{lem}\label{prop:nconn_fiber_to_total}
+Let $P,Q:A\to\type$ be type families and $f:\prd{a:A} \Parens{P(a)\to Q(a)}$.
+Then $\total f: \sm{a:A}P(a) \to \sm{a:A} Q(a)$ is $\modal$-connected if and only if each $f(a)$ is $\modal$-connected.
+\end{lem}
+\begin{proof}
+We have
+$\hfib{\total f}{\pairr{x,v}}\eqvsym\hfib{f(x)}v$
+for each $x:A$ and $v:Q(x)$. Hence $\modal{\hfib{\total f}{\pairr{x,v}}}$ is contractible if and only if
+$\modal{\hfib{f(x)}v}$ is contractible.
+\end{proof}
+
+Of course, the ``if'' direction of \cref{prop:nconn_fiber_to_total} is a special case of \cref{lem:nconnected_postcomp_variation}.
+This suggests a similar generalization of the ``only if'' direction of \cref{prop:nconn_fiber_to_total}, which would be a version of \cref{lem:nconnected_postcomp_variation} asserting that if $f$ and $\varphi$ are $\modal$-connected then so is each $g_a$.
+However, this is not true in general; we will see in \cref{thm:lex-modalities} that it holds if and only if the modality is lex.
+
+Finally, we note that the $\modal$-modal and $\modal$-connected maps are classified.
+More generally, we prove the following generalization of~\cite[Thm~3.31]{RijkeSpitters:Sets}.
 
 \begin{thm}
-A map $f:A\to B$ is formally $0$-\'etale if and only if for each $a:A$ the restriction
-\begin{equation*}
-\begin{tikzcd}
-\sm{x:A}\brck{a=x} \arrow[d,swap,"\proj 1"] \arrow[r,densely dotted,"f"] & \sm{y:B}\brck{f(a)=y} \arrow[d,"\proj 1"] \\
-A \arrow[r,swap,"f"] & B
-\end{tikzcd}
-\end{equation*}
-of $f$ to the connected component at $a$ of $A$ is an equivalence. 
+Let $P:\UU\to\prop$ be a predicate on the universe, let $\UU_P\defeq
+\sm{X:\UU}P(x)$ and $(\UU_P)_\bullet\defeq\sm{X:\UU_P}X$. The projection
+$\proj1:(\UU_P)_\bullet\to\UU_P$ classifies the maps whose fibers satisfy $P$.
 \end{thm}
 
 \begin{proof}
-By \cref{lem:etale_char} and the fact that $\eqv{(\tproj{0}{a}=\tproj{0}{x})}{\brck{a=x}}$, it follows that $f$ is formally $0$-\'etale if and only if the square
+Let $f:Y\to X$ be any map into $X$. Then $\hfibfunc{f}:X\to\UU$ factors through
+$\UU_P$ if and only if all the fibers of $f$ satisfy $P$. Let us write
+$P(f)$ for $\prd{x:X}P(\hfib{f}{x})$. Then we see that the equivalence
+$\chi$ of Theorem 4.8.3 of \cite{TheBook} restricts to an
+equivalence
 \begin{equation*}
-\begin{tikzcd}[column sep=huge]
-\sm{a,x:A}\brck{a=x} \arrow[d,swap,"\pi_1"] \arrow[r,"\total{\brck{\apfunc{f}}}"] & \sm{b,y:B}\brck{b=y} \arrow[d,"\pi_1"] \\
-A \arrow[r,swap,"f"] & B
+\chi^P:(\sm{Y:\UU}{f:Y\to X}P(f))\to(X\to\UU_P).
+\end{equation*}
+Now observe that the outer square and the square on the right in the diagram
+\begin{equation*}
+\begin{tikzcd}[column sep=6em]
+Y \arrow[d,swap,"f"] \arrow[rr,"{\lam{y}\pairr{\hfib{f}{f(y)},\blank,\pairr{y,\refl{f(y)}}}}"] & & \pointed{(\UU_P)} \arrow[r] \arrow[d] & \pointed{\UU} \arrow[d] \\
+X \arrow[rr,swap,"{\hfibfunc{f}}"] & & \UU_P \arrow[r] & \UU
 \end{tikzcd}
 \end{equation*}
-is a pullback square. Furhtermore, this square is a pullback if and only if the induced map
-\begin{equation*}
-\Big(\sm{x:A}\brck{a=x}\Big)\to\Big(\sm{y:B}\brck{f(a)=y}\Big)
-\end{equation*}
-is an equivalence, for each $a:A$.
+are pullback squares. Hence the square on the left is a pullback square.
 \end{proof}
 
 \begin{cor}
-If $f:A\to B$ is formally \'etale, then the square
-\begin{equation*}
-\begin{tikzcd}[column sep=large]
-A \arrow[d,swap,"\delta_{\modalunit}"] \arrow[r,"f"] & B \arrow[d,"\delta_{\modalunit}"] \\
-A\times_{\modal A} A \arrow[r,swap,"f\times_{\modal f}f"] & B\times_{\modal B} B
-\end{tikzcd}
-\end{equation*}
-is a pullback square.
+The $\modal$-modal maps are classified by the universe of $\modal$-modal types, and the $\modal$-connected maps are classified by the universe of $\modal$-connected types.\qed
 \end{cor}
 
-\begin{proof}
-Consider the diagram
-\begin{equation*}
-\begin{tikzcd}[column sep=large]
-A \arrow[d,swap,"\delta_{\modalunit}"] \arrow[r,"f"] & B \arrow[d,"\delta_{\modalunit}"] \\
-A\times_{\modal A} A \arrow[d,swap,"\pi_1"] \arrow[r,"{f\times_{\modal f} f}"] & B\times_{\modal B} B \arrow[d,"\pi_1"] \\
-A \arrow[r,"f"] & B
-\end{tikzcd}
-\end{equation*}
-The bottom square is a pullback square by \cref{lem:etale_char}, and the outer rectangle is a pullback since both vertical composites are homotopic to the respective identity functions. Therefore the top square is a pullback.
-\end{proof}
 
+\subsection{Stable orthogonal factorization systems}
 
-\begin{comment}
-\begin{lem}
-Consider a pullback square
+To complete \cref{sec:modal-refl-subun}, we will show that stable orthogonal factorization systems are also determined by their modal types, and give rise to higher modalities.
+
+\subsubsection{Orthogonal factorization systems}
+
+In classical category theory, orthogonal factorization systems are equivalently characterized by a unique lifting property.
+We begin with the analogue of this in our context.
+
+\begin{defn}
+Let $(\mathcal{L},\mathcal{R})$ be an orthogonal factorization system, and
+consider a commutative square
 \begin{equation*}
 \begin{tikzcd}
-A' \arrow[d,swap,"{i'}"] \arrow[r,"g"] & A \arrow[d,"i"] \\
-B' \arrow[r,swap,"f"] & B
+A \arrow[r,"f"] \arrow[d,swap,"l"] \ar[dr,phantom,"\scriptstyle S"] & X \arrow[d,"r"] \\
+B \arrow[r,swap,"g"] & Y
 \end{tikzcd}
 \end{equation*}
-where $i:A\to B$ is an $\modal'$-equivalence. Then $i':A'\to B'$ is a $\modal$-equivalence. 
+(i.e.\ paths $S : r\circ f = g\circ l$)
+for which $l$ is in $\mathcal{L}$ and $r$ is in $\mathcal{R}$. We define
+$\fillers S$ to be the type of \define{diagonal fillers}
+of the above diagram, i.e.~the type of tuples $(j,H_f,H_g,K)$ consisting of
+$j:B\to X$, $H_f:j\circ l=f$ and $H_g:r\circ j=g$ and an equality $K : r\circ H_f = \ct S{(H_g \circ l)}$.
+\end{defn}
+
+\begin{lem}\label{lem:diagonal_fillers}
+Let $(\mathcal{L},\mathcal{R})$ be an orthogonal factorization system, and
+consider a commutative square
+\begin{equation*}
+\begin{tikzcd}
+A \arrow[r,"f"] \arrow[d,swap,"l"] \ar[dr,phantom,"\scriptstyle S"] & X \arrow[d,"r"] \\
+B \arrow[r,swap,"g"] & Y
+\end{tikzcd}
+\end{equation*}
+for which $l$ is in $\mathcal{L}$ and $r$ is in $\mathcal{R}$. Then the type
+$\fillers S$ of diagonal fillers is contractible.
 \end{lem}
 
 \begin{proof}
-First we factor both $f$ and $g$, using the reflective factorization system of $\modal'$. This results in the diagram
+By the fact that every morphism factors uniquely as a left map followed by a
+right map, we may factorize $f$ and $g$ in $(\mathcal{L},\mathcal{R})$ as $H_f : f = f_\cR \circ f_\cL$ and $H_g : g = g_\cR \circ g_\cL$, obtaining the diagram
 \begin{equation*}
 \begin{tikzcd}
-A' \arrow[d,swap,"{i'}"] \arrow[r,"g_l"] & X \arrow[r,"g_r"] \arrow[d,swap,"h"] & A \arrow[d,"i"] \\
-B' \arrow[r,swap,"f_l"] & Y \arrow[r,swap,"f_r"] & B
+A \arrow[r,"f_{\mathcal{L}}"] \arrow[d,swap,"l"] & \im(f) \arrow[r,"f_{\mathcal{R}}"] & X \arrow[d,"r"] \\
+B \arrow[r,swap,"g_{\mathcal{L}}"] & \im(g) \arrow[r,swap,"g_{\mathcal{R}}"] & Y
 \end{tikzcd}
 \end{equation*}
-where the map $h$ is obtained by orthogonality. Then the square on the right is a pullback square (why?)
+Now both $(r\circ f_{\mathcal{R}})\circ f_{\mathcal{L}}$ and
+$g_{\mathcal{R}}\circ(g_{\mathcal{L}}\circ l)$ are factorizations
+of the same function $r\circ f:A\to Y$.
+Since $\fact_{\mathcal{L},\mathcal{R}}(r\circ f)$ is contractible, so is its identity type
+\[ (\im(f), f_\cL, r\circ f_\cR, r\circ H_f) = (\im(g), g_\cL \circ l, g_\cR, \ct{S}{(H_g\circ l)}). \]
+This identity type is equivalent to
+\begin{multline*}
+\sm{e:\im(f) \simeq \im(g)}{H_\cL : g_\cL \circ l = e\circ f_\cL}{H_\cR : r\circ f_\cR = g_\cR\circ e}\\
+(\ct{(r\circ H_f)}{(H_\cR \circ f_\cL)} = \ct S{\ct{(H_g \circ l)}{(g_\cR \circ H_\cL)}})
+\end{multline*}
+Now since $\fact_{\cL,\cR}(f)$ and $\fact_{\cL,\cR}(g)$ are also contractible, we can sum over them to get that the following type is contractible:
+\begin{multline*}
+  \sm{\im(f):\UU}{f_\cL : A \to \im(f)}{f_\cR : \im(f) \to X}{H_f : f = f_\cR \circ f_\cL}\\
+  \sm{\im(g):\UU}{g_\cL : B \to \im(g)}{g_\cR : \im(g) \to Y}{H_g : g = g_\cR \circ g_\cL}\\
+\sm{e:\im(f) \simeq \im(g)}{H_\cL : g_\cL \circ l = e\circ f_\cL}{H_\cR : r\circ f_\cR = g_\cR\circ e}\\
+(\ct{(r\circ H_f)}{(H_\cR \circ f_\cL)} = \ct S{\ct{(H_g \circ l)}{(g_\cR \circ H_\cL)}})
+\end{multline*}
+(omitting the hypotheses that $f_\cL,g_\cL\in\cL$ and $f_\cR,g_\cR\in\cR$).
+Reassociating and removing the contractible type $\sm{\im(g):\UU}(\im(f) \simeq \im(g))$, and renaming $\im(f)$ as simply $I$, this is equivalent to
+\begin{multline*}
+  \sm{I:\UU}{f_\cL : A \to I}{f_\cR : I \to X}{H_f : f = f_\cR \circ f_\cL}\\
+  \sm{g_\cL : B \to I}{g_\cR : I \to Y}{H_g : g = g_\cR \circ g_\cL}{H_\cL : g_\cL \circ l = f_\cL}{H_\cR : r\circ f_\cR = g_\cR}\\
+(\ct{(r\circ H_f)}{(H_\cR \circ f_\cL)} = \ct S{\ct{(H_g \circ l)}{(g_\cR \circ H_\cL)}})
+\end{multline*}
+Removing the contractible $\sm{f_\cL : A \to I} (g_\cL \circ l = f_\cL)$ and $\sm{g_\cR : I \to Y} (r\circ f_\cR = g_\cR)$, this becomes
+\begin{multline*}
+  \sm{I:\UU}{f_\cR : I \to X}{g_\cL : B \to I}{H_f : f = f_\cR \circ g_\cL \circ l}{H_g : g = r\circ f_\cR \circ g_\cL}\\
+(r\circ H_f = \ct S{(H_g \circ l)})
+\end{multline*}
+Inserting a contractible $\sm{j:B\to X} (f_\cR \circ g_\cL = j)$, and reassociating more, we get
+\begin{multline*}
+  \sm{j:B\to X}{I:\UU}{f_\cR : I \to X}{g_\cL : B \to I}{H_j:f_\cR \circ g_\cL = j}\\
+  \sm{H_f : f = f_\cR \circ g_\cL \circ l}{H_g : g = r\circ f_\cR \circ g_\cL}
+  (r\circ H_f = \ct S{(H_g \circ l)})
+\end{multline*}
+But now $\sm{I:\UU}{f_\cR : I \to X}{g_\cL : B \to I}{H_j:f_\cR \circ g_\cL = j}$ is just $\fact_{\cL,\cR}(j)$, hence contractible.
+Removing it, we get
+\begin{equation*}
+  \sm{j:B\to X}{H_f : f = j \circ l}{H_g : g = r\circ j}(r\circ H_f = \ct S{(H_g \circ l)})
+\end{equation*}
+which is just $\fillers S$.
+Therefore, this is also contractible.
+\end{proof}
+
+\begin{defn}\label{defn:orthogonal}
+For any class $\mathcal{C}:\prd*{A,B:\UU}(A\to B)\to\prop$ of maps, we define
+\begin{enumerate}
+\item $^{\bot}\mathcal{C}$ to be the class of maps with \define{(unique) left lifting
+property} with respect to all maps in $\mathcal{C}$: the mere proposition
+$^\bot\mathcal{C}(l)$ asserts that for every commutative square
+\begin{equation*}
+\begin{tikzcd}
+A \arrow[r,"f"] \arrow[d,swap,"l"] \ar[dr,phantom,"S"] & X \arrow[d,"r"] \\
+B \arrow[r,swap,"g"] & Y
+\end{tikzcd}
+\end{equation*}
+with $r$ in $\mathcal{C}$, the type $\fillers S$ of diagonal fillers is contractible.
+\item $\mathcal{C}^\bot$ to be the class of maps with the dual \define{(unique) right lifting
+property} with respect to all maps in $\mathcal{C}$.
+\end{enumerate}
+\end{defn}
+
+\begin{lem}\label{lem:ofs_lifting}
+In an orthogonal factorization system $(\mathcal{L},\mathcal{R})$, one has
+$\mathcal{L}={^\bot\mathcal{R}}$ and $\mathcal{L}^\bot=\mathcal{R}$.
+\end{lem}
+
+\begin{proof}
+We first show that $\mathcal{L}={^\bot\mathcal{R}}$, i.e.~we show that
+$\mathcal{L}(f)\leftrightarrow {^\bot\mathcal{R}}(f)$ for any map $f$. Note
+that the implication $\mathcal{L}(f)\to {^\bot\mathcal{R}}(f)$ follows from
+\autoref{lem:diagonal_fillers}.
+
+Let $f:A\to B$ be a map in ${^\bot\mathcal{R}}$.
+We wish to show that $\mathcal{L}(f)$. Consider the factorization
+$(f_{\mathcal{L}},f_{\mathcal{R}})$ of $f$. Then the square
+\begin{equation*}
+\begin{tikzcd}
+A \arrow[r,"f_{\mathcal{L}}"] \arrow[d,swap,"f"] & \mathsf{im}_{\mathcal{L},\mathcal{R}}(f) \arrow[d,"f_{\mathcal{R}}"] \\
+B \arrow[r,swap,"\idfunc"] & B
+\end{tikzcd}
+\end{equation*}
+commutes. Since $f$ has the left lifting property, the type of diagonal fillers
+of this square is contractible. Thus we have a section $j$ of $f_{\mathcal{R}}$.
+The map $j\circ f_\mathcal{R}$ is then a diagonal filler of the square
+\begin{equation*}
+\begin{tikzcd}
+A \arrow[r,"f_{\mathcal{L}}"] \arrow[d,swap,"f_{\mathcal{L}}"] & \mathsf{im}_{\mathcal{L},\mathcal{R}}(f) \arrow[d,"f_{\mathcal{R}}"] \\
+\mathsf{im}_{\mathcal{L},\mathcal{R}}(f) \arrow[r,swap,"f_{\mathcal{R}}"] & B
+\end{tikzcd}
+\end{equation*}
+Of course, the identity map $\idfunc[\mathsf{im}_{\mathcal{L},\mathcal{R}}(f)]$
+is also a diagonal filler for this square, so the fact that the type of
+such diagonal fillers is contractible implies that $j\circ f_{\mathcal{R}}=\idfunc$.
+Thus, $j$ and $f_\cR$ are inverse equivalences, and so the pair $(B,f)$ is equal to the pair $(\mathsf{im}_{\mathcal{L},\mathcal{R}}(f),f_\cL)$.
+Hence $f$, like $f_\cL$, is in $\cL$.
+
+Similarly, \autoref{lem:diagonal_fillers} also implies that $\mathcal{R}(f)\to \mathcal{L}^\bot(f)$
+for any map $f$, while we can prove $\mathcal{L}^\bot(f)\to\mathcal{R}(f)$ analogously to ${^\bot\mathcal{R}}(f)\to\mathcal{L}(f)$.
+\end{proof}
+
+\begin{cor}\label{lem:sofs_req}
+The data of two orthogonal factorization systems $(\mathcal{L},\mathcal{R})$ and
+$(\mathcal{L}',\mathcal{R}')$ are identical if and only if
+$\mathcal{R}=\mathcal{R}'$.
+\end{cor}
+\begin{proof}
+  ``Only if'' is obvious.
+  Conversely, if $\mathcal{R}=\mathcal{R}'$, then by \cref{lem:ofs_lifting} we have $\cL = \cL'$, and the remaining data of an orthogonal factorization system is a mere proposition.
+\end{proof}
+
+\begin{comment}
+\begin{lem}[Unfinished]
+For each $l:X\to Y$ such that $\mathcal{L}(l)$ and each type $Z$, the function
+\begin{equation*}
+\lam{g} g\circ l: (\sm{g:Y\to Z}\mathcal{R}(g))\to(\sm{f:X\to Z}\mathcal{R}(f))
+\end{equation*}
+is a monomorphism. Also, for each $r:X\to Y$ such that $\mathcal{R}(r)$ and
+each type $Z$, the function
+\begin{equation*}
+\lam{f} r\circ f : (\sm{f:Z\to X}\mathcal{L}(f))\to(\sm{g:Z\to Y}\mathcal{L}(g))
+\end{equation*}
+is a monomorphism.
+\end{lem}
+
+\begin{proof}
+We prove the first statement. Suppose $g,g':Y\to Z$ are two $\mathcal{R}$-maps
+such that $H:g\circ l=f$ and $H':g'\circ l=f$. Then we obtain two  ...
 \end{proof}
 \end{comment}
+
+\begin{comment}
+\begin{thm}
+From every orthogonal factorization system we obtain a reflective subcategory with the same modal types.
+\end{thm}
+
+\begin{proof}
+We define $P(A)$ to be the proposition that the unique map $A\to\unit$ is in
+$\mathcal{R}$.
+For any type $A$, there is a unique factorization
+\begin{equation*}
+\begin{tikzcd}
+A \arrow[r,"{\modalunit[A]}"] & \modal A \arrow[r] & \unit
+\end{tikzcd}
+\end{equation*}
+of the unique map $A\to\unit$, where $\modalunit[A]$ is in $\mathcal{L}$. This
+defines the operation $\modal$ and the modal units.
+
+Now let $A:\UU$ and $B:\UU_P$, and consider $f:A\to B$. We have to show that
+the type of extensions of $f$ along $\modalunit$ is contractible.
+It is immediate that the type of such extensions is equivalent to the type
+$\mathsf{fill}_{\mathcal{L},\mathcal{R}}(f,g)$ of diagonal fillers
+of the square
+\begin{equation*}
+\begin{tikzcd}
+A \arrow[r,"f"] \arrow[d,swap,"{\modalunit[A]}"] & B \arrow[d] \\
+\modal A \arrow[r,swap,"g"] & \unit
+\end{tikzcd}
+\end{equation*}
+By \autoref{lem:diagonal_fillers}, the assumption that $P(B)$ holds and the fact that $\modalunit[A]$ is
+in $\mathcal{L}$, we know that this type of diagonal fillers is contractible.
+\end{proof}
+\end{comment}
+
+\begin{lem}\label{lem:ofs_rightstable}
+Let $(\mathcal{L},\mathcal{R})$ be an orthogonal factorization system. Then
+the class $\mathcal{R}$ is stable under pullbacks.
+\end{lem}
+
+\begin{proof}
+Consider a pullback diagram
+\begin{equation*}
+\begin{tikzcd}
+A \arrow[d,swap,"k"] \arrow[r,"g"] & X \arrow[d,"h"] \\
+B \arrow[r,swap,"f"] & Y
+\end{tikzcd}
+\end{equation*}
+where $h:X\to Y$ is assumed to be in $\mathcal{R}$, and let $k=k_{\mathcal{R}}\circ k_\mathcal{L}$ be a factorization of $h$.
+Then the outer rectangle in the diagram
+\begin{equation*}
+\begin{tikzcd}
+A \arrow[r,equals] \arrow[d,swap,"k_{\mathcal{L}}"] & A \arrow[d,swap,"k"] \arrow[r,"g"] & X \arrow[d,"h"] \\
+\im_{\mathcal{L},\mathcal{R}}(k) \arrow[r,swap,"k_{\mathcal{R}}"] & B \arrow[r,swap,"f"] & Y
+\end{tikzcd}
+\end{equation*}
+commutes, so by the universal property of pullbacks we obtain a unique map $j:\im_{\mathcal{L},\mathcal{R}}(k)\to A$ such that $j\circ k_{\mathcal{L}}=\idfunc$ and $k\circ j=k_{\mathcal{R}}$.
+It suffices to show that $k_{\mathcal{L}}$ is an equivalence, and since we already have that $j\circ k_{\mathcal{L}}=\idfunc$ we only need to show that $k_{\mathcal{L}}\circ j=\idfunc$.
+
+We do this using the contractibility of the type of diagonal fillers. Consider the square
+\begin{equation*}
+\begin{tikzcd}
+A \arrow[r,"k_{\mathcal{L}}"] \arrow[d,swap,"k_{\mathcal{L}}"] & \im_{\mathcal{L},\mathcal{R}}(k) \arrow[d,"k_{\mathcal{R}}"] \\
+\im_{\mathcal{L},\mathcal{R}}(k) \arrow[r,swap,"k_{\mathcal{R}}"] & B,
+\end{tikzcd}
+\end{equation*}
+for which $\idfunc:\im_{\mathcal{L},\mathcal{R}}(k)\to \im_{\mathcal{L},\mathcal{R}}(k)$ (with the trivial homotopies) is a diagonal filler. However, we also have the homotopies $k_{\mathcal{L}}\circ j\circ k_{\mathcal{L}} \htpy k_{\mathcal{L}}$ and $k_{\mathcal{R}}\circ k_{\mathcal{L}}\circ j\htpy k\circ j\htpy k_{\mathcal{R}}$. This shows that we have a second diagonal filler, of which the underlying map is $k_{\mathcal{L}}\circ j$. Since the type of diagonal fillers is contractible, it follows that $k_{\mathcal{L}}\circ j=\idfunc$, as desired.
+\end{proof}
+
+\subsubsection{Stable orthogonal factorization systems}
+
+\begin{lem}\label{lem:fill_compute}
+Given $l,r,f,g$ and a homotopy $S : r \circ f = g  \circ l$, consider as $b:B$ varies all the diagrams of the form
+\begin{equation*}
+\begin{tikzcd}
+\hfib{l}{b} \arrow[r,"i_b"] \arrow[d,"!"'] & A \arrow[d,swap,"l"] \arrow[r,"f"] \ar[dr,phantom,"S"] & X \arrow[d,"r"] \\
+\unit \arrow[r,swap,"b"] & B \arrow[r,swap,"g"] & Y
+\end{tikzcd}
+\end{equation*}
+and write $S_b : r \circ (f \circ i_b) = (g\circ b) \circ \mathord !$ for the induced commutative square.
+(Note that the square on the left commutes judgmentally.)
+Then the map
+\begin{equation*}
+\fillers{S} \to \prd{b:B}\fillers{S_b},
+\end{equation*}
+defined by precomposition with $b$, is an equivalence.
+\end{lem}
+
+\begin{proof}
+It suffices to show that the map on total spaces
+\begin{equation}
+  \Big(\sm{S:r\circ f = g\circ l} \fillers{S}\Big) \to \Big( \sm{S:r\circ f = g\circ l} \prd{b:B}\fillers{S_b}\Big)\label{eq:fill-total}
+\end{equation}
+is an equivalence.
+The domain of~\eqref{eq:fill-total} can be computed as
+\begin{align*}
+  &\hspace{-1cm}\sm{S:r\circ f = g\circ l}{j:B\to X}{H_f :j\circ l=f}{H_g:r\circ j=g} \ct{(r\circ H_f)}{(H_g\circ l)^{-1}} = S\\
+  &\eqvsym \sm{j:B\to X}(j\circ l=f)\times (r\circ j=g)
+\end{align*}
+by contracting a based path space.
+On the other hand, note that
+\begin{align*}
+  (r\circ f = g\circ l)
+  &\eqvsym
+  \prd{a:A} r(f(a)) = g(l(a))\\
+  &\eqvsym
+  \prd{a:A}{b:B}{l(a)=b} r(f(a)) = g(l(a))\\
+  &\eqvsym
+  \prd{b:B}{u:\hfib l b} r(f(i_b(a))) = g(l(i_b(a)))\\
+  &\eqvsym
+  \prd{b:B}{u:\hfib l b} r(f(i_b(a))) = g(b)\\
+  &\eqvsym
+  \prd{b:B} (r \circ (f \circ i_b) = (g\circ b) \circ \mathord !)
+\end{align*}
+That is, to give $S$ is the same as to give each $S_b$.
+Thus the codomain of~\eqref{eq:fill-total} can be computed as
+\begin{align*}
+  &\hspace{-1cm}\sm{S:r\circ f = g\circ l} \prd{b:B}\fillers{S_b}\\
+  &\eqvsym \sm{S:\prd{b:B} (r \circ (f \circ i_b) = (g\circ b) \circ \mathord !)} \prd{b:B}\fillers{S_b}\\
+  &\eqvsym \prd{b:B}\sm{S_b:r \circ (f \circ i_b) = (g\circ b) \circ \mathord !} \fillers{S_b}\\
+  &\eqvsym \prd{b:B}\sm{j_b:\unit\to X}(j_b=f\circ i_b)\times (r\circ j_b=g(b))
+\end{align*}
+using the same argument as above for $S$.
+Now we can compute
+\begin{align*}
+&\hspace{-1cm}\prd{b:B}\sm{j_b:\unit\to X}(j_b=f\circ i_b)\times(r\circ j_b=g\circ b) \\
+& \eqvsym
+\prd{b:B}\sm{j_b:X}(\lam{x}j_b=f\circ i_b)\times(r(j_b)=g(b)) \\
+& \eqvsym
+\sm{j:B\to X}\prd{b:B}(\lam{\nameless}j(b)=f\circ i_b)\times(r(j(b))=g(b)) \\
+& \eqvsym
+\sm{j:B\to X}(\prd{b:B}\lam{\nameless}j(b)=f\circ i_b)\times(\prd{b:B}r(j(b))=g(b)) \\
+& \eqvsym
+\sm{j:B\to X}(\prd{b:B}\lam{\nameless}j(b)=f\circ i_b)\times(r\circ j=g) \\
+& \eqvsym
+\sm{j:B\to X}(\prd{b:B}\prd{a:A}{p:l(a)=b}j(b)=f(a))\times(r\circ j=g) \\
+& \eqvsym
+\sm{j:B\to X}(\prd{a:A}j(l(a))=f(a))\times(r\circ j=g) \\
+& \eqvsym
+\sm{j:B\to X}(j\circ l=f)\times(r\circ j=g)
+\end{align*}
+which is what we computed as the domain of~\eqref{eq:fill-total} above.
+\end{proof}
+
+\begin{cor}
+In any orthogonal factorization system
+$(\mathcal{L},\mathcal{R})$, if
+$l:A\to B$ is a map such that $\hfib{l}{b} \to \unit$ is in $\cL$ for each $b:B$, then also $l$ itself is in $\cL$.
+\end{cor}
+\begin{proof}
+  By \cref{lem:ofs_lifting}, $l$ is in $\cL$ iff $\fillers S$ is contractible for each $r\in\cR$ and $S$ as in \cref{lem:fill_compute}, while similarly $\hfib{l}{b} \to \unit$ is in $\cL$ iff $\fillers {S_b}$ is contractible.
+  But the product of contractible types is contractible.
+\end{proof}
+
+\begin{cor}\label{thm:detect-right-by-fibers}
+  In any stable orthogonal factorization system, if $l\perp r$ for all maps $l\in\cL$ of the form $l:A\to \unit$, then $r\in\cR$.
+  In particular, for any modality $\modal$, if $X\to (A\to X)$ is an equivalence for all $\modal$-connected types $A$, then $X$ is modal.
+\end{cor}
+\begin{proof}
+  By \cref{lem:fill_compute}, for any $l\in\cL$ and commutative square $S$ from $l$ to $r$, we have $\fillers{S} \eqvsym \prd{b:B}\fillers{S_b}$.
+  Since $(\cL,\cR)$ is stable, each map $\mathord{!}_b:\hfib{l}{b}\to \unit$ is also in $\cL$, so that $\mathord{!}_b\perp r$ by assumption.
+  Thus $\fillers{S_b}$ is contractible for all $b$, hence so is $\fillers{S}$.
+
+  For the second statement, the type $f:A\to X$ is equivalent to the type of commutative squares
+  \[
+  \begin{tikzcd}
+    A \ar[r,"f"] \ar[d] & X \ar[d] \\ \unit\ar[r] & \unit
+  \end{tikzcd}
+  \]
+  and the type of fillers for such a square is equivalent to the type of $x:X$ such that $f(a) = x$ for all $a:A$, i.e.\ the fiber of $X\to (A\to X)$ over $f$.
+  Thus, the assumption ensures that all such types of fillers are contractible, i.e.\ $l\perp r$ for all $\modal$-connected maps of the form $l:A\to \unit$, so the first statement applies.
+\end{proof}
+
+\begin{lem}\label{lem:sofs_rfib}
+Let $(\mathcal{L},\mathcal{R})$ be a stable orthogonal factorization system.
+Then a map $r:X\to Y$ is in $\mathcal{R}$ if and only if $\hfib{r}{y}$
+is $(\mathcal{L},\mathcal{R})$-modal for each $y:Y$.
+\end{lem}
+
+\begin{proof}
+The class of right maps is stable under pullbacks by \autoref{lem:ofs_rightstable},
+so it suffices to show that any map with modal fibers is in $\mathcal{R}$.
+
+Let $r:X\to Y$ be a map with modal fibers. Our goal is to show that
+$r$ is in $\mathcal{R}$. By \autoref{lem:ofs_lifting} it suffices to show that
+$r$ has the right lifting property with respect to the left maps.
+Consider a diagram of the form
+\begin{equation*}
+\begin{tikzcd}
+A \arrow[d,swap,"l"] \arrow[r,"f"] & X \arrow[d,"r"] \\
+B \arrow[r,swap,"g"] & Y
+\end{tikzcd}
+\end{equation*}
+in which $l$ is a map in $\mathcal{L}$.
+We wish to show that the type of diagonal fillers is contractible.
+By \autoref{lem:fill_compute}, the type of diagonal fillers of the above diagram
+is equivalent to the dependent product of the types of fillers of
+\begin{equation*}
+\begin{tikzcd}
+\hfib{l}{b} \arrow[d] \arrow[r,"f\circ i_b"] & X \arrow[d,"r"] \\
+\unit \arrow[r,swap,"g(b)"] & Y
+\end{tikzcd}
+\end{equation*}
+indexed by $b:B$. Thus, it suffices that the type of diagonal fillers for this
+square is contractible for each $b:B$. Since any filler factors uniquely through
+the pullback $\unit\times_Y X$, which is $\hfib{r}{g(b)}$, the type of diagonal
+fillers of the above square is equivalent to the type of diagonal fillers of the
+square
+\begin{equation*}
+\begin{tikzcd}
+\hfib{l}{b} \arrow[d] \arrow[r,densely dotted] & \hfib{r}{g(b)} \arrow[d] \\
+\unit \arrow[r,equals] & \unit
+\end{tikzcd}
+\end{equation*}
+where the dotted map, is the uniqe map into the pullback $\hfib{r}{g(b)}$. In
+this square, the left map is in $\mathcal{L}$ because $\mathcal{L}$ is assumed
+to be stable under pullbacks, and the right map is in $\mathcal{R}$ by assumption,
+so the type of diagonal fillers is contractible.
+\end{proof}
+
+\begin{thm}\label{thm:subuniv-sofs}
+Any two stable orthogonal factorization systems with the same modal types are
+equal.
+\end{thm}
+
+\begin{proof}
+By \autoref{lem:sofs_req} it follows that any orthogonal factorization system
+is completely determined by the class of right maps.
+By \autoref{lem:sofs_rfib} it follows that in a stable orthogonal factorization
+system, the class of right maps is completely determined by the modal types.
+\end{proof}
+
+\begin{thm}\label{thm:highermod_from_sofs}
+Any stable orthogonal factorization system determines a higher modality with
+the same modal types.
+\end{thm}
+
+\begin{proof}
+For every type $X$ we have the $(\cL,\cR)$-factorization $X\to\modal X\to\unit$ of the
+unique map $X\to\unit$. This determines the modal unit
+$\modalunit:X\to\modal X$ which is in $\mathcal{L}$, and the
+unique map $\modal X\to\unit$ is in $\mathcal{R}$, i.e.\ $\modal X$ is $(\cL,\cR)$-modal.
+
+To show the induction principle, let $P:\modal X\to\UU$ and $f:\prd{x:X} \modal(P(\eta(x)))$.
+Then we have a (judgmentally) commutative square
+\begin{equation*}
+\begin{tikzcd}
+X \arrow[r,"f"] \arrow[d,swap,"\modalunit"] & \sm{x:\modal X}\modal(P(x)) \arrow[d,"\proj1"] \\
+\modal X \arrow[r,equals] & \modal X.
+\end{tikzcd}
+\end{equation*}
+Note that by \autoref{lem:sofs_rfib},
+the projection $\proj1:(\sm{x:\modal X}\modal(P(x)))\to\modal X$ is in $\mathcal{R}$
+because its fibers are modal. Also, the modal unit
+$\modalunit:X\to\modal X$ is in $\mathcal{L}$.
+Thus, by \cref{defn:orthogonal}, the type of fillers of this square is contractible.
+Such a filler consists of a function $s$ and homotopies filling the two triangles
+\begin{equation*}
+\begin{tikzcd}
+X \arrow[r,"f"] \arrow[d,swap,"\modalunit"] & \sm{x:\modal X}\modal(P(x)) \arrow[d,"\proj1"] \\
+\modal X \arrow[r,equals] \arrow[ur,densely dotted] & \modal X
+\end{tikzcd}
+\end{equation*}
+whose composite is reflexivity, i.e.\ the type
+\begin{multline*}
+\sm{s:\modal X \to \sm{x:\modal X}\modal(P(x))}{H:\prd{x:\modal X} \proj1(s(x))=x}{K:\prd{x:X} s(\modalunit(x))=f(x)}\\
+\prd{x:X} \proj1(K(x)) = H(\modalunit(x)).
+\end{multline*}
+If we decompose $s$, $f$, and $K$ by their components, we get
+\begin{multline*}
+\sm{s_1:\modal X \to \modal X}{s_2:\prd{x:\modal X} \modal(P(s_1(x)))}{H:\prd{x:\modal X} s_1(x)=x}\\
+\sm{K_1:\prd{x:X} s_1(\modalunit(x))=f_1(x)}{K_2 :\prd{x:X} s_2(\modalunit(x)) =_{K_1(x)} f_2(x)}\\
+\prd{x:X} K_1(x) = H(\modalunit(x)).
+\end{multline*}
+Now we can contract $s_1$ and $H$, and also $K_1$ with the final unnamed homotopy, to get
+\begin{equation*}
+\sm{s_2:\prd{x:\modal X} \modal(P(x))}  \prd{x:X} s_2(\modalunit(x)) =_{K_1(x)} f_2(x).
+\end{equation*}
+But this is just the type of extensions of $f$ along $\modalunit$, i.e.\ the fiber of precomposition by $\modalunit$.
+Thus, precomposition by $\modalunit$ is an equivalence, so in fact that we have a uniquely eliminating modality.
+By \cref{lem:rs_idstable}, the identity types of $\modal X$ are modal, so we have a higher modality as well.
+\end{proof}
+
+\section{Left exact modalities}\label{sec:left-exact-modal}
+
+We have seen that the modal operator of any reflective subuniverse preserves products, but even for a modality it does not generally preserve pullbacks.
+If it does, we call the modality ``left exact'' or just ``lex''.
+
+In higher topos theory, lex modalities coincide with reflective sub-toposes.
+We can construct them by nullifying any family of propositions (\autoref{thm:prop-loc-lex}); these correspond categorically to the ``topological'' localizations (in 1-topos theory, every subtopos is topological).
+
+\subsection{Lex, topological, and cotopological modalities}
+\label{sec:lex-top-cotop}
+
+\begin{thm}\label{thm:lex-modalities}
+  For a modality $\modal$, the following are equivalent.
+  \begin{enumerate}
+  \item If $A$ is $\modal$-connected, then so is $(x=y)$ for any $x,y:A$.\label{item:mu0}
+  \item Whenever $A$ and $\sm{x:A}B(x)$ are $\modal$-connected, then so is $B(x)$ for all $x:A$.\label{item:mu1}
+  \item Any map between $\modal$-connected types is $\modal$-connected.\label{item:mu1a}
+  \item Any $\modal$-modal function between $\modal$-connected types is an equivalence.\label{item:mu1b}
+  \item If $f:A\to B$ and $\total g:(\sm{x:A} P(x)) \to (\sm{y:B} Q(y))$ are $\modal$-connected, then so is $g_a:P(a)\to Q(fa)$ for each $a:A$.\label{item:mu3b}
+  \item If $S:k\circ g = f\circ h$ is a commutative square in which $f$ and $g$ are $\modal$-connected, then for any $a$ the induced map $\hfib{h}{a} \to \hfib{k}{fa}$ is $\modal$-connected.\label{item:mu3c}
+  \item If $S:k\circ g = f\circ h$ is a commutative square in which $f$ and $g$ are $\modal$-connected and $h$ and $k$ are $\modal$-modal, then the square is a pullback.\label{item:mu3d}
+  \item For any $f:A\to B$ and $b:B$, the evident map $\hfib{f}{b} \to \hfib{\modal f}{\modalunit b}$ is $\modal$-connected.\label{item:mu3a}
+  \item For any $A$ and $x,y:A$, the induced map $\modal(x=y) \to (\modalunit[A](x) = \modalunit[A](y))$ is an equivalence.\label{item:mu6}
+  \item The functor $\modal$ preserves pullbacks.\label{item:mu3}
+  \item $\modal$-connected maps satisfy the 2-out-of-3 property.\label{item:mu4}
+  \item If $\modal f: \modal A\to \modal B$ is an equivalence, then $f$ is $\modal$-connected.\label{item:mu5}
+  \item For any $\modal$-connected type $A$ and any $P:A\to \modaltype$, there is a $Q:\modaltype$ such that $P(a)\eqvsym Q$ for all $a:A$.\label{item:mu2}
+  \end{enumerate}
+  When they hold, we say that $\modal$ is \define{lex}.
+\end{thm}
+
+\begin{proof}
+  The equivalence~\ref{item:mu1}$\Leftrightarrow$\ref{item:mu1a} is easy, using the definition of $\modal$-connected maps and the fact that any function is equivalent to a fibration.
+  And~\ref{item:mu0}$\Rightarrow$\ref{item:mu1a} since $\hfib f b \jdeq \sm{a:A} (f(a)=b)$ and $\modal$-connected types are closed under $\Sigma$ (since $\modal$-connected maps are closed under composition, being the left class of a factorization system).
+
+  Condition~\ref{item:mu1b} is a special case of~\ref{item:mu1a}, since a function that is both modal and connected is an equivalence.
+  But assuming~\ref{item:mu1b}, if $f:A\to B$ is any function between $\modal$-connected types, then in its $(\cL,\cR)$-factorization $A\xrightarrow{e} I\xrightarrow{m} B$ the type $I$ is also connected by right cancellation.
+  Thus~\ref{item:mu1b} implies that $m$ is an equivalence; thus $f$, like $e$, is $\modal$-connected, giving~\ref{item:mu1a}.
+
+  Assuming~\ref{item:mu1a}, the $3\times 3$ lemma allows us to identify the fiber of $g_a$ over $q:Q(fa)$ with a fiber of the induced map $\hfib{\total{g}}{(a,q)} \to \hfib{f}{fa}$:
+  \begin{equation}
+  \begin{tikzcd}[column sep=large]
+  \bullet \arrow[r] \arrow[d] 
+    & P(a) \arrow[r] \arrow[d] 
+    & Q(f(a)) \arrow[d] \\
+  \hfib{\total{g}}{(a,q)} \arrow[r] \arrow[d] 
+    & \sm{x:A}P(x) \arrow[r,"{\total{g}}"] \arrow[d,swap,"{\proj1}"] 
+    & \sm{y:B}Q(y) \arrow[d,"{\proj1}"] \\
+  \hfib{f}{f(a)} \arrow[r] 
+    & A \arrow[r,swap,"f"] 
+    & B
+  \end{tikzcd}%
+  \end{equation}
+  Since $f$ and $\total g$ are $\modal$-connected by assumption, their fibers are $\modal$-connected, and hence by~\ref{item:mu1a} so is this fiber; thus~\ref{item:mu3b} holds.
+
+  Now assuming~\ref{item:mu3b}, we can deduce~\ref{item:mu3c} by replacing the maps $h$ and $k$ by equivalent dependent projections.
+  If in addition $h$ and $k$ are $\modal$-modal, then $\hfib{h}{a} \to \hfib{k}{fa}$ is a function between $\modal$-modal types, hence itself $\modal$-modal as well as $\modal$-connected and thus an equivalence; thus~\ref{item:mu3c}$\Rightarrow$\ref{item:mu3d}.
+  On the other hand, the special case of~\ref{item:mu3d} in which $f$ and $g$ have codomain $\unit$ reduces to~\ref{item:mu1b}.
+
+  Applying~\ref{item:mu3c} instead to the commutative square
+  \begin{equation}
+  \begin{tikzcd}
+  A \arrow[r,"{\modalunit[A]}"] \arrow[d,swap,"f"] 
+    & \modal(A) \arrow[d,"\modal(f)"] \\
+  B \arrow[r,swap,"{\modalunit[B]}"]
+    & \modal(B)
+  \end{tikzcd}
+  \end{equation}
+  for any $f:A\to B$ yields~\ref{item:mu3a}.
+  % \begin{equation}
+  % \vcenter{\xymatrix{
+  %     \bullet\ar[r]\ar[d] &
+  %     \hfib{f}{b}\ar[r]\ar[d] &
+  %     \hfib{\modal f}{\modalunit b}\ar[d]\\
+  %     \hfib{\modalunit[A]}{u}\ar[r]\ar[d] &
+  %     A\ar[r]^{\modalunit[A]}\ar[d]_f &
+  %     \modal A\ar[d]^{\modal f}\\
+  %     \hfib{\modalunit[B]}{(\modal f)(u)}\ar[r] &
+  %     B\ar[r]_{\modalunit[B]} &
+  %     \modal B
+  %     }}
+  % \end{equation}
+  And as a special case of~\ref{item:mu3a}, if $A\defeq \unit$ and $B$ is $\modal$-connected, we find that $\apfunc{\modalunit}$ is $\modal$-connected.
+  Since $\modal$-connected maps are inverted by $\modal$, this implies~\ref{item:mu6}.
+  Conversely, if~\ref{item:mu6} holds, if $A$ is $\modal$-connected then $(\modalunit(x)=\modalunit(y))$ is contractible, hence $(x=y)$ is $\modal$-connected, giving~\ref{item:mu0}.
+  Thus~\ref{item:mu0} through~\ref{item:mu6} are equivalent.
+
+  Assuming these equivalent conditions, for a cospan $A\xrightarrow{f}C \xleftarrow{g} B$ the map of pullbacks
+  \begin{equation}
+    \sm{a:A}{b:B} (fa=gb) \longrightarrow \sm{x:\modal A}{y:\modal B} ((\modal f)(x) = (\modal g)(y))\label{eq:pbpres}
+  \end{equation}
+  is equivalent to the map on total spaces induced by $\modalunit[A]:A\to\modal A$ and the fiberwise transformation
+  \[ h : \prd{a:A} \left(\hfib{g}{fa} \to \hfib{\modal g}{(\modal f)(\modalunit a)}\right). \]
+  But since $(\modal f)(\modalunit a) = \modalunit(fa)$, by~\ref{item:mu3a} each $h_a$ is $\modal$-connected.
+  Since $\modalunit[A]$ is also $\modal$-connected, by \cref{lem:nconnected_postcomp_variation} so is~\eqref{eq:pbpres}.
+  Hence the induced map
+  \[ \modal\left(\sm{a:A}{b:B} (fa=gb)\right) \longrightarrow \sm{x:\modal A}{y:\modal B} ((\modal f)(x) = (\modal g)(y))\]
+  (which exists since the codomain is $\modal$-modal) is an equivalence, yielding~\ref{item:mu3}.
+
+  On the other hand, if~\ref{item:mu3}, then $\modal$ preserves any pullback
+  \begin{equation}
+  \begin{tikzcd}
+  (x=y) \arrow[r] \arrow[d] 
+    & \unit \arrow[d,"x"] \\
+  \unit \arrow[r,"y"'] 
+    & A
+  \end{tikzcd}
+  \end{equation}
+  yielding~\ref{item:mu6}.
+
+  For~\ref{item:mu4}, two-thirds of the 2-out-of-3 property holds for any modality, so it remains to show that for $f:A\to B$ and $g:B\to C$, if $g\circ f$ and $g$ are $\modal$-connected, so is $f$.
+  However, the unstable octahedral axiom~(\cite[ex4.4]{TheBook}) implies that for any $b:B$, the fiber $\hfib f b$ is equivalent to the fiber of the induced map $\hfib{g\circ f}{gb} \to \hfib{g}{gb}$.
+  These two types are $\modal$-connected since $g\circ f$ and $g$ are; thus~\ref{item:mu1a}$\Rightarrow$\ref{item:mu4}.
+  Conversely,~\ref{item:mu1a} is clearly a special case of~\ref{item:mu4}.
+
+  Since $\modalunit[A] : A\to \modal A$ is $\modal$-connected, easily~\ref{item:mu4}$\Rightarrow$\ref{item:mu5}.
+  On the other hand, if $g\circ f$ and $g$ are $\modal$-connected, then they are both inverted by $\modal$, and hence so is $f$; thus~\ref{item:mu5}$\Rightarrow$\ref{item:mu4}.
+
+  Next we assume~\ref{item:mu4} and show \ref{item:mu2}.
+  Suppose $A$ is $\modal$-connected and $P:A\to\modaltype$, and define
+  \[ Q \defeq \modal\left(\sm{a:A} P(a)\right),\]
+  and $g:\prd{a:A} P(a) \to Q$ by $g(a,u) \defeq \modalunit(a,u)$.
+  We will show $g$ to be a family of equivalences.
+
+  Since $P(a)$ and $Q$ are both $\modal$-modal, for $g_a$ to be an equivalence, it suffices for it to be $\modal$-connected.
+  We will prove this by showing that the induced map $\total g:(\sm{a:A} P(a)) \to (\sm{a:A} Q)$ is $\modal$-connected.
+  By the assumed 2-out-of-3 property, for this it suffices to show that the other two maps in the following commutative triangle are $\modal$-connected:
+  \begin{equation}
+  \begin{tikzcd}
+  \sm{a:A} P(a) \arrow[r,"{\total g}"] \arrow[dr,swap,"{\modalunit}"]
+    & \sm{a:A} Q \mathrlap{\;\jdeq A\times Q} \arrow[d,"\proj2"] \\
+  & Q
+  \end{tikzcd}
+  \end{equation}
+  But the right-hand vertical map is $\modal$-connected since its fiber is the $\modal$-connected type $A$,
+  and the diagonal map is $\modal$-connected since it is simply $\modalunit$.
+  This completes the proof of~\ref{item:mu4}$\Rightarrow$\ref{item:mu2}.
+
+  Finally, we prove~\ref{item:mu2}$\Rightarrow$\ref{item:mu0}.
+  Suppose $A$ is $\modal$-connected and $x:A$.
+  Then $\lam{y} \modal(x=y) : A \to \modaltype$ so there is a $Q_x:\modaltype$ such that $\modal(x=y)\eqvsym Q_x$ for all $y:A$.
+  It follows that transport in the type family $\lam{y} \modal(x=y)$ is constant, i.e.\ if $p,q:y=z$ and $u:\modal(x=y)$ then $\trans p u = \trans q u$.
+  Now for any $p:x=y$, we have $\trans p {\modalunit(\refl x)} = \modalunit(p)$; hence for any $p,q:x=y$ we have $\modalunit(p)=\modalunit(q)$.
+  By $\mathsf{ind}^\modal$, it follows that for any $u,v:\modal(x=y)$ we have $u=v$, i.e.\ $\modal(x=y)$ is a mere proposition.
+  But $\modal(x=x)$ is inhabited by $\modalunit(\refl x)$, hence $Q_x$ is also inhabited, and thus so is $\modal(x=y)$ for all $y$; thus it is contractible.
+\end{proof}
+
+Note that~\ref{item:mu3a} and~\ref{item:mu3} both imply that a lex modality preserves fibers: given $f:A\to B$ and $b:B$, the map $\modal(\hfib{f}{b}) \to \hfib{\modal f}{\modalunit b}$ is an equivalence.
+In fact, this property (and hence also~\ref{item:mu3}) characterizes lex modalities even among reflective subuniverses.
+
+\begin{thm}\label{thm:rsu-lex}
+  If $\modal$ is a reflective subuniverse such that for any $f:A\to B$ and $b:B$, the map $\modal(\hfib{f}{b}) \to \hfib{\modal f}{\modalunit b}$ is an equivalence, then $\modal$ is $\Sigma$-closed (and hence a lex modality).
+\end{thm}
+\begin{proof}
+  Suppose $A$ and each $B(a)$ are $\modal$-modal.
+  We have a commutative square
+  \[
+  \begin{tikzcd}
+    \sm{a:A}B(a) \ar[r,"\modalunit"] \ar[d,"\proj1"'] &
+    \modal(\sm{a:A}B(a)) \ar[d,"\modal \proj1"] \\
+    A \ar[r,"\modalunit"',"\sim"] & \modal A
+  \end{tikzcd}
+  \]
+  in which the bottom map is an equivalence.
+  Thus, to show that the top map is an equivalence it suffices to show that the induced map on each fiber $B(a) \to \hfib{\modal \proj1}{\modalunit a}$ is an equivalence.
+  But this map factors through the equivalence $B(a) \eqvsym \modal B(a)$ by the map $\modal B(a) \to \hfib{\modal \proj1}{\modalunit a}$, which is an equivalence by assumption.
+\end{proof}
+
+A particularly useful corollary of \cref{thm:lex-modalities} is the following.
+
+\begin{cor}\label{modaln-truncated}
+  A lex modality preserves $n$-truncated maps for all $n$.
+\end{cor}
+\begin{proof}
+  We first argue by induction on $n$ that a lex modality $\modal$ preserves $n$-types for all $n$.
+  The base case is \cref{lem:modal-pres-prop}.
+  For the inductive step, suppose $\modal$ is lex and preserves $n$-types, and $A$ is an $(n+1)$-type.
+  Then for $u,v:\modal A$ the proposition that $u=v$ is an $n$-type is $\modal$-modal, since it is constructed inductively using $\Sigma$, $\Pi$, and identity types.
+  Thus, we can prove it by $\modal$-induction on $u,v$.
+  But for $x,y:A$ the type $\modalunit(x)=\modalunit(y)$ is equivalent to $\modal(x=y)$ by \cref{thm:lex-modalities}\ref{item:mu6}, hence is an $n$-type by the inductive hypothesis.
+
+  Now if $f:A\to B$ is $n$-truncated, to show that $\modal f$ is $n$-truncated we must show that $\hfib{\modal f}{y}$ is an $n$-type for all $y:\modal B$.
+  Again, by $\modal$-induction we can reduce to the case $y\defeq \modalunit(b)$ for some $b:B$, in which case \cref{thm:lex-modalities}\ref{item:mu3a} implies that $\hfib{\modal f}{\modalunit(b)} \eqvsym \modal(\hfib f b)$, which is an $n$-type since $f$ is $n$-truncated and $\modal$ preserves $n$-types.
+\end{proof}
+
+Not every modality satisfying \cref{modaln-truncated} is lex.
+For instance, the $m$-truncation modality preserves $n$-types for all $n$, but is not lex for $m\ge -1$.
+(To see that it is not lex, consider an Eilenberg--MacLane space $K(G,m+1)$~\cite{lf:emspaces}; this is $m$-connected, but its loop space is $K(G,m)$ which is not $m$-connected.
+Alternatively, we can use \cref{thm:acc-lex} below together with the fact that the universe of $m$-types in the $m^{\mathrm{th}}$ universe is not an $m$-type~\cite{ks:u-not-ntype}.)
+
+We do know at least one example of a lex modality.
+
+\begin{eg}
+  For any mere proposition $P$, the open modality $\open P \defeq \lam{X} (P\to X)$ is lex.
+  This is easy to see since mapping out of $P$ is a right adjoint, hence preserves all limits, including pullbacks.
+\end{eg}
+
+However, constructing lex modalities in general, such as by localization, is somewhat tricky.
+Unlike the characterization of modalities as $\Sigma$-closed reflective subuniverses, which refers only to the \emph{modal types} and hence was easy to prove in \cref{thm:nullification_modality}, all the characterizations of lex-ness refer explicitly or implicitly to the \emph{modal operator} $\modal$, and not just by way of its ``mapping out'' universal property but saying something about its identity types.
+In general, saying anything about the identity types of a higher inductive type (such as localization) requires some amount of univalence, and the present case is no exception (although we do not need a full ``encode-decode'' type argument).
+
+\begin{thm}\label{thm:acc-lex}
+  Let $\modal$ be an accessible modality; the following are equivalent.
+  \begin{enumerate}
+  \item $\modal$ is lex.\label{item:al1}
+  \item $\modal$ has a presentation $B:A\to \UU$ such that for any $a:A$ and any $P:B(a)\to \modaltype$, there is a $Q:\modaltype$ such that $P(b)\eqvsym Q$ for all $b:B(a)$.\label{item:al2}
+  \item The universe $\modaltype \defeq \{A:\type | A \text{ is $\modal$-modal}\}$ of modal types is $\modal'$-modal, where $\modal'$ is the canonical accessible extension of $\modal$ to a universe $\UU'$ containing $\UU$, as in \cref{thm:acc-extend}.\label{item:al3}
+  \end{enumerate}
+\end{thm}
+\begin{proof}
+  Assuming~\ref{item:al1}, condition~\ref{item:al2} holds for \emph{any} presentation: it is just a special case of \cref{thm:lex-modalities}\ref{item:mu2}, since each $B(a)$ is $\modal$-connected.
+
+  Now assume~\ref{item:al2} for some presentation $B:A\to\UU$.
+  By definition of $\modal'$, it suffices to show that $\modaltype$ is $B(a)$-null for all $a:A$, i.e.\ that the ``constant functions'' map
+  \[ \modaltype \to (B(a) \to \modaltype) \]
+  is an equivalence for all $a:A$.
+  The assumption~\ref{item:al2} says that this map has a section, and hence in particular is surjective.
+  Thus, it suffices to show it is an embedding, i.e.\ that for any $X,Y:\modaltype$ the map
+  \[ (X=Y) \to ((\lam{b} X)= (\lam{b} Y)) \]
+  is an equivalence.
+  But by univalence and function extensionality, this map is equivalent to
+  \[ (X\eqvsym Y) \to (B(a) \to (X\eqvsym Y)), \]
+  which is an equivalence by \cref{connectedtotruncated} since $X\eqvsym Y$ is $\modal$-modal and $B(a)$ is $\modal$-connected.
+
+  Finally, if we assume~\ref{item:al3}, then for any $\modal$-connected type $A:\UU$ the map
+  \[ \modaltype \to (A\to\modaltype) \]
+  is an equivalence.
+  In particular, it has a section, proving \cref{thm:lex-modalities}\ref{item:mu2}.
+\end{proof}
+
+\begin{cor}\label{thm:prop-loc-lex}
+  Let $B:A\to\prop$ be a family of mere propositions.
+  Then nullification at $B$ is a lex modality.
+\end{cor}
+\begin{proof}
+  We prove condition~\ref{item:al2} of \cref{thm:acc-lex}.
+  Given $P:B(a) \to \modaltype$, define $Q \defeq \prd{b:B(a)} P(b)$.
+  This lies in $\modaltype$ since modal types are always closed under dependent function types.
+  And if we have any $b:B(a)$, then $B(a)$ is an inhabited proposition and hence contractible,
+  and a product over a contractible type is equivalent to any of the fibers.
+\end{proof}
+
+\begin{defn}
+  A (necessarily lex) modality that can be presented by nullification at a family of mere propositions is called \textbf{topological}.
+\end{defn}
+
+\begin{eg}
+  For any mere proposition $Q$, the closed modality $\closed Q \defeq \lam{X} Q\ast X$ is topological, since it is presented by the family $\lam{x:P} \emptyt$.
+  Thus, by \cref{thm:prop-loc-lex}, it is lex.
+\end{eg}
+
+Topological modalities may seem very special, since very few types are mere propositions.
+But in fact, if we allow ourselves to assume rather than conclude lex-ness, then it doesn't matter what truncation level we take the generating family at, as long as it is finite:
+
+\begin{thm}\label{thm:acc-ntypes-tpl}
+  If $\modal$ is an accessible lex modality with a presentation $B:A\to\UU$ for which each $B(a)$ is an $n$-type (for some fixed $n$ independent of $a$), then $\modal$ is topological.
+\end{thm}
+\begin{proof}
+  We will prove that under the given hypotheses, if $n\ge 0$ then $\modal$ also has a presentation $D:C\to \UU$ for which each $D(c)$ is an $(n-1)$-type.
+  By induction, this will prove the theorem.
+  The argument is a modification of~\cite[Lemma 7.5.11]{TheBook}.
+
+  Let $C\defeq A + \sm{a:A} B(a)\times B(a)$, and define
+  \begin{align*}
+    D(\inl(a)) &\defeq \brck{B(a)}\\
+    D(\inr(a,x,y)) &\defeq (x=_{B(a)} y).
+  \end{align*}
+  Clearly each $D(c)$ is an $(n-1)$-type (here is where we use the assumption $n\ge 0$).
+  Since $\modal$ is lex and each $B(a)$ is $\modal$-connected, each $D(\inr(a,x,y))$ is also $\modal$-connected.
+  To show that $D(\inl(a))$ is also $\modal$-connected, since $\modal$ preserves mere propositions, the proof of \cref{prop:nconnected_tested_by_lv_n_dependent types} implies that it suffices to show that $Z\to (\brck{B(a)} \to Z)$ is an equivalence for any $\modal$-modal mere proposition $Z$.
+  But in this case $(\brck{B(a)} \to Z) \eqvsym (B(a) \to Z)$, and the latter is equivalent to $Z$ since $B(a)$ is $\modal$-connected and $Z$ is $\modal$-modal.
+
+  Thus each type $D(c)$ is $\modal$-connected, so every $\modal$-modal type is $D$-null.
+  For the converse, suppose $X$ is $D$-null and let $a:A$.
+  We want to show that $X$ is $B(a)$-null, i.e.\ that the ``constant functions'' map $c : X\to (B(a) \to X)$ is an equivalence.
+  Let $f:B(a) \to X$; we will show that $\hfib{c}{f}$ is contractible.
+
+  Now $X$ and $B(a)\to X$ are both $D$-null, hence so is $\hfib{c}{f}$, and hence so is the proposition ``$\hfib{c}{f}$ is contractible''.
+  Thus, we may assume in proving it that we have $\brck{B(a)}$.
+  But it is also a proposition, so we may furthermore assume that we have some $b:B(a)$.
+
+  If we also write $b$ for the induced map $\unit \to B(a)$, then for any $u:B(a)$ we have $\hfib{b}{u} \simeq (b=u)$, which belongs to $D$.
+  Thus $b:\unit\to B(a)$ is $D$-connected.
+
+  We construct a point in $\hfib{c}{f}$ by taking $f(b)$ and constructing a path $p:\prd{u:B(a)} f(u)=f(b)$.
+  To give $p$, note that since $X$ is $D$-modal, so is the type $f(u)=f(b)$.
+  Thus, by \cref{prop:nconnected_tested_by_lv_n_dependent types}, since $b:\unit\to B(a)$ is $D$-connected, it suffices to prove $f(b)=f(b)$, which is of course trivial.
+
+  Finally, suppose we have some other point $(x,q) : \hfib{c}{f}$, i.e.\ an $x:X$ with $q:\prd{u:B(a)} f(u)=x$.
+  Then $q_b : f(b) = x$, so it remains to show that for any $u:B(a)$ we have $q_b = \ct{p_u^{-1}}{q_u}$.
+  But since this is an iterated equality type in $X$, it is $D$-modal, so using again the fact that $b:\unit\to B(a)$ is $D$-connected it suffices to prove it when $u=b$.
+  But $p_b = \refl{f(b)}$ by definition, so in this case the goal reduces to $q_b = q_b$, which is trivial.
+\end{proof}
+
+Thus, a topological modality could equivalently be defined as a lex modality that admits a generating family of bounded homotopy type.
+Moreover, \emph{every} lex modality is ``almost topological'' in the following sense.
+
+\begin{thm}\label{thm:lex-ntypes-prop}
+  If $\modal$ is a lex modality and $A$ is an $n$-type for $n<\infty$, then $A$ is $\modal$-modal if and only if it is $P$-null for any $\modal$-connected mere proposition $P$.
+\end{thm}
+\begin{proof}
+  ``Only if'' is trivial, so we prove the converse.
+  By induction on $n$.
+  The base case $n=-2$ is trivial.
+  Thus, suppose $A$ is an $(n+1)$-type that is $P$-null for every $\modal$-connected proposition $P$.
+  Then for any $x,y:A$, we have a commutative triangle
+  \[
+  \begin{tikzcd}
+    & x=y \ar[dl] \ar[dr] \\
+    (P\to (x=y)) \ar[rr] && (\lam{\nameless}x =_{P\to A} \lam{\nameless}y)
+  \end{tikzcd}
+  \]
+  in which the bottom map is an equivalence by function extensionality, and the right-hand diagonal map is an equivalence since it is the action on equalities of the equivalence $A\eqvsym (P\to A)$.
+  Thus, the left-hand diagonal map is also an equivalence, so $(x=y)$ is also $P$-null.
+  By the inductive hypothesis, therefore, $(x=y)$ is $\modal$-modal.
+  Hence by \cref{thm:lex-modalities}\ref{item:mu6}, the map $\modalunit[A]:A\to \modal A$ is an embedding; thus it suffices to show that it is surjective.
+
+  Now given $z:\modal A$, since $\modalunit[A]$ is an embedding, its fiber $\hfib{\modalunit[A]}{z}$ is a mere proposition; and it is $\modal$-connected since $\modalunit[A]$ is connected.
+  Thus, by assumption $A \to (\hfib{\modalunit[A]}{z} \to A)$ is an equivalence.
+  But we have $\proj1 : \hfib{\modalunit[A]}{z} \to A$, so there exists an $x:A$ such that $\proj1 = \lam{\nameless}x$, i.e.\ for any $y:A$ with $\modalunit (y)=z$ we have $y = x$.
+
+  We claim that $\modalunit(x) = z$.
+  This is a modal type, since it is an equality in $\modal A$.
+  Thus, since $\hfib{\modalunit[A]}{z}$ is $\modal$-connected, when proving $\modalunit(x) = z$ we may assume that $\hfib{\modalunit[A]}{z}$, i.e.\ we have $y:A$ with $\modalunit (y) = z$.
+  But then $y=x$ as shown above, so that $\modalunit (x) = z$ as well.
+\end{proof}
+
+Thus, if an accessible lex modality is not topological, it must be generated by a family including $n$-types for arbitrarily high $n$ (or else at least one type that is not an $n$-type for any finite $n$), and moreover its failure to be topological will only be visible to types that are not $n$-types for any finite $n$.
+This means that it is rather hard to give examples of lex modalities that are not topological.
+
+Semantically, it is known that not all subtoposes of $(\infty,1)$-toposes are topological, so by the results of \cref{sec:semantics} non-topological lex modalities do exist in some models.
+The basic example is the \emph{hypercompletion}.
+We do not know how to construct hypercompletion inside type theory, but we can show that if it exists then it is lex, and not topological unless it is trivial.
+We begin with definitions.
+
+\begin{defn}
+  A type $A$ or a function $f:A\to B$ is \define{$\infty$-connected} if it is $n$-connected for all $n$.
+\end{defn}
+
+A function $f$ is $\infty$-connected if and only if $\trunc n f$ is an equivalence for all $n$ (although for fixed $n$, being $n$-connected is a stronger condition than $\trunc n f$ being an equivalence).
+Similarly, a type $A$ is $\infty$-connected if and only if $\trunc n A$ is contractible for all $n$.
+Note that since a map is $n$-connected if and only if all its fibers are, a map is likewise $\infty$-connected if and only if all its fibers are.
+
+\begin{defn}
+  A type $Z$ is \define{$\UU$-$\infty$-truncated} or \define{$\UU$-hypercomplete} if it is local with respect to all $\infty$-connected maps in $\UU$, i.e.\ if $(\blank\circ f):(C\to Z) \to (B\to Z)$ is an equivalence whenever $f:B\to C$ is $\infty$-connected with $B,C:\UU$.
+\end{defn}
+
+In general, it is not clear to what extent the notion of $\UU$-$\infty$-truncatedness depends on $\UU$.
+However, if $Z$ is an $n$-type for some $n<\infty$, then $(\blank\circ f)$ is equivalent to $(\blank\circ \trunc nf)$, which is an equivalence if $f$ is $\infty$-connected.
+Thus, any $n$-type is $\infty$-truncated independent of universe level.
+In particular, this implies:
+
+\begin{lem}\label{thm:infconn}
+  Given $B,C:\UU$ and $f:B\to C$, the following are equivalent.
+  \begin{enumerate}
+  \item $f$ is $\infty$-connected.\label{item:ic1}
+  \item $(-\circ f):(C\to Z) \to (B\to Z)$ is an equivalence for all $\UU$-$\infty$-truncated $Z:\UU$.\label{item:ic2}
+  \item $(-\circ f):(C\to Z) \to (B\to Z)$ is an equivalence for all $n$-types $Z:\UU$.\label{item:ic3}
+  \end{enumerate}
+\end{lem}
+\begin{proof}
+  We have~\ref{item:ic1}$\Rightarrow$\ref{item:ic2} by definition of ``$\UU$-$\infty$-truncated'', and \ref{item:ic2}$\Rightarrow$\ref{item:ic3} by the above remarks.
+  Now assuming~\ref{item:ic3}, the universal property of $n$-truncation tells us that
+  \[ (\blank\circ \trunc nf):(\trunc n C\to Z) \to (\trunc nB\to Z) \]
+  is an equivalence for any $n$-type $Z$.
+  By the Yoneda lemma, this implies that $\trunc n f$ is an equivalence for all $n$; hence $f$ is $\infty$-connected.
+\end{proof}
+
+The closure of $\infty$-connectedness under fibers also implies:
+
+\begin{lem}\label{thm:trunc-null}
+  A type $Z$ is $\UU$-$\infty$-truncated if and only if it is null with respect to all $\infty$-connected types, i.e.\ if $Z \to (B\to Z)$ is an equivalence whenever $B$ is $\infty$-connected.
+\end{lem}
+\begin{proof}
+  ``Only if'' is clear, so suppose the given condition holds and let $f:A\to B$ be $\infty$-connected.
+  Then we have
+  \begin{align*}
+    (A \to Z)
+    &\simeq (\sm{b:B}\hfib{f}{b}) \to Z\\
+    &\simeq \prd{b:B} (\hfib{f}{b} \to Z)\\
+    &\simeq \prd{b:B} Z\\
+    &\jdeq (B\to Z).\qedhere
+  \end{align*}
+\end{proof}
+
+Now, we can certainly localize at all the $\infty$-connected maps in $\UU$ to obtain a reflective subuniverse of any \emph{larger} universe $\UU'$ whose modal types are the $\UU$-$\infty$-truncated ones.
+However, hypercompletion should really be a modality on $\UU$ \emph{itself} whose modal types are the $\UU$-$\infty$-truncated ones.
+A local presentability argument in~\cite[Prop.~6.5.2.8]{lurie2009higher} shows that in any Grothendieck $\infty$-topos there exists a small family that generates such a modality by localization.
+But in type theory, the best we can do at present is show that \emph{if} such a modality exists, then it behaves as expected.
+
+\begin{thm}\label{thm:hypercompletion}
+  Suppose $\modal$ is a reflective subuniverse on $\UU$ whose modal types are precisely the $\UU$-$\infty$-truncated ones.
+  Then:
+  \begin{enumerate}
+  \item $\modal$ is a lex modality.\label{item:hc1}
+  \item The $\modal$-connected maps are precisely the $\infty$-connected ones.\label{item:hc2}
+  \item $\modal$ is topological if and only if every type is $\modal$-modal, i.e.\ every type is $\UU$-$\infty$-truncated, i.e.\ ``Whitehead's principle''~\cite[\S8.6]{TheBook} holds for $\UU$.\label{item:hc3}
+  \end{enumerate}
+  If such a modality exists, we call it \textbf{hypercompletion}.
+\end{thm}
+\begin{proof}
+  The proof of \cref{thm:nullification_modality} shows that the $B$-null types for any type family $B$ are $\Sigma$-closed, regardless of whether or not $B$ is small.
+  Thus, \cref{thm:trunc-null} shows that the $\UU$-$\infty$-truncated types are $\Sigma$-closed, hence $\modal$ is a modality.
+
+  Next we prove~\ref{item:hc2}.
+  By \cref{thm:infconn}, any $\modal$-connected map is $\infty$-connected.
+  Conversely, if $f:A\to B$ is $\infty$-connected, then any fiber $\hfib{f}{b}$ is also $\infty$-connected.
+  Thus for any $\modal$-modal type $Z$ we have $Z \eqvsym (\hfib{f}{b}\to Z)$; hence $\hfib{f}{b}$ is $\modal$-connected, and thus so is $f$.
+
+  This shows~\ref{item:hc2}.
+  Now the lex-ness of $\modal$ follows from the fact that $\infty$-connected maps satisfy the 2-out-of-3 property, since $f$ is $\infty$-connected if and only if each $\trunc n f$ is an equivalence, and equivalences satisfy the 2-out-of-3 property.
+
+  Finally, if $\modal$ is topological, then there is a family $B:A\to \prop$ of mere propositions that generates it.
+  In particular, each $B(a)$ must then be $\modal$-connected, and hence $\infty$-connected.
+  But a mere proposition is a $(-1)$-type, hence also $\infty$-truncated.
+  Thus each $B(a)$ is contractible, so that every type is $\modal$-modal.
+\end{proof}
+
+More generally, we have the following analogue of~\cite[Proposition 6.5.2.16]{lurie2009higher}:
+
+\begin{thm}\label{thm:cotop}
+  For a lex modality $\modal$, the following are equivalent:
+  \begin{enumerate}
+  \item Every $\modal$-connected mere proposition is contractible.\label{item:ct1}
+  \item Every $\modal$-connected map is $\infty$-connected.\label{item:ct2}
+  \item Every $\UU$-$\infty$-truncated type is $\modal$-modal.\label{item:ct3}
+  \end{enumerate}
+  In this case we say $\modal$ is \textbf{cotopological}.
+\end{thm}
+\begin{proof}
+  Using \cref{thm:infconn}, we have~\ref{item:ct2}$\Leftrightarrow$\ref{item:ct3}.
+  And an $\infty$-connected mere proposition is contractible, so~\ref{item:ct2}$\Rightarrow$\ref{item:ct1}.
+  Conversely, assuming~\ref{item:ct1}, by \cref{thm:lex-ntypes-prop} every $n$-type is $\modal$-modal; hence \cref{thm:infconn} yields~\ref{item:ct2}.
+\end{proof}
+
+\begin{rmk}\label{thm:nontop-lex}
+  Non-topological lex modalities are somewhat curious due to the apparent lack of a ``small'' condition ensuring their lex-ness.
+  The closest thing we have is \cref{thm:acc-lex}\ref{item:al2}, but this still refers to arbitrary families of modal types.
+  In particular, this means that if $\modal$ is an accessible lex modality on $\UU$, we do not know whether its canonical accessible extension $\modal'$ to a larger universe $\UU'$ from \cref{thm:acc-extend} is again lex.
+  By contrast, if $\modal$ is topological, then so is $\modal'$, since it is generated by the same family of monomorphisms.
+\end{rmk}
+
+\begin{rmk}\label{thm:subtopos-model}
+  The modal types for an accessible lex modality are closed under all the usual type-theoretic operations: identity types by \cref{lem:rs_idstable}, $\Pi$-types by \cref{lem:modal-Pi}, $\Sigma$-types since it is a modality, and universes by \cref{thm:acc-lex}.
+  Thus, they are in their own right a model of homotopy type theory (the internal language of a subtopos).
+
+  These modal types are not closed under other type formers like $\emptyt$, $A+B$, the natural numbers, and more general inductive and higher inductive types.
+  However, if $F$ is a presentation of $\modal$, then we can construct a version of any higher inductive type $\mathsf{H}$ that is $\modal$-modal and satisfies the induction principle with respect to other modal types, by adding the second two constructors of $\localization{F}$ to the given constructors of $\mathsf{H}$, yielding a new higher inductive type that is ``$F$-local by definition''.
+  (This is a sort of internal version of the algebraic fibrant replacement used semantically in~\cite{ls:hits}.)
+  The fact that localization modalities have judgmental computation rules ensures that these ``local higher inductive types'' do too.
+  Thus, the subtopos model inherits higher inductive types as well.
+
+  In principle, this sort of construction could reduce the problem of modeling homotopy type theory with strict univalent universes in all $(\infty,1)$-toposes to the problem of modeling it in presheaf $(\infty,1)$-toposes, since every $(\infty,1)$-topos is (by one definition) an accessible left exact localization of a presheaf $(\infty,1)$-topos.
+  However, in order for this to work we need strict univalent universes that are strictly closed under the modality, and in general we do not know how to ensure this semantically; see \cref{rmk:universes}.
+  A similar construction of a subtopos model, but using a strict monad, can be found in~\cite{Stacks,Coquand:stack}.
+\end{rmk}
+
+
+\subsection{Meets and joins of modalities}
+\label{sec:poset-modalities}
+
+Let $\rsu[\UU]$ denote the type of reflective subuniverses of a universe $\UU$, and similarly $\mdl[\UU]$, $\lex[\UU]$, and $\tpl[\UU]$ the types of modalities, lex modalities, and topological modalities, while $\accrsu$, $\accmdl$, and $\acclex$ consist of accessible ones.
+Each of these is partially ordered by inclusion, i.e.\ $\modal \le \lozenge$ means that every $\modal$-modal type is $\lozenge$-modal, and we have full inclusions
+\[
+\begin{tikzcd}
+  \tpl \ar[r] \ar[dr] & \acclex \ar[r] \ar[d] & \accmdl \ar[r] \ar[d] & \accrsu \ar[d] \\
+  & \lex \ar[r] & \mdl \ar[r] & \rsu.
+\end{tikzcd}
+\]
+The poset $\rsu$ has both a bottom element (the zero modality, for which only $\unit$ is modal) and a top element (the trivial modality, for which all types are modal), which both happen to lie in $\tpl$ and hence all of these other posets.
+It is natural to wonder whether these posets have other lattice structure.
+We do not have a complete answer, but there are some things we can say.
+
+\begin{thm}\label{thm:meet-join}
+  Suppose given any family $\modal_i$ of reflective subuniverses.
+  \begin{enumerate}
+  \item If there is a reflective subuniverse $\lozenge$ such that a type is $\lozenge$-modal if and only if it is $\modal_i$-modal for all $i$, then $\lozenge$ is the meet $\bigwedge_i \modal_i$ in $\rsu$.
+    Moreover, if each $\modal_i$ is a modality, then so is $\lozenge$, and it is also the meet in $\mdl$.\label{item:mj1}
+  \item If each $\modal_i$ is a modality, and there is a modality $\lozenge$ such that a type is $\lozenge$-connected if and only if it is $\modal_i$-connected for all $i$, then $\lozenge$ is the join $\bigvee_i \modal_i$ in $\mdl$.\label{item:mj2}
+  \item If there is a reflective subuniverse $\lozenge$ such that for any function $f:A\to B$, we have that $\lozenge(f)$ is an equivalence if and only if $\modal_i(f)$ is an equivalence for all $i$, then $\lozenge$ is the join $\bigvee_i \modal_i$ in $\rsu$.\label{item:mj3}
+  \end{enumerate}
+\end{thm}
+\begin{proof}
+  The first part of statement~\ref{item:mj1} follows from the fact that the ordering on reflective subuniverses is determined by inclusion of the universes of modal types.
+  The second follows since $\Sigma$-closure of such universes is inherited by intersections.
+
+  The other two statements are instances of a general fact about Galois connections.
+  Suppose $G: \mathcal{B}^{\mathrm{op}} \leftrightarrows \mathcal{A} : H$ is a contravariant adjunction between posets, i.e.\ $G$ and $H$ are contravariant functors and $b \le G a \iff a \le H b$.
+  Then $(G,H)$ restricts to a contravariant isomorphism between the posets of fixed points $\mathcal{A}^{GH}$ and $\mathcal{B}^{HG}$ for the monads $G H$ and $H G$.
+  Moreover, any meets in $\mathcal{B}$ are inherited by $\mathcal{B}^{HG}$, hence also by $(\mathcal{A}^{GH})^{\mathrm{op}}$, i.e.\ are joins in $\mathcal{A}^{GH}$.
+
+  In the simpler case of~\ref{item:mj2}, let $\mathcal{A}$ and $\mathcal{B}$ both be the set $\UU \to \prop$ of subtypes of the universe, let $G(\mathcal{E})$ be the set of types $A$ such that $A \to (B\to A)$ is an equivalence for all $B\in \mathcal{E}$, and likewise let $H(\mathcal{M})$ be the set of types $B$ such that $A \to (B\to A)$ is an equivalence for all $A\in \mathcal{M}$.
+  Then by \cref{connectedtotruncated,thm:detect-right-by-fibers}, the $\modal$-modal types for any modality are a fixed point of $GH$, and the $\modal$-connected types are the corresponding fixed point of $HG$.
+  Not every such fixed point is a modality, but it does follow that if a meet in $\mathcal{A}^{HG}$, i.e.\ an intersection of the universes of $\modal_i$-connected types, is fixed, i.e.\ is the $\lozenge$-connected types for some modality $\lozenge$, then it is a join in the dual poset of modalities.
+
+  Case~\ref{item:mj3} is similar, using the same $\mathcal{A}$ but taking $\mathcal{B}$ to be the set $\prd{X,Y:\UU} (X\to Y) \to \prop$ of subtypes of the type of all functions in the universe, letting $G(\mathcal{E})$ be the set of types $X$ such that $(\blank\circ f) : (B\to X) \to (A\to X)$ is an equivalence for all $f:A\to B$ in $\mathcal{E}$, and dually $H(\mathcal{M})$ the set of functions $f:A\to B$ such that $(\blank\circ f) : (B\to X) \to (A\to X)$ is an equivalence for all $X\in \mathcal{M}$.
+  Then the $\modal$-modal types for any reflective subuniverse are a fixed point of $GH$, since the universal property of $\modal$ tells us that $(\blank\circ f) : (B\to X) \to (A\to X)$ for all modal $X$ if and only if $\modal f$ is an equivalence, and \cref{thm:rsu-galois} tells us that we can detect modal types by mapping out of such functions.
+  The same argument then applies to the dual classes of $\modal$-inverted functions.
+\end{proof}
+
+When the conditions of \cref{thm:meet-join}\ref{item:mj1} hold, we say that $\lozenge$ is the \textbf{canonical meet} of the $\modal_i$'s, and dually in cases~\ref{item:mj2} and~\ref{item:mj3} we say that $\lozenge$ is their \textbf{canonical join}.
+We have no reason to believe that all meets and joins in $\rsu$ and $\mdl$ are canonical, but we do not know of any that are not.
+
+\begin{eg}
+  If $P$ and $Q$ are two propositions, we claim that $\open{P\times Q}$ is the canonical meet of $\open P$ and $\open Q$.
+  To prove this, note that $(P\times Q \to X) \eqvsym (P\to (Q\to X))$, and we have a commutative square
+  \[
+  \begin{tikzcd}
+    X \ar[r] \ar[d] & P\to X \ar[d] \\ Q\to X \ar[r] & P\to (Q\to X)
+  \end{tikzcd}
+  \]
+  If $X$ is $\open P$-modal, then the top function is an equivalence, and if $X$ is $\open Q$-modal, then the left-hand function is an equivalence, hence so is the right-hand one.
+  Thus, in this case the diagonal is also an equivalence, so $X$ is $\open{P\times Q}$-modal.
+  Conversely, since the unit $X\to (P\times Q \to X)$ factors through $P\to X$ and $Q\to X$, if it has a retraction then so do they; thus if $X$ is $\open{P\times Q}$-modal it is both $\open P$-modal and $\open Q$-modal.
+  In other words, the operation $\open{} : \prop_\UU \to \lex$ preserves finite meets (it obviously preserves the top element).
+\end{eg}
+
+\begin{eg}
+  Suppose $P:A\to\prop_\UU$ is a family of propositions indexed by a type $A:\UU$, and let $Q \defeq \brck{\sm{a:A} P(a)}$.
+  Then $Q$ is the join (i.e.\ disjunction) of all the $P(a)$'s in $\prop_\UU$.
+  Now recall from \cref{eg:closed} that a type $X$ is $\closed Q$-modal if and only if $Q\to\iscontr(X)$, and note that
+  \[ (Q \to \iscontr(X)) \eqvsym \prd{a:A} (P(a) \to \iscontr(X)). \]
+  Thus, $X$ is $\closed Q$-modal if and only if it is $\closed{P(a)}$-modal for all $a:A$, and hence $\closed Q$ is the canonical meet of the $\closed{P(a)}$'s.
+
+  We saw in \cref{eg:closed-connected} that the same condition $Q\to\iscontr(X)$ also characterizes the $\open Q$-connected types; thus $\open Q$ is the canonical join of the $\open{P(a)}$'s.
+  In other words, the operation $\open{} : \prop_\UU \to \lex$ preserves joins (indexed by types in $\UU$).
+\end{eg}
+
+\begin{eg}
+  The hypercompletion modality from \cref{thm:hypercompletion}, if it exists, is the canonical join $\bigvee_n \truncmod{n}$ of all the $n$-truncation modalities.
+\end{eg}
+
+We can construct meets in a fair amount of generality:
+
+\begin{thm}\label{thm:meets}
+  Any family $(\modal_i)_{i:I}$ of accessible reflective subuniverses (indexed by a type $I$ in $\UU$) has a canonical meet, which is again accessible, and is a modality or topological if each $\modal_i$ is.
+\end{thm}
+\begin{proof}
+  By a ``family of accessible reflective subuniverses'' we mean that we have a family of generating families $F : \prd{i:I}\prd{a:A_i} B_i(a) \to C_i(a)$.
+  Uncurrying $F$, we obtain a family $F : \prd{(i,a):\sm{i:I} A_i} B_i(a) \to C_i(a)$ indexed by $A \defeq \sm{i:I} A_i$, such that a type is $F$-local if and only if it is $F_i$-local for all $i$.
+  Thus, $\localization{F}$ is the canonical meet.
+  In the topological case we can take the $F_i$ to be topological generators with each $C_i(a)=\unit$ and each $B_i(a)$ a proposition, so that $F$ is also a topological generator.
+\end{proof}
+
+Thus, the posets $\tpl$, $\accmdl$, and $\accrsu$ have meets indexed by any type in $\UU$.
+However, they are not ``complete lattices'' as usually understood, since in general they are themselves large (i.e.\ not types in $\UU$), so we cannot use the usual argument to construct arbitrary joins from arbitrary meets.
+
+There are also some cases in which we can identify the modal operator of a meet more explicitly:
+
+\begin{thm}\label{thm:meets2}
+  Let $\modal$ and $\lozenge$ be reflective subuniverses, and assume that $\modal$ preserves $\lozenge$-modal types.
+  Then $\modal$ and $\lozenge$ have a canonical meet in $\rsu$, which is a modality, accessible, lex, or topological if $\modal$ and $\lozenge$ are.
+\end{thm}
+\begin{proof}
+  If $Y$ is both $\modal$-modal and $\lozenge$-modal, for any $X$ we have
+  \[ (X\to Y) \eqvsym (\lozenge X \to Y) \eqvsym (\modal \lozenge X \to Y) \]
+  and $\modal \lozenge X$ is both $\modal$-modal and $\lozenge$-modal.
+  Thus, the composite $\modal\circ\lozenge : \UU\to\UU$ is the modal operator for a canonical meet of $\modal$ and $\lozenge$.
+  Preservation of modalities follows from \cref{thm:meet-join}, preservation of accessibility and topologicality follows from \cref{thm:meets} (using the different construction given there), while if $\modal$ and $\lozenge$ are both lex then so is their composite $\modal\circ \lozenge$.
+\end{proof}
+
+\begin{eg}
+  By \cref{modaln-truncated}, if $\modal$ is lex then it preserves $n$-types.
+  Thus, if we denote the $n$-truncation modality by $\truncmod{n}$, the composite $\modal\,\truncmod{n}$ (i.e.\ $\modal\,\truncmod{n} A \defeq \modal \trunc n A$) is the meet $\modal\land\truncmod{n}$ in $\mdl$.
+\end{eg}
+
+\begin{eg}\label{eg:strongly-disjoint}
+  If every $\lozenge$-modal type is $\modal$-connected, then $\modal$ preserves $\lozenge$-modal types since it takes them all to $\unit$.
+  Thus, the composite $\modal\lozenge$, which is the bottom element of $\rsu$, is also the meet $\modal\land\lozenge$.
+  In this case we say that \textbf{$\modal$ is strongly disjoint from $\lozenge$} (note that this is an asymmetric relation).
+  We will study this case further in \cref{sec:fracture}.
+\end{eg}
+
+
+\subsection{Lawvere-Tierney operators}
+\label{sec:ltop}
+
+For any modality $\lozenge$, the under-poset $\rsu/\lozenge$ consists of the reflective subuniverses contained in $\UU_{\lozenge}$.
+In other words, we have
+\[ \rsu/\lozenge \eqvsym \rsu[\UU_{\lozenge}] \]
+Composing this with the universal property of meets, we obtain a partial adjunction
+\[
+\begin{tikzcd}
+  \rsu \ar[r,phantom,"\scriptstyle\top"] \ar[r,dashed,bend left,"\blank\land\lozenge"] & \rsu/\lozenge \ar[l,bend left] \ar[r,equals] & \rsu[\UU_{\lozenge}]
+\end{tikzcd}
+\]
+in which the right adjoint $\blank\land\lozenge$ is only known to be defined under the restrictions in \cref{thm:meets}.
+
+One situation in which this is automatic is when $\lozenge$ is $\truncmod{-1}$, since every reflective subuniverse preserves mere propositions.
+Thus we have a totally defined adjunction
+\begin{equation}
+\begin{tikzcd}
+  \rsu \ar[r,phantom,"\scriptstyle\top"] \ar[r,bend left,"\blank\land\truncmod{-1}"] & \rsu/\truncmod{-1} \ar[l,bend left] \ar[r,equals] & \rsu[\prop]
+\end{tikzcd}\label{eq:meet-brck}
+\end{equation}
+A reflective subuniverse of $\prop$, or more generally any universe $\Omega$ of mere propositions, is known as a \define{Lawvere-Tierney operator} or \define{local operator}.
+It can equivalently be defined as a map $j:\Omega\to\Omega$ which is idempotent and preserves finite meets (including the top element):
+\[ j(\top)=\top \qquad j(j(P)) = j(P) \qquad j(P\land Q) = j(P) \land j(Q) \]
+This is equivalent to $j$ being order-preserving, inflationary, and idempotent:
+\[ (P\to Q) \Rightarrow (j(P) \to j(Q)) \qquad P\to j(P) \qquad j(j(P)) = j(P) \]
+and also to its being a monad on the poset $\Omega$.
+
+In particular, such a monad automatically preserves meets, for the same reason that any modality preserves products; but since $\Omega$ is a poset, this makes it automatically left exact.
+Moreover, we have:
+
+\begin{lem}\label{thm:rsu-prop}
+  Every reflective subuniverse of a universe $\Omega$ of mere propositions is a lex modality.
+\end{lem}
+\begin{proof}
+  If $P=j(P)$ and $Q:P\to \Omega$ is such that $Q(x)=j(Q(x))$ for any $x:P$, then the projection $\proj1:(\sm{x:P} Q(x))\to P$ induces a map $j(\sm{x:P} Q(x))\to j(P) = P$.
+  But as soon as we have $p:P$ then $(\sm{x:P} Q(x))\simeq Q(p)$ and so $j(\sm{x:P} Q(x)) \to j(Q(p)) = Q(p)$, hence $j(\sm{x:P} Q(x))\to (\sm{x:P} Q(x))$.
+  Thus it is $\Sigma$-closed, hence a modality, and hence (as observed above) a lex modality.
+\end{proof}
+
+In other words, when $\Omega$ is a universe of mere propositions, we have
+\[ \rsu[\Omega] = \mdl[\Omega] = \lex[\Omega]. \]
+
+In general, the equivalence $\rsu/\lozenge \eqvsym \rsu[\UU_{\lozenge}]$ preserves $\Sigma$-closedness, since it preserves the modal types.
+Thus the reflective subuniverse on $\UU$ corresponding to a Lawvere-Tierney operator $j$, which is defined by $A\mapsto j\brck{A}$, is always a modality.
+However, it is not lex; in particular, $\truncmod{-1}$ itself is not lex.
+
+A somewhat similar situation is when we have two universes $\UU:\UU'$.
+Let $\rsu[\UU'/\UU]$ be the poset of pairs of reflective subuniverses $\modal'$ and $\modal$ on the universes $\UU'$ and $\UU$, respectively, such that a type in $\UU$ is $\modal$-modal if and only if it is $\modal'$-modal, and moreover for any $X:\UU$ the induced map $\modal' X \to \modal X$ is an equivalence.
+There is an evident restriction functor $\rsu[\UU'/\UU] \to \rsu[\UU]$, and similarly for the other posets.
+
+\begin{thm}\label{thm:acc-extend-adjt}
+  The following functors have fully faithful right adjoints:
+  \begin{mathpar}
+    % \rsu[\UU'/\UU] \to \rsu[\UU] \and
+    \accrsu[\UU'/\UU] \to \accrsu[\UU]\and
+    % \mdl[\UU'/\UU] \to \mdl[\UU] \and
+    \accmdl[\UU'/\UU] \to \accmdl[\UU]\and
+    \tpl[\UU'/\UU] \to \tpl[\UU] 
+  \end{mathpar}
+\end{thm}
+\begin{proof}
+  Given an accessible reflective subuniverse $\modal$ on $\UU$, we define $\modal'$ to be its canonical accessible extension to $\UU'$.
+  As shown in \cref{thm:acc-extend}, this is a modality or topological if $\modal$ is, and it restricts to $\modal$ on $\UU$, so that $(\modal',\modal) : \accrsu[\UU'/\UU]$.
+
+  We also need to show that this operation is functorial on $\rsu[\UU]$.
+  If $\modal_1 \le \modal_2$, so that every $\modal_1$-modal type is $\modal_2$-modal, then the functor $\modal_1$ factors through the functor $\modal_2$, so that if $\modal_2 f$ is an equivalence then so is $\modal_1 f$.
+  Therefore, by \cref{thm:acc-extend}\ref{item:ae3} every $\modal_1'$-modal type is $\modal_2'$-modal.
+
+  The restriction of $(\modal',\modal)$ to $\UU$ is certainly $\modal$, so to have an adjunction it remains to show that for any $(\modal',\modal):\rsu[\UU'/\UU]$, the reflective subuniverse $\modal'$ is contained in the canonical accessible extension of $\modal$ to $\UU'$.
+  But since $\modal'$ restricts to $\modal$ on $\UU$, it also inverts every map in $\UU$ inverted by $\modal$, so this follows from \cref{thm:acc-extend}\ref{item:ae3}.
+\end{proof}
+
+We do not know how to construct a similar adjoint to $\acclex[\UU'/\UU] \to \acclex[\UU]$; see \cref{thm:nontop-lex}.
+In general, we also do not know how to do without accessibility; the obvious thing to do is localize $\UU'$ at the class of \emph{all} maps in $\UU$ inverted by $\modal$, but as noted in \cref{rmk:extend-oops} there seems no reason why the resulting $\modal'$ would agree with $\modal$ on $\UU$.
+However, there is one case in which this does work.
+
+\begin{thm}\label{thm:tpl-extend}
+  If propositional resizing holds for $\UU$, so that there is a universe $\Omega$ of mere propositions such that $\Omega:\UU$ and every mere proposition in $\UU$ is equivalent to one in $\Omega$, then the restriction functor
+  \begin{equation}
+    \rsu[\UU] \to \rsu[\Omega]\label{eq:restr}
+  \end{equation}
+  has a right adjoint $\shmod{}$, which lands inside $\tpl[\UU/\Omega]$ and induces an equivalence
+  \[ \tpl[\UU] \eqvsym \rsu[\Omega] \]
+\end{thm}
+\begin{proof}
+  The restriction functor is defined on all of $\rsu[\UU]$ since any modal operator preserves mere propositions.
+  Now given a reflective subuniverse of $\Omega$, i.e.\ a Lawvere-Tierney operator $j:\Omega\to\Omega$, we define $\shmod{j}$ to be the nullification of $\UU$ at all $j$-connected propositions (which are also called \textbf{$j$-dense}).
+  Because any modality preserves mere propositions, if $P:\Omega$ then $\shmod{j}(P)$ is again a mere proposition, hence equivalent to some type in $\Omega$.
+  Thus the universal properties of $j$ and $\shmod{j}$ do coincide for mapping into types in $\Omega$, so that $j(P) \eqvsym \shmod{j}(P)$.
+  The rest of \cref{thm:acc-extend,thm:acc-extend-adjt} goes through without difficulty.
+
+  Of course $\shmod{j}$ is topological by definition.
+  Moreover, if $\modal$ is any topological modality on $\UU$, its generating family is equivalent to one lying in $\Omega$, hence contained in the family of all $j_\modal$-dense propositions (where $j_\modal$ is the restriction of $\modal$ to $\Omega$).
+  Thus $\modal = \shmod{j_\modal}$, giving the stated equivalence.
+\end{proof}
+
+Note that the \emph{left} adjoint~\eqref{eq:restr} coincides with the \emph{right} adjoint in~\eqref{eq:meet-brck}.
+That is, assuming propositional resizing, the forgetful operation $\rsu[\UU] \to \rsu[\Omega]$ has both adjoints: its left adjoint sends $j$ to $j\circ \truncf{-1}$, while its right adjoint is $\shmod{j}$.
+The $\shmod j$-modal types are also called \textbf{$j$-sheaves}, with $\shmod j$ being \textbf{$j$-sheafification}.
+(We remarked above that the $j$-connected propositions are called \textbf{$j$-dense}; the $j$-modal propositions are called \textbf{$j$-closed}.)
+
+\begin{eg}
+  For a proposition $P$, the \textbf{open Lawvere-Tierney operator} is defined by $o_P(Q) = P\Rightarrow Q$.
+  This is the restriction to $\Omega$ of the open modality $\open P$, which is topological; hence $\shmod{o_P} = \open P$.
+\end{eg}
+
+\begin{eg}
+  For a proposition $P$, the \textbf{closed Lawvere-Tierney operator} is defined by $c_P(Q) = P\lor Q$.
+  Since $P \lor Q$ is equivalently the join $P \ast Q$ (see~\cite[Lemma 2.4]{joinconstruction}), this is the restriction to $\Omega$ of the closed modality $\closed P$, which is topological; hence $\shmod{c_P} = \closed P$.
+\end{eg}
+
+\begin{eg}\label{eg:dnsheaves}
+  If $j = \neg\neg$ is the double negation operator, then by the usual arguments, the lattice of $\neg\neg$-closed elements of $\Omega$ is a Boolean algebra.
+  Thus, the logic of the subtopos determined by $\shmod{\neg\neg}$ is Boolean.
+  The $\shmod{\neg\neg}$-modal types are called \textbf{double-negation sheaves}.
+\end{eg}
+
+For a general reflective subuniverse $\modal$, the sheafification modality $\shmod{j_\modal}$ is far from equivalent to $\modal$.
+We showed in \cref{thm:tpl-extend} that this is the case if $\modal$ is topological.
+In classical 1-topos theory every lex modality is topological; in higher topos theory this is not the case, and $\modal$ can disagree with $\shmod{j_\modal}$ even when $\modal$ is lex, but at least we can say the following.
+
+\begin{thm}\label{thm:lex-tpl}
+  Assuming propositional resizing, the map $\shmod{j_\modal} A \to \modal A$ is an equivalence whenever $A$ is an $n$-type with $n<\infty$.
+\end{thm}
+\begin{proof}
+  By \cref{thm:lex-ntypes-prop}, $A$ is $\modal$-modal if and only if it is $P$-null for any $\modal$-connected mere proposition $P$.
+  But the latter condition exactly characterizes the $\shmod{j_\modal}$-modal types.
+\end{proof}
+
+At the other extreme, if $\modal$ is cotopological, then $\shmod{j_\modal}$ is the trivial modality.
+For a general lex $\modal$, the restriction of $\modal$ to $\shmod{j_\modal}$ is cotopological, in the sense that any $\modal$-connected $\shmod{j_\modal}$-modal mere proposition is contractible.
+That is, any lex modality ``decomposes'' into a topological part and a cotopological part, as in~\cite[Proposition 6.5.2.19]{lurie2009higher}.
+
+\cref{thm:tpl-extend} also supplies additional structure on $\tpl$; the following proof is that of~\cite{wilson:frames}, as reproduced in~\cite[C1.1.15]{johnstone:elephant}.
+
+\begin{cor}
+  Assuming propositional resizing, $\tpl$ is a coframe, i.e.\ a complete lattice in which finite joins distribute over arbitrary meets.
+\end{cor}
+\begin{proof}
+  Since $\tpl$ has canonical meets, the corresponding meets in $\rsu[\Omega]$ are also canonical, i.e.\ given by taking intersections of the sets of $j$-closed propositions.
+  On the other hand, the ordering on modalities in $\Omega$ is the reverse of the pointwise ordering on Lawvere-Tierney operators $j:\Omega\to\Omega$, and any pointwise meet of Lawvere-Tierney operators is again a Lawvere-Tierney operator.
+
+  Now suppose $j$ and $(k_i)_{i:I}$ are Lawvere-Tierney operators, and suppose $P$ is a $\bigwedge_i (j\lor k_i)$-closed proposition
+  This means that $P$ is $(j\lor k_1)$-closed for each $i$, so that we have $P = j(P) \land k_i(P)$.
+  Now
+  \[ (j(P) \to P) =
+  (j(P) \to j(P) \land k_i(P)) =
+  (j(P) \to k_i(P)).
+  \]
+  Hence $j(P)\to P$ is $k_i$-closed for every $i$, so it is $\bigwedge_i k_i$-closed.
+  Taking $Q \defeq j(P)$ and $R\defeq (j(P) \to P)$, and writing $k\defeq \bigwedge_i k_i$, we have
+  \begin{multline*}
+    (j\lor k)(Q\land R) = j(Q\land R) \land k(Q\land R) = j(Q)\land j(R) \land k(Q)\land k(R)\\
+    = Q \land k(Q) \land R \land j(R) = Q\land R
+  \end{multline*}
+  so that $Q\land R$ is $(j\lor \bigwedge_i k_i)$-closed.
+  But $Q\land R = (j(P) \land (j(P)\to P)) = P$.
+\end{proof}
+
+However, there seems no particular reason for the inclusions $\tpl \to \lex$ or $\tpl \to \mdl$ to preserve joins, and joins in $\lex$ and $\mdl$ in general seem difficult to construct.
+In the next section we will consider one situation in which such joins can be constructed explicitly.
+
+
+
+\subsection{A fracture and gluing theorem}
+\label{sec:fracture}
+
+We end the paper by proving a general ``fracture and gluing'' theorem for a pair of modalities, which has as a special case the ``Artin gluing'' of a complementary closed and open subtopos.
+
+\begin{defn}
+  Let $\modal$ and $\lozenge$ be two modalities on a universe $\UU$.
+  A $(\lozenge,\modal)$-\textbf{fracture square} consists of the following.
+  \begin{itemize}
+  \item An arbitrary type $A:\UU$.
+  \item A $\modal$-modal type $B:\UU_\modal$.
+  \item A $\lozenge$-modal type $C:\UU_\lozenge$.
+  \item Functions $f:A\to B$ and $l:A\to C$ and $g:C\to \lozenge B$.
+  \item A commutative square
+    \[
+    \begin{tikzcd}
+      A \ar[r,"f"] \ar[d,"l"'] & B \ar[d,"{\modalunit^\lozenge_B}"] \\
+      C \ar[r,"g"'] & \lozenge B.
+    \end{tikzcd}
+    \]
+  \end{itemize}
+  For any type $A$, the \textbf{canonical fracture square} associated to $A$ is the naturality square for $\modalunit^\lozenge$ at $\modalunit^\modal_A$:
+  \begin{equation}
+    \begin{tikzcd}
+      A \ar[r,"\modalunit^\modal_A"] \ar[d,"\modalunit^\lozenge_A"'] & \modal A \ar[d,"{\modalunit^\lozenge_{\modal A}}"] \\
+      \lozenge A \ar[r,"{\lozenge \modalunit^\modal_A}"'] & \lozenge \modal A
+    \end{tikzcd}\label{eq:canonical-fracture}
+  \end{equation}
+  Given an arbitrary fracture square, we say it is \textbf{canonical} if it is equal to a canonical one in the type of fracture squares.
+\end{defn}
+
+\begin{lem}\label{thm:canonical-fracture}
+  A fracture square is canonical if and only if $f$ is $\modal$-connected and $l$ is $\lozenge$-connected.
+\end{lem}
+\begin{proof}
+  ``Only if'' is clear, so suppose $f$ is $\modal$-connected and $l$ is $\lozenge$-connected.
+  Then by \cref{lem:reflective_uniqueness}, we have $(B,f) = (\modal A,\modalunit^\modal_A)$ and $(C,l) = (\lozenge A,\modalunit^\lozenge_A)$.
+  And modulo these equivalences, $g$ and the commutative square are a factorization of $\modalunit^\lozenge_{\modal A} \circ \modalunit^\modal_A$ through $\modalunit^\lozenge_A$, hence inhabit a contractible type of which~\eqref{eq:canonical-fracture} is another element.
+\end{proof}
+
+\begin{thm}\label{thm:fracture}
+  If $\lozenge$ is lex, then the canonical fracture square associated to $A$ is a pullback square if and only if $\modalunit^\modal_A$ is $\lozenge$-modal.
+\end{thm}
+\begin{proof}
+  The maps $\modalunit^\lozenge_A$ and $\modalunit^\lozenge_{\modal A}$ are always $\lozenge$-connected, while $\lozenge \modalunit^\modal_A$ is a map between $\lozenge$-modal types and hence $\lozenge$-modal.
+  Thus, if $\modalunit^\modal_A$ is $\lozenge$-modal then the square is a pullback by \cref{thm:lex-modalities}\ref{item:mu3d}.
+  Conversely, if the square is a pullback then $\modalunit^\modal_A$ is a pullback of the $\lozenge$-modal map $\lozenge \modalunit^\modal_A$ and hence $\lozenge$-modal.
+\end{proof}
+
+\begin{cor}
+  If $\lozenge$ is lex and every $\modal$-connected type is $\lozenge$-modal, then every canonical fracture square is a pullback.
+\end{cor}
+\begin{proof}
+  The map $\modalunit^\modal_A$ is always $\modal$-connected, so the hypothesis ensures it is $\lozenge$-modal.
+\end{proof}
+
+Recall from \cref{eg:strongly-disjoint} that we say \textbf{$\modal$ is strongly disjoint from $\lozenge$} if every $\lozenge$-modal type is $\modal$-connected.
+
+\begin{thm}\label{thm:cofracture}
+  If $\modal$ is strongly disjoint from $\lozenge$, then every fracture square that is a pullback is canonical.
+\end{thm}
+\begin{proof}
+  If a fracture square is a pullback, then $l$ must be $\lozenge$-connected since it is a pullback of $\modalunit^\lozenge_{\modal A}$, and similarly $f$ must be $\lozenge$-modal since it is a pullback of $g$.
+  The assumption therefore ensures that $f$ is $\modal$-connected, so that \cref{thm:canonical-fracture} applies.
+\end{proof}
+
+Putting together \cref{thm:fracture,thm:cofracture} we can construct certain joins of modalities.
+
+\begin{thm}\label{thm:join}
+  If $\lozenge$ is a lex modality and $\modal$ is a modality is strongly disjoint from $\lozenge$, then the canonical join $\modal\lor\lozenge$ exists in $\rsu$.
+  Moreover, the following are equivalent:
+  \begin{enumerate}
+  \item $A$ is $(\modal\lor\lozenge)$-modal.\label{item:j1}
+  \item $\modalunit^\modal_A : A \to \modal A$ is $\lozenge$-modal.\label{item:j2}
+  \item The canonical fracture square of $A$ is a pullback.\label{item:j3}
+  \end{enumerate}
+  And we have an equivalence of universes
+  \begin{equation}
+    \UU_{\modal\lor\lozenge} \simeq \sm{B:\UU_\modal}{C:\UU_\lozenge} (C \to \lozenge B).\label{eq:gluing0}
+  \end{equation}
+  Finally, if $\modal$ is also lex, then $\modal\lor\lozenge$ is a lex modality, and hence is the join in $\lex$.
+\end{thm}
+\begin{proof}
+  The equivalence \ref{item:j2}$\Leftrightarrow$\ref{item:j3} is by \cref{thm:fracture}, so we must show that such types form a reflective subuniverse.
+  Given $A:\UU$, we define $(\modal\lor\lozenge)(A)$ to be the pullback of its canonical fracture square:
+  \[
+  \begin{tikzcd}
+    A \ar[dr,"\modalunit^{\modal\lor\lozenge}_A" description] \ar[drr,bend left,"\modalunit^\modal_A"] \ar[ddr,bend right,"\modalunit^\lozenge_A"'] \\
+    & (\modal\lor\lozenge)(A) \ar[r] \ar[d] \ar[dr,phantom,"\lrcorner" near start] & \modal A \ar[d,"\modalunit^\lozenge_{\modal A}"] \\
+    & \lozenge A \ar[r,"\lozenge \modalunit^\modal_A"'] & \lozenge\modal A
+  \end{tikzcd}
+  \]
+  By \cref{thm:cofracture} this pullback square is a canonical fracture square, and thus $(\modal\lor\lozenge)(A)$ satisfies~\ref{item:j2} and~\ref{item:j3}.
+  Now suppose we have some other $B$ satisfying~\ref{item:j2} and~\ref{item:j3}, hence a canonical fracture square that is a pullback:
+  \[
+  \begin{tikzcd}
+    B \ar[r] \ar[d] \ar[dr,phantom,"\lrcorner" near start] & \modal B \ar[d,"\modalunit^\lozenge_{\modal B}"] \\
+    \lozenge B \ar[r,"\lozenge \modalunit^\modal_B"'] & \lozenge\modal B.
+  \end{tikzcd}
+  \]
+  Then we have equivalences
+  \begin{align*}
+    (A\to B)
+    &\eqvsym (A\to \modal B) \times_{(A\to \lozenge \modal B)} (A\to\lozenge B)\\
+    &\eqvsym (\modal A\to \modal B) \times_{(\lozenge A\to \lozenge \modal B)} (\lozenge A\to\lozenge B)
+  \end{align*}
+  in which the final pullback is of the two maps
+  \begin{align*}
+    (\lozenge \modalunit^\modal_B \circ \blank) &: (\lozenge A\to\lozenge B)\to (\lozenge A\to \lozenge \modal B)\\
+    (\lam{h} \lozenge h \circ \lozenge \modalunit^\modal_A)&: (\modal A\to \modal B) \to (\lozenge A\to \lozenge \modal B).
+  \end{align*}
+  However, since the canonical fracture square of $A$ is also the canonical fracture square of $(\modal\lor\lozenge)(A)$, we also have
+  \[ ((\modal\lor\lozenge)(A) \to B) \eqvsym (\modal A\to \modal B) \times_{(\lozenge A\to \lozenge \modal B)} (\lozenge A\to\lozenge B) \]
+  and hence
+  \[ (A\to B) \eqvsym ((\modal\lor\lozenge)(A) \to B)\]
+  giving the desired universal property.
+
+  To see that $\modal\lor\lozenge$ is the canonical join of $\modal$ and $\lozenge$, first note that if $A$ is $\modal$-modal, then $\modalunit^\modal_A$ and hence $\lozenge\modalunit^\modal_A$ are equivalences, so that its canonical fracture square is a pullback and so $A$ is $(\modal\lor\lozenge)$-modal.
+  On the other hand, if $A$ is $\lozenge$-modal, then $\modalunit^\lozenge_A$ is an equivalence, while (since $\lozenge$ is strongly disjoint from $\modal$) $\modal A$ and hence $\lozenge \modal A$ are contractible; thus the canonical fracture square is again a pullback and so $A$ is $(\modal\lor\lozenge)$-modal.
+  That is, any $\modal$-modal or $\lozenge$-modal type is $(\modal\lor\lozenge)$-modal, and hence any $(\modal\lor\lozenge)$-connected type is $\modal$-connected and $\lozenge$-connected.
+  On the other hand, if $A$ is both $\modal$-connected and $\lozenge$-connected, then $(\modal\lor\lozenge)(A)$ is a pullback of a square of contractible types, hence contractible, so $A$ is also $(\modal\lor\lozenge)$-connected.
+
+  As for~\eqref{eq:gluing0}, the left-to-right map sends $A$ to the bottom morphism in its canonical fracture square; while the right-to-left map sends $(B,C,g)$ to the pullback of $g$ and $\modalunit^\lozenge_B$, i.e.\ the vertex of the pullback fracture square with $g$ on the bottom.
+  The two round-trip composites are the identity because a fracture square with $(\modal\lor\lozenge)$-modal vertex is a pullback if and only if it is canonical.
+
+  Finally, suppose $\modal$ is also lex.
+  To show that $\modal\lor\lozenge$ is a lex modality, by \cref{thm:rsu-lex} it suffices to show that $\modal\lor\lozenge$ preserves pullbacks.
+  However, this follows from its construction as the pullback of the canonical fracture square, since $\lozenge$ and $\modal$ preserve pullbacks, and pullbacks commute with pullbacks.
+  In somewhat more detail, given a cospan $B \to C \leftarrow D$, we have a $3\times 3$-diagram
+  \[
+  \begin{tikzcd}
+    \modal B \ar[r] \ar[d] & \modal C \ar[d] & \modal D \ar[d] \ar[l] & \modal (B\times_C D) \ar[d] \\
+    \lozenge \modal B \ar[r] & \lozenge \modal C & \lozenge \modal D \ar[l] & \lozenge\modal (B\times_C D) \\
+    \lozenge B \ar[r] \ar[u] & \lozenge C \ar[u] & \lozenge D \ar[u] \ar[l] & \lozenge (B\times_C D) \ar[u]\\
+    (\modal\lor\lozenge)(B) \ar[r] & (\modal\lor\lozenge)(C) & (\modal\lor\lozenge)(D) \ar[l] & 
+  \end{tikzcd}
+  \]
+  in which the limit of the rows gives the canonical fracture cospan for $B\times_C D$, whose pullback is $(\modal\lor\lozenge)(B\times_C D)$, whereas the limit of the columns gives $\modal\lor\lozenge$ of the given cospan.
+  Thus, these two pullbacks agree, so $\modal\lor\lozenge$ preserves pullbacks, and hence is a lex modality.
+\end{proof}
+
+\begin{cor}\label{thm:fracture-gluing}
+  If $\lozenge$ is a lex modality, and $\modal$ a modality such that the $\lozenge$-modal types coincide with the $\modal$-connected types, then $\lozenge \lor \modal$ is the top element of $\lex$ (the trivial modality), and every canonical fracture square is a pullback.
+  Moreover, we have an induced equivalence
+  \begin{equation}
+    \UU \simeq \sm{B:\UU_\modal}{C:\UU_\lozenge} (C \to \lozenge B)\label{eq:gluing}
+  \end{equation}
+\end{cor}
+\begin{proof}
+  The additional assumption that $\modal$-connected types are $\lozenge$-modal means that a $(\modal\lor\lozenge)$-connected type must be both $\lozenge$-modal and $\lozenge$-connected, hence contractible.
+  Thus, every type is $(\modal\lor\lozenge)$-modal, i.e.\ $(\modal\lor\lozenge)$ is the maximal modality.
+  The equivalence~\eqref{eq:gluing} is just a specialization of~\eqref{eq:gluing0}.
+\end{proof}
+
+\begin{rmk}
+  We call \cref{thm:fracture-gluing} a ``fracture theorem'' because it appears formally analogous to the fracture theorems for localization and completion at primes in classical homotopy theory~\cite{mp:more-concise}, or more generally for localization at complementary generalized homology theories~\cite{bauer:loc-hasse}.
+  However, we do not know a precise relationship, because the classical fracture theorems either apply only to spectra (which do not form an $\infty$-topos) or to spaces with restrictions (such as nilpotence), and moreover the localizations appearing therein are not generally left exact (though they do often have some limit-preservation properties).
+\end{rmk}
+
+The equivalence~\eqref{eq:gluing} says informally that the universe of all types is equivalent to the ``comma category'' or ``gluing'' of the $\modal$-modal types with the $\lozenge$-modal types along the functor $\lozenge : \UU_\modal \to \UU_\lozenge$, as in the ``Artin gluing'' construction for toposes.
+The paradigmatic example is the following.
+
+\begin{eg}\label{eg:artin}
+  Let $Q$ be a mere proposition.
+  We have seen that both open and closed modalities $\open Q$ and $\closed Q$ are lex, and in \cref{eg:closed-connected} we noted that the $\open Q$-connected types coincide with the $\closed Q$-modal ones.
+  Thus, these modalities satisfy the hypotheses of \cref{thm:fracture-gluing}.
+  In particular, for any type $A$ we have a pullback square
+  \begin{equation}
+  \begin{tikzcd}
+    A \ar[r] \ar[d] & Q\to A \ar[d] \\
+    Q\ast A \ar[r] & Q\ast(Q\to A).
+  \end{tikzcd}\label{eq:propositional-fracture}
+  \end{equation}
+  To understand this better internally, suppose $Q$ is decidable, i.e.\ we have $Q+\neg Q$.
+  Then we claim that $\eqv{Q\ast A}{\neg Q \to A}$.
+  For if $Q$, then both are contractible, while if $\neg Q$, then both are equivalent to $A$.
+  In particular, when $Q$ is decidable, $\eqv{(Q\ast (Q\to A))}{(\neg Q \land Q \to A)}$ and hence is contractible; so our above pullback square becomes
+  \[
+  \begin{tikzcd}
+    A \ar[r] \ar[d] & Q\to A \ar[d] \\
+    \neg Q\to A \ar[r] & \unit.
+  \end{tikzcd}
+  \]
+  This is just the equivalence
+  \[A \eqvsym ((Q+\neg Q) \to A) \eqvsym (Q\to A) \times (\neg Q \to A) \]
+  that allows us to do case analysis on $Q$ to construct an element of any type $A$.
+
+  Thus, the fracture square~\eqref{eq:propositional-fracture} can be viewed as a sort of ``constructive case analysis'': even if $Q$ is not decidable, we can construct an element of any type $A$ by constructing an element of $A$ assuming $Q$, then constructing an element of $Q\ast A$ (a sort of ``positive replacement'' for $\neg Q \to A$), then checking that they agree in $Q\ast (Q\to A)$.
+  If $A$ is also a mere proposition, then $Q\ast A = Q\lor A$, so this reduces to the intuitionistic tautology
+  \[ A \leftrightarrow (Q\lor A) \land (Q\to A). \]
+  It is unclear to us whether the more general version has any applications.
+\end{eg}
+
+

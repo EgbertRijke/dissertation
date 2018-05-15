@@ -3,12 +3,12 @@ In this section I describe joint work with Ulrik Buchholtz and Floris van Doorn 
 
 \subsection{From RPn to higher groups}
 \begin{defn}
-For any type $X$, we define \define{the connected component of $X$ in $\UU$} to be the type \[\UU_X\defeq\sm{A:\UU}\sbrck{A=X}.\] In particular, we have the type \[\UU_{\sphere{0}}\jdeq\sm{A:\UU}\sbrck{A={\sphere{0}}}\] of $2$\nobreakdash-element sets.
+For any type $X$, we define \define{the connected component of $X$ in $\UU$} to be the type \[\UU_X\defeq\sm{A:\UU}\brck{A=X}.\] In particular, we have the type \[\UU_{\sphere{0}}\jdeq\sm{A:\UU}\brck{A={\sphere{0}}}\] of $2$\nobreakdash-element sets.
 
 An \define{$X$\nobreakdash-bundle} over a type $A$ is defined to be a type family $B:A\to\UU_X$. 
 \end{defn}
 
-A term of type $\UU_X$ is formally a pair of a small type $A:\UU$ together with a term of type $\sbrck{A=X}$, but since the latter is a mere proposition we usually omit it, and consider the term itself as a small type.
+A term of type $\UU_X$ is formally a pair of a small type $A:\UU$ together with a term of type $\brck{A=X}$, but since the latter is a mere proposition we usually omit it, and consider the term itself as a small type.
 
 \section{The real projective spaces}
 In this section I describe joint work with Ulrik Buchholtz \cite{realprojective}, in which we defined the real projective spaces $\rprojective{n}$ in homotopy type theory. Furthermore, I answer a question posed by André Joyal during his visit of CMU in February 2018, regarding the complement of the tautological bundle on $\rprojective{n}$.
@@ -40,7 +40,7 @@ Hence we can complete the proof by constructing a term of type
 It is time for a little trick. Instead of constructing a term the type in
 \autoref{eq:Sn0_ptdequiv}, we will show that this type is contractible.
 Since being contractible is a mere proposition, 
-this allows us to eliminate the assumption $\sbrck{\sphere{0}=A}$
+this allows us to eliminate the assumption $\brck{\sphere{0}=A}$
 into the assumption $p:\sphere{0}=A$. Note that the end point of $p$ is free.
 Therefore we eliminate $p$ into $\refl{\sphere{0}}$. 
 Thus, we see that it suffices to show that the type
