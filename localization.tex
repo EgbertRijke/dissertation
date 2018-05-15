@@ -1,0 +1,1843 @@
+\chapter{Localization at maps between $\omega$-compact types}
+
+\section{Compact types}
+
+\begin{defn}
+Call a type $X$ $\omega$-compact, if for any
+\begin{equation*}
+\begin{tikzcd}
+A_0 \arrow[r] & A_1 \arrow[r] & A_2 \arrow[r] & \cdots
+\end{tikzcd}
+\end{equation*}
+the map
+\begin{equation*}
+\xi_A\defeq\mathsf{rec}(\lam{f} \iota_n\circ f,\lam{f} \kappa_n\circ f)
+  : \tfcolim(X\to A_n)\to(X\to A_\infty)
+\end{equation*}
+is an equivalence.
+\end{defn}
+
+\begin{rmk}
+In the literature, an object $X$ of a category $\cat{C}$ is said to be $\omega$-compact if for any
+functor $F:P\to\cat{C}$ from a directed countable partially ordered set $P$, there
+is a natural isomorphism
+\begin{equation*}
+\mathrm{hom}(X,\mathrm{colim}(F(p))) \cong \mathrm{colim}(\mathrm{hom}(X,p))
+\end{equation*}
+The notion of $\omega$-compact type $X$ is equivalent to the classical notion,
+if one takes a directed poset $P$ to be a Rezk-complete category $P$ in which
+each hom-set is a mere proposition, for which there merely is a term of type
+\begin{equation*}
+\prd{p,q:P}\sm{r:P} (p\leq r)\land (q\leq r).
+\end{equation*}
+and if one takes a countable set to be a set $X$ for which there merely exists
+a function $f:\nat\to X$ such that $\prd{x:X}\hfib{f}{x}$.
+
+In other settings, it might be more useful to replace $\Pi$ and $\Sigma$ in the
+notion of directed poset, with the truncated versions $\forall$ and $\exists$. 
+\end{rmk}
+
+In this section we will prove that the $\omega$-compact types are closed under
+various type theoretical constructions. Most of these proofs decompose the
+function $\xi_A$ as a chain of canonical equivalences. In a rigorous proofs,
+such chains should be accompanied by the verification that such chains of
+canonical equivalences can indeed be identified with the functions $\xi_A$, but
+we leave this to the computer verification. 
+
+\begin{lem}
+The empty type and the unit type are $\omega$-compact and the $\omega$-compact types are closed under
+disjoint sums. Thus, all sub-finite types are $\omega$-compact.
+\end{lem}
+
+\begin{proof}
+The fact that the empty type and the unit type are $\omega$-compact is trivial.
+
+Thus it remains to show that $\omega$-compact types are closed under disjoint
+sums. Suppose that $X$ and $Y$ are $\omega$-compact. Then we have
+\begin{align*}
+(X+Y)\to A_\infty & \eqvsym (X\to A_\infty)\times(Y\to A_\infty) \\
+& \eqvsym \tfcolim((X\to A_n)\to (Y\to A_n)) \tag{By \autoref{thm:colim_sm}} \\
+& \eqvsym \tfcolim((X+Y)\to A_n).
+\end{align*}
+\end{proof}
+
+\begin{lem}
+Let $X$ be an $\omega$-compact type and consider
+\begin{equation*}
+\begin{tikzcd}
+A_{0} \arrow[r] \arrow[d,->>] & A_{1} \arrow[r] \arrow[d,->>] & A_{2} \arrow[r] \arrow[d,->>] & \cdots \\
+X \arrow[r,equals] & X \arrow[r,equals] & X \arrow[r,equals] & \cdots
+\end{tikzcd}
+\end{equation*}
+Then there is an equivalence
+\begin{equation*}
+\eqv{(\prd{x:X} A_\infty(x))}{\tfcolim(\prd{x:X}A_n(x))}.
+\end{equation*}
+\end{lem}
+
+\begin{proof}
+The proof is a simple calculation:
+\begin{align*}
+(\prd{x:X} A_\infty(x)) & \eqvsym \sm{f:X\to\sm{x:X}A_\infty(x)}\id{\fst\circ f}{\catid{X}} \\
+& \eqvsym \sm{f:X\to\tfcolim(\sm{x:X} A_n(x))}\id{\mathsf{rec}(\fst,\blank)\circ f}{\catid{X}} \\
+& \eqvsym \tfcolim(\sm{f:X\to\sm{x:X}A_n(x)} \id{\fst\circ f}{\catid{X}}) \\
+& \eqvsym \tfcolim(\prd{x:X}A_n(x)).\qedhere
+\end{align*}
+\end{proof}
+
+\begin{defn}
+A graph is said to be $\omega$-small if its type of vertices and each type of
+edges is $\omega$-compact. 
+\end{defn}
+
+\begin{thm}
+The colimit of an $\omega$-small graph is $\omega$-compact. 
+\end{thm}
+
+\begin{proof}
+Let $\Gamma$ be an $\omega$-small graph and consider a sequence
+\begin{equation*}
+\begin{tikzcd}
+A_0 \arrow[r] & A_1 \arrow[r] & A_2 \arrow[r] & \cdots
+\end{tikzcd}
+\end{equation*}
+Then we have
+\begin{align*}
+\tfcolim(\Gamma)\to A_\infty
+& \eqvsym \sm{f:\pts{\Gamma}\to A_\infty}\prd{i,j:\pts{\Gamma}}\edg{\Gamma}(i,j)\to(\id{f(i)}{f(j)}) \\
+& \eqvsym \tfcolim(\sm{f:\pts{\Gamma}\to A_n}\prd{i,j:\pts{\Gamma}}\edg{\Gamma}(i,j)\to(\id{\iota_n(f(i))}{\iota_n(f(j))})) \\
+& \eqvsym \tfcolim(\sm{f:\pts{\Gamma}\to A_n}\prd{i,j:\pts{\Gamma}}\edg{\Gamma}(i,j)\to\tfcolim(\id{\iota_{n+k}(a^k_n(f(i)))}{\iota_{n+k}(a^k_n(f(i)))}))\\
+& \eqvsym \tfcolim(\sm{f:\pts{\Gamma}\to A_n}\prd{i,j:\pts{\Gamma}} \tfcolim(\edg{\Gamma}(i,j)\to\id{\iota_{n+k}(a^k_n(f(i)))}{\iota_{n+k}(a^k_n(f(i)))}))\\
+& \eqvsym \tfcolim(\sm{f:\pts{\Gamma}\to A_n}\tfcolim(\prd{i,j:\pts{\Gamma}} \edg{\Gamma}(i,j)\to\id{\iota_{n+k}(a^k_n(f(i)))}{\iota_{n+k}(a^k_n(f(i)))}))\\
+& \eqvsym \tfcolim(\sm{f:\pts{\Gamma}\to A_n}\prd{i,j:\pts{\Gamma}} \edg{\Gamma}(i,j)\to\id{\iota_{n}(a_n(f(i)))}{\iota_{n}(a_n(f(i)))})) \\
+& \eqvsym \tfcolim(\tfcolim(\Gamma)\to A_n).\qedhere
+\end{align*}
+\end{proof}
+
+\begin{cor}
+The $\omega$-compact types are closed under dependent pair types, subtypes,
+cartesian products, suspension and pushouts.
+\end{cor}
+
+\begin{rmk}
+The $\omega$-compact types are not closed under identity types, because $\Z$ is not $\omega$-compact
+and $\eqv{\Z}{\Omega(\Sn^1)}$. To see that $\Z$ is not $\omega$-compact, consider
+the sequence $A_n\defeq\nat_{-n}$, where $\nat_{-n}$ is a version of the natural
+numbers of starting at $-n$ and $A_n\to A_{n+1}$ is the inclusion map. The colimit
+of $A_n$ is $\Z$ and the image of the map $\tfcolim(\Z\to A_n)\to (\Z\to\Z)$ is
+the set of maps that are bounded from below. Thus, it is not surjective.
+
+Also, the $\omega$-compact types are not closed under exponentiation. We have
+the equivalence $\eqv{(\Sn^1\to\Sn^1)}{\Sn^1\times\Z}$, which is not
+$\omega$-compact. It is not know to me whether or not the type $X=Y$ is $\omega$-compact
+for any two $\omega$-compact types $X$ and $Y$.
+\end{rmk}
+
+\begin{thm}
+The $\omega$-compact types are closed under retracts.
+\end{thm}
+
+\begin{proof}
+Let $Y$ be a retract of an $\omega$-compact type $X$, and consider
+the infinite sequence
+\begin{equation*}
+\begin{tikzcd}
+A_0 \arrow[r] & A_1 \arrow[r] & A_2 \arrow[r] & \cdots
+\end{tikzcd}
+\end{equation*}
+Then we hvar $i:Y\to X$ and $r:X\to Y$ such that $r\circ i=\catid{Y}$. 
+So we also have $\lam{f}f\circ r:(Y\to A_\infty)\to(X\to A_\infty)$ and
+$\lam{g}g\circ i:(X\to A_\infty)\to (Y\to A_\infty)$, and since
+$f\circ r\circ i= f$ for any $f:Y\to A_\infty$, we see that $Y\to A_\infty$ is
+a retract of $X\to A_\infty$. Similarly, $\tfcolim_n(Y\to A_n)$ is a retract of
+$\tfcolim_n(X\to A_n)$.
+Now we have the following diagram
+\begin{equation*}
+\begin{tikzcd}
+\tfcolim_n(Y\to A_n) \arrow[r] \arrow[d] & \tfcolim_n(X\to A_n) \arrow[r] & \tfcolim_n(Y\to A_n) \arrow[d]\\
+(Y\to A_\infty) \arrow[r] & (X\to A_\infty) \arrow[u,equals] \arrow[r] & (Y\to A_\infty)
+\end{tikzcd}
+\end{equation*}
+and the two squares commute. Thus, we see that the canonical map 
+$\tfcolim_n(Y\to A_n)\to (Y\to A_\infty)$ is a retract of an equivalence, hence
+it is an equivalence. 
+\end{proof}
+
+\begin{conj}
+Consider a function $f:X\to Y$ in which the domain $X$ is $\omega$-compact. If
+each $\id{f(x)}{f(x')}$ is $\omega$-compact, then $\im{f}$ is $\omega$-compact.
+\end{conj}
+
+\begin{conj}
+Is it the case that $\trunc{n}{X}$ is $\omega$-compact for any $\omega$-compact
+type $X$? Does any modality preserve $\omega$-compactness?
+\end{conj}
+
+\begin{conj}
+Let $\sequence{A}{a}$ be a type sequence. If each $A_n$ is $\omega$-compact, and
+each $a_n$ is surjective, is it the case that $A_\infty$ is $\omega$-compact? And
+if just $A_0$ is $\omega$-compact and each $a_n$ is surjective?
+\end{conj}
+
+\begin{comment}
+\begin{conj}
+Suppose $X$ and $Y$ are $\omega$-compact. Then $X=Y$ is $\omega$-compact.
+\end{conj}
+
+\begin{proof}[Non-proof]
+Consider the infinite sequence
+\begin{equation*}
+\begin{tikzcd}
+A_0 \arrow[r] & A_1 \arrow[r] & A_2 \arrow[r] & \cdots
+\end{tikzcd}
+\end{equation*}
+Since $\isequiv(f)$ is a mere proposition (and hence $\omega$-compact) for
+any $f:X\to Y$, we have
+\begin{align*}
+(X=Y)\to A_\infty 
+& \eqvsym
+(\eqv{X}{Y})\to A_\infty \\
+& \eqvsym 
+(\sm{f:X\to Y}\isequiv(f))\to A_\infty \\
+& \eqvsym
+\prd{f:X\to Y} \isequiv(f)\to A_\infty \\
+& \eqvsym
+\prd{f:X\to Y} \tfcolim_n(\isequiv(f)\to A_n)
+\end{align*}
+This reduction is not going to help, because $X\to Y$ does not need to be
+$\omega$-compact.
+\end{proof}
+
+\begin{conj}
+If $X$ is $\omega$-compact, then so is $\mathrm{Aut}(X)$.
+\end{conj}
+
+\begin{proof}
+
+\end{proof}
+\end{comment}
+
+\section{Construction of localizations}
+In this section, we assume to have $P,Q:A\to\type$ and $F:\prd{a:A} P(a)\to Q(a)$.
+We will mostly suppress reference to $F$.
+
+\begin{defn}
+A type $X$ is said to
+be $F$-local, if for all $a:A$, the map $\psi_{X}(a):\lam{g} g\circ F(a):(Q(a)\to X)\to (P(a)\to X)$
+is a an equivalence. 
+\end{defn}
+
+The idea is to approximate the $F$-localization of $X$ by iterated `quasi $F$-local extensions' of $X$. Those will be maps $l:X\to Y$ with certain extra structure, so when we have iterated extensions, we will be working with type sequences. Thus, we need the following technical lemma.
+
+\begin{lem}\label{lem}
+Suppose that $F$ is a family of maps between $\omega$-compact types. Consider a type sequence
+\begin{equation*}
+\begin{tikzcd}
+X_0 \arrow[r,"\alpha_0"] & X_1 \arrow[r,"\alpha_1"] & X_2 \arrow[r,"\alpha_2"] & \cdots
+\end{tikzcd}
+\end{equation*}
+and let $f:P(a)\to X_0$. Then we have an equivalence
+\begin{equation*}
+\eqv{\hfib{\psi_{X_\infty}}{\iota_0\circ f}}{\tfcolim_n(\hfib{\psi_{X_n}}{\alpha^n\circ f})}.
+\end{equation*}
+\end{lem}
+
+\begin{proof}
+This follows from a simple calculation using the facts about $\omega$-compact
+types of the previous section:
+\begin{align*}
+\hfib{\psi_{X_\infty}}{\iota_0\circ f}
+  & \jdeq
+\sm{g:Q(a)\to X_\infty} \id{g\circ F(a)}{\iota_0\circ f} \\
+& \eqvsym \sm{g:\tfcolim_n(Q(a)\to X_n} \id{\xi_{Q(a)}(g)\circ F(a)}{\iota_0\circ f}) \\
+& \eqvsym \tfcolim_n(\sm{g:Q(a)\to X_n} \id{\iota_n\circ g\circ F(a)}{\iota_0\circ f}) \\
+& \eqvsym \tfcolim_n(\sm{g:Q(a)\to X_n} \prd{u:P(a)}\id{\iota_n(g(F(a,u)))}{\iota_0(f(u))} \\
+& \eqvsym \tfcolim_n(\sm{g:Q(a)\to X_n} \prd{u:P(a)}\tfcolim_m(\id{\iota_{n+m}(g(F(a,u)))}{\iota_{n+m}(\alpha^{n+m}(f(u)))}) \\
+& \eqvsym \tfcolim_n(\sm{g:Q(a)\to X_n} \tfcolim_m(\prd{u:P(a)}\id{\iota_{n+m}(g(F(a,u)))}{\iota_{n+m}(\alpha^{n+m}(f(u)))}) \\
+& \eqvsym \tfcolim_n(\sm{g:Q(a)\to X_n} \id{g\circ F(a)}{\alpha^n\circ f}) \\
+& \jdeq \tfcolim_n(\hfib{\psi_{X_n}}{\alpha^n\circ f}).\qedhere
+\end{align*}
+\end{proof}
+
+\begin{comment}
+\begin{rmk}
+We have an equivalence
+\begin{align*}
+\hfib{\psi_{X}(a)}{f}
+& = \sm{g:Q(a)\to X} g\circ F(a) = f
+\end{align*}
+This is contractible if and only if there is a term
+\begin{align*}
+j(f) & : Q(a)\to X \\
+J(f) & : j(f)\circ F(a) = f \\
+k(f) & : \prd{g:Q(a)\to X}{H:g\circ F(a)=f} g = j(f) \\
+K(f) & : \prd{g:Q(a)\to X}{H:g\circ F(a)=f} \trans{k(f)}{H} = J(f).
+\end{align*}
+\end{rmk}
+\end{comment}
+
+\begin{defn}
+A \define{quasi $F$-local extension} of $X$ consists of a map $l:X\to Y$ and terms
+\begin{align*}
+\alpha & : \prd{a:A}{f:P(a)\to X}\hfib{\psi_Y}{l\circ f} \\
+\beta & : \prd{a:A}{f:P(a)\to X}{(j,H):\hfib{\psi_X}{f}}\pairr{l\circ j,\apfunc{l}\circ H}=\alpha(f).
+\end{align*}
+\end{defn}
+
+\begin{rmk}
+A quasi-local extension $l:X\to Y$ is therefore a map for which the map defined by the universal property
+\begin{equation*}
+\begin{tikzcd}
+\hfib{\psi_X}{f} \arrow[drr,bend left=15] \arrow[ddr, bend right=15,swap,"\proj1(\blank)\circ l"] \arrow[dr,densely dotted,"u"] \\
+& \hfib{\psi_Y}{l\circ f} \arrow[r] \arrow[d] & \unit \arrow[d,"l\circ f"] \\
+& (Q(a)\to Y) \arrow[r,swap,"\psi_Y"] & (P(a)\to Y)
+\end{tikzcd}
+\end{equation*}
+factors through the unit type.
+\end{rmk}
+
+\begin{thm}
+Suppose $F$ is a family of maps between $\omega$-compact types, and let
+\begin{equation*}
+\begin{tikzcd}
+X_0 \arrow[r,"l"] & X_1 \arrow[r,"l"] & X_2 \arrow[r,"l"] & \cdots
+\end{tikzcd}
+\end{equation*}
+be a sequence of types in which each $X_{n+1}$ is a quasi $F$-local extension of $X_n$. Then the sequential colimit $X_\infty$ is $F$-local.
+\end{thm}
+
+\begin{proof}
+We have already seen that there is an equivalence of type
+\begin{equation*}
+\eqv{\hfib{\psi_{X_\infty}}{\iota_0\circ f}}{\tfcolim_n(\hfib{\psi_{X_n}}{l^n\circ f})}.
+\end{equation*}
+for any $f:P(a)\to X_0$. Since the maps
+\begin{equation*}
+\hfib{\psi_{X_n}}{l^n\circ f}\to \hfib{\psi_{X_{n+1}}}{l^{n+1}\circ f}
+\end{equation*}
+all factor through the unit type, the colimit is contractible. It follows (by generalization), that
+\begin{equation*}
+\hfib{\psi_{X_\infty}}{\iota_n\circ f}
+\end{equation*}
+is contractible for any $f:P(a)\to X_n$. Now, by $\omega$-compactness of $P(a)$, it follows that $X_\infty$ is $F$-local.
+\end{proof}
+
+Note that the initial quasi $F$-local extension of $X$ can be specified as a higher inductive type (with a $2$-path constructor).
+
+\begin{defn}
+For any type $X$, we define the \emph{initial quasi $F$-local extension of $X$} as
+the higher inductive type $L(X)$ with constructors
+\begin{align*}
+l & : X\to L(X) \\
+j & : (P(a)\to X) \to (Q(a)\to L(X)) \\
+J & : \prd{f:P(a)\to X} j(f)\circ F(a) = l\circ f \\
+k & : \prd{f:P(a)\to X}{g:Q(a)\to X}{H:g\circ F(a)=f} l\circ g = j(f) \\
+K & : \prd{f:P(a)\to X}{g:Q(a)\to X}{H:g\circ F(a)=f} \trans{k(f,g,H)}{l\circ H} = J(f).
+\end{align*}
+\end{defn}
+
+\begin{comment}
+\begin{lem}
+Let $X$ be a type. For any $f:P(a)\to X$, the homotopy fiber 
+$\hfib{\psi_{L(X)}(a)}{l\circ f}$ is equivalent to the higher inductive type 
+with type constructors
+\begin{align*}
+i & : \hfib{\psi_X(a)}{f}\to\hfib{\psi_{L(X)}(a)}{l\circ f} \\
+c & : \hfib{\psi_{L(X)}(a)}{l\circ f} \\
+p & : \prd{h:\hfib{\psi_X(a)}{f}}\id{i(h)}{c}.
+\end{align*}
+\end{lem}
+
+\begin{proof}
+We define $c\defeq\pairr{j(f),J(f)}$ and $p\defeq\pairr{k(f),K(f)}$.
+\end{proof}
+
+\begin{cor}\label{cor}
+For any type $X$ and $f:P(a)\to X$, we have
+\begin{equation*}
+\iscontr(\hfib{\psi_{L(X)}(a)}{l\circ f}).
+\end{equation*}
+\end{cor}
+
+\begin{proof}
+Let $X$ be a type and let $f:P(a)\to X$. Then $\hfib{\psi_{L(X)}(a)}{l\circ f}$
+fits in the pushout diagram
+\begin{equation*}
+\begin{tikzcd}
+\hfib{\psi_X(a)}{f} \arrow[r] \arrow[d,equals] & \unit \arrow[d] \\
+\hfib{\psi_X(a)}{f} \arrow[r] & \hfib{\psi_{L(X)}(a)}{l\circ f}
+\end{tikzcd}
+\end{equation*}
+so the arrow going down on the right is an equivalence.
+\end{proof}
+\end{comment}
+
+\begin{comment}
+\begin{defn}
+For any type $X$, we define the \emph{one-step localization of $X$ at $F$} as
+the higher inductive type $L(X)$ with constructors
+\begin{align*}
+l & : X\to L(X) \\
+i,j & : (P(a)\to X) \to (Q(a)\to L(X)) \\
+p & : \prd{g:Q(a)\to X}{q:Q(a)} \id{i(g\circ F(a),q)}{l(g(q))} \\
+q & : \prd{f:P(a)\to X}{p:P(a)} \id{j(f,F(a,p))}{l(f(p))}
+\end{align*} 
+\end{defn}
+
+\begin{lem}
+Let $X$ be a type and consider the short sequence
+\begin{equation*}
+\begin{tikzcd}
+X \arrow[r] & L(X) \arrow[r] & L^2(X).
+\end{tikzcd}
+\end{equation*}
+There is a term of type
+\begin{equation*}
+\prd{f:P(a)\to X}{q:Q(a)} \id[L^2(X)]{l(k(f,q))}{k(l\circ f,q)}
+\end{equation*}
+for both $k\jdeq i$ and $k\jdeq j$.
+\end{lem}
+
+\begin{proof}
+We first prove the assertion for $k\jdeq i$. Let $f:P(a)\to X$ and $q:Q(a)$.
+Then we have to find an identification $l(i(f,q)) = i(l\circ f,q)$.
+\begin{align*}
+l\circ i(f) & = i(i(f)\circ F(a)) \\
+& = \cdots \\
+& = l\circ j(f) \\
+& = i(j(f)\circ F(a))\\
+& = i( l\circ f)
+\end{align*}
+\end{proof}
+\end{comment}
+
+\begin{defn}
+Consider the diagram
+\begin{equation*}
+\begin{tikzcd}
+X \arrow[r] & L(X) \arrow[r] & L^2(X) \arrow[r] & \cdots
+\end{tikzcd}
+\end{equation*}
+When the situation demands it, we annotate the constructors of $L^n(X)$ with
+the number $n$. We define the colimit of the above diagram to be $L^\infty(X)$. 
+\end{defn}
+
+\begin{rmk}
+Since by definition, $l:X\to L(X)$ is a quasi $F$-local extension of $X$, it follows that $L^\infty(X)$ is $F$-local.
+\end{rmk}
+
+\begin{comment}
+\begin{lem}
+Let $X$ be a type and let $f:P(a)\to X$. Then we have an equivalence
+\begin{equation*}
+\eqv{\hfib{\psi_{L^\infty(X)}}{\iota_0\circ f}}{\tfcolim_n(\hfib{\psi_{L^n(X)}}{l^n\circ f})}.
+\end{equation*}
+\end{lem}
+
+\begin{proof}
+This follows from a simple calculation using the facts about $\omega$-compact
+types of the previous section:
+\begin{align*}
+\hfib{\psi_{L^\infty(X)}}{\iota_0\circ f}
+  & \jdeq
+\sm{g:Q(a)\to L^\infty(X)} \id{g\circ F(a)}{\iota_0\circ f} \\
+& \eqvsym \sm{g:\tfcolim_n(Q(a)\to L^n(X)} \id{\xi_{Q(a)}(g)\circ F(a)}{\iota_0\circ f}) \\
+& \eqvsym \tfcolim_n(\sm{g:Q(a)\to L^n(X)} \id{\iota_n\circ g\circ F(a)}{\iota_0\circ f}) \\
+& \eqvsym \tfcolim_n(\sm{g:Q(a)\to L^n(X)} \prd{u:P(a)}\id{\iota_n(g(F(a,u)))}{\iota_0(f(u))} \\
+& \eqvsym \tfcolim_n(\sm{g:Q(a)\to L^n(X)} \prd{u:P(a)}\tfcolim_m(\id{\iota_{n+m}(g(F(a,u)))}{\iota_{n+m}(l^{n+m}(f(u)))}) \\
+& \eqvsym \tfcolim_n(\sm{g:Q(a)\to L^n(X)} \tfcolim_m(\prd{u:P(a)}\id{\iota_{n+m}(g(F(a,u)))}{\iota_{n+m}(l^{n+m}(f(u)))}) \\
+& \eqvsym \tfcolim_n(\sm{g:Q(a)\to L^n(X)} \id{g\circ F(a)}{l^n\circ f}) \\
+& \jdeq \tfcolim_n(\hfib{\psi_{L^n(X)}}{l^n\circ f}).\qedhere
+\end{align*}
+\end{proof}
+\end{comment}
+
+\begin{comment}
+\begin{cor}
+For any $m:\nat$ and $f:P(a)\to L^m(X)$, we have an equivalence
+\begin{equation*}
+\eqv{\hfib{\psi_{L^\infty(X)}}{\iota_n\circ f}}{\tfcolim_{n\geq m}(\hfib{\psi_{L^n(X)}}{l^{n-m}\circ f})}.
+\end{equation*}
+\end{cor}
+\end{comment}
+
+\begin{comment}
+\begin{lem}
+For any type $X$, and any $F:\prd{a:A}P(a)\to Q(a)$ where each $P(a)$ and $Q(a)$
+is $\omega$-compact, the type $L^\infty(X)$ is $F$-local.
+\end{lem}
+
+\begin{proof}
+We have to show that
+\begin{equation*}
+\prd{a:A}{f:P(a)\to L^\infty(X)}\iscontr(\hfib{\psi_{L^\infty(X)}(a)}{f})
+\end{equation*}
+By our assumption of $\omega$-compactness, this type is equivalent to
+\begin{equation*}
+\prd{a:A}{f:\tfcolim(P(a)\to L^n(X))}\iscontr(\hfib{\psi_{L^\infty(X)}(a)}{\xi_A(f)})
+\end{equation*}
+We prove this by induction on $\tfcolim(P(a)\to L^n(X))$. Since we are proving
+a mere proposition, it suffices to perform the induction argument on the point
+constructors of $\tfcolim(P(a)\to L^n(X))$ only. So, we need to find a term of
+type
+\begin{equation*}
+\prd{a:A}{f:P(a)\to L^n(X)}\iscontr(\hfib{\psi_{L^\infty(X)}(a)}{\iota_n\circ f})
+\end{equation*}
+for all $n:\nat$. Since we show this fact for all types $X$, it suffices to
+show that
+\begin{equation*}
+\prd{a:A}{f:P(a)\to X}\iscontr(\hfib{\psi_{L^\infty(X)}(a)}{\iota_0\circ f})
+\end{equation*}
+By \autoref{lem}, this type is equivalent to
+\begin{equation*}
+\prd{a:A}{f:P(a)\to X}\iscontr(\tfcolim_{n}(\hfib{\psi_{L^n(X)}(a)}{l^{n}\circ f}))
+\end{equation*}
+The result now follows from \autoref{cor}.
+\end{proof}
+\end{comment}
+
+\begin{comment}
+\begin{proof}
+To show that the function $\varphi\defeq \lam{g} g\circ F(a) : (Q(a)\to L^\infty(X))\to
+(P(a)\to L^\infty(X))$ is an equivalence, we show that it has both a left 
+inverse $\psi_l$ and a right inverse $\psi_r$. Note that we have the equivalence
+\begin{align*}
+(P(a)\to L^\infty(X))\to (Q(a)\to L^\infty(X))
+  & \eqvsym
+\tfcolim_n(P(a)\to L^n(X)) \to (Q(a)\to L^\infty(X))
+\end{align*}
+so we may construct $\psi_l$ and $\psi_r$ by induction on $n$. 
+To define the functions $\psi_l$ and $\psi_r$, note that it suffices
+to construct functions of type
+\begin{equation*}
+\psi_k^n: (P(a)\to L^n(X))\to (Q(a)\to L^{n+1}(X))
+\end{equation*}
+for each $n:\nat$ and $k\jdeq l,r$, and a term of type
+\begin{equation*}
+\prd{f:P(a)\to L^n(X)}{q:Q(a)} \iota_{n+1}(\psi_{k}^n(f,q))=\iota_{n+2}(\psi_{k}^{n+1}(l\circ f,q))
+\end{equation*}
+
+and a term of type
+\begin{equation*}
+\prd{f:P(a)\to L^n(X)}{q:Q(a)} l(\psi_{k}^n(f,q))=\psi_{k}^{n+1}(l\circ f,q)
+\end{equation*}
+We first define the left inverse $\psi_l$.  
+\end{proof}
+\end{comment}
+
+\begin{comment}
+\begin{proof}
+We have to show that
+\begin{equation*}
+\prd{a:A}{f:P(a)\to L^\infty(X)}\iscontr(\sm{g:Q(a)\to L^\infty(X)} \id{g\circ F(a)}{f})
+\end{equation*}
+By our assumption of $\omega$-compactness, this type is equivalent to
+\begin{equation*}
+\prd{a:A}{f:\tfcolim(P(a)\to L^n(X))}\iscontr(\sm{g:Q(a)\to L^\infty(X)} \id{g\circ F(a)}{\xi_A(f)})
+\end{equation*}
+We prove this by induction on $\tfcolim(P(a)\to L^n(X))$. Since we are proving
+a mere proposition, it suffices to perform the induction argument on the point
+constructors of $\tfcolim(P(a)\to L^n(X))$ only. So, we need to find a term of
+type
+\begin{equation*}
+\prd{a:A}{f:P(a)\to L^n(X)}\iscontr(\sm{g:Q(a)\to L^\infty(X)} \id{g\circ F(a)}{i_n\circ f})
+\end{equation*}
+Let $a:A$ and $f:P(a)\to L^n(X)$. Then we have the equivalences
+\begin{align*}
+& \sm{g:Q(a)\to L^\infty(X)} \id{g\circ F(a)}{\iota_n\circ f} \\
+& \quad \eqvsym \sm{g:\tfcolim_{m\geq n}(Q(a)\to L^m(X)} \id{\xi_{Q(a)}(g)\circ F(a)}{\iota_n\circ f}) \\
+& \quad \eqvsym \tfcolim_{m\geq n}(\sm{g:Q(a)\to L^m(X)} \id{i_m\circ g\circ F(a)}{\iota_n\circ f}) \\
+& \quad \eqvsym \tfcolim_{m\geq n}(\sm{g:Q(a)\to L^m(X)} \prd{u:P(a)}\id{i_m(g(F(a,u)))}{\iota_n(f(u))} \\
+& \quad \eqvsym \tfcolim_{m\geq n}(\sm{g:Q(a)\to L^m(X)} \prd{u:P(a)}\tfcolim_k(\id{i_{m+k}(g(F(a,u)))}{\iota_{m+k}(l^{k+m-n}(f(u)))}) \\
+& \quad \eqvsym \tfcolim_{m\geq n}(\sm{g:Q(a)\to L^m(X)} \tfcolim_k(\prd{u:P(a)}\id{i_{m+k}(g(F(a,u)))}{\iota_{m+k}(l^{k+m-n}(f(u)))}) \\
+& \quad \eqvsym \tfcolim_{m\geq n}(\sm{g:Q(a)\to L^m(X)} \id{g\circ F(a)}{l^{m-n}\circ f}) \\
+& \quad \eqvsym \tfcolim_{m\geq n+1}(\sm{g:Q(a)\to L^m(X)} \id{g\circ F(a)}{l^{m-n}\circ f}) %\\
+%& \quad \eqvsym \tfcolim_{m\geq n+1}(\sm{g:Q(a)\to L^m(X)} \id{l\circ g\circ F(a)}{l\circ l^{m-n}\circ f}) \\
+%& \quad \eqvsym \tfcolim_{m\geq n+1}(\sm{g:Q(a)\to L^m(X)} \id{i(l\circ g)}{l\circ l^{m-n}\circ f}) \\
+\end{align*}
+Therefore, it suffices to show that
+\begin{equation*}
+\iscontr\big(\tfcolim_{m\geq n}(\sm{g:Q(a)\to L^m(X)} \id{g\circ F(a)}{l^{m-n}\circ f})\big).
+\end{equation*}
+We define the center of contraction to be
+\begin{equation*}
+c\defeq \iota_{n+1}(j(f),q).
+\end{equation*}
+It remains to show that every $d:\tfcolim_{m\geq n+1}(\sm{g:Q(a)\to L^m(X)} \id{g\circ F(a)}{l^{m-n}\circ f})$ is
+equal to $c$. Denote the graph $\{\sm{g:Q(a)\to L^m(X)} \id{g\circ F(a)}{l^{m-n}\circ f}\}_{m\geq n+1}$ by
+$\Gamma$. Then our goal is equivalent to finding a $\Gamma$-structure of the type
+family $\id{d}{c}$ over $\tfcolim(\Gamma)$. 
+\begin{align*}
+\Gamma\mathrm{-struct}(\lam{d}\id{d}{c}) 
+& \jdeq \sm{\pts{d}:\prd{i:\pts{\Gamma}} \iota(i)=c}\prd{i,j:\pts{\Gamma}}{e:\edg{\Gamma}(i,j)}\dpath{}{\kappa(e)}{\pts{d}(i)}{\pts{d}(j)}
+\end{align*}
+For $m\geq n+1$, let $g:Q(a)\to L^m(X)$ and $h:\id{g\circ F(a)}{l^{m-n}\circ f}$.
+
+This is done by induction on $d$. So we first have to find a term of type
+\begin{equation*}
+\prd{m\geq n+1}{g:Q(a)\to L^m(X)}{h:\id{g\circ F(a)}{l^{m-n}\circ f}} \id{\iota_m(g,h)}{c}.
+\end{equation*}
+for $m\geq n+1$, let $g:Q(a)\to L^m(X)$ and $h:\id{g\circ F(a)}{l^{m-n}\circ f}$. Then we have
+\begin{align*}
+\iota_m(g,h) & = \iota_{m+1}(l\circ g,\apfunc{l}\circ h) \\
+& = \iota_{m+1}(i(l\circ g\circ F(a)),\trans{\opp{p}}{(\apfunc{l}\circ h)}) \\
+& = \iota_{m+1}(i(l\circ l^{m-n}\circ f),\trans{\apfunc{i}(\apfunc{l}(h))}{\trans{\opp{p}}{(\apfunc{l}\circ h)}}) \\
+& \jdeq \iota_{m+1}(i(l^{m-n}\circ l\circ f),\blank) \\
+& = \iota_{m+1}(i(l^{m-n}\circ j(f)\circ F(a)),\blank) \\
+& = \iota_{m+1}(l^{m-n}\circ j(f),\blank) \\
+& = \iota_{n+1}(j(f),q).
+\end{align*}
+This gives a term $\pts{d}(g,h):\pairr{g,h}=c$.
+It remains to show that
+\begin{equation*}
+\prd{m\geq n+1}{g:Q(a)\to L^m(X)}{h:\id{g\circ F(a)}{l^{m-n}\circ f}} \dpath{}{\kappa}{\pts{d}(g,h)}{\pts{d}(l\circ g,\apfunc{l}\circ h)}.
+\end{equation*}
+This is done by recognizing that the diagram commutes.
+\begin{equation*}
+\begin{tikzcd}
+\iota_m(g,h) \arrow[rr,equals] \arrow[d,equals] & & \iota_{m+1}(l\circ g,\apfunc{l}\circ h) \arrow[d,equals] \\
+\iota_{m+1}(l\circ g,\apfunc{l}\circ h) \arrow[rr,equals] \arrow[d,equals] & & \iota_{m+2}(l^2\circ g,\apfunc{l^2}\circ h) \arrow[d,equals] \\
+\iota_{m+1}(i(l^{1+m-n}\circ f),\nameless) \arrow[rr,equals] \arrow[d,equals] & & \iota_{m+1}(i(l^{2+m-n}\circ f),\nameless) \arrow[d,equals] \\
+\iota_{m+1}(i(l^{m-n}\circ j(f)\circ F(a)),\nameless) \arrow[rr,equals] \arrow[d,equals] & & \iota_{m+1}(i(l^{1+m-n}\circ j(f)\circ F(a)),\nameless) \arrow[d,equals] \\
+\iota_{m+1}(l^{m-n}\circ j(f),\nameless) \arrow[rr,equals] \arrow[dr,equals] & & \iota_{m+1}(l^{m-n}\circ j(f),\nameless) \arrow[dl,equals] \\
+& \iota_{n+1}(j(f),q)
+\end{tikzcd}
+\end{equation*}
+\end{proof}
+\end{comment}
+
+\begin{thm}
+For any type $X$ and any family $F:\prd{a:A}P(a)\to Q(a)$ of maps between
+$\omega$-compact types, $L_F^\infty(X)$ is the localization of $X$ at $F$.
+\end{thm}
+
+\begin{proof}
+We have to show that for any function $h:X\to Y$ into an
+$F$-local type $Y$, there is a unique function $\tilde{h}: L^\infty(X)\to
+Y$ such that the triangle
+\begin{equation*}
+\begin{tikzcd}
+X \arrow[dr,"h"] \arrow[d,swap,"\iota_0"] \\ 
+L^\infty(X) \arrow[r,swap,"\tilde{h}"] & Y
+\end{tikzcd}
+\end{equation*}
+commutes. To define $\tilde{h}$ for any $h:X\to Y$ into an $F$-local type, 
+it suffices to define $h^1:L(X)\to Y$. To define $h^1$, we need to construct
+\begin{align*}
+d & : \prd{f:P(a)\to X} \hfib{\psi_Y(a)}{h\circ f}\\
+D & : \prd{f:P(a)\to X}{w:\hfib{\psi_{X}(a)}{f}}\id{i(w)}{d}
+\end{align*}
+We get these terms immediately from the assumption that $Y$ is $F$-local.
+Note also that the type of the pair $\pairr{d,D}$ is contractible, so uniqueness
+follows immediately.
+
+The above universal property and the fact that $L^\infty(X)$ is $F$-local
+together give that $L^\infty(X)$ is the localization of $X$ at $F$.
+\end{proof}
+
+\section{Localization with respect to a family of maps}\label{section:localization}
+
+In this section, we discuss localization with respect to a family of maps.
+%% Vague:
+%In \cref{ss:basic-properties} we give the definition,
+%present some examples, and prove some basic properties.
+Our primary examples are localization at the degree $k$ map from $\sphere{1}$ to $\sphere{1}$
+and localization at a family of such maps.
+%We quote a result of~\cite{RSS} showing that in the special case when $B$ is $1$,
+%the localization one obtains is a modality.
+
+In \cref{ss:basic-properties}, we prove some basic properties and study some consequences
+of the general theory of separated subuniverses in the case of localization with respect to families of maps.
+In \cref{ss:connectedness}, we give conditions under which
+$f$-localization preserves coproducts and connectedness.
+Finally, \cref{ss:orthogonal-factorization-systems} contains results about the interaction between
+orthogonal factorization systems and localizations at families of maps, generalizing some
+previous results. The results in \cref{ss:orthogonal-factorization-systems} are not used in the rest
+of the paper.
+
+\subsection{Local types and their properties}\label{ss:basic-properties}
+
+We recall the following definitions from~\cite{RSS}.
+\begin{defn}\ 
+\begin{enumerate}
+\item    Let $f: \prd{i:I} A_i \to B_i$ be a family of maps indexed by a type $I$.
+    A type $X$ is \define{$f$-local} if
+    $\precomp{f_i} : (B_i \to X) \to (A_i \to X)$ is an equivalence for every $i : I$.
+\item Let $A:I\to\UU$ be a family of types. A type $X$ is said to be \define{$A$-null} if it is $u$-local for the family of maps $u:\prd{i:I}A_i\to\unit$. 
+\end{enumerate}
+\end{defn} 
+
+As previously noted, \cite[Theorem 2.16]{RSS} shows that for every
+family $f$, the $f$-local types form a reflective subuniverse.
+The localization $L_f X$ is constructed as a higher inductive type,
+and we write $\eta_X : X \to L_f X$ for the unit.
+In the case of a family $A:I\to\UU$, localization at the unique family $u:\prd{i:I}A_i \to \unit$ is called \define{$A$-nullification}.
+By \cite[Theorem 2.17]{RSS}, the reflective subuniverse of $A$-null types is stable under dependent sums and therefore $A$-nullification is a modality (\cref{modality}).
+
+\begin{eg} We recall the following basic examples from~\cite{RSS}.
+\begin{enumerate}
+\item The unit type is $f$-local for any map $f$.
+\item A type $X$ is $(\emptyt\to\unit)$-local if and only if $X$ is contractible.
+\item A type $X$ is $(\sphere{n+1}\to\unit)$-local if and only if $X$ is $n$-truncated.
+\end{enumerate}
+\end{eg}
+
+When $f$ consists of pointed map between pointed types, we can test whether
+a type $X$ is local using the pointed mapping types.
+
+\begin{lem}\label{lemma:pointed}
+    If $f : \prd{i:I} A_i \to B_i$ is a pointed map between pointed types,
+    then a type $X$ is $f$-local if and only if
+    $\precomp{f_i} : (B \pto X) \to (A \pto X)$ is an equivalence
+    for every base point $x : X$ and every $i : I$.
+    If $X$ is connected, then it is enough to check this for one $x : X$.
+\end{lem}
+
+\begin{proof}
+    The second claim follows from the first one, since
+    $\mathsf{isEquiv}$ is a mere proposition.
+    For the first claim, fix $i : I$ and consider the diagram
+    \[
+        \begin{tikzpicture}
+          \matrix (m) [matrix of math nodes,row sep=2em,column sep=3em,minimum width=2em]
+          { (B_i \pto X) & (B_i \to X) & X \\
+            (A_i \pto X) & (A_i \to X) & X , \\};
+          \path[->]
+            (m-1-1) edge [right hook->] node [above] {} (m-1-2)
+                    edge node [left] {} (m-2-1)
+            (m-1-2) edge node [above] {} (m-1-3)
+                    edge node [left] {} (m-2-2)
+            (m-2-1) edge [right hook->] node [above] {} (m-2-2)
+            (m-2-2) edge node [above] {} (m-2-3)
+            (m-1-3) edge [double equal sign distance,-] node [left] { } (m-2-3)
+            ;
+        \end{tikzpicture}
+    \]
+    where the horizontal sequences are fiber sequences with the fiber taken over
+    some $x : X$. Since fiberwise maps are equivalences exactly when they are fiberwise
+    equivalences, the vertical map in the middle is an equivalence if and
+    only if the vertical map on the left is an equivalence for every $x : X$.
+\end{proof}
+
+Since the pointed mapping space $\unit\to_\ast X$ is contractible for any pointed space $X$, we have the following corollary.
+
+\begin{cor}\label{cor:pointed_null}
+If $A$ is a family of pointed types, then a type $X$ is $A$-null
+if and only if $(A_i \pto X)$ is contractible
+for every base point $x : X$ and every $i : I$. \qed
+\end{cor}
+
+We turn to a comparison of $L_f$ and $L_{\suspsym f}$.
+The next corollary follows immediately from \cref{lemma:characterizationsigmaflocal}
+and \cref{Lseparatedloopspace}.
+
+\begin{cor}\label{remark:commutativitylooplocalization}
+    Let $f : \prd{i:I} A_i \to B_i$.
+    For any pointed type $X$, we have
+    $\loopspacesym L_{\susp{f}} X \simeq L_f \loopspacesym X$. \qed
+\end{cor}
+
+This result is a type theoretic analog of \cite[Theorem 3.1]{Bousfield} and \cite[3.A.1]{DrorFarjoun}.
+Interestingly, the classical proofs use delooping techniques which are not yet available in type theory.
+Our proof instead makes essential use of a universe.
+
+Given this corollary, we are led to consider the relationship between $f$-local types and $\suspsym f$-local types, as a step towards comparing $L_f$ and $L_{\suspsym f}$.
+
+\begin{thm}\label{theorem:characterizinglocalness}
+    Let $f: \prd{i:I} A_i \to B_i$ and let $n \geq 1$.
+    Consider the following conditions on a type $X$:
+    \begin{enumerate}
+    \item $X$ is $f$-local.
+    \item $X$ is $\suspsym^{n-1} C_f$-null,
+    where $C_f$ is the family of cofibers of the family $f$. 
+    \item $X$ is $\suspsym^{n} f$-local.
+    \end{enumerate}
+    Then (1) $\Rightarrow$ (2) $\Rightarrow$ (3).
+    Moreover, if the pointed mapping spaces $(A_i \pto X)$ and $(B_i \pto X)$
+    are $(n-1)$-connected for all choices of base point $x : X$
+    and every $i : I$,
+    then the three conditions are equivalent.
+\end{thm}
+
+\begin{proof}
+We will show the required implications for each $i : I$.
+So, without loss of generality we consider a single map $f : A \to B$.
+
+By \cref{lemma:pointed}, it suffices to consider pointed mapping
+spaces for each $x : X$.
+With $x$ chosen, we have a long fiber sequence
+\[
+  \begin{tikzpicture}[descr/.style={fill=white,inner sep=1.5pt}]
+        \matrix (m) [matrix of math nodes,row sep=2em,column sep=3em,minimum width=2em]
+        {   &  (A\pto X) & {(B\pto X)} & (C_f \pto X) \\
+            & (\suspsym A \pto X) & (\suspsym B \pto X)& (\suspsym C_f \pto X) \\
+            & \hspace*{2em}\cdots\hspace*{2em} \\
+        };
+
+        \path[overlay,->, font=\scriptsize]
+        (m-1-3) edge (m-1-2)
+        (m-1-4) edge (m-1-3)
+        (m-2-2) edge[out=175,in=355] node[descr,yshift=0.3ex]{}(m-1-4)
+        (m-2-3) edge (m-2-2)
+        (m-2-4) edge (m-2-3)
+        (m-3-2) edge[out=175,in=355] node[descr,yshift=0.3ex] {} (m-2-4);
+  \end{tikzpicture}
+\]
+
+Assuming (1), from the first fiber sequence in the diagram above
+it follows that $(C_f \pto X)$ is contractible. This means that $X$ is $C_f$-null and
+thus $\suspsym^{n-1} C_f$-null, since any $C_f$-null type is also $C_f$-separated. Thus (1) implies (2).
+
+To see that (2) implies (3), consider a piece of the above fiber sequence:
+\[
+  (\suspsym^{n} B \pto X) \xrightarrow{\precomp{(\suspsym^n f)}}
+  (\suspsym^n A\pto X) \lra (\suspsym^{n-1} C_f \pto X).
+\]
+If (2) holds, then the base of the fiber sequence is contractible and thus the inclusion of the
+fiber in the total space
+is an equivalence, proving (3).
+
+Finally, we show that (3) implies (1) under the connectedness hypotheses.
+Notice that we can express
+$\precomp{(\suspsym^{n} f)} : (\suspsym^n B \pto X) \to (\suspsym^n A \pto X)$ as
+\[
+    (\suspsym^n B\pto X) \simeq \loopspacesym^n(B \pto X) \xrightarrow{\loopspacesym^n (\precomp{f})}
+    \loopspacesym^n(A \pto X) \simeq (\suspsym^n A \pto X),
+\]
+using~\cite[Lemma~6.5.4]{hottbook}.
+If $X$ is $\suspsym^{n}f$-local, it follows that $\loopspacesym^n (\precomp{f})$ is an equivalence.
+By hypothesis, $(A\pto X)$ and $(B\pto X)$ are $(n-1)$-connected, and so by~\cite[Corollary~8.8.2]{hottbook} applied $n$ times
+it follows that $\precomp{f} : (B \pto X) \to (A \pto X)$ is an equivalence.
+\end{proof}
+
+%\begin{eg}
+%    Consider the unique map $\underline{n} : \sphere{n} \to \unit$.
+%    For a pointed type $X$, composition with $\underline{n}$ induces the unique pointed map
+%    \[
+%        \unit \simeq (\unit \pto X) \to (\sphere{n} \pto X) \simeq \loopspacesym^n X.
+%    \]
+%    By \cref{lemma:pointed}, a type $X$ is $\underline{n}$-local if and only if
+%    this map is an equivalence for every point $x$ in $X$.
+%    Therefore, $X$ is $\underline{n}$-local if and only if $X$ is $(n-1)$-truncated.
+%\end{eg}
+
+\subsection{Preservation of coproducts and connectedness}\label{ss:connectedness}
+
+We begin this section by studying conditions under which
+$f$-localization preserves coproducts. 
+By a coproduct, we mean a set-indexed $\sum$-type.
+We first prove a lemma, which will also be used in \cref{example:notlex}.
+
+\begin{lem}\label{lemma:setsarelocal}
+    Let $f : \prd{i:I} A_i \to B_i$ be a family of pointed maps
+    between pointed, connected types.
+    Then a coproduct of $f$-local types is $f$-local.
+    In particular, sets are $f$-local.
+\end{lem}
+
+\begin{proof}
+    It suffices to prove the lemma for each $f_i$, so we assume
+    that we are given a single map $f : A \to B$.
+    Let $J$ be a set and let $T : J \to \UU$ be a type family.
+    Since $A$ is pointed and connected, any map $A \to \sum_{j:J} T_j$ factors through a well-defined summand
+    $T_j$, so we have $(A \to \sum_j T_j) \simeq \sum_j (A \to T_j)$. The same is true for $B$, so
+    we can factor the map $\precomp{f} : (B \to \sum_j T_j) \to (A \to \sum_j T_j)$ as
+    \[
+        \left(B \to \sum_j T_j \right) \simeq \sum_j (B \to T_j) \simeq \sum_j (A \to T_j) \simeq \left(A \to \sum_j T_j\right),
+    \]
+    which shows that $\sum_j T_j$ is $f$-local.
+
+    Since $\unit$ is $f$-local, a special case is that $\sum_j \unit \simeq J$ is $f$-local.
+\end{proof}
+
+\begin{cor}
+    Let $f : \prd{i:I} A_i \to B_i$ be a family of pointed maps
+    between pointed, connected types.
+    Then $f$-localization preserves coproducts.
+\end{cor}
+
+\begin{proof}
+    Let $J$ be a set and let $S : J \to \UU$ be a type family.
+    Consider the coproduct $\sum_j S_j$.
+    By \cref{lemma:setsarelocal}, $\sum_j L_f S_j$ is $f$-local. We claim that the natural
+    map $\sum_j S_j \to \sum_j L_f S_j$ is a localization.
+    Let $Y$ be $f$-local. Then we have
+    \[
+        \Bigg( \bigg( \sum_j S_j \bigg) \to Y \Bigg) \simeq \prod_j (S_j \to Y) \simeq
+        \prod_j (L_f S_j \to Y) \simeq \Bigg( \bigg( \sum_j L_f S_j \bigg) \to Y \Bigg).\qedhere
+    \]
+\end{proof}
+
+\medskip
+
+Our next goal is to give conditions under which $f$-localization
+preserves $n$-connected\-ness.
+
+\begin{prop}\label{prop:Kequiv-Lf}
+Let $K$ be a reflective subuniverse and let $f$ be a family of $K$-equiva\-lences.
+Then $\eta : X \to L_f X$ is a $K$-equivalence for every $X$.
+\end{prop}
+
+\begin{proof}
+Since each $f_i$ is a $K$-equivalence, every $K$-local type is $f$-local,
+by \cref{lemma:characterizationorthogonal}.
+Therefore, $\eta : X \to L_f X$ is a $K$-equivalence
+by \cref{lemma:comparelocalization}(1).
+\end{proof}
+
+\begin{cor}\label{cor:preserve-n-connected}
+For $n \geq -1$, let $f$ be a family of maps such that each $\trunc{n}{f_i}$ is an equivalence.
+If $X$ is $n$-connected, then $L_f X$ is $n$-connected.
+\end{cor}
+
+\begin{proof}
+Let $K$ be the subuniverse of $n$-truncated types.
+Then each $f_i$ is a $K$-equivalence, by assumption.
+It follows from \cref{prop:Kequiv-Lf} that $X \to L_f X$ is a $K$-equivalence.
+Thus, if $\trunc{n}{X}$ is contractible, so is $\trunc{n}{L_f X}$.
+\end{proof}
+
+\subsection{Orthogonal factorization systems}\label{ss:orthogonal-factorization-systems}
+
+In this section, we strengthen \cref{cor:preserve-n-connected}, using
+the framework of orthogonal factorization systems.
+While we do not need this generalization in the rest of the paper,
+the stronger results will likely be of independent interest.
+
+Roughly speaking, an \define{orthogonal factorization system} consists of
+classes $\LLL$ and $\RRR$ of maps such that every map factors uniquely as
+$r \circ l$, with $l$ in $\LLL$ and $r$ in $\RRR$.
+See~\cite{RSS} for more information.
+The reader not familiar with orthogonal factorization systems can assume
+that $\LLL$ is the class of $n$-connected maps
+and $\RRR$ is the class of $n$-truncated maps for some $n \geq -2$;
+this case is treated in~\cite[Section 7.6]{hottbook}.
+(For example, when $n = -1$, $\LLL$ consists of the surjective maps
+and $\RRR$ consists of the embeddings.)
+
+\begin{lem}\label{lemma:subtypes}
+    Let $(\LLL, \RRR)$ be an orthogonal factorization system and
+    let $f : \prd{i:I} A_i \to B_i$ be a family of maps in $\LLL$.
+    If $r : S \to X$ is in $\RRR$ and $X$ is $f$-local, then $S$ is $f$-local.
+    In particular, if each $f_i$ is surjective,
+    then any subtype of an $f$-local type is $f$-local.
+\end{lem}
+
+\begin{proof}
+    Suppose that $X$ is $f$-local
+    and that $r : S \to X$ is in $\RRR$.
+    Fix $i : I$.
+    Since $f_i$ is in $\LLL$ and $r$ is in $\RRR$, the following square is a pullback:
+    \[
+        \begin{tikzpicture}
+          \matrix (m) [matrix of math nodes,row sep=2em,column sep=3em,minimum width=2em]
+          { (B_i \sto S) & (A_i \sto S) \\
+            (B_i \sto X) & (A_i \sto X) . \\};
+          \path[->]
+            (m-1-1) edge node [above] {$\precomp{f_i}$} (m-1-2)
+                    edge node [left] {$r \circ \blank$} (m-2-1)
+            (m-1-2) edge node [right] {$r \circ \blank$} (m-2-2)
+            (m-2-1) edge node [below] {$\precomp{f_i}$} (m-2-2)
+            ;
+        \end{tikzpicture}
+    \]
+    This follows from~\cite[Lemma~1.44]{RSS}, which says that the fibers of
+    the map comparing $S^{B_i}$ to the pullback are contractible.
+    The bottom arrow is an equivalence since $X$ is $f$-local,
+    so the top arrow is an equivalence, as required.
+\end{proof}
+% The previous proof was missing awkward details about the witnesses
+% to the various commuting squares and triangles.
+
+\begin{thm}\label{theorem:localizationpreservesconnected}
+    Let $(\LLL, \RRR)$ be an orthogonal factorization system and
+    let $f$ be a family of maps in $\LLL$.
+    Then $\eta : X \to L_f X$ is in $\LLL$ for every $X$.
+\end{thm}
+
+%Note that if $A$ is pointed and $B$ is connected, then $f$ is surjective.
+
+\begin{proof}
+    Factor the unit map as $X \xrightarrow{l} I \xrightarrow{r} L_f X$, with $l$ in $\LLL$
+    and $r$ in $\RRR$.
+    By \cref{lemma:subtypes},
+    $I$ is $f$-local. This gives us a map $\overline{l} : L_f X \to I$
+    such that $r \circ \overline{l} \circ \eta = r \circ l = \eta$.
+    By the universal property of $L_f X$, it must be the case that $r \circ \overline{l}$
+    is homotopic to the identity of $L_f X$.
+    Similarly, $\overline{l} \circ r$ is an automorphism of $I$ that respects the
+    factorization, so it must be homotopic to the identity of $I$.
+    Thus $r$ is an equivalence and so $\eta = r \circ l$ is in $\LLL$.
+\end{proof}
+
+\begin{cor}\label{cor:preserve-n-connected-stronger}
+    For $n \geq -1$, let $f$ be a family of $(n-1)$-connected maps.
+    If $X$ is $n$-connected, then $L_f X$ is $n$-connected.
+\end{cor}
+
+\begin{proof}
+    Applying \cref{theorem:localizationpreservesconnected} with
+    $\LLL$ the $(n-1)$-connected maps and $\RRR$ the $(n-1)$-truncated maps
+    gives that $\eta : X \to L_f X$ is $(n-1)$-connected.
+%    \note{The last sentence is wishy-washy, but giving details about basepoints is messy.
+%    I think there must be a sharper argument; can anyone find it?}
+    By examining homotopy groups, it follows that when $X$ is $n$-connected,
+    so is $L_f X$.
+\end{proof}
+
+\cref{prop:Kequiv-Lf} and \cref{theorem:localizationpreservesconnected} are very similar.
+To compare them in a concrete situation, take $K$ to be the subuniverse of $n$-truncated
+types and consider the orthogonal factorization system in which $\LLL$ is the
+class of $n$-connected maps.
+If a map $g$ is $n$-connected, then $Kg = \trunc{n}{g}$ is an equivalence, so
+\cref{theorem:localizationpreservesconnected} makes a stronger assumption on $f$
+and gives a stronger conclusion about $\eta : X \to L_f X$.
+Thus neither result implies the other.
+
+On the other hand, \cref{cor:preserve-n-connected-stronger} has the same
+conclusion as \cref{cor:preserve-n-connected}, but makes a weaker hypothesis,
+since if $\trunc{n}{f}$ is an equivalence then $f$ is $(n-1)$-connected.
+This is strictly weaker.  For example, if $n = 0$, the former is the
+condition that $f$ is a bijection on components, while the latter is
+the condition that $f$ is surjective on components.
+% Similarly, for $n = -1$,
+% being $-1$-connected is the same as being surjective.
+% But being an equivalence under $\trunc{-1}{-}$ is the same as being
+% a logical equivalence, which is much weaker.  E.g. \emph{any} map
+% between pointed types is a logical equivalence.
+
+\section{Localization away from sets of numbers}\label{section:localizationaway}
+
+In this section, we focus on localization with respect to the \define{degree $k$
+map} $\degg(k) : \sphere{1} \to \sphere{1}$, for $k : \N$, and with respect to
+families of such maps.
+The degree $k$ map is defined by circle induction by mapping $\base$ to $\base$
+and $\lloop$ to $\lloop^k$.
+Using suggestive language that mirrors the algebraic case, we call $L_{\degg(k)}$
+``localization away from $k$'' and say that we are ``inverting $k$.''
+We note that, for many applications, one considers localization away from $k$ for $k$ prime.
+However, for the results of this section, $k$ can be any natural number.
+
+As might be expected, $\degg(k)$-localizations can be combined to localize a type \emph{at}
+a prime $p$, by localizing with respect to the family of maps $\degg(q)$ indexed by all
+primes $q$ different from $p$.
+With this case in mind, we study localization with respect to any family of degree $k$ maps
+indexed by a map $S : A \to \N$ for some type $A$.
+In other words, we localize with respect to the family $\degg\circ S : A \to \sphere{1} \to \sphere{1}$.
+We denote the family $\degg\circ S$ by $\degg(S)$.
+
+The main goal of this section is to show that, for simply connected types,
+$\degg(S)$-localization localizes the homotopy groups away from $S$ (as long as $S$ indexed by $\N$),
+as is true in the classical setting.
+
+We begin with a discussion of localization of groups in \cref{ss:localizationofgroups}, which we need in order to describe the effect of localization on homotopy groups.
+
+In \cref{ss:n-conn}, we give characterizations of $\degg(S)$-localization for highly connected types. In particular, we show that the localization of a simply connected type can be computed as the nullification with respect to $M_S$, the family of cofibers of the maps $\degg(S(a))$, or as the localization with respect to $\susp \degg(S)$, the family of suspensions of these maps.
+We prove that the $\degg(S)$-localization of a pointed, $(n-1)$-connected type inverts $S$ in $\pi_n$,
+and deduce from this that every group has a localization away from $S$.
+
+These characterizations of $\degg(S)$-localization are of interest to us for two reasons. First, the observation that $\degg(S)$-localization can be computed via a nullification implies that, restricted to simply connected types, $\degg(S)$-localization is a modality and therefore is better behaved than an arbitrary localization. Second, the fact that $\degg(S)$-localization can be computed as $\susp \degg(S)$-localization allows us to deduce that, for simply connected types, $\degg(S)$-localization commutes with taking loop spaces, a fact we use in the next section.
+
+In \cref{ss:localizingKgn}, we give a method for computing the $\degg(S)$-localization of a loop space via a mapping telescope construction. This allows us to show that the localization of an Eilenberg-Mac Lane space $K(G,n)$, for $n \geq 1$ and $G$ abelian, is $K(G',n)$, where $G'$ is the algebraic localization of $G$ away from $S$.
+
+In \cref{ss:localization-of-homotopy-groups}, we combine the results of \cref{ss:localizingKgn} and observations about the interaction between $\degg(S)$-localization and truncation to show that localizing a simply connected type at $\degg(S)$ localizes all of the homotopy groups away from $S$.
+The results of the last two sections assume that the family $S$ is indexed by the natural numbers.
+
+Finally, in \cref{ss:abelian} we give a direct proof of the fact that
+the localization of an abelian group in the category of groups coincides with
+its localization in the category of abelian groups, which also follows from
+\cref{theorem:localizationKgn}.
+This section is not needed in the rest of the paper.
+
+\subsection{Localization of groups}\label{ss:localizationofgroups}
+
+We fix a family $S : A \to \N$ of natural numbers and consider the family
+of maps $\degg(S) : A \to S^1 \to S^1$ sending $a$ to $\degg(S(a))$.
+
+We begin by defining the collection of groups that will be the
+``local'' groups for our algebraic localization.
+We make the standard assumption that the underlying type of a group is a set.
+
+\begin{defn}
+    For $k : \N$, a group $G$ is \define{uniquely $k$-divisible} if the $k$-th power map
+    $g \mapsto g^k$ is a bijection.
+    A group $G$ is \define{uniquely $S$-divisible} if it is uniquely $S(a)$-divisible for every $a : A$.
+\end{defn}
+
+When the group is additive, the $k$-th power map is usually called the ``multiplication by $k$ map.''
+Notice that for non-abelian groups the map is not a group homomorphism in general.
+
+Our first goal is to show that the homotopy groups of a $\degg(S)$-local type
+are uniquely $S$-divisible.
+In order to do this, we begin by characterizing the $\degg(S)$-local types.
+
+\begin{lem}
+A type $X$ is $\degg(S)$-local if and only if, for each $x:X$ and $a:A$, the map
+$S(a) : \loopspace{X,x} \to \loopspace{X,x}$ sending 
+$\omega$ to $\omega^{S(a)}$ is an equivalence.
+\end{lem}
+
+\begin{proof}
+We apply \cref{lemma:pointed}.
+Let $x:X$ and $a:A$.
+By the universal property of the circle, we have an equivalence
+$(\sphere{1} \pto X) \eqvsym \loopspace{X,x}$,
+and it is easy to see that the square
+\[
+  \begin{tikzcd}
+    (\sphere{1} \pto X) \arrow[r,"\simeq"] \arrow[d,swap,"\precomp{\degg(S(a))}"] & \loopspace{X,x} \arrow[d,"S(a)"] \\
+    (\sphere{1} \pto X) \arrow[r,swap,"\simeq"] & \loopspace{X,x}
+  \end{tikzcd}
+\]
+commutes.
+So we conclude that $\precomp{\degg(S(a))}$ is an equivalence if and only if $S(a)$ is an equivalence.
+\end{proof}
+
+\begin{prop}\label{prop:homotopygroupsoflocalarelocal}
+    If $X$ is a pointed, $\degg(S)$-local type, then $\pi_{m+1}(X)$ is uniquely $S$-divisible
+    for each $m : \N$.
+    Conversely, if for some $n \geq 0$, $X$ is a pointed, simply connected $n$-type
+    such that $\pi_{m+1}(X)$ is uniquely $S$-divisible for each $m : \N$,
+    then $X$ is $\degg(S)$-local.
+\end{prop}
+
+For the converse, the requirement that $X$ be truncated is needed because
+we need to use Whitehead's theorem.
+
+\begin{proof}
+    Let $X$ be a pointed, $\degg(S)$-local type and let $a : A$.
+    In this proof, we write $\degg(k, Y)$ for the degree $k$ map on $\loopspacesym Y$,
+    where $k = S(a)$.
+    For every $m : \N$,
+    the map $\degg(k, X) : \loopspacesym X \to \loopspacesym X$ induces
+    the map $\degg(k, \loopspacesym^m X) : \loopspacesym^m \loopspacesym X \to \loopspacesym^m \loopspacesym X$,
+    by the Eckmann-Hilton argument~\cite[Theorem~2.1.6]{hottbook}.
+    That is, $\loopspacesym^m \degg(k, X) = \degg(k, \loopspacesym^m X)$.
+    It follows that $\loopspacesym^m \degg(k, X)$ induces the $k$-th power map on $\pi_{m+1}( X )$.
+    Since $\degg(k, X)$ is an equivalence, the $k$-th power map on $\pi_{m+1}( X )$
+    must be an equivalence for each $m$.
+    In other words, $\pi_{m+1}( X )$ is uniquely $S$-divisible for each $m$.
+
+    Conversely, suppose that, for some $n \geq 0$, $X$ is a pointed,
+    simply connected $n$-type such that $\pi_{m+1}(X)$ is uniquely $S$-divisible
+    for each $m : \N$.
+    Let $a : A$ and let $k = S(a)$.
+    Since $X$ is pointed and connected, it suffices to show that
+    $\degg(k, X) : \loopspacesym X \to \loopspacesym X$ is an equivalence.
+    By the above argument, $\degg(k, X)$ induces the $k$-th power map on each
+    $\pi_{m+1}(X) = \pi_m(\loopspacesym X)$.
+    By assumption, these $k$-th power maps are bijections.
+    Since $\loopspacesym X$ is a pointed, connected $(n-1)$-type, it follows from the
+    truncated Whitehead theorem~\cite[Theorem~8.8.3]{hottbook} that 
+    $\degg(k, X)$ is an equivalence.
+    % This last step is where we use that X is simply connected.  Otherwise,
+    % we'd need to study pi_m(\loopspacesym X) at other base points.
+\end{proof}
+
+Our next goal is to show that a group $G$ is uniquely $S$-divisible if and only
+if the Eilenberg--Mac Lane space $K(G, 1)$ is $\degg(S)$-local.
+For this, we use the following theorem.
+
+%\note{Update Theorem number when BDR is published.}
+\begin{thm}[{\cite[Theorem 4]{BuchholtzDoornRijke}}]\label{theorem:catofgroups}
+    Given $n>1$, the pointed, $(n-1)$-connected, $n$-truncated types together with pointed maps
+    form a univalent category, and this category is equivalent to the category of abelian groups
+    and group homomorphisms.
+    Similarly, when $n=1$ we have an equivalence between the category of pointed, $0$-connected,
+    $1$-truncated types and the category of groups. \qed
+\end{thm}
+
+The equivalence in \cref{theorem:catofgroups} is given by mapping a pointed,
+$(n-1)$-connected, $n$-truncated type $X$ to $\pi_n( X )$,
+and the inverse is given by mapping a group $G$ to the Eilenberg--Mac Lane
+space $K(G,n)$, as constructed in~\cite{FinsterLicata}.
+Moreover,~\cite{BuchholtzDoornRijke} shows that the inverse equivalence maps
+short exact sequences of groups to fiber sequences of types.
+
+\begin{cor}\label{corollary:characterizationpdivisible}
+    For any $n > 1$, an abelian group $G$ is uniquely $S$-divisible if and only if its classifying space $K(G,n)$
+    is $\degg(S)$-local. An arbitrary group $G$ is uniquely $S$-divisible if and only if $K(G,1)$ is $\degg(S)$-local.
+\end{cor}
+
+\begin{proof}
+    As argued in the proof of \cref{prop:homotopygroupsoflocalarelocal}, $\degg(k)$ induces the $k$-th power map under the equivalence of categories, so one morphism is an equivalence if and only if the other is.
+\end{proof}
+
+Note that the $n > 1$ case of \cref{corollary:characterizationpdivisible} also follows
+immediately from \cref{prop:homotopygroupsoflocalarelocal}.
+
+Now we define what it means to localize a group away from $S$.
+This concept is needed to state our main result, \cref{theorem:localizationlocalizes}.
+
+\begin{defn}\label{def:localizationofgroups}
+    Given a group $G$, a homomorphism $\eta : G \to G'$ is a \define{localization of $G$ away from $S$
+    in the category of groups} if $G'$ is uniquely $S$-divisible and for every group $H$
+    which is uniquely $S$-divisible, the precomposition map $\precomp{\eta} : \Hom(G', H) \to \Hom(G, H)$ is an equivalence.
+    If $G$ is abelian and $\eta : G \to G'$ has the universal property only with respect to uniquely
+    $S$-divisible abelian groups, we say $\eta$ is a \define{localization of $G$ away from $S$ in the category
+    of abelian groups}.
+\end{defn}
+
+\begin{rmk}\label{rmk:localizationofgroups}
+It will follow from \cref{lemma:localizationlocalizesfirst} that every group $G$ has a localization $G \to G'$
+away from $S$, obtained by applying $\pi_1$ to the $\deg(S)$-localization of $K(G, 1)$.
+Similarly, if $G$ is abelian, its localization in the category of abelian groups is obtained
+by applying $\pi_2$ to the $\deg(S)$-localization of $K(G,2)$.
+Moreover, by \cref{theorem:localizationKgn}, these algebraic localizations agree
+when restricted to abelian groups.
+In \cref{ss:abelian}, we give an independent, purely algebraic construction of
+the localization of an abelian group away from $S$ which also shows that the
+two localizations agree.
+\end{rmk}
+
+We conclude this section with three examples.
+The first one shows that $\degg(k)$-localization does not preserve fiber sequences in general.
+The second one shows the stronger statement that $\degg(k)$-localization is not a modality,
+by giving an example showing that uniquely $k$-divisible groups are not closed under extensions.
+(It is an easy exercise that if a localization $L$ preserves fiber sequences,
+then $L$ is a modality.)
+The third one shows that the $\degg(k)$-local types are not the separated types
+for any reflective subuniverse $L$.
+
+\begin{eg}\label{example:notlex}
+    We show that for $k > 1$, $\degg(k)$-localization
+    does not preserve all fiber sequences.
+    We first make some general observations.
+    By \cref{lemma:setsarelocal}, we know that if $f$ is a map between pointed,
+    connected types, then sets are $f$-local.
+    It follows that if $L_f$ preserves the fiber sequence
+    \[
+        G \longhookrightarrow \unit \lra K(G,1),
+    \]
+    then $K(G,1)$ is $f$-local.
+    Indeed, the $f$-localization map between the fiber sequences gives
+    \[
+        \begin{tikzpicture}
+          \matrix (m) [matrix of math nodes,row sep=2em,column sep=3em,minimum width=2em]
+          { G \strut & \unit \strut &  K(G,1) \strut \\
+           L_f G \strut & L_f \unit \strut & L_f K(G,1) , \strut \\};
+          \path[->]
+            (m-1-1) edge [right hook->] node [above] {} (m-1-2)
+                    edge node [left] {$\sim$} (m-2-1)
+            (m-1-2) edge node [above] {} (m-1-3)
+                    edge node [left] {$\sim$} (m-2-2)
+            (m-2-1) edge [right hook->] node [above] {} (m-2-2)
+            (m-2-2) edge node [above] {} (m-2-3)
+            (m-1-3) edge node [left] { } (m-2-3)
+            ;
+        \end{tikzpicture}
+    \]
+    which implies that $K(G,1) \simeq L_f K(G,1)$, since $L_f K(G,1)$ is connected
+    by \cref{cor:preserve-n-connected}.
+    Now take $f$ to be the degree $k$ map.
+    By \cref{corollary:characterizationpdivisible}, $K(G,1)$ is $\degg(k)$-local if and only if
+    $G$ is uniquely $k$-divisible.
+    In particular, if $G = \Z/k\Z$, then $K(G,1)$ is not $\degg(k)$-local.
+    So $\degg(k)$-localization does not preserve all fiber sequences.
+\end{eg}
+
+\note{Added the following example. It is much simpler than the next one. Should we keep both?}
+\note{Haven't modified the intro to these examples.}
+
+\begin{eg}\label{example:nonlocalfib2}
+    Consider the map $K(\Z,1) \to K(\Q,1)$, induced by the inclusion of groups $\Z \to \Q$.
+    Using the long exact sequence of homotopy groups, one sees that the fiber over any point is
+    (merely) equivalent to the set $\Q/\Z$. Recall that sets are $\degg(k)$-local for any $k : \N$,
+    so as long as $k > 0$, the type $K(\Z,1)$ is the total space of a fibration with $\degg(k)$-local fibers and $\degg(k)$-local base.
+    On the other hand, if $k > 1$, $K(\Z,1)$ is not $\degg(k)$-local, so we see that $\degg(k)$-localization
+    is not a modality in general.
+\end{eg}
+
+\begin{eg}\label{example:nonlocalfib}
+    Let $B$ be the subtype of $\Q \to \Q$ consisting of functions with bounded support.
+    We can define this type constructively as the type of functions together with
+    a mere bound for their support:
+    \[
+         B \defeq \sm{f : \Q \to \Q} \, \ttrunc{-1}{\sm{b : \Q} \prd{x : \Q} (x > b) \to (f(x) = 0) \times (f(-x) = 0)}.
+    \]
+    The group operation is given by $(f + g)(x) = f(x) + g(x)$.
+    Notice that both $\Q$ and $B$ are uniquely $k$-divisible for any $k > 0$.
+
+    Consider the semidirect product $P \defeq B \rtimes \Q$, where $\Q$ acts by translation:
+    \[
+        (r \cdot f)(x) = f(x+r).
+    \]
+    We claim that $(\delta_0, 2) : P$ does not have a square root. To see
+    this, assume we have $(f,r)$ such that $(f,r)^2 = (f + r\cdot f,2r) = (\delta_0, 2)$.
+    Then it must be the case that $r = 1$ and thus $f(x) + f(x+1) = \delta_0(x)$ for all $x : \Q$.
+    But then $f(x) = - f(x+1)$ if $x \neq 0$.
+    We can now contradict our assumption by proving that $f(x) = 0$ for all $x$.
+    To do this, notice that this fact is a mere proposition, so we
+    can use the mere bound for the support of $f$ to conclude that $f(x+1)$ is $0$ if $x>0$ is large enough,
+    and then induct backwards using $f(x) = - f(x+1)$ if $x>0$. The case $x<0$ is analogous.
+    Thus we have obtained a short exact sequence of groups
+    \[
+        1 \lra B \lra P \lra \Q \lra 1
+    \]
+    in which the kernel and cokernel are uniquely $2$-divisible, but the middle group is not.
+
+    It follows that if we apply the functor $K(\blank, 1)$ to this short exact sequence of groups,
+    we obtain a fiber sequence with connected, $\degg(2)$-local base and fiber,
+    but for which the total space is not $\degg(2)$-local.
+    Phrased differently, a dependent sum of $\degg(2)$-local types, indexed by 
+    a $\degg(2)$-local type, is not necessarily $\degg(2)$-local.
+    So $\degg(2)$-localization is not a modality.
+
+    A similar argument shows that for any $k > 1$, $P$ is not uniquely $k$-divisible
+    and therefore that $\degg(k)$-localization is also not a modality.
+\end{eg}
+
+\begin{eg}
+As a final example in a similar spirit, we show that for $k > 1$, $L_{\degg(k)}$ is not
+of the form $L'$ for any reflective subuniverse $L$.
+For any $L$, the $L$-separated types are determined by their identity types.
+However, the identity types of $K(\Q,1)$ and $K(\Z,1)$ are equivalent,
+and the former is $L_{\degg(k)}$-local while the latter is not.
+\end{eg}
+
+\subsection{Localizing highly connected types}\label{ss:n-conn}
+
+We continue to fix a family $S : A \to \N$ of natural numbers and the associated family
+of maps $\degg(S) : A \to S^1 \to S^1$ sending $a$ to $\degg(S(a))$.
+We write $M_S$ for the family of cofibers, which sends $a$ to the cofiber
+of $\degg(S(a))$, a ``Moore space.''
+We write $\susp{\degg(S)}$ for the family of suspensions of the maps $\degg(S(a))$,
+and similarly consider $\suspsym^n M_S$ and $\suspsym^n \degg(S)$.
+
+The main result of this section is:
+
+\begin{thm}\label{theorem:localizationisnullification}
+    Let $n\geq 1$.
+    If $X$ is $n$-connected, then its
+    $\degg(S)$-localization, its $\suspsym^{n-1} M_S$-nullification and
+    its $\suspsym^n \degg(S)$-localization coincide.
+\end{thm}
+
+Note that this implies that the same is true for the other localizations ``between''
+$\degg(S)$ and $\suspsym^n \degg(S)$.
+% E.g. N_{\suspsym^i M_S} for various i.
+
+\begin{proof}
+By \cref{cor:preserve-n-connected},
+$L_{\susp[n] \degg(S)} X$ is $n$-connected,
+since $\trunc{n}{\suspsym^n \, \sphere{1}} \eqvsym 1$.
+Thus, by \cref{theorem:characterizinglocalness}, $L_{\susp[n] \degg(S)} X$
+is $\degg(S)$-local and $\suspsym^{n-1} M_S$-local.
+So the natural maps
+\[
+  L_{\susp[n] \degg(S)} X \lra L_{\suspsym^{n-1} M_S} X \lra L_{\degg(S)} X
+\]
+are equivalences, by \cref{lemma:comparelocalization}(3).
+\end{proof}
+
+This theorem fails without the connectedness hypothesis, as the next example shows.
+
+\begin{eg}
+    The type $\sphere{1}$ is not $\degg(k)$-local for $k > 1$ but it is $M_k$-null.
+    On the one hand, $\loopspacesym \sphere{1}$ is equivalent to the integers, and the $k$-fold map
+    is multiplication by $k$, which is not an equivalence.
+    On the other, mapping from the cofiber sequence $\sphere{1}\to \sphere{1} \to M_k$ into $\sphere{1}$ we
+    obtain the fiber sequence:
+    \[
+        (M_k \to_\ast \sphere{1}) \longhookrightarrow (\sphere{1} \to_\ast \sphere{1}) \xrightarrow{k} (\sphere{1}\to_\ast \sphere{1}),
+    \]
+    and the multiplication by $k$ map on the integers is injective, so the pointed mapping space $M_k \to_\ast \sphere{1}$ is contractible. Therefore $\sphere{1}$ is $M_k$-null by \cref{cor:pointed_null}.
+\end{eg}
+
+As an application of \cref{theorem:localizationisnullification}, we have:
+
+\begin{cor}\label{corollary:commutativitylooplocalizationsimpconn}
+    For a pointed, simply connected type $X$, we have
+    \[
+        \loopspacesym L_{\degg(S)} X \simeq L_{\degg(S)} \loopspacesym X.
+    \]
+\end{cor}
+
+\begin{proof}
+This follows from \cref{remark:commutativitylooplocalization} and \cref{theorem:localizationisnullification}.
+\end{proof}
+
+\cref{example:notlex} shows that the assumption that $X$ is simply connected cannot be removed.
+Note that we cannot necessarily iterate the interchange of $\loopspacesym$ and $\degg(S)$-localization,
+since $\loopspacesym X$ might fail to be simply connected.
+
+\medskip
+
+It also follows that these localizations preserve $l$-connected types.
+
+\begin{cor}\label{corollary:plocalizationpreservesconnectedness}
+    For $l \geq -2$ and $n \geq 0$, if $X$ is $l$-connected, then $L_{\susp[n] \degg(S)} X$ is $l$-connected.
+\end{cor}
+% We really only need the case n = 0 of this result.
+% This lemma can also be proved using lemma:truncationpreserveslocal,
+% and can then be used to prove theorem:localizationisnullification.
+
+\begin{proof}
+    If $n \geq l$, this follows from \cref{cor:preserve-n-connected}.
+    If $n < l$, then \cref{theorem:localizationisnullification} implies
+    that $L_{\susp[n] \degg(S)} X \eqvsym L_{\susp[l] \degg(S)} X$, putting us
+    in the situation where $n = l$.
+%\note{Having to break into cases makes me think we still haven't
+%captured the cleanest way of organizing this.}
+\end{proof}
+
+The following proposition implies that localizations of groups always exist
+(see \cref{rmk:localizationofgroups})
+and is also used to prove \cref{theorem:localizationKgn}.
+
+\begin{prop}\label{lemma:localizationlocalizesfirst}
+    For $n \geq 1$,
+    the $\degg(S)$-localization of a pointed, $(n-1)$-connected type $X$ localizes $\pi_n(X)$ away from $S$.
+    The algebraic localization takes place in the category of groups if $n = 1$ and
+    abelian groups otherwise.
+\end{prop}
+
+\begin{proof}
+    By \cref{prop:homotopygroupsoflocalarelocal},
+    we know that $\pi_n(L_{\degg(S)} X)$ is uniquely $S$-divisible.
+    So it remains to show that precomposition with $\pi_n(\eta) : \pi_n(X) \to \pi_n(L_{\degg(S)} X)$
+    induces an equivalence
+    \[
+        \precomp{\pi_n(\eta)} : \Hom(\pi_n(L_{\degg(S)} X),  H) \lra \Hom(\pi_n(X), H)
+    \]
+    for every uniquely $S$-divisible group $H$ (where $H$ is assumed to be abelian if $n>1$).
+    Notice that this map is equivalent to 
+    \[
+        \precomp{\pi_n(\ttrunc{n}{\eta})} : \Hom(\pi_n(\ttrunc{n}{L_{\degg(S)} X}),  H) \lra \Hom(\pi_n(\ttrunc{n}{X}), H)
+    \]
+    which in turn is equivalent to
+    \[
+        \precomp{\ttrunc{n}{\eta}} : \left( \ttrunc{n}{L_{\degg(S)}X} \pto K(H, n) \right) \lra \left( \ttrunc{n}{X} \pto K(H, n) \right) 
+    \]
+    by \cref{theorem:catofgroups}, using the fact that $\ttrunc{n}{L_{\degg(S)}X}$ is still $(n-1)$-connected (\cref{corollary:plocalizationpreservesconnectedness}).
+    Finally, this last map is equivalent to
+    \[
+        \precomp{\eta} : \left( L_{\degg(S)}X \pto K(H, n) \right) \lra \left( X \pto K(H, n) \right),
+    \]
+    since $K(H,n)$ is $n$-truncated.
+    And this map is an equivalence, since $K(H,n)$ is $\degg(S)$-local by \cref{corollary:characterizationpdivisible}.
+\end{proof}
+
+The results of this section also let us deduce the following lemma,
+which will be used in \cref{ss:localization-of-homotopy-groups}.
+
+\begin{lem}\label{lemma:lex}
+    $\degg(S)$-localization maps fiber sequences of simply connected types to fiber sequences.
+\end{lem}
+
+Note that this lemma cannot be used to prove \cref{corollary:commutativitylooplocalizationsimpconn},
+since the fiber that arises in that case is $\loopspacesym X$, which is not assumed to be
+simply connected.
+%\note{But maybe it's enough to assume that $E$ and $X$ are simply connected?}
+
+\begin{proof}
+    Let $F \to E \to X$ be a fiber sequence of simply connected types, with $F$ the fiber over $x_0$.
+    By \cref{theorem:localizationisnullification}, the $L$- and $L'$-localizations
+    of these types agree, where $L \defeq L_{\degg(S)}$.
+    Applying \cref{proposition:preservationfibersequences}, we get a diagram
+    \[
+        \begin{tikzpicture}
+          \matrix (m) [matrix of math nodes,row sep=2em,column sep=3em,minimum width=2em]
+          { F & E & X\\
+           L F \strut & E' \strut & L' X \mathrlap{\,\,=\, L X ,} \strut \\};
+          \path[->]
+            (m-1-1) edge [right hook->] node [above] {} (m-1-2)
+                    edge node [left] {$\eta$} (m-2-1)
+            (m-1-2) edge node [above] {} (m-1-3)
+                    edge node [left] {$l$} (m-2-2)
+            (m-2-1) edge [right hook->] node [above] {} (m-2-2)
+            (m-2-2) edge node [above] {} (m-2-3)
+            (m-1-3) edge node [right] {$\eta = \eta'$} (m-2-3)
+            ;
+        \end{tikzpicture}
+    \]
+    in which the rows are fiber sequences, with $L F$ the fiber over $\eta(x_0)$.
+    To show that $l$ is an $L$-localization, it is enough to show that $E'$ is $L$-local.
+    Since it is the total space of a fibration of simply connected spaces,
+    it is simply connected. And since it is $L'$-local,
+    by the same proposition, we deduce that it is $L$-local, as needed.
+\end{proof}
+
+\cref{example:nonlocalfib} shows that the $\degg(S)$-localization of a
+fiber sequence is not a fiber sequence in general.
+
+\medskip
+
+We end this section with the following lemma, which is of a similar
+flavor and which will be used in \cref{ss:localization-of-homotopy-groups}.
+
+\begin{lem}\label{lemma:truncationpreserveslocal}
+    For $l \geq -2$ and $n \geq 0$, the $l$-truncation of a $\suspsym^n \degg(S)$-local type is $\suspsym^n \degg(S)$-local.
+\end{lem}
+% I think we only need the n = 0 case of this later.
+
+\begin{proof}
+    Let $X$ be a $\suspsym^n \degg(S)$-local type.
+    Fix $a : A$ and let $k = S(a)$.
+    We must show that $k : \loopspacesym^{n+1} \ttrunc{l}{X} \to \loopspacesym^{n+1} \ttrunc{l}{X}$
+    is an equivalence for each basepoint $x' : \ttrunc{l}{X}$.
+    If $l - (n+1) \leq -2$, then $\loopspacesym^{n+1} \ttrunc{l}{X}$ is
+    contractible, so this is clear.
+    So assume that $l - (n+1) > -2$, and in particular that $l > -2$.
+    Since being an equivalence is a mere proposition,
+    we can assume that $x' = \tproj{l}{x}$ for some $x : X$.
+    Recall that $l$-truncation
+    is the subuniverse of separated types for $(l-1)$-truncation (\cref{example:truncationisseparated}).
+    Applying \cref{Lseparatedloopspace} $n+1$ times gives the equivalences
+    in the square
+\[
+        \begin{tikzpicture}
+          \matrix (m) [matrix of math nodes,row sep=2.5em,column sep=3em,minimum width=2em]
+          { \loopspacesym^{n+1} \trunc{l}X & \trunc{l-n-1}{\loopspacesym^{n+1} X}\hspace*{-3ex} \\
+            \loopspacesym^{n+1} \trunc{l} X & \trunc{l-n-1}{\loopspacesym^{n+1} X} . \hspace*{-3ex} \\};
+          \path[->]
+            (m-1-1) edge node [left] {$k$} (m-2-1)
+            (m-2-2) edge node [above] {$\sim$} (m-2-1)
+            (m-1-2) edge node [right]{$\trunc{l-n-1}{k}$} (m-2-2)
+                    edge node [above] {$\sim$} (m-1-1)
+            ;
+        \end{tikzpicture}
+    \]
+    To show that the square commutes, it suffices to check this after precomposing
+    with the truncation map $\loopspacesym^{n+1} X \to \trunc{l-n-1}{\loopspacesym^{n+1} X}$.
+    And this follows since the equivalences commute with the natural maps from
+    $\loopspacesym^{n+1} X$ and
+    both vertical maps commute with $k : \loopspacesym^{n+1} X \to \loopspacesym^{n+1} X$.
+    Since $X$ is $\suspsym^n \degg(k)$-local, the map on the right hand side is an equivalence,
+    so the result follows.
+\end{proof}
+
+\subsection{Localization of Eilenberg--Mac Lane spaces}\label{ss:localizingKgn}
+
+In this section, we compute the localization of a loop space as a mapping telescope,
+in a way that is familiar from classical topology.
+This specializes to give a concrete description of the
+localization of an Eilenberg--Mac Lane space for an abelian group.
+This is the key ingredient in the proofs of the results in the next section.
+
+For the remainder of \cref{section:localizationaway}, we assume that our family
+$S$ is indexed by the natural numbers, i.e., we have $S : \N \to \N$ and
+$\degg(S)$ sends $i$ to $\degg(S(i))$.
+
+For example, if we want to invert a decidable subset of the natural numbers
+$T : \N \to \bool$, we can define a family $S : \N \to \N$ by
+\[
+    S(k) \defeq \begin{cases} k, & \text{if $T(k)$} \\
+                              1, & \text{otherwise.}
+                \end{cases}
+\]
+It is easy to see that a type is $\degg(S)$-local if and only if it is $\degg(k)$-local for every $k$ such that $T(k)$ is true.
+The most important example of this form is the case of localizing \emph{at} a prime $p$,
+in which we take $T$ to be the subset of primes different from $p$.
+
+\begin{lem}\label{lemma:pmapisorthogonal}
+    Given a pointed, simply connected type $X$, the $k$-fold map $k : \loopspacesym X \to \loopspacesym X$
+    is an $L_{\degg(k)}$-equivalence.
+\end{lem}
+
+\begin{proof}
+    We have the usual square
+    \[
+        \begin{tikzpicture}
+          \matrix (m) [matrix of math nodes,row sep=2.5em,column sep=3em,minimum width=2em]
+          { \loopspacesym X \strut & L_{\degg(k)} \loopspacesym X \strut \\
+            \loopspacesym X \strut & L_{\degg(k)} \loopspacesym X . \strut \\};
+          \path[->]
+            (m-1-1) edge node [above] {$\eta$} (m-1-2)
+                    edge node [left] {$k$} (m-2-1)
+            (m-2-1) edge node [above] {$\eta$} (m-2-2)
+            (m-1-2) edge node [right]{$L_{\degg(k)} k$} (m-2-2)
+            ;
+        \end{tikzpicture}
+    \]
+    Recall that the right vertical map is the unique map that makes the square commute.
+    Now, by \cref{corollary:commutativitylooplocalizationsimpconn}, we know that for pointed, simply connected types we have
+    $L_{\degg(k)} \loopspacesym X \simeq \loopspacesym L_{\degg(k)} X$ so that,
+    by the uniqueness of the right vertical map, the above square is equivalent to the square
+    \[
+        \begin{tikzpicture}
+          \matrix (m) [matrix of math nodes,row sep=2.5em,column sep=3em,minimum width=2em]
+          { \loopspacesym X \strut & \loopspacesym L_{\degg(k)} X \strut \\
+            \loopspacesym X \strut & \loopspacesym L_{\degg(k)} X , \strut \\};
+          \path[->]
+            (m-1-1) edge node [above] {$\loopspacesym \eta$} (m-1-2)
+                    edge node [left] {$k$} (m-2-1)
+            (m-2-1) edge node [above] {$\loopspacesym \eta$} (m-2-2)
+            (m-1-2) edge node [right]{$k$} (m-2-2)
+            ;
+        \end{tikzpicture}
+    \]
+    where the map on the right is the usual $k$-fold map.
+    But in this square the right vertical map is an equivalence, since $L_{\degg(k)} X$
+    is $\degg(k)$-local.
+\end{proof}
+
+We are almost ready to localize the loop space of a simply connected type away from $S : \N \to \N$.
+Before doing this we need a general fact about sequential colimits.
+
+\begin{rmk}\label{remark:equivalenceofseqcolim}
+Given a sequential diagram $X$:
+\[
+    X_0 \xrightarrow{h_0} X_1 \xrightarrow{h_1} \cdots
+\]
+we can consider the shifted sequential diagram $X_1 \to X_2 \to \cdots$, which we denote $X[1]$.
+Analogously, we can shift a natural transformation $f : X \to Y$ between sequential
+diagrams to obtain a natural transformation $f[1] : X[1] \to Y[1]$.
+Notice that the transition maps $h_n$ induce a natural transformation $h : X \to X[1]$, and that moreover, the
+induced map $\colim\, h : \colim X \to \colim X[1]$ is an equivalence.
+It then follows that if $f : X \to X$ is a natural transformation such that there exist $g, g' : X \to X[1]$
+with $g \circ f = h$ and $f[1] \circ g' = h$, then $f$ induces an equivalence $\colim\, f : \colim X \xrightarrow{\sim} \colim X$.
+\end{rmk}
+
+\begin{thm}\label{theorem:localizationastelescope}
+    Let $X$ be pointed and simply connected, and
+    define $s : \N \to \N$ by $s(n) = \prod_{i=0}^n S(i)$.
+    Then the $\degg(S)$-localization of $\loopspacesym X$ is equivalent to the colimit of the sequence
+    \[\loopspacesym X \xrightarrow{s(0)}\loopspacesym X \xrightarrow{s(1)} \loopspacesym X \xrightarrow{s(2)} \cdots, \]
+    where as usual a natural number $k$ is used to denote the $k$-fold map.
+\end{thm}
+
+\begin{proof}
+    We must show that the colimit is $\degg(S)$-local and that
+    the map $\loopspacesym X \to \colim\, \loopspacesym X$ is an $L_{\degg(S)}$-equivalence.
+    % Being a deg(S)-equivalence is not the same as being a deg(S(k))-equivalence
+    % for every k.
+    
+    To prove that $\loopspacesym X \to \colim\, \loopspacesym X$ is an $L_{\degg(S)}$-equivalence
+    we use \cref{lemma:orthogonalcomposition}, so it is enough to show that all the maps in the
+    diagram are $L_{\degg(S)}$-equivalences. To prove this last fact notice that \cref{lemma:pmapisorthogonal}
+    implies that the $s(k)$-fold map is an $L_{\degg(s(k))}$-equivalence. But in particular this implies that it is also an
+    $L_{\degg(S)}$-equivalence, since every $\degg(S)$-local type is $\degg(s(k))$-local for every $k$.
+    % The map s(0) is not a deg(S(1))-equivalence in general, so we can't work
+    % one k at a time above.  But it works to handle all k at once.
+
+    Now we must show that the colimit is $\degg(S(k))$-local for each $k$.
+    So fix $k$ and recall that
+    the colimit is equivalent to the colimit of the sequence starting at $k$.
+    That is, we consider the colimit of the sequential diagram with objects
+    $C_n = \loopspacesym X$ and transition maps $h_n : C_n \to C_{n+1}$ given by $s(n+k)$.
+    Then $\colim_n C_n$ is pointed and connected by \cite{DoornRijkeSojakova},
+    so it is enough to check that the map $S(k) : \loopspacesym \colim_n C_n \to \loopspacesym \colim_n C_n$ is an equivalence.
+    By the commutativity of loop spaces and sequential colimits \cite{DoornRijkeSojakova},
+    it is then enough to show that the natural transformation $S(k) : \loopspacesym C_n \to \loopspacesym C_n$
+    induces an equivalence in the colimit.
+
+    By the Eckmann-Hilton argument~\cite[Theorem~2.1.6]{hottbook}, the transition map
+    $\loopspacesym h_n : \loopspacesym C_n \to \loopspacesym C_{n+1}$ is homotopic to $s(n+k)$.
+    We can then apply \cref{remark:equivalenceofseqcolim},
+    taking $f$ to be the natural transformation given by
+    $S(k)$ in every degree, and both $g$ and $g'$ to be the natural transformation given by
+    $s(n + k)/S(k) : \loopspacesym C_n \to \loopspacesym C_{n+1}$ in degree $n$.
+    We have that $g_n \circ f_n = f_{n+1} \circ g'_n = s(n + k)$, and moreover that
+    $g \circ f = f[1] \circ g' = h$ as natural transformations.
+    So $S(k) : \loopspacesym C_n \to \loopspacesym C_n$ induces an equivalence in the colimit,
+    as needed.
+\end{proof}
+
+Using the fact that $K(G,n)$ is the loop space of a simply connected space
+when $G$ is abelian we deduce:
+
+\begin{cor}\label{corollary:localizationKgn}
+    For $n \geq 1$ and $G$ abelian,
+    the $\degg(S)$-localization of $K(G,n)$ is equivalent to the colimit of the sequence
+    \[
+      K(G,n) \xrightarrow{s(0)} K(G,n) \xrightarrow{s(1)} \cdots .  \tag*{\qed}
+    \]
+\end{cor}
+
+In particular, it follows from \cite{DoornRijkeSojakova} that the
+$\deg(S)$-localization of $K(G,n)$ is $n$-truncated and $(n-1)$-connected,
+so it is again a $K(G',n)$ for some group $G'$.
+By \cref{lemma:localizationlocalizesfirst}, $G'$ is the algebraic localization of $G$
+away from $S$ (in the category of groups if $n = 1$ and abelian groups otherwise).
+We deduce:
+
+\begin{thm}\label{theorem:localizationKgn}
+    Let $n\geq 1$ and let $G$ be any abelian group.
+    Then the $\degg(S)$-localization map $K(G,n) \to L_{\degg(S)} K(G,n)$ is a map between Eilenberg--Mac Lane spaces and
+    is induced by an algebraic localization of $G$ away from $S$.
+    Moreover, the algebraic localization of $G$ is equivalent to the colimit
+    \[
+      G \xrightarrow{s(0)} G \xrightarrow{s(1)} \cdots
+    \]
+    and is therefore abelian, even when $n = 1$.  \qed
+\end{thm}
+
+It follows that the two types of algebraic localization agree for abelian groups,
+so we do not need to distinguish between them in what follows.
+
+\subsection{Localization of homotopy groups}\label{ss:localization-of-homotopy-groups}
+
+In this section we prove the main theorem of the paper:
+for simply connected types, $\degg(S)$-localization localizes all homotopy groups away from $S$.
+We continue to assume that our family $S$ is indexed by the natural numbers,
+as the essential ingredient is our result on the localization of Eilenberg--Mac Lane spaces from the previous section.
+%We use this and \cref{lemma:lex} to induct over the Postnikov tower.
+The other ingredient we need is that for simply connected types,
+truncation commutes with $\degg(S)$-localization, which follows
+from the next lemma.
+
+\begin{lem}\label{lemma:locofscntrunc}
+    The $\degg(S)$-localization of a simply connected, $n$-truncated type is $n$-truncated.
+\end{lem}
+
+\begin{proof}
+    First, we show that it suffices to prove the statement for pointed types.
+    Let us assume given a simply connected and $n$-truncated type $X$, and let us denote the statement
+    of the theorem by $P(X)$. If we prove $X \to P(X)$ it follows that $\ttrunc{-1}{X} \to P(X)$,
+    since being $n$-truncated is a mere proposition. But this is enough, for $X$ is
+    simply connected, which implies that $\ttrunc{1}{X}$ is contractible, and hence that
+    $\ttrunc{-1}{X}$ is inhabited.
+
+    We now assume that $X$ is pointed and proceed by induction.
+    If $X$ is $-2$, $-1$, $0$ or $1$-truncated, we are done, since $X$ is also simply connected, and thus contractible.
+    If $X$ is $(n+1)$-truncated and $n > 0$, consider the fiber sequence
+    \[ K(G,n+1) \longhookrightarrow X \lra \ttrunc{n}{X}. \]
+    Since the types in the fiber sequence are simply connected, $\degg(S)$-localization
+    preserves this fiber sequence, by \cref{lemma:lex}. So we obtain a fiber sequence
+    \[L_{\degg(S)} K(G,n+1) \longhookrightarrow L_{\degg(S)}X \lra L_{\degg(S)} \ttrunc{n}{X}. \]
+    The type $L_{\degg(S)} \ttrunc{n}{X}$ is $n$-truncated by the induction hypothesis
+    and $L_{\degg(S)} K(G,n+1)$ is $(n+1)$-truncated by \cref{theorem:localizationKgn}.
+    So $L_{\degg(S)} X$ must be $(n+1)$-truncated as well.
+\end{proof}
+
+The proof of \cref{lemma:locofscntrunc} shows that we can compute
+the $\degg(S)$-localization of a simply connected $n$-type $X$ by
+localizing the Postnikov tower of $X$.
+
+From \cref{lemma:locofscntrunc}, \cref{lemma:truncationpreserveslocal} and
+the argument used in \cref{lemma:commutelocalization}, but restricted to simply connected types,
+we deduce:
+
+\begin{cor}\label{corollary:localizationandtruncationcommute}
+    For simply connected types, $\degg(S)$-localization and $n$-trunca\-tion commute.\qed
+\end{cor}
+
+We now give the main theorem of the paper.
+
+\begin{thm}\label{theorem:localizationlocalizes}
+    The $\degg(S)$-localization of a pointed, simply connected type $X$ localizes all of the
+    homotopy groups away from $S$.
+\end{thm}
+
+\begin{proof}
+    Since $\degg(S)$-localization preserves simply connectedness, it is immediate that $\pi_1(L_{\degg(S)} X)$ is trivial.
+    Now fix $n \geq 1$ and consider the fiber sequence
+    \[
+        K(\pi_{n+1}(X),n+1) \longhookrightarrow \ttrunc{n+1}{X} \lra \ttrunc{n}{X}.
+    \]
+    Notice that all of the types in the fiber sequence are simply connected.
+    Applying $\degg(S)$-localization we obtain a map of fiber sequences
+    \[
+        \begin{tikzpicture}
+          \matrix (m) [matrix of math nodes,row sep=2em,column sep=3em,minimum width=2em]
+            { K(\pi_{n+1}(X),n+1) \strut & \ttrunc{n+1}{X} \strut & \ttrunc{n}{X} \strut \\
+            L_{\degg(S)} K(\pi_{n+1}(X),n+1) &  \ttrunc{n+1}{L_{\degg(S)}X} & \ttrunc{n}{L_{\degg(S)} X}\\};
+          \path[->]
+            (m-1-1) edge [right hook->] node [right] {} (m-1-2)
+                    edge node [right] {} (m-2-1)
+            (m-1-2) edge node [right] {} (m-1-3)
+                    edge node [right] {} (m-2-2)
+            (m-2-2) edge node [right] {} (m-2-3)
+            (m-2-1) edge [right hook->] node [right] {} (m-2-2)
+            (m-1-3) edge node [right] {} (m-2-3)
+            ;
+        \end{tikzpicture}
+    \]
+    by \cref{lemma:lex} combined with the commutativity of truncation and
+    $\degg(S)$-localization (\cref{corollary:localizationandtruncationcommute}).
+    The result now follows from \cref{theorem:localizationKgn}.
+\end{proof}
+
+We also have a partial converse to \cref{theorem:localizationlocalizes}.
+
+\begin{thm}\label{theorem:characterize-localization}
+  Let $X$ and $X'$ be pointed, simply connected $n$-types, for some $n \geq 0$.
+  If $f : X \to X'$ is a pointed map such that $\pi_m(f) : \pi_m(X) \to \pi_m(X')$ is
+  an algebraic localization away from $S$ for each $m > 1$,
+  then $f$ is a $\degg(S)$-localization of $X$.
+\end{thm}
+
+\begin{proof}
+  By \cref{prop:homotopygroupsoflocalarelocal}, $X'$ is $\degg(S)$-local.
+  Therefore, we have a commuting triangle
+  \[
+    \begin{tikzcd}
+      X \arrow[r,"f"] \arrow[d,swap,"\eta"] & X' \\
+      L_{\degg(S)} X \arrow[ur,dashed,swap,"f'"]
+    \end{tikzcd}
+  \]
+  and it suffices to show that $f'$ is an equivalence.
+  Since $L_{\degg(S)} X$ is also a pointed, simply connected $n$-type,
+  if we show that $\pi_m(f')$ is a bijection for each $m > 1$,
+  the truncated Whitehead theorem~\cite[Theorem~8.8.3]{hottbook} implies
+  that $f'$ is an equivalence.
+  By assumption, $\pi_m(f)$ is an algebraic localization of $\pi_m(X)$.
+  By \cref{theorem:localizationlocalizes}, the same is true of $\pi_m(\eta)$.
+  Since $\pi_m(f') \circ \pi_m(\eta) = \pi_m(f)$, it follows that
+  $\pi_m(f')$ is a bijection.
+\end{proof}
+
+\subsection{Algebraic localization of abelian groups}\label{ss:abelian}
+
+As observed in \cref{rmk:localizationofgroups},
+\cref{theorem:localizationKgn} implies that the localization of an abelian group
+away from a set $S$, in the category of groups, coincides with its localization in
+the category of abelian groups. It moreover provides a construction of the localization.
+Since we could not find these results in the literature, and since \cref{theorem:localizationKgn}
+has an indirect, homotopical proof, in this section we give a short, independent, algebraic proof
+of these results.
+
+The following elementary lemma is the key ingredient.
+ 
+\begin{lem}
+    Let $H$ be a group, let $n,m : \N$, and let $x$, $y$, $\hat{x}$ and $\hat{y}$ be
+    elements of $H$ with the property that
+    $\hat{x}$ is the unique element of $H$ such that $\hat{x}^n = x$ and
+    $\hat{y}$ is the unique element of $H$ such that $\hat{y}^m = y$.
+    If $x$ and $y$ commute, then $\hat{x}$ and $\hat{y}$ commute.
+\end{lem}
+
+\begin{proof}
+    We first show that $x$ and $\hat{y}$ commute.
+    The $m$-th power of $x \hat{y} x^{-1}$ is $x \hat{y}^m x^{-1} = x y x^{-1} = y$,
+    so by the uniqueness of $\hat{y}$, it must be the case that $x \hat{y} x^{-1} = \hat{y}$.
+
+    Similarly, we have that
+    the $n$-th power of $\hat{y} \hat{x} \hat{y}^{-1}$ is
+    $\hat{y} \hat{x}^n \hat{y}^{-1} = \hat{y} x \hat{y}^{-1} = x$,
+    so by the uniqueness of $\hat{x}$, we have $\hat{y} \hat{x} \hat{y}^{-1} = \hat{x}$.
+\end{proof}
+
+\begin{prop}
+    Let $G$ be an abelian group, let $n : \N$, and let $n : G \to G$ be the multiplication by $n$ map.
+    Then, for every uniquely $n$-divisible group $H$, the precomposition map
+    \[
+        n^* : \Hom(G,H) \lra \Hom(G,H)
+    \]
+    is an equivalence.
+\end{prop}
+
+\begin{proof}
+    Given a map $f : G \to H$, we have to show that there exists a unique $\hat{f} : G \to H$ such that
+    $\hat{f} \circ n = f$.
+    Since $H$ is uniquely $n$-divisible, we have an inverse function $\phi : H \to H$ to the $n$-th power map $n : H \to H$.
+    It follows that if $\hat{f}$ exists, then $\hat{f} = \phi \circ f$.
+    So we only have to check that $\hat{f}$ is a group homomorphism.
+
+    It is clear that $\hat{f}$ preserves the identity element, so it remains to show that it preserves
+    the group operation. Take two elements $a,b : G$, and consider $f(a),f(b) : H$. These are two commuting
+    elements that have unique $n$-th roots. So their $n$-th roots $\phi(f(a)), \phi(f(b)) : H$ must also
+    commute. This implies that
+    \[
+        (\hat{f}(a) \cdot \hat{f}(b))^n = \hat{f}(a)^n \cdot \hat{f}(b)^n = f(a) \cdot f(b) = f(a + b) .
+    \]
+    So by the uniqueness of $n$-th roots, $\hat{f}(a) \cdot \hat{f}(b) = \phi(f(a + b)) = \hat{f}(a+b)$.
+\end{proof}
+
+Using this result, given an abelian group $G$,
+it is straightforward to prove that the colimit of the sequence displayed in
+\cref{theorem:localizationKgn} is a localization of $G$ away from the family $S$
+in the category of groups.
+Moreover, this colimit is abelian, so it is also the localization of $G$
+in the category of abelian groups.
