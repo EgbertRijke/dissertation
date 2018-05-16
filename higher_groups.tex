@@ -411,6 +411,24 @@ B_p & : \prd{x:\rprojective{n}}{y:\tautfam[\R]{n}(x)} ...
 \end{align*}
 \end{constr}
 
+\begin{lem}
+For any two $2$-element sets $T$ and $T'$ with $t:T$ and $t':T'$, the square
+\begin{equation*}
+\begin{tikzcd}
+\join{T}{T'} \arrow[r] \arrow[d] & \join{T'}{T} \arrow[d] \\
+\join{T}{T'} \arrow[r] & \join{\bool}{\bool}
+\end{tikzcd}
+\end{equation*}
+commutes.
+\end{lem}
+
+\begin{proof}
+Since $\eqv{T}{(T=\bool)}$ it suffices to show that
+\begin{equation*}
+\join{\mathsf{neg}}{\idfunc}\htpy \sigma.
+\end{equation*}
+This is straightforward to verify by the universal property of $\join{\bool}{\bool}$. 
+\end{proof}
 \section{The complex projective spaces}
 
 \section{The quaternionic Hopf fibration}
