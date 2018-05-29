@@ -1,0 +1,1006 @@
+\chapter{Reflexive coequalizers}
+
+\section{Discrete reflexive graphs}
+
+\begin{defn}\label{defn:graphs_ctx}
+A \define{graph} $\mathcal{A}$ in $\UU$ is a pair $\pairr{\pts{A},\edg{A}}$ consisting of
+\begin{align*}
+\pts{A} & : \UU \\
+\edg{A} & : \pts{A}\to\pts{A}\to\UU.
+\end{align*}
+We write $\mathsf{Gph}$ for the type of all graphs in $\UU$. When $\mathcal{A}$ is a graph, we say that $\pts{A}$ is its type of \define{vertices}, and that $\edg{A}$ is its family of \define{edges}.
+
+A \define{reflexive graph} $\mathcal{A}$ in $\UU$ consists of a graph $(\pts{A},\edg{A})$ equipped with a \define{reflexivity} term
+\begin{align*}
+\rfx{\mathcal{A}} & : \prd{i:\pts{A}}\edg{A}(i,i).
+\end{align*}
+We write
+\begin{equation*}
+\mathsf{rGph}\defeq \sm{V:\UU}{E:V\to (V\to\UU)}\prd{v:V}E(v,v)
+\end{equation*}
+for the type of reflexive graphs in $\UU$. 
+\end{defn}
+
+\begin{eg}
+\begin{enumerate}
+\item A \define{reflexive pair} consists of types $V$ and $E$, and maps $s$, $t$, and $r$ between $V$ and $E$ as indicated in the diagram
+\begin{equation*}
+\begin{tikzcd}[column sep=large]
+E \arrow[r,yshift=1.5ex,"s"] \arrow[r,yshift=-1.5ex,swap,"t"] & V, \arrow[l,"r" description]
+\end{tikzcd}
+\end{equation*}
+equipped with homotopies $H_{sr}:\idfunc[V]\htpy s\circ r$ and $H_{tr}:\idfunc[V]\htpy t\circ r$.
+Given a reflexive pair as above, we obtain a reflexive graph $\mathcal{A}$ by taking
+\begin{align*}
+\pts{A} & \defeq V \\
+\edg{A}(v,w) & \defeq \sm{e:E} (v=s(e))\times (w=t(e)) \\
+\rfx{\mathcal{A}}(v) & \defeq \pairr{r(v),H_{sr}(v),H_{tr}(v)}.
+\end{align*}
+By a routine construction it can be shown that the type of small reflexive pairs is equivalent to the type of small reflexive graphs.
+\item \label{eg:disc_codisc} Given a type $X$, we have the \define{discrete graph} $\Delta(X)$ on $X$ consisting of
+\begin{align*}
+\pts{\Delta(X)} & \defeq X \\
+\edg{\Delta(X)} & \defeq \idtypevar{X} \\
+\rfx{\Delta(X)} & \defeq \refl{},
+\end{align*}
+and we have the \define{indiscrete graph} $\nabla(X)$ on $X$ consisting of
+\begin{align*}
+\pts{\nabla(X)} & \defeq X \\
+\edg{\nabla(X)} & \defeq \lam{x}{y}\unit \\
+\rfx{\nabla(X)} & \defeq \ttt.
+\end{align*}
+In particular, we have the \define{unit} graph $\unit\defeq\nabla(\unit)$, which happens to also be $\Delta(\unit)$. 
+\item The \define{walking arrow} $\mathcal{I}$ is an example of a reflexive graph. It consists of
+\begin{align*}
+\pts{\mathcal{I}} & \defeq \bool \\
+\edg{\mathcal{I}}(x,y) & \defeq \tau(x)\to \tau(y) \\
+\rfx{\mathcal{I}}(x) & \defeq \idfunc[\tau(x)]
+\end{align*}
+where $\tau:\bool\to\UU$ is the \define{tautological family} on $\bool$ given by $\tau(\bfalse)\defeq\emptyt$ and $\tau(\btrue)\defeq\unit$. We write $a$ for the (unique) arrow from $\bfalse$ to $\btrue$. It may be helpful to think of the walking arrow $\mathcal{I}$ as an interval, hence the choice of notation.
+\end{enumerate}
+\end{eg}
+
+\begin{defn}
+A \define{morphism} of graphs $f$ from $\mathcal{A}$ to $\mathcal{B}$ is a pair
+\begin{align*}
+\pts{f} & : \pts{A} \to \pts{B} \\
+\edg{f} & : \prd{i,j:\pts{A}} \edg{A}(i,j)\to \edg{B}(\pts{f}(i),\pts{f}(j)).
+\end{align*}
+We write $\mathsf{Gph}(\mathcal{A},\mathcal{B})$ for the type of graph morphisms from $\mathcal{A}$ to $\mathcal{B}$.
+
+A \define{morphism} of reflexive graphs $f$ from $\mathcal{A}$ to $\mathcal{B}$ is a morphism of graphs equipped with a term
+\begin{align*}
+\rfx{f} & : \prd{i:\pts{A}} \edg{f}(\rfx{\mathcal{A}}(i))= \rfx{\mathcal{B}}(\pts{f}(i))
+\end{align*}
+witnessing that reflexivity is preserved. We write $\mathsf{rGph}(\mathcal{A},\mathcal{B})$ for the type of reflexive graph morphisms from $\mathcal{A}$ to $\mathcal{B}$.
+\end{defn}
+
+For any reflexive graph there is an identity morphism, and for any composable pair of morphisms there is a composite. Furthermore, these operations are associative, and satisfy the unit laws. It should be noted, however, that composition of reflexive graph morphisms is not expected to be associative on the nose, since the reflexivity is only preserved up to higher identification. In other words, preservation of reflexivity is part of the \emph{structure} of a reflexive graph morphism, and is not a property. 
+
+\begin{eg}\label{eg:rgraph_morphism}
+\begin{enumerate}
+\item Given a function $f:X\to Y$ we obtain a morphism $\Delta f:\mathsf{rGph}(\Delta X,\Delta Y)$ given by
+\begin{align*}
+\pts{\Delta f} & \defeq f \\
+\edg{\Delta f} & \defeq \apfunc{f} \\
+\rfx{\Delta f} & \defeq \refl{\refl{f(x)}}
+\end{align*}
+Note that the map $(X\to Y)\to \mathsf{rGph}(\Delta X,\Delta Y)$ is an equivalence, since the type
+\begin{equation*}
+\sm{\varphi:\prd{x,y:X}(x=y)\to (f(x)=f(y))}\varphi(\refl{x})=\refl{f(x)}
+\end{equation*}
+is equivalent to the fiber of the map
+\begin{equation*}
+\mathsf{ev\usc{}refl} : \Big(\prd{x,y:X}(x=y)\to (f(x)=f(y))\Big)\to \Big(f(x)=f(x)\Big),
+\end{equation*}
+which is contractible by \cref{thm:yoneda}.
+\item The graph $\nabla(\unit)$ is the terminal reflexive graph in the sense that for any graph $\mathcal{A}$, the type $\mathsf{rGph}(\mathcal{A},\unit)$ is contractible.
+\item For any reflexive graph $\mathcal{A}$, the map 
+\begin{equation*}
+\mathsf{ev\usc{}pt}:\mathsf{rGph}(\unit,\mathcal{A})\to\pts{A}
+\end{equation*}
+given by $f\mapsto \pts{f}(\ttt)$, is an equivalence. The analogous statement is false for (non-reflexive) graphs.
+\item The universal property of the walking arrow $\mathcal{I}$ is that every edge $e$ in a graph $\mathcal{A}$, the type of reflexive graph morphisms that map the edge $a$ of $\mathcal{I}$ to $e$ is contractible. In other words, the map
+\begin{equation*}
+\mathsf{ev\usc{}arrow} : \mathsf{rGph}(\mathcal{I},\mathcal{A})\to \sm{i,j:\pts{A}}\edg{A}(i,j)
+\end{equation*}
+given by $f\mapsto (\pts{f}(0),\pts{f}(1),\edg{f}(a))$ is an equivalence.
+\item For the walking arrow $\mathcal{I}$ there are reflexive graph morphisms
+\begin{equation*}
+\begin{tikzcd}
+\mathcal{I} \arrow[r] & \unit \arrow[l,yshift=1ex,swap,"1"] \arrow[l,yshift=-1ex,"0"]
+\end{tikzcd}
+\end{equation*}
+This is a \emph{cograph} object of reflexive graphs, since the morphism $\mathcal{I}\to\unit$ is a common \emph{retraction} of the end-point inclusions $0,1:\unit\to \mathcal{I}$, whereas in a reflexive pair (a graph object) the morphism $r$ is a common \emph{section} of the source and target maps.
+\item \label{eg:freerfx} Since we do not have the technology available to establish that graphs and reflexive graphs form $\infty$-categories, a comparison between the two structures is limited to what we can say directly using the basic categorical operations such as composition. However, this is just enough to establish an adjunction-like property. 
+
+Given a non-reflexive graph $\mathcal{A}\jdeq\pairr{\pts{A},\edg{A}}$, we can obtain a reflexive graph $F\mathcal{A}$ by freely adjoining reflexivity:
+\begin{align*}
+\pts{F\mathcal{A}} & \defeq \pts{A} \\
+\edg{F\mathcal{A}}(i,j) & \defeq \edg{A}(i,j)+(i=j) \\
+\rfx{F\mathcal{A}}(i) & \defeq \inr(\refl{i}).
+\end{align*}
+On the other hand, there is the projection $U:\mathsf{rGph}\to\mathsf{Gph}$ which forgets the reflexivity structure, and for each graph $\mathcal{A}$ there is a graph morphism $\eta:\mathcal{A}\to UF\mathcal{A}$. Both $F$ and $U$ are functorial in the sense that they act on morphisms, and preserve units and composition in the obvious way, and $\eta$ is natural in $\mathcal{A}$. 
+
+The universal property of the construction $F$ of freely adjoining reflexivity, is that the map
+\begin{equation*}
+U(\blank)\circ \eta : \mathsf{rGph}(F\mathcal{A},\mathcal{B})\to \mathsf{Gph}(\mathcal{A},U\mathcal{B})
+\end{equation*}
+is an equivalence. Indeed, this is the universal property that establishes $F$ as a left adjoint to $U$, even though we cannot manifest $F$ and $U$ as functors.
+
+The construction $F$ of freely adjoining reflexivity is not surjective on morphisms. For example, there are no morphisms from $\unit$ to the graph $\mathcal{A}$ with a contractible type of vertices but no edges. However $F\mathcal{A}$ is the terminal reflexive graph.
+\end{enumerate}
+\end{eg}
+
+\begin{thm}\label{thm:discrete_rgraph}
+Let $\mathcal{A}$ be a reflexive graph. The following are equivalent:
+\begin{enumerate}
+\item The canonical map
+\begin{equation*}
+\prd{i,j:\pts{A}} (i=j)\to \edg{A}(i,j)
+\end{equation*}
+given by $\refl{i}\mapsto \rfx{\mathcal{A}}(i)$ is a fiberwise equivalence.
+\item The graph $\mathcal{A}$ is \define{$\mathcal{I}$-null} in the sense that the map
+\begin{equation*}
+\mathsf{rGph}(\unit,\mathcal{A}) \to \mathsf{rGph}(\mathcal{I},\mathcal{A})
+\end{equation*}
+given by pre-composition by the unique morphism $\mathsf{rGph}(\mathcal{I},\unit)$, is an equivalence.
+\item The map
+\begin{equation*}
+\mathsf{rGph}(\mathcal{I},\mathcal{A})\to \mathsf{rGph}(\unit,\mathcal{A})
+\end{equation*}
+given by pre-composing with the end-point inclusion $0:\mathsf{rGph}(\unit,\mathcal{I})$, is an equivalence.
+\item The map
+\begin{equation*}
+\mathsf{rGph}(\mathcal{I},\mathcal{A})\to \mathsf{rGph}(\unit,\mathcal{A})
+\end{equation*}
+given by pre-composing with the end-point inclusion $1:\mathsf{rGph}(\unit,\mathcal{I})$, is an equivalence.
+\end{enumerate}
+If any of these conditions hold, we say that $\mathcal{A}$ is \define{discrete}.
+\end{thm}
+
+\begin{proof}
+The outline of our argument is as follows:
+\begin{equation*}
+\begin{tikzcd}[row sep=tiny]
+& & (iii) \arrow[dr,Rightarrow] \\
+(i) \arrow[r,Rightarrow] & (ii) \arrow[ur,Rightarrow] \arrow[dr,Rightarrow] & & (i). \\
+& & (iv) \arrow[ur,Rightarrow]
+\end{tikzcd}
+\end{equation*}
+Suppose (i) holds. We have a commuting square
+\begin{equation*}
+\begin{tikzcd}
+\mathsf{rGph}(\unit,\mathcal{A}) \arrow[d,swap,"\mathsf{ev\usc{}pt}"] \arrow[r] & \mathsf{rGph}(\mathcal{I},\mathcal{A}) \arrow[d,"\mathsf{ev\usc{}arrow}"] \\
+\pts{A} \arrow[r] & \sm{i,j:\pts{A}}\edg{A}(i,j)
+\end{tikzcd}
+\end{equation*}
+where both vertical maps are equivalences, and the top map is an equivalence by assumption. Therefore the bottom map is an equivalence.
+
+Since the reflexive graph morphism $\mathsf{rGph}(\mathcal{I},\unit)$ is a common retraction of both end-point inclusions, it follows that the pre-composition map
+\begin{equation*}
+\mathsf{rGph}(\unit,\mathcal{A}) \to \mathsf{rGph}(\mathcal{I},\mathcal{A})
+\end{equation*}
+is a common section of both pre-composition maps
+\begin{equation*}
+0^\ast,1^\ast:\mathsf{rGph}(\mathcal{I},\mathcal{A})\to \mathsf{rGph}(\unit,\mathcal{A})
+\end{equation*}
+However, assuming (ii) it follows that both $0^\ast$ and $1^\ast$ are equivalences, so (ii) implies both (iii) and (iv).
+
+Now suppose that (iii) holds; we will show that (i) follows. We have the commuting square
+\begin{equation*}
+\begin{tikzcd}
+\mathsf{rGph}(\mathcal{I},\mathcal{A}) \arrow[d,swap,"\mathsf{ev\usc{}arrow}"] \arrow[r,"0^\ast"] & \mathsf{rGph}(\unit,\mathcal{A}) \arrow[d,"\mathsf{ev\usc{}pt}"] \\
+\sm{i,j:\pts{A}}\edg{A}(i,j) \arrow[r,swap,"\pi_1"] & \pts{A}
+\end{tikzcd}
+\end{equation*}
+in which both vertical maps are equivalences. Therefore the fibers of $\pi_1$ are equivalent to the fibers of $0^\ast$. Note that the fibers of $\pi_1$ are of the form
+\begin{equation*}
+\sm{j:\pts{A}}\edg{A}(i,j),
+\end{equation*}
+so it follows from (iii) that these are contractible. Then (i) follows by the fundamental theorem of identity types, \cref{thm:id_fundamental}.
+
+The argument that (i) follows from (iv) is similar, using $\pi_2$ instead of $\pi_1$ in the square.
+\end{proof}
+
+\begin{cor}
+The operation $\Delta:\UU\to\mathsf{rGph}$ is an embedding, and its image is the type of discrete reflexive graphs.
+\end{cor}
+
+\begin{proof}
+For any type $X$, the graph $\Delta X$ is a discrete reflexive graph. Moreover, by the type of reflexive relations on $X$ giving $X$ the structure of a discrete reflexive graph is contractible by \cref{thm:discrete_rgraph}.
+\end{proof}
+
+\section{Reflexive coequalizers}
+
+\begin{defn}
+Consider a reflexive graph $\mathcal{A}$ and a type $X$ equipped with a morphism $f:\mathsf{rGph}(\mathcal{A},\Delta(X))$. We say that $X$ is a \define{reflexive coequalizer} if the map
+\begin{equation*}
+\Delta(\blank) \circ f: (X\to Y)\to \mathsf{rGph}(\mathcal{A},\Delta(Y))
+\end{equation*}
+is an equivalence.
+\end{defn}
+
+Our goal in this section is to show that reflexive coequalizers can be constructed as pushouts. We will use the following lemma.
+
+\begin{lem}\label{lem:coh_red}
+Consider a type $A$ with a type family $B$, and $a:A$. Furthermore, suppose that
+\begin{equation*}
+\alpha:\prd{x:A}B(x)\to (a=x).
+\end{equation*}
+Then the \define{coherence reduction} map
+\begin{equation*}
+\mathsf{coh\usc{}red} : \Big(\sm{y:B(a)}\alpha(y)=\refl{a}\Big)\to\Big(\sm{x:A}B(x)\Big)
+\end{equation*}
+given by $(y,q)\mapsto (a,y)$ is an equivalence.
+\end{lem}
+
+\begin{rmk}
+A quick way to see that there is an equivalence
+\begin{equation*}
+\sm{x:A}B(x) \eqvsym \sm{b:B(a)} \alpha_{a}(b)=\refl{a}.
+\end{equation*}
+is to use the contractibiliby of the total space of identity types twice:
+\begin{align*}
+\sm{x:A}B(x) & \eqvsym \sm{x:A}{y:B(x)}{p:a=x}\alpha(y)=p \\
+& \eqvsym \sm{y:B(a)}\alpha(y)=\refl{a}.\qedhere
+\end{align*}
+However, it is not clear at once that the underlying map of this composite of equivalences is indeed the map $\mathsf{coh\usc{}red}$ defined in \cref{lem:coh_red}.
+\end{rmk}
+
+\begin{proof}[Proof of \cref{lem:coh_red}]
+We show that the fibers are contractible:
+\begin{align*}
+\fib{\mathsf{coh\usc{}red}}{(x,y)} & \eqvsym \sm{y':B(a)}{q:\alpha(y')=\refl{a}} (a,y')=(x,y) \\
+& \eqvsym \sm{y':B(a)}{q:\alpha(y')=\refl{a}}{p:a=x} \mathsf{tr}_B(p,y')=y \\
+& \eqvsym \sm{y':B(a)}{q:\alpha(y')=\refl{a}}{p:a=x} y'=\mathsf{tr}_B(p^{-1},y) \\
+& \eqvsym \sm{p:a=x}\alpha(\mathsf{tr}_B(p^{-1},y))=\refl{a} \\
+& \eqvsym \sm{p:a=x}p=\alpha(y).\qedhere
+\end{align*}
+\end{proof}
+
+\begin{cor}
+Consider a type $A$ with a relation $R:A\to A\to\UU$ such that
+\begin{equation*}
+\alpha: \prd{x,y:A}R(x,y)\to (x=y).
+\end{equation*}
+Then the map
+\begin{equation*}
+\mathsf{coh\usc{}red}:\Big(\sm{x:A}{r:R(x,x)}\alpha(r)=\refl{x}\Big)\to \Big(\sm{x,y:A}R(x,y)\Big).
+\end{equation*}
+given by $(x,r,c)\mapsto (x,x,r)$ is an equivalence.
+\end{cor}
+
+\begin{proof}
+Immediate by \cref{thm:fib_equiv}.
+\end{proof}
+
+\begin{thm}\label{thm:rcoeq_is_pushout}
+Let $\mathcal{A}$ be a reflexive graph, and let $X$ be a type equipped with $f:\mathsf{rGph}(\mathcal{A},\Delta X)$. Then the following are equivalent:
+\begin{enumerate}
+\item $X$ is a reflexive coequalizer of $\mathcal{A}$.
+\item The square
+\begin{equation*}
+\begin{tikzcd}
+\sm{x,y:\pts{A}}\edg{A}(x,y) \arrow[r,"\pi_2"] \arrow[d,swap,"\pi_1"] & \pts{A} \arrow[d,"\pts{f}"] \\
+\pts{A} \arrow[r,swap,"\pts{f}"] & X
+\end{tikzcd}
+\end{equation*}
+which commutes by $\lam{(i,j,e)}\edg{f}(e)$, is a pushout square.
+\end{enumerate}
+In particular, there is a reflexive coequalizer for every reflexive graph $\mathcal{A}$, for which we write
+\begin{equation*}
+\mathsf{constr}:\mathsf{rGph}(\mathcal{A},\Delta(\mathsf{rcoeq}(\mathcal{A}))).
+\end{equation*}
+\end{thm}
+
+\begin{proof}
+The triangle
+\begin{equation*}
+\begin{tikzcd}
+& Y^X \arrow[dl,swap,"{\Delta(\blank)\circ f}"] \arrow[dr,"\mathsf{cocone\usc{}map}"] \\
+\mathsf{rGph}(\mathcal{A},\Delta Y) \arrow[rr,"\eqvsym","\mathsf{coh\usc{}red}"'] & & \mathsf{cocone}(Y)
+\end{tikzcd}
+\end{equation*}
+commutes, for any type $Y$, so the claim follows by the 3-for-2 property of equivalences.
+\end{proof}
+
+\begin{eg}\label{eg:rcoeq_is_pushout} {}~
+\begin{enumerate}
+\item The reflexive graph quotient of the discrete graph $\Delta(X)$ of a type $X$ is just $X$ itself. It also follows that $\mathsf{constr} : \mathsf{rGph}(\mathcal{A},\Delta(\mathsf{rcoeq}(\mathcal{A})))$ is an equivalence of reflexive graphs if and only if $\mathcal{A}$ is a discrete graph.
+\item The reflexive graph quotient of the indiscrete graph $\nabla(X)$ on a type $X$ is the join square $\join{X}{X}$.
+\item Let $\mathcal{A}$ be a non-reflexive graph, and let $F(\mathcal{A})$ be the reflexive graph obtained by freely adding a proof of reflexivity, as in \autoref{eg:freerfx} of \autoref{eg:running_graphs}. Then the non-reflexive graph quotient of $\mathcal{A}$ is the reflexive graph quotient of $F(\mathcal{A})$. 
+\item Let $X$ be a type with base point $x_0:X$. Define the reflexive graph $SX$ by
+\begin{align*}
+\pts{SX} & \defeq \unit \\
+\edg{SX} & \defeq \lam{\nameless}{\nameless}X \\
+\rfx{SX} & \defeq \lam{\nameless}x_0.
+\end{align*} 
+The reflexive graph quotient of $SX$ is the suspension of $X$.
+\end{enumerate}
+\item The reflexive coequalizer of the walking arrow $\mathcal{I}$ is the interval, which is contractible.
+\end{eg}
+
+\section{Diagrams over reflexive graphs}
+
+\begin{defn}
+Let $\mathcal{A}$ be a reflexive graph. A diagram $D$ over $\mathcal{A}$ is a triple $(\pts{D},\edg{D},\rfx{D})$ consisting of
+\begin{align*}
+\pts{D} & \pts{A}\to \UU \\
+\edg{D} & \prd{i,j:\pts{A}} \edg{A}(i,j)\to (\pts{D}(i)\to \pts{D}(j)) \\
+\rfx{D} & \prd{i:\pts{A}} \edg{D}(\rfx{\mathcal{A}}(i))\htpy \idfunc[\pts{D}(i)].
+\end{align*}
+\end{defn}
+
+\begin{defn}
+Let $D$ be a diagram over $\mathcal{A}$. We form the total reflexive graph $\msm{\mathcal{A}}{D}$ of $D$ by
+\begin{align*}
+\pts{\msm{\mathcal{A}}{D}} & \defeq \sm{i:\pts{A}}\pts{D}(i) \\
+\edg{\msm{\mathcal{A}}{D}}((i,x),(j,y)) & \defeq \sm{e:\edg{A}(i,j)} \edg{D}(e,x)=y \\
+\rfx{\msm{\mathcal{A}}{D}}((i,x)) & \defeq (\rfx{\mathcal{A}}(i),\rfx{D}(i,x)).
+\end{align*}
+\end{defn}
+
+\begin{defn}
+Let $D$ be a diagram over $\mathcal{A}$, and let $X$ be a type. A $D$-cocone on $X$ is a morphism $f:\mathsf{rGph}(\msm{\mathcal{A}}{D},\Delta X)$ of reflexive graphs. A $D$-cocone $f$ on $X$ is colimiting if the map
+\begin{equation*}
+\Delta(\blank)\circ f : (X\to Y)\to \mathsf{rGph}(\msm{\mathcal{A}}{D},\Delta Y)
+\end{equation*}
+is an equivalence for every type $Y$. 
+\end{defn}
+
+\begin{rmk}
+By \cref{thm:rcoeq_is_pushout} it follows that every diagram $D$ over any reflexive graph $\mathcal{A}$ has a colimit. 
+\end{rmk}
+
+\section{Sequential colimits}
+
+\begin{defn}
+We define the non-reflexive graph $\N^{\prec}$ by 
+\begin{align*}
+\pts{(\N^{\prec})} & \defeq \N \\
+\edg{(\N^{\prec})}(n,m) & \defeq n+1=m \\
+\end{align*}
+\end{defn}
+
+Type sequences are diagrams of the following form.
+\begin{equation*}
+\begin{tikzcd}
+A_0 \arrow[r,"f_0"] & A_1 \arrow[r,"f_1"] & A_2 \arrow[r,"f_2"] & \cdots.
+\end{tikzcd}
+\end{equation*}
+Their formal specification is as follows.
+
+\begin{defn}
+An \define{(increasing) type sequence} $\mathcal{I}$ consists of
+\begin{align*}
+A & : \N\to\UU \\
+f & : \prd{n:\N} A_n\to A_{n+1}. 
+\end{align*}
+\end{defn}
+
+In this section we will introduce the sequential colimit of a type sequence.
+The sequential colimit includes each of the types $A_n$, but we also identify each $x:A_n$ with its value $f_n(x):A_{n+1}$. 
+Imagine that the type sequence $A_0\to A_1\to A_2\to\cdots$ defines a big telescope, with $A_0$ sliding into $A_1$, which slides into $A_2$, and so forth.
+
+As usual, the sequential colimit is characterized by its universal property.
+
+\begin{defn}
+\begin{enumerate}
+\item A \define{(sequential) cocone} on a type sequence $\mathcal{I}$ with vertex $B$ consists of
+\begin{align*}
+h & : \prd{n:\N} A_n\to B \\
+H & : \prd{n:\N} f_n\htpy f_{n+1}\circ H_n.
+\end{align*}
+We write $\mathsf{cocone}(B)$ for the type of cones with vertex $X$.
+\item Given a cone $(h,H)$ with vertex $B$ on a type sequence $\mathcal{I}$ we define the map
+\begin{equation*}
+\mathsf{cocone\usc{}map}(h,H) : (B\to C)\to \mathsf{cocone}(B)
+\end{equation*}
+given by $f\mapsto (f\circ h,\lam{n}{x}\mathsf{ap}_f(H_n(x)))$. 
+\item We say that a cone $(h,H)$ with vertex $B$ is \define{colimiting} if $\mathsf{cocone\usc{}map}(h,H)$ is an equivalence for any type $C$. 
+\end{enumerate}
+\end{defn}
+
+\begin{thm}\label{thm:sequential_up}
+Consider a cocone $(h,H)$ with vertex $B$ for a type sequence $\mathcal{I}$. The following are equivalent:
+\begin{enumerate}
+\item The cocone $(h,H)$ is colimiting.
+\item The cocone $(h,H)$ is inductive in the sense that for every type family $P:B\to \UU$, the map
+\begin{align*}
+\Big(\prd{b:B}P(b)\Big)\to {}& \sm{h:\prd{n:\N}{x:A_n}P(h_n(x))}\\ 
+& \qquad \prd{n:\N}{x:A_n} \mathsf{tr}_P(H_n(x),h_n(x))={h_{n+1}(f_n(x))}
+\end{align*}
+given by
+\begin{equation*}
+s\mapsto (\lam{n}s\circ h_n,\lam{n}{x} \mathsf{apd}_{s}(H_n(x)))
+\end{equation*}
+has a section.
+\item The map in (ii) is an equivalence.
+\end{enumerate}
+\end{thm}
+
+\section{Descent for reflexive coequalizers}\label{sec:descent_rcoeq}
+
+\subsection{Families over reflexive graphs}
+
+\begin{defn}\label{defn:graphs_fam}
+A \define{family $\mathcal{B}$ of graphs over $\mathcal{A}$} is a triple $\pairr{\pts{B},\edg{B},\rfx{B}}$ consisting of
+\begin{align*}
+\pts{B} & : \pts{A}\to\UU \\
+\edg{B} & : \prd*{i,j:\pts{A}}{q:\edg{A}(i,j)} \pts{B}(i)\to\pts{B}(j)\to\UU \\
+\rfx{\mathcal{B}} & : \prd{i:\pts{A}}{x:\pts{B}(i)} \edg{B}(\rfx{\mathcal{A}}(i),x,x).
+\end{align*}
+\end{defn}
+
+\begin{defn}\label{graph:ext}
+Suppose that $\mathcal{B}$ is a family of reflexive graphs over $\mathcal{A}$. Then we define the \define{total graph} of $\mathcal{B}$ to be the reflexive graph $\msm{\mathcal{A}}{\mathcal{B}}$ given by
+\begin{align*}
+\pts{\msm{\mathcal{A}}{\mathcal{B}}} & \defeq \sm{i:\pts{A}}\pts{B}(i)\\
+\edg{\msm{\mathcal{A}}{\mathcal{B}}}(\pairr{i,x},\pairr{j,y}) & \defeq \sm{q:\edg{A}(i,j)}\edg{B}(q,x,y)\\
+\rfx{\msm{\mathcal{A}}{\mathcal{B}}}(\pairr{i,x}) & \defeq \pairr{\rfx{\mathcal{A}}(i),\rfx{\mathcal{B}}(x)}.
+\end{align*}
+Furthermore, we define the reflexive graph morphism $\proj 1:\mathsf{rGph}(\msm{\mathcal{A}}{\mathcal{B}},\mathcal{A})$ by
+\begin{align*}
+\pts{(\proj 1)} & \defeq \proj 1 \\
+\edg{(\proj 1)}((i,x),(j,y)) & \defeq \proj 1 \\
+\rfx{(\proj 1)}((i,x)) & \defeq \refl{\rfx{\mathcal{A}}(i)}.
+\end{align*}
+\end{defn}
+
+\begin{thm}
+For any small reflexive graph $\mathcal{A}$, the type $\mathsf{fam}_\UU(\mathcal{A})$ is equivalent to the type
+\begin{equation*}
+\sm{\mathcal{B}:\mathsf{rGph}}\mathsf{rGph}(\mathcal{B},\mathcal{A}).
+\end{equation*}
+\end{thm}
+
+\subsection{The universal family of reflexive graphs}
+
+\begin{defn}
+We define the universe $\mathcal{G}$ of reflexive graphs to be the reflexive graph consisting of
+\begin{align*}
+\pts{\mathcal{G}} & \defeq \mathsf{rGph} \\
+\edg{\mathcal{G}}(\mathcal{A},\mathcal{B}) & \defeq \pts{A}\to\pts{B}\to\UU \\
+\rfx{\mathcal{G}}(\mathcal{A}) & \defeq \edg{A}.
+\end{align*}
+We define the \define{universal family of reflexive graphs} $\tilde{\mathcal{G}}$ over $\mathcal{G}$ to consist of
+\begin{align*}
+\pts{\tilde{\mathcal{G}}}(\mathcal{A}) & \defeq \pts{A} \\
+\edg{\tilde{\mathcal{G}}}(S) & \defeq S \\
+\rfx{\tilde{\mathcal{G}}}(\mathcal{A}) & \defeq \rfx{\mathcal{A}}.
+\end{align*}
+\end{defn}
+
+\begin{thm}
+Let $\mathcal{A}$ be a reflexive graph. Then the pre-composition map $\alpha\mapsto \tilde{\mathcal{G}}\cdot\alpha$ of type
+\begin{equation*}
+\begin{tikzcd}
+\mathsf{rGph}({\mathcal{A}},{\mathcal{G}})\to\tffam{\mathcal{A}}
+\end{tikzcd}
+\end{equation*}
+is an equivalence.
+\end{thm}
+
+\begin{proof}
+A graph homomorphism $\chi:\mathcal{A}\to\mathcal{G}$ is a triple $\pairr{\mathcal{G},R,\rho}$ consisting of
+\begin{align*}
+\mathcal{G} & : \pts{A}\to\mathsf{rGraph} \\
+R & : \prd*{i,j:\pts{A}}{q:\edg{A}(i,j)} \pts{\mathcal{G}(i)}\to\pts{\mathcal{G}(j)}\to\UU \\
+\rho & : \prd{i:\pts{A}} \edg{\mathcal{G}(i)}=R(\rfx{\mathcal{A}}(i)). 
+\end{align*}
+The type of such triples $\pairr{\mathcal{G},R,\rho}$ is equivalent to the type of pentuples $\pairr{\pts{G},\edg{G},\rfx{G},R,\rho}$ consisting of
+\begin{align*}
+\pts{G} & : \pts{A}\to\UU \\
+\edg{G} & : \prd*{i:\pts{A}} \pts{G}(i)\to\pts{G}(i)\to\UU \\
+\rfx{G} & : \prd{i:\pts{A}}{g:\pts{G}(i)} \edg{G}(g,g) \\
+R & : \prd*{i,j:\pts{A}}{q:\edg{A}(i,j)} \pts{G}(i)\to\pts{G}(j)\to\UU \\
+\rho & : \prd{i:\pts{A}} \edg{G}(i)=R(\rfx{\mathcal{A}}(i)).
+\end{align*}
+Note that the type of $R$ does not depend on $\edg{G}$ or $\rfx{G}$, and that the type of $\rho$ does not depend on $\rfx{G}$. Thus, we can use the contractibility of the type of pairs $\pairr{\edg{G},\rho}$ to conclude that the type of pentuples $\pairr{\pts{G},\edg{G},\rfx{G},R,\rho}$ as described above is equivalent to the type of triples $\pairr{\pts{G},R,\rfx{G}}$ consisting of
+\begin{align*}
+\pts{G} & : \pts{A}\to\UU \\
+R & : \prd*{i,j:\pts{A}}{q:\edg{A}(i,j)} \pts{G}(i)\to\pts{G}(j)\to\UU \\
+\rfx{G} & : \prd*{i:\pts{A}}{g:\pts{G}(i)} R(\rfx{A}(i),g,g).
+\end{align*}
+Note that this is precisely the type of families of reflexive graphs over $\mathcal{A}$. Explicitly, the equivalence we have constructed is given by
+\begin{equation*}
+\pairr{\mathcal{G},R,\rho}\mapsto \pairr{(\lam{i}\pts{\mathcal{G}(i)}),R,(\lam{i}{g}\trans{\rho(i)}{\rfx{\mathcal{G}(i)}(g)})}.
+\end{equation*}
+By inspection one sees that this map is the map 
+\begin{equation*}
+\pairr{\mathcal{G},R,\rho}\mapsto \tilde{U}\cdot\pairr{\mathcal{G},R,\rho}
+\end{equation*} 
+of which the theorem asserts that it is an equivalence.
+\end{proof}
+
+\begin{rmk}
+There also is a universal family of non-reflexive graphs, which is considerably simpler. However, the universe of non-reflexive graphs is \emph{not} obtained by simply forgetting the reflexivity of $\mathcal{G}$. Instead, the universe $\mathcal{S}$ of non-reflexive graphs is given by
+\begin{align*}
+\pts{\mathcal{S}} & \defeq \UU \\
+\edg{\mathcal{S}}(A, B) & \defeq A \to B \to\UU,
+\end{align*}
+and its universal family $\tilde{\mathcal{S}}$ over $\mathcal{S}$ is given by
+\begin{align*}
+\pts{\tilde{\mathcal{S}}}(A) & \defeq A \\
+\edg{\tilde{\mathcal{S}}}(R) & \defeq R.
+\end{align*}
+Then it can be shown that the canonical map
+\begin{equation*}
+\begin{tikzcd}
+\mathsf{Gph}({\mathcal{A}},{\mathcal{S}})\to\tffam{\mathcal{A}}
+\end{tikzcd}
+\end{equation*}
+is an equivalence, where $\tffam{\mathcal{A}}$ is the type of small families of non-reflexive graphs.
+\end{rmk}
+
+\subsection{Equifibered families}
+
+\begin{defn}\label{defn:functional}
+Let $R:A\to (B\to \UU)$ be a binary relation from $A$ to $B$.
+\begin{enumerate}
+\item $R$ is said to be \define{functional} if there is a term of type
+\begin{equation*}
+\isfunction (R) \defeq \prd{x:A}\iscontr \big(\sm{y:B}R(x,y)\big).
+\end{equation*}
+\item The \define{opposite} $R^{op}:B\to (A\to \UU)$ of a relation $R:A\to (B\to \UU)$ is defined by $R^{op}(b,a)\defeq R(a,b)$.
+\item $R$ is said to be a \define{correspondence} if both $R$ and $R^{op}$ are functional. We will write $\mathsf{is\usc{}corr}(R)$ for the property that $R$ is a correspondence.
+\end{enumerate}
+\end{defn}
+
+\begin{lem}[Exercise 4.2 in \cite{hottbook}]\label{lem:fun_rel}
+Let $A$ and $B$ be types.
+\begin{enumerate}
+\item The map $f\mapsto \lam{x}{y}(f(x)=y)$ with the canonical proof that the relation associated to $f$ is functional is an equivalence
+\begin{equation*}
+(A\to B) \eqvsym {\sm{R:A\to B\to \UU}\isfunction (R)}.
+\end{equation*}
+\item The map $e\mapsto \lam{x}{y}(e(x)=y)$ with the canonical proof that the relation associated to $e$ is a correspondence is an equivalence
+\end{enumerate}
+\begin{equation*}
+(\eqv{A}{B}) \eqvsym {\sm{R:A\to B\to\UU}\mathsf{is\usc{}corr}(R)}.\qedhere
+\end{equation*}
+\end{lem}
+
+\begin{defn}
+Let $\mathcal{B}$ be a family of reflexive graphs over $\mathcal{A}$. 
+\begin{enumerate}
+\item We say that $\mathcal{B}$ is \define{diagrammatic} if each relation
+\begin{equation*}
+\edg{B}(e):\pts{B}(i)\to \pts{B}(j)\to\UU
+\end{equation*}
+is functional. We write $\mathsf{is\usc{}diagr}(\mathcal{B})$ for the proposition that $\mathcal{B}$ is diagrammatic.
+\item We say that $\mathcal{B}$ is \define{equifibered} if each relation
+\begin{equation*}
+\edg{B}(e):\pts{B}(i)\to \pts{B}(j)\to\UU
+\end{equation*}
+is a correspondence. We write $\mathsf{is\usc{}eqf}(\mathcal{B})$ for the proposition that $\mathcal{B}$ is equifibered. 
+\end{enumerate}
+\end{defn}
+
+\begin{lem}
+The type of diagrammatic families over $\mathcal{A}$ is equivalent to the type of diagrams over $\mathcal{A}$.
+\end{lem}
+
+\begin{defn}
+An \define{equifibered family} $\mathcal{E}$ over $\mathcal{A}$ consists of
+\begin{align*}
+\pts{E} & : \pts{A}\to\UU \\
+\edg{E} & : \prd{i,j:\pts{A}} \edg{A}(i,j)\to (\eqv{\pts{E}(i)}{\pts{E}(j)}) \\
+\rfx{E} & : \prd{i:\pts{A}} \edg{E}(\rfx{\mathcal{A}}(i))\htpy \idfunc[\pts{E}(i)]
+\end{align*}
+\end{defn}
+
+\begin{lem}
+The type of families $\mathcal{B}$ over $\mathcal{A}$ satisfying $\mathsf{is\usc{}eqv}(\mathcal{B})$ is equivalent to the type of equifibered families over $\mathcal{A}$.
+\end{lem}
+
+\begin{defn}
+A map $f:X\to Y$ is said to be right orthogonal to a map $i:A\to B$ if the square
+\begin{equation*}
+\begin{tikzcd}
+X^B \arrow[r,"\blank\circ i"] \arrow[d,swap,"f\circ \blank"] & X^A \arrow[d,"f\circ \blank"] \\
+Y^B \arrow[r,swap,"\blank\circ i"] & Y^A
+\end{tikzcd}
+\end{equation*}
+is a pullback square.
+\end{defn}
+
+\begin{rmk}
+The notion of orthogonality can also be stated for morphisms of reflexive graphs.
+\end{rmk}
+
+\begin{defn}
+A morphism $f:\mathsf{rGph}(\mathcal{A},\mathcal{B})$ is said to be a \define{left fibration} of reflexive graphs if it is right orthogonal to the morphism $0,1:\mathsf{rGph}(\unit,\mathcal{I})$, i.e.~if the commuting square
+\begin{equation*}
+\begin{tikzcd}
+\mathsf{rGph}(\mathcal{I},\mathcal{A}) \arrow[r] \arrow[d] & \mathsf{rGph}(\unit,\mathcal{A}) \arrow[d] \\
+\mathsf{rGph}(\mathcal{I},\mathcal{B}) \arrow[r] & \mathsf{rGph}(\unit,\mathcal{B})
+\end{tikzcd}
+\end{equation*}
+is a pullback square.
+\end{defn}
+
+\begin{defn}
+A morphism $f:\mathsf{rGph}(\mathcal{A},\mathcal{B})$ of reflexive graphs is said to be \define{left cartesian} if the naturality square
+\begin{equation*}
+\begin{tikzcd}
+\sm{i,j:\pts{A}}\edg{A}(i,j) \arrow[d] \arrow[r,"\pi_1"] & \pts{A} \arrow[d] \\
+\sm{i,j:\pts{B}}\edg{B}(i,j) \arrow[r,swap,"\pi_1"] & \pts{B}
+\end{tikzcd}
+\end{equation*}
+is a pullback square.
+\end{defn}
+
+\begin{thm}
+Let $\mathcal{B}$ be a family of reflexive graphs over $\mathcal{A}$. The following are equivalent:
+\begin{enumerate}
+\item $\mathcal{B}$ is diagrammatic.
+\item The morphism $\proj 1 : \mathsf{rGph}(\msm{\mathcal{A}}{\mathcal{B}},\mathcal{A})$ is a left fibration.
+\item The morphism $\proj 1 : \mathsf{rGph}(\msm{\mathcal{A}}{\mathcal{B}},\mathcal{A})$ is left cartesian.
+\end{enumerate}
+\end{thm}
+
+\begin{proof}
+For any morphism $f:\mathsf{rGph}(\mathcal{B},\mathcal{A})$ we have the commuting cube
+\begin{equation*}
+\begin{tikzcd}
+& \mathsf{rGph}(\mathcal{I},\mathcal{B}) \arrow[dl] \arrow[d] \arrow[dr] \\
+\mathsf{rGph}(\unit,\mathcal{B}) \arrow[d] & \sm{i,j:\pts{B}}\edg{B}(i,j) \arrow[dl] \arrow[dr] & \mathsf{rGph}(\mathcal{I},\mathcal{A}) \arrow[dl,crossing over] \arrow[d] \\
+\pts{B} \arrow[dr] & \mathsf{rGph}(\unit,\mathcal{A}) \arrow[d] \arrow[from=ul,crossing over] & \sm{i,j:\pts{A}}\edg{A}(i,j) \arrow[dl] \\
+& \pts{A}
+\end{tikzcd}
+\end{equation*}
+in which all vertical maps are equivalences. Therefore the top square is a pullback if and only if the bottom square is a pullback, which proves that (ii) holds if and only if (iii) holds.
+\end{proof}
+
+\begin{defn}\label{defn:graph_fibration}
+A morphism $f:\mathsf{rGph}(\mathcal{B},\mathcal{A})$ is said to be a \define{fibration} of reflexive graphs if it is right orthogonal to the morphisms
+\begin{equation*}
+0,1:\mathsf{rGph}(\unit,\mathcal{I}),\qquad\text{and}\qquad t:\mathsf{rGph}(\mathcal{I},\unit). 
+\end{equation*}
+\end{defn}
+
+\begin{defn}
+A morphism $f:\mathsf{rGph}(\mathcal{B},\mathcal{A})$ of reflexive graphs is said to be \define{cartesian} if the naturality squares
+\begin{equation*}
+\begin{tikzcd}
+\pts{B} \arrow[d] & \sm{i,j:\pts{B}}\edg{B}(i,j) \arrow[d] \arrow[r] \arrow[l] & \pts{B} \arrow[d] & \pts{B} \arrow[r] \arrow[d] & \sm{i,j:\pts{B}}\edg{B}(i,j) \arrow[d] \\
+\pts{A} & \sm{i,j:\pts{A}}\edg{A}(i,j) \arrow[l] \arrow[r] & \pts{A} & \pts{A} \arrow[r] & \sm{i,j:\pts{A}}\edg{A}(i,j)
+\end{tikzcd}
+\end{equation*}
+are pullback squares.
+\end{defn}
+
+\begin{thm}
+Let $\mathcal{B}$ be a family of reflexive graphs over $\mathcal{A}$. The following are equivalent:
+\begin{enumerate}
+\item $A$ is equifibered.
+\item The morphism $\proj 1 : \mathsf{rGph}(\msm{\mathcal{A}}{\mathcal{B}},\mathcal{A})$ is a fibration.
+\item The morphism $\proj 1 : \mathsf{rGph}(\msm{\mathcal{A}}{\mathcal{B}},\mathcal{A})$ is cartesian.
+\end{enumerate}
+\end{thm}
+
+\subsection{The descent property for reflexive coequalizers}
+
+\begin{defn}
+We define an operation
+\begin{equation*}
+\mathsf{equifib\usc{}fam} : (\mathsf{rcoeq}(\mathcal{A})\to\UU)\to \mathsf{equifib}(\mathcal{A})
+\end{equation*}
+for each reflexive graph $\mathcal{A}$, by
+\begin{align*}
+\pts{\mathsf{equifib\usc{}fam}(P)} & \defeq P \circ \pts{\mathsf{constr}} \\
+\edg{\mathsf{equifib\usc{}fam}(P)}(e) & \defeq \mathsf{tr}_P(\edg{\mathsf{constr}}(e)) \\
+\rfx{\mathsf{equifib\usc{}fam}(P)}(i) & \defeq \mathsf{htpy\usc{}eq}(\ap{\mathsf{tr}_P}{\rfx{\mathsf{constr}}(i)}).
+\end{align*}
+\end{defn}
+
+\begin{thm}
+The operation
+\begin{equation*}
+\mathsf{equifib\usc{}fam} : (\mathsf{rcoeq}(\mathcal{A})\to\UU)\to \mathsf{equifib}(\mathcal{A})
+\end{equation*}
+is an equivalence for each reflexive graph $\mathcal{A}$, if and only if the univalence axiom holds.
+\end{thm}
+
+\begin{proof}
+The type of equifibered families over $\mathcal{A}$ is equivalent to the type
+$\mathcal{A}\to\UU^{\eqvsym}$, while the type of type families over $\rcoeq(\mathcal{A})$
+is equivalent to the type of $\mathcal{A}$-structures on $\UU$, which are graph morphisms
+$\mathcal{A}\to\Delta(\UU)$. Thus, we only need to know whether $\Delta(\UU)$ and
+$\UU^{\eqvsym}$ are equivalent graphs. This follows from the univalence axiom. This finishes the proof that (i) implies (ii).
+
+To prove that (ii) implies (i) we apply the descent property to the walking arrow $\mathcal{I}$, writing $I$ for $\mathsf{rcoeq}(\mathcal{I})$. We have a commuting triangle
+\begin{equation*}
+\begin{tikzcd}
+& \UU \arrow[dr,"\lam{X}\pairr{X,X,\idfunc}"] \arrow[dl,swap,"\lam{X}\mathsf{const}_X"] \\
+(I\to\UU)  \arrow[rr] & & \sm{A,B:\UU}\eqv{A}{B}
+\end{tikzcd}
+\end{equation*}
+Since the interval is contractible, the map $\lam{X}\mathsf{const}_X:\UU\to (I\to\UU)$ is an equivalence, and by the descent property it follows that the bottom map is an equivalence. Therefore the remaining map is an equivalence, which is equivalent to the univalence axiom. This finishes the proof that (ii) implies (i).
+\end{proof}
+
+\begin{cor}\label{cor:descent_rcoeq}
+For an cartesian morphism $f:\mathsf{rGph}(\mathcal{B},\mathcal{A})$ of reflexive graphs, the type of maps $g:X\to \mathsf{rcoeq}(\mathcal{A})$ equipped with a morphism $h:\mathsf{rGph}(\mathcal{B},\Delta X)$ and an identification witnessing that the square
+\begin{equation*}
+\begin{tikzcd}
+\mathcal{B} \arrow[d,swap,"f"] \arrow[r,"h"] & \Delta X \arrow[d,"\Delta g"] \\
+\mathcal{A} \arrow[r,swap,"\mathsf{constr}"] & \Delta(\mathsf{rcoeq}(\mathcal{A}))
+\end{tikzcd}
+\end{equation*}
+of reflexive graph morphisms commutes, is contractible.
+\end{cor}
+
+\subsection{The flattening lemma for reflexive coequalizers}
+
+\begin{defn}
+Let $\mathcal{E}$ be an equifibered diagram over $\mathcal{A}$. 
+We define $\rcoeq(\mathcal{E}):\rcoeq (\mathcal{A})\to\UU$ to be the type family
+$\mathsf{equifib\usc{}fam}^{-1}(\mathcal{E})$.
+\end{defn}
+
+By \cref{cor:descent_rcoeq} there is a commuting square
+\begin{equation*}
+\begin{tikzcd}[column sep=huge]
+\msm{\mathcal{A}}{\mathcal{E}} \arrow[d,swap,"\proj 1"] \arrow[r,"\mathsf{tot\usc{}constr}"] & \Delta\big(\sm{x:\mathsf{rcoeq}(\mathcal{A})}\mathsf{rcoeq}(\mathcal{E},x)\big) \arrow[d,"\Delta(\proj 1)"] \\
+\mathcal{A} \arrow[r,swap,"\mathsf{constr}"] & \Delta(\mathsf{rcoeq}(\mathcal{A}))
+\end{tikzcd}
+\end{equation*}
+of reflexive graph morphisms.
+
+\begin{thm}
+For any equifibered family over $\mathcal{A}$, the reflexive graph morphism
+\begin{equation*}
+\mathsf{tot\usc{}constr}:\mathsf{rGph}\Big(\msm{\mathcal{A}}{\mathcal{E}},\Delta\big(\sm{x:\mathsf{rcoeq}(\mathcal{A})}\mathsf{rcoeq}(\mathcal{E},x)\big)\Big)
+\end{equation*}
+is a reflexive coequalizer.
+\end{thm}
+
+\begin{thm}
+Consider a pullback square
+\begin{equation*}
+\begin{tikzcd}
+\mathcal{B} \arrow[r] \arrow[d] & \Delta X' \arrow[d] \\
+\mathcal{A} \arrow[r] & \Delta X 
+\end{tikzcd}
+\end{equation*}
+of reflexive coequalizers. Then the commuting square
+\begin{equation*}
+\begin{tikzcd}
+\mathsf{rcoeq}(\mathcal{B}) \arrow[r] \arrow[d] & X' \arrow[d] \\
+\mathsf{rcoeq}(\mathcal{A}) \arrow[r] & X 
+\end{tikzcd}
+\end{equation*}
+of types is a pullback square.
+\end{thm}
+
+\section{Descent for sequential colimits}\label{sec:descent_seqcolim}
+
+\subsection{Cartesian natural transformations of diagrams}
+
+In this section we study cartesian natural transformations of diagrams over graphs, i.e.~natural transformations of diagrams of which the naturality squares are pullback squares.
+In particular, will show that for any diagram $D$ over a graph $\mathcal{A}$, the type of cartesian natural transformations into $D$ is equivalent to the type of equifibered families over the graph of elements $\int_\mathcal{A} D$, which is just the context extension of the left fibration corresponding to $D$.
+This can be seen as a justification of our choice of terminology for equifibered families of graphs in \cref{defn:diag}, because in \cite[page 9]{rezk2010toposes} Rezk uses the terminology \emph{equifibered transformation} for cartasian natural transformations.
+
+Cartesian natural transformations are useful in practice, so we will provide some classes of examples.
+
+\begin{defn}
+Let $D$ and $D'$ be diagrams over $\mathcal{A}$. A \define{natural transformation} $\tau : D'\to D$ of diagrams consists of
+\begin{align*}
+\pts{\tau} & : \prd{i:\pts{A}}\pts{D'}(i)\to\pts{D}(i) \\
+\edg{\tau} & : \prd*{i,j:\pts{A}}{e:\edg{A}(i,j)}\prd{x:\pts{D}(i)}\pts{\tau}(\edg{D'}(e,x))=\edg{D}(e,\pts{\tau}(x)) \\
+\rfx{\tau} & : \prd{i:\pts{A}}{x:\pts{D}(i)} \dpath{}{}{\refl{\pts{\tau}(x)}}{\edg{\tau}(\rfx{A}(i),x)}
+\end{align*}
+\end{defn}
+
+\begin{defn}\label{defn:cartesian}
+A natural transformation $\tau:D'\to D$ of diagrams over $\mathcal{A}$ is said to be \define{cartesian} if the commutative squares
+\begin{equation*}
+\begin{tikzcd}[column sep=large]
+\pts{D'}(i) \arrow[r,"{\edg{D'}(e)}"] \arrow[d,swap,"\pts{\tau}(i)"] & \pts{D'}(j) \arrow[d,"\pts{\tau}(j)"] \\
+\pts{D}(i) \arrow[r,swap,"{\edg{D}(e)}"] & \pts{D}(i)
+\end{tikzcd}
+\end{equation*}
+are all pullback squares. 
+%We will write $D'\mathbin{\to_\times}D$ for the type of cartesian natural transformations from $D'$ to $D$.
+\end{defn}
+
+\begin{rmk}
+Let $D$ be a diagram over a graph $\mathcal{A}$. By considering $D$ as a left fibration over $\mathcal{A}$ via the equivalence of \cref{thm:lfib_diag}, we may form the context extension $\ctxext{\mathcal{A}}{D}$. Explicitly, the graph $\ctxext{\mathcal{A}}{D}$ consists of
+\begin{align*}
+\pts{\ctxext{\mathcal{A}}{D}} & \defeq \sm{i:\pts{A}}\pts{D}(i) \\
+\edg{\ctxext{\mathcal{A}}{D}}(\pairr{i,x},\pairr{j,q}) & \defeq \sm{q:\edg{A}(i,j)} \edg{D}(q,x)=y \\
+\rfx{\ctxext{\mathcal{A}}{D}}(i,x) & \defeq \pairr{\rfx{A}(i),\rfx{D}(x)}.
+\end{align*}
+Note that the graph $\ctxext{\mathcal{A}}{D}$ compares to the category of elements of a presheaf, at least intuitively.
+
+Now let $D'$ be a diagram over $\ctxext{\mathcal{A}}{D}$. When $D'$ is considered as left fibrations, the family $\msm{D}{D'}$ of graphs over $\mathcal{A}$ is by \cref{thm:diag_sigma} a left fibration, corresponding to the diagram consisting of
+\begin{align*}
+\pts{\msm{D}{D'}}(i) & \defeq \sm{x:\pts{D}(i)}\pts{D'}(i,x) \\
+\edg{\msm{D}{D'}}(q,\pairr{x,y}) & \defeq \pairr{\edg{D}(q,x),\edg{D'}(\pairr{q,\refl{\edg{D}(q,x)}},y} \\
+\rfx{\msm{D}{D'}}(i,\pairr{x,y}) & \defeq \pairr{\rfx{D}(i,x),\rfx{D'}(\pairr{i,x},y)}.
+\end{align*}
+\end{rmk}
+
+By considering diagrams $D$ and $D'$ over $\mathcal{A}$ as left fibrations, we see that a natural transformation $\tau$ from $D'$ to $D$ is just a graph morphism of type $\ctxext[\mathcal{A}]{D'}{D}$. 
+
+When $D'$ is a diagram over $\ctxext{\mathcal{A}}{D}$, one may easily verify that the projection morphism $\pi_1:\ctxhom[\mathcal{A}]{\msm{D}{D'}}{D}$ is a natural transformation of diagrams. Thus, we obtain a map
+\begin{equation*}
+\mathsf{diagToNat}_\mathcal{A} : \mathsf{Diag}(\ctxext{\mathcal{A}}{D})\to \sm{D':\mathsf{Diag}(\ctxext{\mathcal{A}}{D})}\ctxhom[\mathcal{A}]{D'}{D}.
+\end{equation*}
+
+\begin{thm}
+Let $D$ be a diagram over a graph $\mathcal{A}$. Assuming the univalence axiom, the map $\mathsf{diagToNat}_\mathcal{A}$ is an equivalence. Moreover, $\mathsf{diagToNat}$ restricts to an equivalence $\mathsf{equiFibToCart}_\mathcal{A}$, as indicated in the diagram
+\begin{equation*}
+\begin{tikzcd}[column sep=huge]
+\equifib(\ctxext{\mathcal{A}}{D}) \arrow[r,densely dotted] \arrow[d,swap,"\subseteq"] & \mathsf{Cart}(D) \arrow[d,"\subseteq"] \\
+\mathsf{Diag}(\ctxext{\mathcal{A}}{D}) \arrow[r,swap,"\mathsf{diagToNat}_\mathcal{A}"] & \mathsf{Nat}(D)
+\end{tikzcd}
+\end{equation*}
+\end{thm}
+
+\begin{cor}\label{lem:equifibered_basic}
+Let $D$ be a diagram over a graph $\mathcal{A}$, and let $E$ be a family of graphs over $\ctxext{\mathcal{A}}{D}$.
+Then the following are equivalent:
+\begin{enumerate}
+\item The family $E$ is equifibered.
+\item For each edge $q:\edg{\mathcal{A}}(i,j)$ in $\mathcal{A}$, the square
+\begin{equation*}
+\begin{tikzcd}[column sep=huge]
+\sm{u:\pts{D}(i)}\pts{E}(u) \arrow[r,"\edg{\msm{D}{E}}(q)"] \ar{d}[swap]{\proj1} & \sm{v:\pts{D}(j)}\pts{E}(v) \ar{d}{\proj1}\\ 
+\pts{D}(i) \ar{r}[swap]{\edg{D}(q)} & \pts{D}(j)
+\end{tikzcd}
+\end{equation*}
+is a pullback square.
+\end{enumerate}
+\end{cor}
+
+\begin{proof}
+This is a direct consequence of \cref{thm:fiberequiv_pullback}.
+\end{proof}
+
+\begin{thm}\label{thm:cartesian-equifibered}
+For a natural transformation $\tau:D'\to D$ of diagrams over $\mathcal{A}$, the following three properties are equivalent:
+\begin{enumerate}
+\item it is cartesian.
+\item each $\edg{D'}(e)$ is fiberwise an equivalence, i.e. for each $e:\edg{\mathcal{A}}(i,j)$ and each $y:\pts{D}(i)$, the unique map $\pts{\tau}(i)_y$ such that the diagram
+\begin{equation*}
+\begin{tikzcd}
+& \hfib{\pts{\tau}(i)}{y} \arrow[dl] \arrow[d,densely dotted,"\pts{\tau}(i)_y"] \arrow[dr,"\edg{D'}(e)\circ\proj1"] \\
+\unit & \hfib{\pts{\tau}(j)}{\edg{D}(e,y)} \arrow[l] \arrow[r,swap,"\proj1"] & \pts{D'}(j)
+\end{tikzcd}
+\end{equation*}
+commutes, is an equivalence.
+\item the graph family over $D$ determined by $\tau$ is an equifibered family.
+\end{enumerate}
+\end{thm}
+
+\begin{proof}
+The equivalence of the first two statements is a corollary of \cref{lem:pullback}. Statements (ii) and (iii) are equivalent by the way the object classifier works.
+\end{proof}
+
+\subsection{Type families over type sequences}
+
+\begin{defn}
+The type of \define{descent data} on a type sequence $\mathcal{A}\jdeq (A,f)$ is defined to be
+\begin{equation*}
+\mathsf{Desc}(\mathcal{A}) \defeq \sm{B:\prd{n:\N}A_n\to\UU}\prd{n:\N}{x:A_n}\eqv{B_n(x)}{B_{n+1}(f_n(x))}.
+\end{equation*}
+\end{defn}
+
+\begin{defn}
+We define a map
+\begin{equation*}
+\mathsf{desc\usc{}fam} : (A_\infty\to\UU)\to\mathsf{Desc}(\mathcal{A})
+\end{equation*}
+by $B\mapsto (\lam{n}{x}B(\mathsf{seq\usc{}in}(n,x)),\lam{n}{x}\mathsf{tr}_B(\mathsf{seq\usc{}glue}(n,x)))$.
+\end{defn}
+
+\begin{thm}
+The map 
+\begin{equation*}
+\mathsf{desc\usc{}fam} : (A_\infty\to\UU)\to\mathsf{Desc}(\mathcal{A})
+\end{equation*}
+is an equivalence.
+\end{thm}
+
+\begin{defn}
+A \define{cartesian transformation} of type sequences from $\mathcal{A}$ to $\mathcal{B}$ is a pair $(h,H)$ consisting of
+\begin{align*}
+h & : \prd{n:\N} A_n\to B_n \\
+H & : \prd{n:\N} g_n\circ h_n \htpy h_{n+1}\circ f_n,
+\end{align*}
+such that each of the squares in the diagram
+\begin{equation*}
+\begin{tikzcd}
+A_0 \arrow[d,swap,"h_0"] \arrow[r,"f_0"] & A_1 \arrow[d,swap,"h_1"] \arrow[r,"f_1"] & A_2 \arrow[d,swap,"h_2"] \arrow[r,"f_2"] & \cdots \\
+B_0 \arrow[r,swap,"g_0"] & B_1 \arrow[r,swap,"g_1"] & B_2 \arrow[r,swap,"g_2"] & \cdots
+\end{tikzcd}
+\end{equation*}
+is a pullback square. We define
+\begin{align*}
+\mathsf{cart}(\mathcal{A},\mathcal{B}) & \defeq\sm{h:\prd{n:\N}A_n\to B_n} \\
+& \qquad\qquad \sm{H:\prd{n:\N}g_n\circ h_n\htpy h_{n+1}\circ f_n}\prd{n:\N}\mathsf{is\usc{}pullback}(h_n,f_n,H_n),
+\end{align*}
+and we write
+\begin{equation*}
+\mathsf{Cart}(\mathcal{B}) \defeq \sm{\mathcal{A}:\mathsf{Seq}}\mathsf{cart}(\mathcal{A},\mathcal{B}).
+\end{equation*}
+\end{defn}
+
+\begin{defn}
+We define a map
+\begin{equation*}
+\mathsf{cart\usc{}map}(\mathcal{B}) : \Big(\sm{X':\UU}X'\to X\Big)\to\mathsf{Cart}(\mathcal{B}).
+\end{equation*}
+which associates to any morphism $h:X'\to X$ a cartesian transformation of type sequences into $\mathcal{B}$.
+\end{defn}
+
+\begin{thm}
+The operation $\mathsf{cart\usc{}map}(\mathcal{B})$ is an equivalence.
+\end{thm}
+
+\section{The flattening lemma for sequential colimits}
+
+The flattening lemma for sequential colimits essentially states that sequential colimits commute with $\Sigma$. 
+
+\begin{lem}
+Consider
+\begin{align*}
+B & : \prd{n:\N}A_n\to\UU \\
+g & : \prd{n:\N}{x:A_n}\eqv{B_n(x)}{B_{n+1}(f_n(x))}.
+\end{align*}
+and suppose $P:A_\infty\to\UU$ is the unique family equipped with
+\begin{align*}
+e & : \prd{n:\N}\eqv{B_n(x)}{P(\mathsf{seq\usc{}in}(n,x))}
+\end{align*}
+and homotopies $H_n(x)$ witnessing that the square
+\begin{equation*}
+\begin{tikzcd}[column sep=7em]
+B_n(x) \arrow[r,"g_n(x)"] \arrow[d,swap,"e_n(x)"] & B_{n+1}(f_n(x)) \arrow[d,"e_{n+1}(f_n(x))"] \\
+P(\mathsf{seq\usc{}in}(n,x)) \arrow[r,swap,"{\mathsf{tr}_P(\mathsf{seq\usc{}glue}(n,x))}"] & P(\mathsf{seq\usc{}in}(n+1,f_n(x)))
+\end{tikzcd}
+\end{equation*}
+commutes. Then $\sm{t:A_\infty}P(t)$ satisfies the universal property of the sequential colimit of the type sequence
+\begin{equation*}
+\begin{tikzcd}
+\sm{x:A_0}B_0(x) \arrow[r,"{\total[f_0]{g_0}}"] & \sm{x:A_1}B_1(x) \arrow[r,"{\total[f_1]{g_1}}"] & \sm{x:A_2}B_2(x) \arrow[r,"{\total[f_2]{g_2}}"] & \cdots.
+\end{tikzcd}
+\end{equation*}
+\end{lem}
+
+In the following theorem we rephrase the flattening lemma in using cartesian transformations of type sequences.
+
+\begin{thm}
+Consider a commuting diagram of the form
+\begin{equation*}
+\begin{tikzcd}[column sep=small,row sep=small]
+A_0 \arrow[rr] \arrow[dd] & & A_1 \arrow[rr] \arrow[dr] \arrow[dd] &[-.9em] &[-.9em] A_2 \arrow[dl] \arrow[dd] & & \cdots \\
+& & & X \arrow[from=ulll,crossing over] \arrow[from=urrr,crossing over] \arrow[from=ur,to=urrr] \\
+B_0 \arrow[rr] \arrow[drrr] & & B_1 \arrow[rr] \arrow[dr] & & B_2 \arrow[rr] \arrow[dl] & & \cdots \arrow[dlll] \\
+& & & Y \arrow[from=uu,crossing over] 
+\end{tikzcd}
+\end{equation*}
+If each of the vertical squares is a pullback square, and $Y$ is the sequential colimit of the type sequence $B_n$, then $X$ is the sequential colimit of the type sequence $A_n$. 
+\end{thm}
+
+\begin{cor}
+Consider a commuting diagram of the form
+\begin{equation*}
+\begin{tikzcd}[column sep=small,row sep=small]
+A_0 \arrow[rr] \arrow[dd] & & A_1 \arrow[rr] \arrow[dr] \arrow[dd] &[-.9em] &[-.9em] A_2 \arrow[dl] \arrow[dd] & & \cdots \\
+& & & X \arrow[from=ulll,crossing over] \arrow[from=urrr,crossing over] \arrow[from=ur,to=urrr] \\
+B_0 \arrow[rr] \arrow[drrr] & & B_1 \arrow[rr] \arrow[dr] & & B_2 \arrow[rr] \arrow[dl] & & \cdots \arrow[dlll] \\
+& & & Y \arrow[from=uu,crossing over] 
+\end{tikzcd}
+\end{equation*}
+If each of the vertical squares is a pullback square, then the square
+\begin{equation*}
+\begin{tikzcd}
+A_\infty \arrow[r] \arrow[d] & X \arrow[d] \\
+B_\infty \arrow[r] & Y
+\end{tikzcd}
+\end{equation*} 
+is a pullback square.
+\end{cor}
