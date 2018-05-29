@@ -1,0 +1,720 @@
+\chapter{$2$-simplicial types}
+
+We have observed in \cref{eg:rcoeq_is_pushout} that we have a reflexive coequalizer diagram
+\begin{equation*}
+\begin{tikzcd}
+\Big(\sm{x,y:A}f(x)=f(y)\Big) \arrow[r,yshift=1ex] \arrow[r,yshift=-1ex] & A \arrow[l] \arrow[r] & \join[X]{A}{A}
+\end{tikzcd}
+\end{equation*}
+In other words, the fiberwise join $\join[X]{A}{A}$ is can be thought of as a geometric realization of a $1$-truncated simplicial type. Thus, $\join[X]{A}{A}$ is a first approximation to `the' geometric realization of the nerve of $f$, which remains undefined in homotopy type theory since the problem of defining simplicial types is still open.
+
+\section{Discrete and Segal $2$-simplicial types}
+
+\begin{defn}
+A small $2$-simplicial type $\mathcal{A}$ consists of:
+\begin{enumerate}
+\item A \define{$2$-semi-simplicial structure} $(A_0,A_1,A_2)$ consisting of
+\begin{align*}
+A_0 & : \UU \\
+A_1 & : A_0 \to A_0 \to \UU \\
+A_2 & : \prd{x_1,x_2,x_3:A_0} A_1(x_1,x_2)\to A_1(x_1,x_3)\to A_1(x_2,x_3)\to\UU.
+\end{align*}
+Terms of $A_0$ are also called \define{vertices} or \define{$0$-cells}. Terms of type $A_1(x,y)$ are also called \define{edges} or \define{$1$-cells}. Terms of type $A_2(p,r,q)$ are also called \define{$2$-cells}.
+\item A \define{$2$-simplicial structure} or \define{unital structure}
+\begin{equation*}
+(\rfx{\mathcal{A}},\mathsf{right\usc{}unit}_{\mathcal{A}},\mathsf{left\usc{}unit}_{\mathcal{A}},\mathsf{coh\usc{}unit}_{\mathcal{A}})
+\end{equation*}
+consisting of
+\begin{align*}
+\rfx{\mathcal{A}} & : \prd{x:\pts{A}} \edg{A}(x,x) \\
+\mathsf{right\usc{}unit}_{\mathcal{A}} & : \prd{x_1,x_2:A_0}{f:A_1(x_1,x_2)} A_2(f,f,\rfx{\mathcal{A}}(x_2)) \\
+\mathsf{left\usc{}unit}_{\mathcal{A}} & : \prd{x_2,x_3:A_0}{g:A_1(x_2,x_3)} A_2(\rfx{\mathcal{A}}(x_2),g,g) \\
+\mathsf{coh\usc{}unit}_{\mathcal{A}} & : \prd{x:A_0} \mathsf{left\usc{}unit}(\rfx{\mathcal{A}}(x))=\mathsf{right\usc{}unit}(\rfx{\mathcal{A}}(x)).
+\end{align*}
+Given a semi-simplicial structure $\mathcal{A}$, we write $\mathsf{simp}(\mathcal{A})$ for the type of quadruples in the $2$-simplicial structre of $\mathcal{A}$.
+\end{enumerate}
+\end{defn}
+
+\begin{eg}
+Let $A$ be a type. The \define{discrete} $2$-simplicial type $\Delta(A)$ consists of
+\begin{samepage}
+\begin{align*}
+\pts{\Delta(A)} & \defeq A \\
+\edg{\Delta(A)}(x,y) & \defeq x=y \\
+\Delta(A)_2(p,r,q) & \defeq \ct{p}{q}=r,
+\end{align*}
+\end{samepage}%
+using that the identity type is reflexive and that composition satisfies the coherent unit laws. 
+\end{eg}
+
+\begin{eg}
+Let $A$ be a type. The \define{indiscrete} $2$-simplicial type $\nabla(A)$ consists of
+\begin{samepage}
+\begin{align*}
+\pts{\Delta(A)} & \defeq A \\
+\edg{\Delta(A)}(x,y) & \defeq \unit \\
+\Delta(A)_2(p,r,q) & \defeq \unit. \\
+\end{align*}
+\end{samepage}%
+Since the types of $1$-cells and $2$-cells are always contractible, the indiscrete $2$-simplicial type $\nabla(A)$ possesses the unital structure in a unique way. 
+\end{eg}
+
+\begin{eg}
+Let $f:A\to X$ be a map. The \define{$2$-pre-kernel} $k^2(f)$ consists of
+\begin{samepage}
+\begin{align*}
+\pts{k^2(f)} & \defeq A \\
+\edg{k^2(f)}(x,y) & \defeq f(x)=f(y) \\
+k^2(f)_2(p,r,q) & \defeq \ct{p}{q}=r. \\
+\end{align*}
+\end{samepage}%
+The unital structure of $k^2(f)$ comes from the unital structure of the identity type of $B$.
+\end{eg}
+
+\begin{eg}
+Let $X$ be a coherent H-space, as specified in \cref{defn:coh_hspace}. Then we have the $2$-simplicial type $S^2X$ consisting of
+\begin{samepage}
+\begin{align*}
+\pts{S^2X} & \defeq \unit \\
+\edg{S^2X}(s,t) & \defeq X \\
+S^2X_2(x,z,y) & \defeq \mu(x,y)=z \\
+\end{align*}
+\end{samepage}%
+Since $X$ has a unit and the multiplication satisfies the coherent unit laws, we obtain the unital structure of $S^2 X$ in a canonical way.
+\end{eg}
+
+\begin{table}
+\centering
+\caption{\label{table:stype_eg}The specification of the $2$-simplicial types $\Delta(A)$, $\nabla(A)$, $k^2(f)$, and $S^2 X$.}
+\begin{tabular}{lllll}
+\toprule
+$\mathcal{A}$ & $\Delta(A)$ & $\nabla(A)$ & $k^2(f)$ & $S^2X$ \\
+\midrule
+$\pts{A}$ & $A$ & $A$ & $A$ & $\unit$  \\
+$\edg{A}(x,y)$ &  $x=y$ & $\unit$ & $f(x)=f(y)$ & $X$ \\
+$\rfx{\mathcal{A}}$(x) & $\refl{x}$ & $\ttt$ & $\refl{f(x)}$ & $1$  \\
+$A_2(p,r,q)$ & $\ct{p}{q}=r$ & $\unit$ & $\ct{p}{q}=r$ & $\mu(p,q)=r$ \\
+$\mathsf{right\usc{}unit}_{\mathcal{A}}(p)$ & $\mathsf{right\usc{}unit}(p)$ & $\ttt$ & $\mathsf{right\usc{}unit}(p)$ & $\mathsf{right\usc{}unit}_{\mu}(p)$ \\ 
+$\mathsf{left\usc{}unit}_{\mathcal{A}}(p)$ & $\mathsf{left\usc{}unit}(p)$ & $\ttt$ & $\mathsf{left\usc{}unit}(p)$ & $\mathsf{left\usc{}unit}_{\mu}(p)$ \\
+$\mathsf{coh\usc{}unit}_{\mathcal{A}}(p)$ & $\mathsf{coh\usc{}unit}(p)$ & $\refl{\ttt}$ & $\mathsf{coh\usc{}unit}(p)$ & $\mathsf{coh\usc{}unit}_{\mu}(p)$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{defn}
+Let $\mathcal{A}$ be a $2$-simplicial type. We define
+\begin{align*}
+\tilde{A}_0 & \defeq A_0 \\
+\tilde{A}_1 & \defeq \sm{x,y:A_0} A_1(x,y) \\
+\tilde{A}_2 & \defeq \sm{x,y,z:A_0}{p:A_1(x,y)}{r:A_1(x,z)}{q:A_1(y,z)} A_2(p,r,q),
+\end{align*}
+We also define the maps
+\begin{equation*}
+\begin{tikzcd}
+\tilde{A}_2 \arrow[r,yshift=2ex,"\pi_{01}"] \arrow[r,"\pi_{02}" description] \arrow[r,yshift=-2ex,swap,"\pi_{12}"] &[2em] \tilde{A}_1 \arrow[r,yshift=1ex,"\pi_0"] \arrow[r,yshift=-1ex,swap,"\pi_1"] & \tilde{A}_0
+\end{tikzcd}
+\end{equation*}
+in the expected way.
+\end{defn}
+
+\begin{defn}
+Consider
+\begin{align*}
+f_0 & : \pts{A}\to \pts{B} \\
+f_1 & : \prd{x,y:A_0} A_1(x,y) \to B_1(f_0(x),f_0(y)) \\
+f_2 & : \prd{x,y,z:A_0}{p:A_1(x,y)}{r:A_1(x,z)}{q:A_1(y,z)} \\
+& \qquad\qquad\qquad A_2(p,r,q) \to B_2(f_1(p),f_1(r),f_1(q))
+\end{align*}
+We define the map $\mathsf{ev\usc{}simp}(f_0,f_1,f_2):\mathsf{simp}(\mathcal{A})\to\mathsf{simp}(\mathcal{B})$ by
+\begin{equation*}
+(\alpha,\beta_{10},\beta_{01},\beta_{00}) \mapsto
+\left(\begin{array}{l}
+\lam{x} f_1(\alpha(x)) \\
+\lam{x}{y}{p} f_2(\beta_{10}(p)) \\
+\lam{x}{y}{q} f_2(\beta_{01}(q)) \\
+\lam{x} \ap{f_2}{\beta_{00}(x)}
+\end{array}\right)
+\end{equation*}
+A morphism of $2$-simplicial types is defined to be a quadruple $(f_0,f_1,f_2,f_u)$ consisting of $(f_0,f_1,f_2)$ as before, and an identification
+\begin{align*}
+f_u & : \mathsf{ev\usc{}simp}(f_0,f_1,f_2,(\rfx{\mathcal{A}},\mathsf{right\usc{}unit}_{\mathcal{A}},\mathsf{left\usc{}unit}_{\mathcal{A}},\mathsf{coh\usc{}unit}_{\mathcal{A}})) \\
+& \qquad\qquad = (\rfx{\mathcal{B}},\mathsf{right\usc{}unit}_{\mathcal{B}},\mathsf{left\usc{}unit}_{\mathcal{B}},\mathsf{coh\usc{}unit}_{\mathcal{B}}).
+\end{align*}
+We write $\mathsf{sType}_2(\mathcal{A},\mathcal{B})$ for the type of morphisms of $2$-simplicial types from $\mathcal{A}$ to $\mathcal{B}$.
+\end{defn}
+
+It is clear that for each $2$-simplicial type $\mathcal{A}$ there is an identity morphism, and that morphisms of $2$-simplicial types can be composed. Moreover, composition is associative and satisfies the unit laws.
+
+\begin{eg}
+For every map $f:A\to B$ there is a unique way to equip it with the structure of a morphism of $2$-simplicial types from $\Delta(A)$ to $\Delta(B)$. Indeed, we have seen in \cref{eg:rgraph_morphism} that $\apfunc{f}$ is the unique action on edges such that $\ap{f}{\refl{x}}=\refl{f(x)}$ for each $x:A$. Similarly, it follows by \cref{thm:yoneda} that the type of fiberwise transformations
+\begin{equation*}
+f_2 : \prd{x,y,z:A}{p:x=y,\ q:y=z,\ r:x=z} (\ct{p}{q}=r)\to (\ct{\ap{f}{p}}{\ap{f}{q}}=\ap{f}{r})
+\end{equation*}
+satisfying a left unit law, is contractible. Furthermore, the type of 
+\begin{equation*}
+\mathsf{\beta_{10}} : \prd{x,y:A}{p:x=y} f_2(\mathsf{right\usc{}unit}(p))= \mathsf{right\usc{}unit}(\ap{f}{p})
+\end{equation*}
+equipped with a coherence with the left unit law is again contractible. We conclude that the discrete functor $\Delta$ is an embedding in the sense that its action on morphisms
+\begin{equation*}
+(A\to B)\to \mathsf{sType}_2(\Delta(A),\Delta(B))
+\end{equation*}
+is an equivalence. Moreover, we note that our proof that $\Delta$ is an embedding uses the coherence of the unit laws, and we don't expect $\Delta$ to be an equivalence without the coherence being part of the data of a $2$-simplicial type.
+\end{eg}
+
+\begin{eg}
+The \define{standard $0$-simplex} $\Delta[0]$ is the $2$-simplicial type with just one vertex. The universal property of $\Delta[0]$ is that the function 
+\begin{equation*}
+\mathsf{sType}_2(\Delta[0],\mathcal{A}) \to \tilde{A}_0
+\end{equation*}
+given by $f\mapsto \pts{f}(\ttt)$ is an equivalence, for every $2$-simplicial type $\mathcal{A}$.
+
+The \define{standard $1$-simplex} $\Delta[1]$ is the $2$-simplicial type with two vertices $0$ and $1$, and a non-degenerate edge $s$ from $0$ to $1$. The universal property of the stardard $1$-simplex is that the function
+\begin{equation*}
+\mathsf{sType}_2(\Delta[1],\mathcal{A}) \to \tilde{A}_1
+\end{equation*}
+is an equvialence for every $2$-simplicial type $\mathcal{A}$.
+
+The \define{standard $2$-simplex} $\Delta[2]$ is the $2$-simplicial type consisting of three vertices, three non-degenerate arrows, and a $2$-cell filling the triangle, as indicated in the diagram
+\begin{equation*}
+\begin{tikzcd}[column sep=tiny]
+& 1 \arrow[dr] \\
+0 \arrow[ur] \arrow[rr] & & 2.
+\end{tikzcd}
+\end{equation*}
+The function
+\begin{equation*}
+\mathsf{sType}_2(\Delta[2],\mathcal{A}) \to \tilde{A}_2
+\end{equation*}
+that evaluates $f$ at the non-degenerate $2$-cell, is an equvialence. This is the universal property of the standard $2$-simplex.
+
+We obtain a diagram of the form
+\begin{equation*}
+\begin{tikzcd}
+\Delta[2] \arrow[r,yshift=1ex] \arrow[r,yshift=-1ex] & \Delta[1] \arrow[l,yshift=2ex] \arrow[l] \arrow[l,yshift=-2ex] \arrow[r] & \Delta[0] \arrow[l,yshift=1ex] \arrow[l,yshift=-1ex]
+\end{tikzcd}
+\end{equation*}
+of morphisms of $2$-simplicial types, where the three arrows $\Delta[1]\to\Delta[2]$ are characterized by the three non-degenerate edges of $\Delta[2]$, the two arrows $\Delta[0]\to\Delta[1]$ are characterized by the two vertices of $\Delta[1]$, the downward arrows $\Delta[2]\to\Delta[1]$ are obtained from the unit laws, and the arrow $\Delta[1]\to \Delta[0]$ is by reflexivity\footnote{There is a `$2$-cosimplicial object of $2$-simplicial types', although we have not fully specified it here, because we will only make use of the morphisms}.
+\end{eg}
+
+\begin{defn}
+Let $\mathcal{A}$ be a $2$-simplicial type. We say that $\mathcal{A}$ satisfies the \define{Segal condition} if the square
+\begin{equation*}
+\begin{tikzcd}
+\tilde{A}_2 \arrow[r,"\pi_{12}"] \arrow[d,swap,"\pi_{01}"] & \tilde{A}_1 \arrow[d,"\pi_0"] \\
+\tilde{A}_1 \arrow[r,swap,"\pi_1"] & \tilde{A}_0
+\end{tikzcd}
+\end{equation*}
+is a pullback square.
+\end{defn}
+
+\begin{thm}
+Let $\mathcal{A}$ be a $2$-simplicial type. The following are equivalent:
+\begin{enumerate}
+\item $\mathcal{A}$ satisfies the Segal condition.
+\item $\mathcal{A}$ is $i$-local, where
+\begin{equation*}
+i : \mathsf{sType}_2(\Lambda^1[2],\Delta[2])
+\end{equation*}
+is the horn inclusion. In other words, the map
+\begin{equation*}
+\mathsf{sType}(\Delta[2],\mathcal{A}) \to \mathsf{sType}_2(\Lambda^1[2],\mathcal{A})
+\end{equation*}
+is an equivalence.
+\item For every $f:A_1(x,y)$ and $g:A_1(y,z)$ the type
+\begin{equation*}
+\sm{h:A_1(x,z)}A_2(f,h,g)
+\end{equation*}
+is contractible.
+\end{enumerate}
+\end{thm}
+
+\begin{defn}
+Let $\mathcal{A}$ be a $2$-simplicial type. We say that $\mathcal{A}$ is \define{$1$-discrete} the type
+\begin{equation*}
+\sm{y:A_0}A_1(x,y)
+\end{equation*}
+is contractible for every $x:A_0$. We say that $\mathcal{A}$ is \define{discrete} if it is $1$-discrete and satisfies the Segal condition. 
+\end{defn}
+
+\begin{thm}
+Let $\mathcal{A}$ be a $2$-simplicial type. The following are equivalent:
+\begin{enumerate}
+\item $\mathcal{A}$ is discrete.
+\item $\mathcal{A}$ is right orthogonal to every morphism in the diagram
+\begin{equation*}
+\begin{tikzcd}
+\Delta[2] \arrow[r,yshift=1ex] \arrow[r,yshift=-1ex] & \Delta[1] \arrow[l,yshift=2ex] \arrow[l] \arrow[l,yshift=-2ex] \arrow[r] & \Delta[0]. \arrow[l,yshift=1ex] \arrow[l,yshift=-1ex]
+\end{tikzcd}
+\end{equation*}
+\item Conjecture: $\mathcal{A}$ is $\Delta[2]$-null in the sense that the pre-composition map
+\begin{equation*}
+\mathsf{sType}_2(\Delta[0],\mathcal{A})\to \mathsf{sType}_2(\Delta[2],\mathcal{A})
+\end{equation*}
+is an equivalence.
+\end{enumerate}
+\end{thm}
+
+In \cref{prop:disc_unique} we have established that every type can be equipped with the structure of a discrete reflexive graph in a unique way. Now we extend this observation to see that every type can be equipped with the structure of a discrete $2$-simplicial type in a unique way.
+
+\begin{prp}
+The operation $\Delta:\UU\to \mathsf{sType}_2$ is an embedding.
+\end{prp}
+
+\begin{proof}
+By the Yoneda lemma.
+\end{proof}
+
+\begin{defn}
+A cone on a $2$-simplicial type $\mathcal{A}$ with vertex $X$ is simply a morphism
+\begin{equation*}
+\mathsf{sType}_2(\mathcal{A},\Delta X).
+\end{equation*}
+A morphism $f:\mathsf{sType}_2(\mathcal{A},\Delta X)$ is said to be a \define{geometric realization} of $\mathcal{A}$ if the function
+\begin{equation*}
+\Delta(\blank)\circ f : (X\to Y) \to \mathsf{sType}_2(\mathcal{A},\Delta Y)
+\end{equation*}
+is an equivalence for every $Y$. 
+\end{defn}
+
+Our goal for the remainder of this chapter is to study geometric realizations of $2$-simplicial types. In particular, we want to establish that geometric realizations can be obtained as iterated pushouts, and derive from this fact some useful relations between pushouts that we know. However, we need some further machinery to get there.
+
+\section{$2$-cospans and $2$-pullbacks}
+
+A $2$-cospan is a diagram of the fom
+\begin{equation*}
+\begin{tikzcd}
+A_{110} \arrow[d] & A_{101} \arrow[dl] \arrow[dr] & A_{011} \arrow[d] \\
+A_{100} \arrow[dr] & A_{010} \arrow[d] \arrow[from=ul,crossing over] \arrow[from=ur,crossing over] & A_{001} \arrow[dl] \\
+& A_{000}
+\end{tikzcd}
+\end{equation*}
+More formally:
+
+\begin{defn}
+A $2$-cospan consists of 
+\begin{enumerate}
+\item types
+\begin{equation*}
+A_{000},A_{001},A_{010},A_{100},A_{011},A_{101},A_{110},
+\end{equation*}
+\item maps
+\begin{align*}
+f_{00\check{1}} & : A_{001}\to A_{000} \\
+f_{0\check{1}0} & : A_{010}\to A_{000} \\
+f_{\check{1}00} & : A_{100}\to A_{000} \\
+f_{0\check{1}1} & : A_{011}\to A_{001} \\
+f_{01\check{1}} & : A_{011}\to A_{010} \\
+f_{\check{1}01} & : A_{101}\to A_{001} \\
+f_{10\check{1}} & : A_{101}\to A_{100} \\
+f_{\check{1}10} & : A_{110}\to A_{010} \\
+f_{1\check{1}0} & : A_{110}\to A_{100},
+\end{align*}
+\item and homotopies
+\begin{align*}
+H_{0\check{1}\check{1}} & : f_{00\check{1}}\circ f_{0\check{1}1} \htpy f_{0\check{1}0}\circ f_{01\check{1}} \\
+H_{\check{1}0\check{1}} & : f_{00\check{1}}\circ f_{\check{1}01} \htpy f_{\check{1}00}\circ f_{10\check{1}} \\
+H_{\check{1}\check{1}0} & : f_{0\check{1}0}\circ f_{\check{1}10} \htpy f_{\check{1}00}\circ f_{1\check{1}0}.
+\end{align*}
+\end{enumerate}
+\end{defn}
+
+\begin{defn}
+A \define{cone} with vertex $X$ on a $2$-cospan $\mathcal{A}$ consists of
+\begin{enumerate}
+\item maps
+\begin{align*}
+p_{011} & : X \to A_{011} \\
+p_{101} & : X \to A_{101} \\
+p_{110} & : X \to A_{110},
+\end{align*}
+\item homotopies
+\begin{align*}
+K_{001} & : f_{0\check{1}1}\circ p_{011} \htpy f_{\check{1}01}\circ p_{101} \\
+K_{010} & : f_{01\check{1}}\circ p_{011} \htpy f_{\check{1}10}\circ p_{110} \\
+K_{100} & : f_{10\check{1}}\circ p_{101} \htpy f_{1\check{1}0}\circ p_{110},
+\end{align*}
+\item and a homotopy
+\begin{align*}
+L_{000} & : \ct{(f_{\check{1}00}\cdot K_{100})}{(H_{\check{1}0\check{1}}\cdot p_{101})}{(f_{00\check{1}}\cdot K_{001})} \\
+& \qquad = \ct{(H_{\check{1}\check{1}0}\cdot p_{110})}{(f_{0\check{1}0}\cdot K_{010})}{(H_{0\check{1}\check{1}}\cdot p_{011})}
+\end{align*}
+\end{enumerate}
+We write $\mathsf{cone}(X)$ for the type of cones with vertex $X$ on $\mathcal{A}$.
+\end{defn}
+
+\begin{defn}
+Consider a $2$-cospan $\mathcal{A}$ and a cone $\mathcal{C}$ with vertex $X$ on $\mathcal{A}$. We define for every type $Y$ a map
+\begin{equation*}
+\mathsf{cone\underline{~}map}(\mathcal{C}) : (Y\to X)\to \mathsf{cone}(X)
+\end{equation*}
+A cone $\mathcal{C}$ is said to be \define{limiting} if the map $\mathsf{cone\underline{~}map}(\mathcal{C})$ is an equivalence for every type $Y$.
+\end{defn}
+
+\begin{defn}
+A \define{global section} of a $2$-span $\mathcal{A}$ consists of
+\begin{enumerate}
+\item terms $\gamma_{011}:A_{011}$, $\gamma_{101}:A_{101}$, and $\gamma_{110}:A_{110}$,
+\item paths
+\begin{align*}
+\gamma_{001} & : f_{0\check{1}1}(\gamma_{011}) = f_{\check{1}01}(\gamma_{101}) \\
+\gamma_{010} & : f_{01\check{1}}(\gamma_{011}) = f_{\check{1}10}(\gamma_{110}) \\
+\gamma_{100} & : f_{10\check{1}}(\gamma_{101}) = f_{1\check{1}0}(\gamma_{110}),
+\end{align*}
+\item and a path
+\begin{align*}
+\gamma_{000} & : \ct{\mathsf{ap}_{f_{\check{1}00}}(\gamma_{100})}{H_{\check{1}0\check{1}}(\gamma_{101})}{\mathsf{ap}_{f_{00\check{1}}}(\gamma_{001})} \\
+& \qquad = \ct{H_{\check{1}\check{1}0}(\gamma_{110})}{\mathsf{ap}_{f_{0\check{1}0}}(\gamma_{010})}{H_{0\check{1}\check{1}}(\gamma_{011})}
+\end{align*}
+\end{enumerate}
+We write $\Gamma(\mathcal{A})$ for the type of global sections of $\mathcal{A}$.
+\end{defn}
+
+\begin{thm}
+For any $2$-span $\mathcal{A}$ the type $\Gamma(\mathcal{A})$ can be given the structure of a limiting cone.
+\end{thm}
+
+\begin{thm}
+Consider a cube
+\begin{equation*}
+\begin{tikzcd}
+& A_{111} \arrow[dl] \arrow[d] \arrow[dr] \\
+A_{110} \arrow[d] & A_{101} \arrow[dl] \arrow[dr] & A_{011} \arrow[d] \\
+A_{100} \arrow[dr] & A_{010} \arrow[d] \arrow[from=ul,crossing over] \arrow[from=ur,crossing over] & A_{001} \arrow[dl] \\
+& A_{000}.
+\end{tikzcd}
+\end{equation*}
+The following are equivalent:
+\begin{enumerate}
+\item The cube is cartesian.
+\item The the square
+\begin{equation*}
+\begin{tikzcd}
+A_{111} \arrow[r] \arrow[d] & A_{101}\times_{A_{001}} A_{011} \arrow[d] \\
+A_{110} \arrow[r] & A_{100} \times_{A_{000}} A_{010}
+\end{tikzcd}
+\end{equation*}
+is cartesian.
+\end{enumerate}
+\end{thm}
+
+\begin{proof}
+Let $X$ be a type. The type of cones with vertex $X$ on the 2-cospan $\mathcal{A}^{\vee}$
+\end{proof}
+
+\begin{cor}
+The $2$-pullback of the $2$-cospan
+\begin{equation*}
+\begin{tikzcd}
+X \arrow[d] & Y \arrow[dl] \arrow[dr] & Z \arrow[d] \\
+\unit \arrow[dr] & \unit \arrow[d] \arrow[from=ul,crossing over] \arrow[from=ur,crossing over] & \unit \arrow[dl] \\
+& \unit
+\end{tikzcd}
+\end{equation*}
+is the product $X\times Y\times Z$. 
+\end{cor}
+
+\begin{cor}
+The $2$-pullback of the $2$-cospan
+\begin{equation*}
+\begin{tikzcd}
+X\times Y \arrow[d] & X\times Z \arrow[dl] \arrow[dr] & Y\times Z \arrow[d] \\
+X \arrow[dr] & Y \arrow[d] \arrow[from=ul,crossing over] \arrow[from=ur,crossing over] & Z \arrow[dl] \\
+& \unit
+\end{tikzcd}
+\end{equation*}
+is the product $X\times Y\times Z$. 
+\end{cor}
+
+\begin{cor}
+The $2$-pullback of the $2$-cospan
+\begin{equation*}
+\begin{tikzcd}
+\unit \arrow[d] & \unit \arrow[dl] \arrow[dr] & \unit \arrow[d] \\
+\unit \arrow[dr] & \unit \arrow[d] \arrow[from=ul,crossing over] \arrow[from=ur,crossing over] & \unit \arrow[dl] \\
+& X
+\end{tikzcd}
+\end{equation*}
+is the double loop space $\loopspace[2]{X}$. 
+\end{cor}
+
+\section{$2$-spans and $2$-pushouts}
+
+A $2$-span is a diagram of the fom
+\begin{equation*}
+\begin{tikzcd}
+& A_{111} \arrow[dl] \arrow[d] \arrow[dr] \\
+A_{110} \arrow[d] & A_{101} \arrow[dl] \arrow[dr] & A_{011} \arrow[d] \\
+A_{100} & A_{010} \arrow[from=ul,crossing over] \arrow[from=ur,crossing over] & A_{001}
+\end{tikzcd}
+\end{equation*}
+More formally:
+
+\begin{defn}
+A $2$-span consists of 
+\begin{enumerate}
+\item types
+\begin{equation*}
+A_{111},A_{110},A_{101},A_{011},A_{100},A_{010},A_{001},
+\end{equation*}
+\item maps
+\begin{align*}
+f_{11\check{1}} & : A_{111} \to A_{110}\\
+f_{1\check{1}1} & : A_{111} \to A_{101}\\
+f_{\check{1}11} & : A_{111} \to A_{011}\\
+f_{1\check{1}0} & : A_{110} \to A_{100}\\
+f_{10\check{1}} & : A_{101} \to A_{100}\\
+f_{\check{1}10} & : A_{110} \to A_{010}\\
+f_{01\check{1}} & : A_{011} \to A_{010}\\
+f_{\check{1}01} & : A_{101} \to A_{001}\\
+f_{0\check{1}1} & : A_{011} \to A_{001},
+\end{align*}
+\item and homotopies
+\begin{align*}
+H_{\check{1}\check{1}1} & : f_{\check{1}01}\circ f_{1\check{1}1} \htpy f_{0\check{1}1}\circ f_{\check{1}11} \\
+H_{\check{1}1\check{1}} & : f_{\check{1}10}\circ f_{11\check{1}} \htpy f_{01\check{1}}\circ f_{\check{1}11} \\
+H_{1\check{1}\check{1}} & : f_{1\check{1}0}\circ f_{11\check{1}} \htpy f_{10\check{1}}\circ f_{1\check{1}1}.
+\end{align*}
+\end{enumerate}
+\end{defn}
+
+\begin{defn}
+A \define{cocone} with vertex $X$ on a $2$-span $\mathcal{A}$ consists of
+\begin{enumerate}
+\item maps
+\begin{align*}
+i_{100} & : A_{100} \to X\\
+i_{010} & : A_{010} \to X\\
+i_{001} & : A_{001} \to X,
+\end{align*}
+\item homotopies
+\begin{align*}
+K_{110} & : i_{100}\circ f_{1\check{1}0} \htpy i_{010}\circ f_{\check{1}10} \\
+K_{101} & : i_{100}\circ f_{10\check{1}} \htpy i_{001}\circ f_{\check{1}01} \\
+K_{011} & : i_{010}\circ f_{01\check{1}} \htpy i_{001}\circ f_{0\check{1}1},
+\end{align*}
+\item and a homotopy
+\begin{align*}
+L_{111} & : \ct{(K_{011}\cdot f_{\check{1}11})}{(i_{010}\cdot H_{\check{1}1\check{1}})}{(K_{110}\cdot f_{11\check{1}})} \\
+& \qquad = \ct{(i_{001}\cdot H_{\check{1}\check{1}1})}{(K_{101}\cdot f_{1\check{1}1})}{(i_{100}\cdot H_{1\check{1}\check{1}})}
+\end{align*}
+\end{enumerate}
+We write $\mathsf{cocone}(X)$ for the type of cocones with vertex $X$ on $\mathcal{A}$.
+\end{defn}
+
+\begin{defn}
+Consider a $2$-span $\mathcal{A}$ and a cocone $\mathcal{C}$ with vertex $X$ on $\mathcal{A}$. We define for every type $Y$ a map
+\begin{equation*}
+\mathsf{cocone\underline{~}map}(\mathcal{C}) : (X\to Y)\to \mathsf{cocone}(Y)
+\end{equation*}
+A cocone $\mathcal{C}$ is said to be \define{colimiting} if the map $\mathsf{cocone\underline{~}map}(\mathcal{C})$ is an equivalence for every type $Y$.
+\end{defn}
+
+\begin{defn}
+Consider a $2$-span $\mathcal{A}$ and a cocone $\mathcal{C}$ with vertex $X$ on $\mathcal{A}$. A \define{dependent cocone structure} on a dependent type $P:X\to\UU$ over $\mathcal{C}$ consists of
+\begin{enumerate}
+\item dependent functions
+\begin{align*}
+j_{100} & : \prd{x:A_{100}}P(i_{100}(x))\\
+j_{010} & : \prd{x:A_{010}}P(i_{010}(x))\\
+j_{001} & : \prd{x:A_{001}}P(i_{001}(x)),
+\end{align*}
+\item homotopies
+\begin{align*}
+j_{110} & : \prd{x:A_{110}} \dpath{P}{K_{110}(x)}{i_{100}(f_{1\check{1}0}(x))}{i_{010}(f_{\check{1}10}(x))} \\
+j_{101} & : \prd{x:A_{101}} \dpath{P}{K_{101}(x)}{i_{100}(f_{10\check{1}}(x))}{i_{001}(f_{\check{1}01}(x))} \\
+j_{011} & : \prd{x:A_{011}} \dpath{P}{K_{011}(x)}{i_{010}(f_{01\check{1}}(x))}{i_{001}(f_{0\check{1}1}(x))},
+\end{align*}
+\item and a homotopy
+\begin{align*}
+j_{111} & : \ct{(K_{011}\cdot f_{\check{1}11})}{(i_{010}\cdot H_{\check{1}1\check{1}})}{(K_{110}\cdot f_{11\check{1}})} \\
+& \qquad = \ct{(i_{001}\cdot H_{\check{1}\check{1}1})}{(K_{101}\cdot f_{1\check{1}1})}{(i_{100}\cdot H_{1\check{1}\check{1}})}
+\end{align*}
+\end{enumerate}
+We write $\mathsf{cocone}(X)$ for the type of cocones with vertex $X$ on $\mathcal{A}$.
+\end{defn}
+
+\begin{thm}
+Consider a cube
+\begin{equation*}
+\begin{tikzcd}
+& A_{111} \arrow[dl] \arrow[d] \arrow[dr] \\
+A_{110} \arrow[d] & A_{101} \arrow[dl] \arrow[dr] & A_{011} \arrow[d] \\
+A_{100} \arrow[dr] & A_{010} \arrow[d] \arrow[from=ul,crossing over] \arrow[from=ur,crossing over] & A_{001} \arrow[dl] \\
+& A_{000}.
+\end{tikzcd}
+\end{equation*}
+The following are equivalent:
+\begin{enumerate}
+\item The cube is cocartesian.
+\item The the square
+\begin{equation*}
+\begin{tikzcd}
+A_{011}\sqcup^{A_{111}} A_{101} \arrow[r] \arrow[d] & A_{001} \arrow[d] \\
+A_{010}\sqcup^{A_{110}} A_{100} \arrow[r] & A_{000}
+\end{tikzcd}
+\end{equation*}
+is cocartesian.
+\end{enumerate}
+\end{thm}
+
+\begin{proof}
+The cube $\mathcal{A}$ is cocartesian if and only if the cube $X^{\mathcal{A}}$ is cartesian for every type $X$, which happens if and only if the square
+\begin{equation*}
+\begin{tikzcd}
+X^{A_{000}} \arrow[r] \arrow[d] & X^{A_{010}}\times_{X^{A_{110}}} X^{A_{100}} \arrow[d] \\
+X^{A_{001}} \arrow[r] & X^{A_{011}}\times_{X^{A_{111}}} X^{A_{101}}
+\end{tikzcd}
+\end{equation*}
+is cartesian. By the universal property of pushouts, this is equivalent to the condition that the square
+\begin{equation*}
+\begin{tikzcd}
+X^{A_{000}} \arrow[r] \arrow[d] & X^{A_{010}\sqcup^{X^{A_{110}}}A_{100}} \arrow[d] \\
+X^{A_{001}} \arrow[r] & X^{A_{011}\sqcup^{X^{A_{111}}}A_{101}}
+\end{tikzcd}
+\end{equation*}
+is cartesian, for every type $X$. By another application of the universal property of pushouts, this is equivalent to the condition that the square
+\begin{equation*}
+\begin{tikzcd}
+A_{011}\sqcup^{A_{111}} A_{101} \arrow[r] \arrow[d] & A_{001} \arrow[d] \\
+A_{010}\sqcup^{A_{110}} A_{100} \arrow[r] & A_{000}
+\end{tikzcd}
+\end{equation*}
+is cocartesian.
+\end{proof}
+
+\begin{cor}
+The cube
+\begin{equation*}
+\begin{tikzcd}
+& X \arrow[dl] \arrow[d] \arrow[dr] \\
+\unit \arrow[d] & \unit \arrow[dl] \arrow[dr] & \unit \arrow[d] \\
+\unit \arrow[dr] & \unit \arrow[d] \arrow[from=ul,crossing over] \arrow[from=ur,crossing over] & \unit \arrow[dl] \\
+& \Sigma^2 X.
+\end{tikzcd}
+\end{equation*}
+is cocartesian.
+\end{cor}
+
+\begin{cor}
+The cube
+\begin{equation*}
+\begin{tikzcd}
+& \unit \arrow[dl] \arrow[d] \arrow[dr] \\
+\unit \arrow[d] & \unit \arrow[dl] \arrow[dr] & \unit \arrow[d] \\
+X \arrow[dr] & Y \arrow[d] \arrow[from=ul,crossing over] \arrow[from=ur,crossing over] & Z \arrow[dl] \\
+& X\vee Y\vee Z.
+\end{tikzcd}
+\end{equation*}
+is cocartesian.
+\end{cor}
+
+\begin{cor}
+The cube
+\begin{equation*}
+\begin{tikzcd}
+& A\times B \times C \arrow[dl] \arrow[d] \arrow[dr] \\
+A\times B \arrow[d] & A\times C \arrow[dl] \arrow[dr] & B\times C \arrow[dl,crossing over] \arrow[d] \\
+A \arrow[dr] & B \arrow[d] \arrow[from=ul,crossing over] & C  \arrow[dl] \\
+& \join{A}{\join{B}{C}}
+\end{tikzcd}
+\end{equation*}
+is cocartesian.
+\end{cor}
+
+\begin{cor}
+Consider an $H$-space $X$. Then the $2$-pushout of the $2$-span
+\begin{equation*}
+\begin{tikzcd}
+& X \times X \arrow[dl,swap,"\proj 1"] \arrow[d,swap,"\mu"] \arrow[dr,"\pi_2"] \\
+X \arrow[d] & X \arrow[dl] \arrow[dr] & X \arrow[dl,crossing over] \arrow[d] \\
+\unit & \unit \arrow[from=ul,crossing over] & \unit
+\end{tikzcd}
+\end{equation*}
+is the cofiber of the Hopf fibration $X \hookrightarrow \join{X}{X} \twoheadrightarrow \susp X$. 
+\end{cor}
+
+\begin{defn}
+Let $X$, $Y$, and $Z$ be pointed types. We define the \define{fat wedge} $X\blacktriangledown Y\blacktriangledown Z$ to be the $2$-pushout
+\begin{equation*}
+\begin{tikzcd}
+& \unit \arrow[dl] \arrow[d] \arrow[dr] \\
+X \arrow[d] & Y \arrow[dl] \arrow[dr] & Z \arrow[d] \\
+X\times Y \arrow[dr] & X\times Z \arrow[d] \arrow[from=ul,crossing over] \arrow[from=ur,crossing over] & Y\times Z \arrow[dl] \\
+& X\blacktriangledown Y\blacktriangledown Z.
+\end{tikzcd}
+\end{equation*}
+\end{defn}
+
+\begin{thm}
+(Needs results about the total cofiber.) The square
+\begin{equation*}
+\begin{tikzcd}
+X\blacktriangledown Y\blacktriangledown Z \arrow[r] \arrow[d] & X\times Y\times Z \arrow[d] \\
+\unit \arrow[r] & X\wedge Y\wedge Z
+\end{tikzcd}
+\end{equation*}
+is cocartesian.
+\end{thm}
+
+\begin{conj}
+Consider a cube
+\begin{equation*}
+\begin{tikzcd}
+& A_{111} \arrow[dl] \arrow[d] \arrow[dr] \\
+A_{110} \arrow[d] & A_{101} \arrow[dl] \arrow[dr] & A_{011} \arrow[d] \\
+A_{100} \arrow[dr] & A_{010} \arrow[d] \arrow[from=ul,crossing over] \arrow[from=ur,crossing over] & A_{001} \arrow[dl] \\
+& A_{000}.
+\end{tikzcd}
+\end{equation*}
+The following are equivalent:
+\begin{enumerate}
+\item The cube is $n$-cocartesian.
+\item The the square
+\begin{equation*}
+\begin{tikzcd}
+A_{011}\sqcup^{A_{111}} A_{101} \arrow[r] \arrow[d] & A_{001} \arrow[d] \\
+A_{010}\sqcup^{A_{110}} A_{100} \arrow[r] & A_{000}
+\end{tikzcd}
+\end{equation*}
+is $n$-cocartesian.
+\end{enumerate}
+\end{conj}
+
+\section{Geometric realizations as iterated pushouts}
+
+\begin{defn}
+Every $2$-simplicial type $\mathcal{A}$ determines a $2$-span $\mathcal{S}(\mathcal{A})$ given by
+\begin{equation*}
+\begin{tikzcd}
+& \tilde A_2 \arrow[dl] \arrow[d] \arrow[dr] \\
+\tilde A_1 \arrow[d] \arrow[dr] & \tilde A_1 \arrow[dl,crossing over] & \tilde A_1 \arrow[dl] \arrow[d] \\
+\tilde A_0 & \tilde A_0 & \tilde A_0. \arrow[from=ul,crossing over] 
+\end{tikzcd}
+\end{equation*}
+The maps range over the projections, and the homotopies are the obvious ones.
+\end{defn}
+
+The following theorem is analogous to \cref{thm:rcoeq_is_pushout}.
+\begin{thm}
+For any $2$-simplicial type $\mathcal{A}$, its geometric realization $|\mathcal{A}|$ is equivalent to the colimit of the $2$-span $B(\mathcal{A})$.
+\end{thm}
+
+\begin{cor}
+The geometric realization of the discrete $2$-simplicial type $\Delta(A)$ is equivalent to $A$.
+\end{cor}
+
+\begin{cor}
+The geometric realization of the indiscrete $2$-simplicial type $\nabla(A)$ is equivalent to the triple join $\join{A}{\join{A}{A}}$. 
+\end{cor}
+
+\begin{cor}
+The geometric realization of the $2$-pre-kernel of a map $f:A\to B$ is the type $\join[X]{A}{\join[X]{A}{A}}$. 
+\end{cor}
+
+\begin{cor}
+Given an $H$-space $X$, the geometric realization of the $2$-simplicial type $S^2 X$ is the cofiber of the Hopf fibration $X \hookrightarrow \join{X}{X} \twoheadrightarrow \susp X$.
+\end{cor}
+
+\begin{cor}
+The geometric realization of the standard simplices $\Delta[0]$, $\Delta[1]$, and $\Delta[2]$ are contractible.
+\end{cor}

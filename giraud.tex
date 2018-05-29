@@ -3,11 +3,11 @@
 \section{Principal equivalence relations}
 
 \begin{comment}
-In the setting of homotopy type theory, as described by the Univalent Foundations Program in \cite{UFP}, `ordinary' equivalence relations on a type $A$ are specified as $\prop$-valued binary relations which are reflexive, symmetric, and transitive. When $\mathcal{R}$ is an equivalence relation in this sense, then the quotient $A/\mathcal{R}$ can be specified as the image of $\mathcal{R}:A\to (A\to \prop)$, as a subtype of $A\to\prop$, which is always a set. Such `set-quotients' have been first constructed in \cite{UniMath2015,UniMath} using propositional resizing, and as higher inductive types in \cite{UFP} in the case where $A$ is assumed to be a set. In fact, using the join construction \cite{joinconstruction}, the quotient $A/\mathcal{R}$ can be constructed as a sequential colimit of pushouts. 
+In the setting of homotopy type theory, as described by the Univalent Foundations Program in \cite{hottbook}, `ordinary' equivalence relations on a type $A$ are specified as $\prop$-valued binary relations which are reflexive, symmetric, and transitive. When $\mathcal{R}$ is an equivalence relation in this sense, then the quotient $A/\mathcal{R}$ can be specified as the image of $\mathcal{R}:A\to (A\to \prop)$, as a subtype of $A\to\prop$, which is always a set. Such `set-quotients' have been first constructed in \cite{UniMath2015,UniMath} using propositional resizing, and as higher inductive types in \cite{hottbook} in the case where $A$ is assumed to be a set. In fact, using the join construction \cite{joinconstruction}, the quotient $A/\mathcal{R}$ can be constructed as a sequential colimit of pushouts. 
 
-Prop-valued equivalence relations as described above are just one level in a hierarchy of equivalence relations. The next level up consists of `$1$-equivalence relations', or `pre-groupoid structures' on a type $A$, the data of which endows $A$ with the structure of a pre-groupoid in the sense of Ahrens, Kapulkin, Shulman \cite{AKS}. In the case of pre-groupoid structures one also needs to account for associativity, unit laws, and inverse laws. Groupoid quotients have been defined as higher inductive types in homotopy type theory by Sojakova \cite{SojakovaPhD}.
+Prop-valued equivalence relations as described above are just one level in a hierarchy of equivalence relations. The next level up consists of `$1$-equivalence relations', or `pre-groupoid structures' on a type $A$, the data of which endows $A$ with the structure of a pre-groupoid in the sense of Ahrens, Kapulkin, Shulman \cite{AhrensKapulkinShulman}. In the case of pre-groupoid structures one also needs to account for associativity, unit laws, and inverse laws. Groupoid quotients have been defined as higher inductive types in homotopy type theory by Sojakova \cite{SojakovaPhD}.
 
-The notions of prop-valued equivalence relations and $1$-equivalence relations fit in a hierarchy of $n$-equivalence relations that actually starts at level $-1$ with \emph{trivial} relations. In this hierarchy, displayed in \autoref{tab:hierarchy}, the index corresponds to the truncation level of the quotient, so that a $1$-equivalence relation is indeed a pre-groupoid structure in the sence of \cite{AKS}.
+The notions of prop-valued equivalence relations and $1$-equivalence relations fit in a hierarchy of $n$-equivalence relations that actually starts at level $-1$ with \emph{trivial} relations. In this hierarchy, displayed in \autoref{tab:hierarchy}, the index corresponds to the truncation level of the quotient, so that a $1$-equivalence relation is indeed a pre-groupoid structure in the sence of \cite{AhrensKapulkinShulman}.
 
 \begin{table}\label{tab:hierarchy}
 \caption{The truncation hierarchy of equivalence relations}
@@ -259,28 +259,6 @@ Consider a graph extension $\mathcal{R}$ of $h:A\to B$. The type of right extens
 \end{align*}
 \end{thm}
 
-Before we give the proof, we provide the following lemma, of which the intended use is to get from a structure with many related low level operations to an equivalent structure with some of the low level operations replaced by higher coherences.
-
-\begin{lem}\label{lem:coh}
-Let $x_0:X$ and let $Y:X\to \UU$ be a  type family equipped implying the identity type. That is, $Y$ comes equipped with an operation
-\begin{equation*}
-\alpha : \prd{x:X}Y(x)\to (x_0=x).
-\end{equation*}
-Then there is an equivalence
-\begin{equation*}
-\eqv{\Big(\sm{x:X}Y(x)\Big)}{\Big(\sm{y:Y(a)}\alpha_{x_0}(y)=\refl{x_0}\Big)}.
-\end{equation*}
-\end{lem}
-
-\begin{proof}
-The proof is a simple concatenation of equivalences, using the contractibility of the total space of the identity type twice:
-\begin{align*}
-\sm{x:X}Y(x) & \eqvsym \sm{x:X}{y:Y(x)}{p:x_0=x}\alpha_{x_0}(y)=p \\
-& \eqvsym \sm{x:X}{p:x_0=x}{y:Y(x)}\alpha_{x_0}(y)=p \\
-& \eqvsym \sm{y:Y(x_0)}\alpha_{x_0}(y)=\refl{a}.\qedhere
-\end{align*}
-\end{proof}
-
 \begin{proof}[Proof of \autoref{thm:hrel}]
 By the universal property of pushouts, the type of right extensions of $\mathcal{R}$ is equivalent to the type of
 \begin{align*}
@@ -293,21 +271,21 @@ such that the map
 \begin{equation*}
 \epsilon : \prd{a:A}{b:B} R(a,b)\to Q(a,b)
 \end{equation*}
-given by $r\mapsto \mu(r,1_a)$ is a fiberwise equivalence. By \autoref{lem:coh} this type is equivalent to the type of
+given by $r\mapsto \mu(r,1_a)$ is a fiberwise equivalence. By \autoref{lem:coh_red} this type is equivalent to the type of
 \begin{align*}
 P & : A\to A \to \UU \\
 \mu & : \prd{a:A}{x:A}{y:B} R(x,y)\to (P(a,x)\eqvsym R(a,y)) \\
 1 & : \prd{a:A} P(a,a) \\
 \mathsf{unit\underline{~}r} & : \prd{a:A}{b:B}{r:R(a,b)} \mu(r,1_a)=r.
 \end{align*}
-Since we have $\mu(\rho(x)) : P(a,x) \eqvsym R(a,h(x))$ for any $a,x:A$, we see that by a second application of \autoref{lem:coh}, the type of right extensions of $\mathcal{R}$ is equivalent to the type
+Since we have $\mu(\rho(x)) : P(a,x) \eqvsym R(a,h(x))$ for any $a,x:A$, we see that by a second application of \autoref{lem:coh_red}, the type of right extensions of $\mathcal{R}$ is equivalent to the type
 \begin{align*}
 \mu & : \prd{a:A}{x:A}{y:B} R(x,y)\to (R(a,h(x))\eqvsym R(a,y)) \\
 1 & : \prd{a:A} R(a,h(a)) \\
 \mathsf{unit\underline{~}r} & : \prd{a:A}{b:B}{r:R(a,b)} \mu(r,1_a)=r \\
 \mathsf{unit\underline{~}l} & : \prd{a,x:A}{r:R(a,h(x))} \mu(\rho(x),r)=r.
 \end{align*}
-Finally, we observe that $\ct{\beta_r(\rho(a))^{-1}}{\beta_l(1_a)}:\rho(a)=1_a$. Thus, by a last application of \autoref{lem:coh} we see that the type of right extensions of $\mathcal{R}$ is equivalent to the type
+Finally, we observe that $\ct{\beta_r(\rho(a))^{-1}}{\beta_l(1_a)}:\rho(a)=1_a$. Thus, by a last application of \autoref{lem:coh_red} we see that the type of right extensions of $\mathcal{R}$ is equivalent to the type
 \begin{align*}
 \mu & : \prd{a:A}{x:A}{y:B} R(x,y)\to (R(a,h(x))\eqvsym R(a,y)) \\
 \mathsf{unit\underline{~}r} & : \prd{a:A}{b:B}{r:R(a,b)} \mu(r,\rho(a))=r \\
@@ -911,7 +889,7 @@ From this data we have the concatenation of paths
 & \alpha_{101}(t,r),
 \end{tikzcd}
 \end{equation*}
-showing that $\mu\htpy \alpha_{101}$. Thus, we can use \autoref{lem:coh} to obtain the equivalent data type
+showing that $\mu\htpy \alpha_{101}$. Thus, we can use \autoref{lem:coh_red} to obtain the equivalent data type
 \begin{align*}
 \alpha_{011} & : \prd{a:A}{x:A}{y:A} R(x,h(y))\to (R(a,h(x)) \eqvsym R(a,h(y))) \\
 \alpha & : \prd{a,x,y:A}{z:B}{t:R(y,z)}{s:R(x,h(y))}{r:R(a,h(x))} \mu(t,\alpha_{011}(s,r)) = \mu(\mu(t,s),r) \\
@@ -927,7 +905,7 @@ From this data we obtain the concatenation of paths
 \mu(s,r)
 \end{tikzcd}
 \end{equation*}
-showing that $\alpha_{011}\htpy \mu$ (where $\mu$ is restricted appropriately). Thus, we can use \autoref{lem:coh} to obtain the equivalent data type
+showing that $\alpha_{011}\htpy \mu$ (where $\mu$ is restricted appropriately). Thus, we can use \autoref{lem:coh_red} to obtain the equivalent data type
 \begin{align*}
 \alpha & : \prd{a,x,y:A}{z:B}{t:R(y,z)}{s:R(x,h(y))}{r:R(a,h(x))} \mu(t,\mu(s,r)) = \mu(\mu(t,s),r) \\
 \alpha_{011} & : \prd{a,x,y:A}{s:R(x,h(y))}{r:R(a,h(x))} \mu_{01}(\mu(s,r))=\ct{\alpha(\rho_y,s,r)}{\mu((\mu_{01}(s))_{\mathsf{ap}},r)} \\
@@ -946,7 +924,7 @@ To this end, we do a calculation:
 & = \mu_{01}(\mu(\rho_x,r)) \\
 & = \mu(\rho_x,(\mu_{01}(r))_{\mathsf{ap}}).
 \end{align*}
-Now we can apply \autoref{lem:coh} once more to obtain the equivalent type
+Now we can apply \autoref{lem:coh_red} once more to obtain the equivalent type
 \begin{align*}
 \alpha & : \prd{a,x,y:A}{z:B}{t:R(y,z)}{s:R(x,h(y))}{r:R(a,h(x))} \mu(t,\mu(s,r)) = \mu(\mu(t,s),r) \\
 \alpha_{011} & : \prd{a,x,y:A}{s:R(x,h(y))}{r:R(a,h(x))} \mu_{01}(\mu(s,r))=\ct{\alpha(\rho_y,s,r)}{\mu((\mu_{01}(s))_{\mathsf{ap}},r)} \\
@@ -960,7 +938,7 @@ This completes our first goal. Note that under the above transformations, the ty
 \end{align*}
 \end{proof}
 
-Thus, if a reflexive relation $R$ is pre-groupoidal, then its $0$-truncation $x,y\mapsto\trunc{0}{R(x,y)}$ defines a pre-groupoid structure on the type $A$, as defined in \cite{AKS}. 
+Thus, if a reflexive relation $R$ is pre-groupoidal, then its $0$-truncation $x,y\mapsto\trunc{0}{R(x,y)}$ defines a pre-groupoid structure on the type $A$, as defined in \cite{AhrensKapulkinShulman}. 
 
 The groupoidal laws formulated in the following definition are exactly the usual groupoid laws if one instantiates $h\jdeq \idfunc[A]$. 
 

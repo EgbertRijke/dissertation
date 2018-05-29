@@ -1,10 +1,345 @@
 \chapter{Type theoretic descent}
 
-\section{Martin-L\"of type theory}
+\section{Univalent type theory}
 
-\subsection{Notation}
+In this section we establish notation, and we highlight the basic results that we will rely upon. In particular, we focus on results concerning fiberwise transformations, which we will use for the descent theorems.
 
-We will write $\tr_{B}({p},{b})$ for the transport of $b:B(x)$ along $p:\id[A]{x}{y}$ with respect to a type family $B$ over $A$.
+\subsection{Notation and preliminary results}
+
+We work in Martin-L\"of dependent type theory with $\Pi$-types, $\Sigma$-types and cartesian products, coproducts $A+B$ equipped with $\inl:A\to A+B$ and $B\to A+B$ for any two types $A$ and $B$, an empty type $\emptyt$, a unit type $\unit$ equipped with $\ttt:\unit$, a type $\bool$ of booleans equipped with $\btrue,\bfalse:\bool$, a type $\N$ of natural numbers equipped with $0:\N$ and $\mathsf{succ}:\N\to\N$, and identity types. 
+
+\begin{rmk}
+In the case of $\Sigma$-types, the empty type $\emptyt$, and the unit type, we use the following notation to define functions by pattern-matching:
+\begin{align*}
+\lam{(x,y)}f(x,y) & : \prd{t:\sm{x:A}B(x)} P(t) \\
+\lambda & : \prd{t:\emptyt} P(t) \\
+\lam{\ttt}y & : \prd{t:\unit}P(t),
+\end{align*}
+and we use similar notation for definitions by iterated pattern-matching. For instance, given a function $f:\prd{x:A}{y:B(x)}{z:C(x,y)} P((x,y),z)$ we obtain the function
+\begin{equation*}
+\lam{((x,y),z)} f(x,y,z): \prd{t:\sm{s:\sm{x:A}B(x)}C(s)}P(t).
+\end{equation*}
+\end{rmk}
+
+Given a type $A$ in context $\Gamma$, the \define{identity type} of $A$ at $a:A$ is the inductive type family 
+\begin{equation*}
+\Gamma,x:A\vdash a =_A x~\mathrm{type}
+\end{equation*}
+with constructor
+\begin{equation*}
+\Gamma \vdash \refl{a} : a=_A a.
+\end{equation*}
+The induction principle for the identity type of $A$ at $a$ asserts that for any type family
+\begin{equation*}
+\Gamma,x:A,\alpha: a=_A x\vdash P(x,\alpha)~\mathrm{type}
+\end{equation*}
+there is a term
+\begin{equation*}
+\ind{a=} : P(a,\refl{a})\to \prd{x:A}{\alpha:a=_A x}P(x,\alpha)
+\end{equation*}
+in context $\Gamma$, satisfying the computation rule
+\begin{equation*}
+\ind{a=}(p,a,\refl{a})\jdeq p.
+\end{equation*}
+We also use pattern-matching notation $\lam{\,\refl{a}}p$ for $\ind{a=}(p)$.
+
+A term of type $a=_A x$ is also called an \define{identification} of $a$ with $x$, and sometimes it is called a \define{path} from $a$ to $x$.
+The induction principle for identity types is sometimes called \define{identification elimination} or \define{path induction}. Occasionally, we also write $\idtypevar{A}$ for the identity type on $A$. 
+
+Moreover, we assume that there is a universe $\UU$ with a universal family $\mathrm{El}$ over $\UU$, that is closed under the type forming operations. For example, there is a map
+\begin{equation*}
+\check{\mathsf{Id}}:\prd{A:\UU}\mathrm{El}(A)\to\mathrm{El}(A)\to\UU
+\end{equation*}
+satisfying
+\begin{equation*}
+\mathrm{El}(\check{\mathsf{Id}}(A,x,y))\jdeq x=_{\mathrm{El}(A)} y,
+\end{equation*}
+establishing that the universe is closed under identity types.
+
+Given a type $A$ the \define{concatenation} operation
+\begin{equation*}
+\mathsf{concat} : \prd{x,y,z:A} (\id{x}{y})\to(\id{y}{z})\to (\id{x}{z})
+\end{equation*}
+is defined by $\mathsf{concat}(\refl{x},q)\defeq q$. We will usually write $\ct{p}{q}$ for $\mathsf{concat}(p,q)$. 
+The concatenation operation satisfies the unit laws
+\begin{align*}
+\mathsf{left\usc{}unit}(p) & : \ct{\refl{x}}{p}=p \\
+\mathsf{right\usc{}unit}(p) & : \ct{p}{\refl{y}}=p,
+\intertext{with a cohererence}
+\mathsf{coh\usc{}unit}(x) & : \mathsf{left\usc{}unit}(\refl{x})=\mathsf{right\usc{}unit}(\refl{x})
+\end{align*}
+that will come into play when we study type valued equivalence relations.
+
+The \define{inverse operation} 
+\begin{equation*}
+\mathsf{inv}:\prd{x,y:A} (x=y)\to (y=x)
+\end{equation*}
+is defined by $\mathsf{inv}(\refl{x})\defeq\refl{x}$. We will usually write $p^{-1}$ for $\mathsf{inv}(p)$.
+The inverse operation satisfies the inverse laws
+\begin{align*}
+\mathsf{left\usc{}inv}(p) & : \ct{p^{-1}}{p} = \refl{y} \\
+\mathsf{right\usc{}inv}(p) & : \ct{p}{p^{-1}} = \refl{x},
+\intertext{with a coherence}
+\mathsf{coh\usc{}inv}(x) & \defeq \mathsf{left\usc{}inv}(\refl{x})=\mathsf{right\usc{}inv}(\refl{x}).
+\end{align*}
+
+The \define{associativity operation}, which assigns to each $p:x=y$, $q:y=z$, and $r:z=w$ the \define{associator}
+\begin{equation*}
+\mathsf{assoc}(p,q,r) : \ct{(\ct{p}{q})}{r}=\ct{p}{(\ct{q}{r})}
+\end{equation*}
+is defined by $\mathsf{assoc}(\refl{x},q,r)\defeq \refl{\ct{q}{r}}$. The associator again satisfies unit laws, which we will encounter when we study type-valued equivalence relations.
+
+Given a map $f:A\to B$, the \define{action on paths} of $f$ is an operation
+\begin{equation*}
+\apfunc{f} : \prd{x,y:A} (\id{x}{y})\to(\id{f(x)}{f(y)})
+\end{equation*}
+defined by $\apfunc{f}{\refl{x}}\defeq\refl{f(x)}$. 
+Moreover, there are operations
+\begin{align*}
+\mathsf{ap\usc{}idfun}_A & : \prd{x,y:A}{p:\id{x}{y}} \id{p}{\ap{\idfunc[A]}{p}} \\
+\mathsf{ap\usc{}comp}(f,g) & : \prd{x,y:A}{p:\id{x}{y}} \id{\ap{g}{\ap{f}{p}}}{\ap{g\circ f}{p}}
+\end{align*}
+defined by $\mathsf{ap\usc{}idfun}_A(\refl{x})\defeq \refl{\refl{x}}$ and $\mathsf{ap\usc{}comp}(f,g,\refl{x})\jdeq \refl{\refl{g(f(x))}}$, respectively.
+
+The action on paths of a map preserves the groupoid operations, i.e.~we can construct
+\begin{align*}
+\mathsf{ap\usc{}refl}(f,x) & : \id{\ap{f}{\refl{x}}}{\refl{f}(x)} \\
+\mathsf{ap\usc{}inv}(f,p) & : \id{\ap{f}{p^{-1}}}{\ap{f}{p}^{-1}} \\
+\mathsf{ap\usc{}concat}(f,p,q) & : \id{\ap{f}{\ct{p}{q}}}{\ct{\ap{f}{p}}{\ap{f}{q}}}
+\end{align*}
+by identification elimination. The groupoid laws are also preserved, when formulated appropriately.
+
+\begin{defn}
+Let $A$ be a type, and let $B$ be a type family over $A$. The \define{transport} operation
+\begin{equation*}
+\mathsf{tr}_B:\prd{x,y:A} (\id{x}{y})\to (B(x)\to B(y))
+\end{equation*}
+is defined by $\mathsf{tr}_B(\refl{x}) \defeq \idfunc[B(x)]$. 
+\end{defn}
+
+\begin{defn}\label{defn:apd}
+Given a dependent function $f:\prd{a:A}B(a)$ and a path $p:\id{x}{y}$ in $A$, the \define{dependent action on paths}
+\begin{equation*}
+\apdfunc{f} : \prd{x,y:A}{p:x=y}\id{\mathsf{tr}_B(p,f(x))}{f(y)}
+\end{equation*}
+is defined by $\apd{f}{\refl{x}}\defeq \refl{f(x)}$.
+\end{defn}
+
+\begin{defn}
+Let $f,g:\prd{x:A}P(x)$ be two dependent functions. The type of \define{homotopies}\index{homotopy|textbf} from $f$ to $g$ is defined as
+\begin{equation*}
+f\htpy g \defeq \prd{x:A} f(x)=g(x).
+\end{equation*}
+\end{defn}
+
+The reflexivity, inverse, and concatenation operations on homotopies are defined pointwise.
+We will write $H^{-1}$ for $\lam{x}H(x)^{-1}$, and $\ct{H}{K}$ for $\lam{x}\ct{H(x)}{K(x)}$.
+These operations satisfy the groupoid laws (phrased appropriately as homotopies). Apart from the groupoid operations and their laws, we will occasionally need \emph{whiskering} operations and the naturality of homotopies.
+
+\begin{defn}\label{defn:htpy_whisering}
+We define the following \define{whiskering}\index{homotopy!whiskering operations|textbf}\index{whiskering operations!of homotopies|textbf} operations on homotopies:
+\begin{enumerate}
+\item Suppose $H:f\htpy g$ for two functions $f,g:A\to B$, and let $h:B\to C$. We define
+\begin{equation*}
+h\cdot H\defeq \lam{x}\ap{h}{H(x)}:h\circ f\htpy h\circ g.
+\end{equation*}
+\item Suppose $f:A\to B$ and $H:g\htpy h$ for two functions $g,h:B\to C$. We define
+\begin{equation*}
+H\cdot f\defeq\lam{x}H(f(x)):h\circ f\htpy g\circ f.
+\end{equation*}
+\end{enumerate}
+\end{defn}
+
+\begin{defn}\label{defn:htpy_nat}\index{homotopy!naturality|textbf}
+Let $f,g:A\to B$ be functions, and consider $H:f\htpy g$ and $p:x=y$ in $A$. We define identification
+\begin{align*}
+\mathsf{nat\usc{}htpy}(H,p) \defeq \ind{x=}(\mathsf{right\usc{}unit}(H(x)),p) & :\ct{H(x)}{\ap{g}{p}}=\ct{\ap{f}{p}}{H(y)}
+\end{align*}
+witnessing that the square
+\begin{equation*}
+\begin{tikzcd}
+f(x) \arrow[r,equals,"H(x)"] \arrow[d,equals,swap,"\ap{f}{p}"] & g(x) \arrow[d,equals,"\ap{g}{p}"] \\
+f(y) \arrow[r,equals,swap,"H(y)"] & g(y)
+\end{tikzcd}
+\end{equation*}
+commutes. This square is also called the \define{naturality square} of the homotopy $H$ at $p$.
+\end{defn}
+
+\begin{defn}
+Let $f:A\to B$ be a function. We say that $f$ has a \define{section}\index{section!of a map|textbf} if there is a term of type\index{sec(f)@{$\mathsf{sec}(f)$}|textbf}
+\begin{equation*}
+\mathsf{sec}(f) \defeq \sm{g:B\to A} f\circ g\htpy \idfunc[B].
+\end{equation*}
+Dually, we say that $f$ has a \define{retraction}\index{retraction} if there is a term of type\index{retr(f)@{$\mathsf{retr}(f)$}|textbf}
+\begin{equation*}
+\mathsf{retr}(f) \defeq \sm{h:B\to A} h\circ f\htpy \idfunc[A].
+\end{equation*}
+If $f$ has a retraction, we also say that $A$ is a \define{retract}\index{retract!of a type} of $B$.
+\end{defn}
+
+\begin{eg}
+The induction principles for $\Sigma$-types, $\emptyt$, $\unit$, and $\bool$ provide sections for the functions
+\begin{align*}
+\mathsf{ev\usc{}pair} & : \Big(\prd{t:\sm{x:A}B(x)}P(t)\Big)\to \prd{x:A}{y:B(x)}P((x,y)) \\
+\mathsf{const}_\ttt & : \Big(\prd{t:\emptyt}P(t)\Big)\to \unit \\
+\mathsf{ev\usc{}pt} & : \Big(\prd{t:\unit}P(t)\Big) \to P(\ttt) \\
+\mathsf{ev\usc{}f\usc{}t} & : \Big(\prd{t:\bool}P(t)\Big) \to P(\bfalse)\times P(\btrue) \\
+\end{align*}
+\end{eg}
+
+\begin{defn}
+We say that a function $f:A\to B$ is an \define{equivalence}\index{equivalence|textbf}\index{bi-invertible map|see {equivalence}} if it has both a section and a retraction, i.e.~if it comes equipped with a term of type\index{is_equiv@{$\isequiv$}|textbf}
+\begin{equation*}
+\isequiv(f)\defeq\mathsf{sec}(f)\times\mathsf{retr}(f).
+\end{equation*}
+We will write $\eqv{A}{B}$\index{equiv@{$\eqv{A}{B}$}|textbf} for the type $\sm{f:A\to B}\isequiv(f)$.
+\end{defn}
+
+Clearly, if $f$ is \define{invertible}\index{invertible map} in the sense that it comes equipped with a function $g:B\to A$ such that $f\circ g\htpy\idfunc[B]$ and $g\circ f\htpy\idfunc[A]$, then $f$ is an equivalence. We write\index{has_inverse@{$\mathsf{has\usc{}inverse}$}|textbf}
+\begin{equation*}
+\mathsf{has\usc{}inverse}(f)\defeq\sm{g:B\to A} (f\circ g\htpy \idfunc[B])\times (g\circ f\htpy\idfunc[A]).
+\end{equation*}
+The section of an equivalence is also a retraction (and vice versa), so we define the \define{inverse} of an equivalence to be its section. It follows immediately that the inverse of any equivalence is again an equivalence.\index{equivalence!invertibility of} The identity function $\idfunc[A]$ on a type $A$ is an equivalence since it is its own section and its own retraction.
+
+It is straightforward to show that for any two functions $f,g:A\to B$, we have
+\begin{equation*}
+(f\htpy g)\to (\isequiv(f)\leftrightarrow\isequiv(g)).
+\end{equation*}
+Given a commuting triangle
+\begin{equation*}
+\begin{tikzcd}[column sep=tiny]
+A \arrow[rr,"h"] \arrow[dr,swap,"f"] & & B \arrow[dl,"g"] \\
+& X.
+\end{tikzcd}
+\end{equation*}
+with $H:f\htpy g\circ h$, we have:
+\begin{enumerate}
+\item Suppose that the map $h$ has a section, then $f$ has a section if and only if $g$ has a section.
+\item Suppose that the map $g$ has a retraction, then $f$ has a retraction if and only if $h$ has a retraction.
+\item (The \define{3-for-2 property} for equivalences.) If any two of the functions
+\begin{equation*}
+f,\qquad g,\qquad h
+\end{equation*}
+are equivalences, then so is the third.
+\end{enumerate}
+
+In the following theorem we characterize the identity type of a $\Sigma$-type as a $\Sigma$-type of identity types.
+
+
+\begin{thm}[Theorem 2.7.2 of \cite{hottbook}]\label{thm:eq_sigma}
+Let $B$ be a type family over $A$, let $s:\sm{x:A}B(x)$, and consider the dependent function\index{pair_eq@{$\mathsf{pair\usc{}eq}$}|textbf}
+\begin{equation*}
+\mathsf{pair\usc{}eq}_s:\prd{t:\sm{x:A}B(x)} (s=t)\to \sm{\alpha:\proj 1(s)=\proj 1(t)} \mathsf{tr}_B(\alpha,\proj 2(s))=\proj 2(t)
+\end{equation*}
+defined by $\mathsf{pair\usc{}eq}_s(\refl{s}) \defeq (\refl{\proj 1(s)},\refl{\proj 2(s)})$. Then $\mathsf{pair\usc{}eq}_{s,t}$ is an equivalence for every $t:\sm{x:A}B(x)$.\index{Sigma type@{$\Sigma$-type}!identity types of|textit}\index{identity type!of a Sigma-type@{of a $\Sigma$-type}|textit}
+\end{thm}
+
+\begin{proof}
+The maps in the converse direction\index{eq_pair@{$\mathsf{eq\usc{}pair}$}}
+\begin{equation*}
+\mathsf{eq\usc{}pair}_{s,t} : \Big(\sm{p:\proj 1(s)=\proj 1(t)}\id{\mathsf{tr}_B(p,\proj 2(s))}{\proj 2(t)}\Big)\to(\id{s}{t})
+\end{equation*}
+is defined by
+\begin{equation*}
+\mathsf{eq\usc{}pair}_{(x,y),(x',y')}(\refl{x},\refl{y})\defeq \refl{(x,y)}.
+\end{equation*}
+The proofs that the function $\mathsf{eq\usc{}pair}_{s,t}$ is indeed an inverse of $\mathsf{pair\usc{}eq}_{s,t}$ are also by induction.
+\end{proof}
+
+\begin{cor}
+Let $B$ be a type family over $A$, and let $\pairr{x,y},\pairr{x',y'}:\sm{x:A}B(x)$. Then the map
+\begin{equation*}
+\mathsf{pair\usc{}eq}_{(x,y),(x',y')} : (\id{\pairr{x,y}}{\pairr{x',y'}})\to \Big(\sm{p:x=x'}\id{\mathsf{tr}_B(p,y)}{y'}\Big)
+\end{equation*}
+is an equivalence.
+\end{cor}
+
+\begin{defn}
+We say that a type $A$ is \define{contractible}\index{contractible!type|textbf} if there is a term of type
+\begin{equation*}
+\iscontr(A) \defeq \sm{c:A}\prd{x:A}c=x.
+\end{equation*}
+Given a term $(c,C):\iscontr(A)$, we call $c:A$ the \define{center of contraction}\index{center of contraction|textbf} of $A$, and we call $C:\prd{x:A}a=x$ the \define{contraction}\index{contraction} of $A$.
+\end{defn}
+
+Suppose $A$ is a contractible type with center of contraction $c$ and contraction $C$. Then the type of $C$ is (judgmentally) equal to the type
+\begin{equation*}
+\mathsf{const}_c\htpy\idfunc[A].
+\end{equation*}
+In other words, the contraction $C$ is a \emph{homotopy} from the constant function to the identity function.
+
+\begin{defn}
+Consider a type $A$ with a base point $a:A$. We say that $A$ satisfies \define{singleton induction}\index{singleton induction|textbf} if for every type family $B$ over $A$, the map
+\begin{equation*}
+\mathsf{ev\usc{}pt}:\Big(\prd{x:A}B(x)\Big)\to B(a)
+\end{equation*}
+given by $f\mapsto f(a)$ has a section. In other words, we have a function and a homotopy
+\begin{align*}
+\mathsf{sing\usc{}ind}_{A,a} & : B(a)\to \prd{x:A}B(x) \\
+\mathsf{sing\usc{}comp}_{A,a} & : \prd{b:B(a)} \mathsf{sing\usc{}ind}_{A,a}(b,a)=b.
+\end{align*}
+\end{defn}
+
+\begin{thm}\label{thm:contractible}
+A type $A$ is contractible if and only if it satisfies signleton induction.
+\end{thm}
+
+\begin{eg}
+By definition the unit type\index{unit type!contractibility} $\unit$ satisfies singleton induction, so it is contractible.
+\end{eg}
+
+\begin{thm}[Lemma 3.11.8 in \cite{hottbook}]\label{thm:total_path}
+For any $x:A$, the type
+\begin{equation*}
+\sm{y:A}x=y
+\end{equation*}
+is contractible.\index{identity type!contractibility of total space|textit}
+\end{thm}
+
+\begin{proof}
+We have the term $(x,\refl{x}):\sm{y:A}x=y$, and both maps in the composite
+\begin{equation*}
+\begin{tikzcd}[column sep=large]
+\prd{t:\sm{y:A}x=y}B(t) \arrow[r,"\mathsf{ev\usc{}pair}"] & \prd{y:A}{p:x=y}B((y,p)) \arrow[r,"\mathsf{ev\usc{}refl}"] & B((x,\refl{x}))
+\end{tikzcd}
+\end{equation*}
+have sections, so the composite has a section.
+\end{proof}
+
+\begin{defn}
+Let $f:A\to B$ be a function, and let $b:B$. The \define{fiber}\index{fiber|textbf}\index{homotopy fiber|see {fiber}} of $f$ at $b$ is defined to be the type
+\begin{equation*}
+\fib{f}{b}\defeq\sm{a:A}f(a)=b.
+\end{equation*}
+\end{defn}
+
+In other words, the fiber of $f$ at $b$ is the type of $a:A$ that get mapped by $f$ to $b$.
+One may think of the fiber as a type theoretic version of the pre-image\index{pre-image|see {fiber}} of a point.
+
+\begin{defn}
+We say that a function $f:A\to B$ is \define{contractible}\index{contractible!map|textbf} if there is a term of type
+\begin{equation*}
+\iscontr(f)\defeq\prd{b:B}\iscontr(\fib{f}{b}).
+\end{equation*}
+\end{defn}
+
+We cite Chapter 4 of \cite{hottbook} for the following result, although it is well-known that it can be proven directly and without the use of function extensionality.
+
+\begin{thm}[Chapter 4 in \cite{hottbook}]\label{thm:contr_equiv}
+A function is an equivalence if and only if it is contractible.\index{contractible!map!is an equivalence|textit}
+\end{thm}
+
+\begin{cor}\label{cor:contr_path}
+Let $A$ be a type, and let $a:A$. Then the type
+\begin{equation*}
+\sm{x:A}x=a
+\end{equation*}
+is contractible.
+\end{cor}
+
+\begin{proof}
+Since the identity function is an equivalence, the fibers of the identity function are contractible by \autoref{thm:contr_equiv}. Note that $\sm{x:A}x=a$ is exactly the fiber of $\idfunc[A]$ at $a:A$.
+\end{proof}
 
 \subsection{The fundamental theorem of identity types}
 Consider a family
@@ -28,6 +363,21 @@ For any fiberwise transformation $f:\prd{x:A}B(x)\to C(x)$, and any $a:A$ and $c
 \end{equation*}
 \end{lem}
 
+\begin{eg}
+There are equivalences
+\begin{equation*}
+\eqv{\fib{(\apfunc{f})_{x,y}}{q}}{\fib{\delta_f}{(x,y,q)}}
+\end{equation*}
+for any $q:f(x)=f(y)$, because the triangle
+\begin{equation*}
+\begin{tikzcd}
+A \arrow[rr,"{\lam{x}(x,x,\refl{x})}"] \arrow[dr,swap,"\delta_f"] & & \sm{x,y:A}x=y \arrow[dl,"\total{\total{\apfunc{f}}}"] \\
+& \sm{x,y:A}f(x)=f(y)
+\end{tikzcd}
+\end{equation*}
+and the top map is an equivalence.
+\end{eg}
+
 \begin{thm}[Theorem 4.7.7 of \cite{hottbook}]\label{thm:fib_equiv}
 Let $f:\prd{x:A}B(x)\to C(x)$ be a fiberwise transformation. The following are logically equivalent:
 \begin{enumerate}
@@ -36,13 +386,15 @@ Let $f:\prd{x:A}B(x)\to C(x)$ be a fiberwise transformation. The following are l
 \end{enumerate}
 \end{thm}
 
+The following theorem is a key result in many results about identity types, which we will use instead of the \emph{encode-decode method}\index{encode-decode method} of \cite{LicataShulman}. We refer to it as the \define{fundamental theorem of identity types}.
+
 \begin{thm}\label{thm:id_fundamental}
 Let $A$ be a type with $a:A$, and let $B$ be be a type family over $A$ with $b:B(a)$.
 Then  the following are logically equivalent:
 \begin{enumerate}
 \item The canonical family of maps
 \begin{equation*}
-\rec{a{=}}(b):\prd{x:A} (a=x)\to B(x)
+\ind{a{=}}(b):\prd{x:A} (a=x)\to B(x)
 \end{equation*}
 is a fiberwise equivalence.
 \item The total space
@@ -54,21 +406,249 @@ is contractible.
 \end{thm}
 
 \begin{proof}
-By \autoref{thm:fib_equiv} it follows that the fiberwise transformation $\rec{a{=}}(b)$ is a fiberwise equivalence if and only if it induces an equivalence
+By \autoref{thm:fib_equiv} it follows that the fiberwise transformation $\ind{a{=}}(b)$ is a fiberwise equivalence if and only if it induces an equivalence
 \begin{equation*}
 \eqv{\Big(\sm{x:A}a=x\Big)}{\Big(\sm{x:A}B(x)\Big)}
 \end{equation*}
 on total spaces. We have that $\sm{x:A}a=x$ is contractible. Now it follows by the 3-for-2 property of equivalences, applied in the case
 \begin{equation*}
 \begin{tikzcd}
-\sm{x:A}a=x \arrow[rr,"\total{\rec{a{=}}(b)}"] \arrow[dr,swap,"\eqvsym"] & & \sm{x:A}B(x) \arrow[dl] \\
+\sm{x:A}a=x \arrow[rr,"\total{\ind{a{=}}(b)}"] \arrow[dr,swap,"\eqvsym"] & & \sm{x:A}B(x) \arrow[dl] \\
 & \unit
 \end{tikzcd}
 \end{equation*}
-that $\total{\rec{a{=}}(b)}$ is an equivalence if and only if $\sm{x:A}B(x)$ is contractible.
+that $\total{\ind{a{=}}(b)}$ is an equivalence if and only if $\sm{x:A}B(x)$ is contractible.
 \end{proof}
 
-\section{Extensionality axioms}
+\begin{cor}
+Let $a:A$, and let $B$ be a type family over $A$. If each $B(x)$ is a retract of $\id{a}{x}$, then $B(x)$ is equivalent to $\id{a}{x}$ for every $x:A$.
+\end{cor}
+
+As a first application of the fundamental theorem we give a quick proof that equivalences are embeddings.
+
+\begin{defn}
+An \define{embedding}\index{embedding|textbf} is a map $f:A\to B$ satisfying the property that
+\begin{equation*}
+\apfunc{f}:(\id{x}{y})\to(\id{f(x)}{f(y)})
+\end{equation*}
+is an equivalence for every $x,y:A$. We write $\mathsf{is\usc{}emb}(f)$ for the type of witnesses that $f$ is an embedding.
+\end{defn}
+
+\begin{thm}[Theorem 2.11.1 in \cite{hottbook}]
+\label{cor:emb_equiv} 
+Any equivalence is an embedding.\index{embedding!equivalences are embeddings|textit}\index{equivalence!is an embedding|textit}
+\end{thm}
+
+\begin{proof}
+Let $e:\eqv{A}{B}$ be an equivalence, and let $x:A$. By \autoref{thm:id_fundamental} it follows that
+\begin{equation*}
+\apfunc{e} : (\id{x}{y})\to (\id{e(x)}{e(y)})
+\end{equation*}
+is an equivalence for every $y:A$ if and only if the total space
+\begin{equation*}
+\sm{y:A}e(x)=e(y)
+\end{equation*}
+is contractible for every $y:A$. Now observe that $\sm{y:A}e(x)=e(y)$ is equivalent to the fiber $\fib{e}{e(x)}$, which is contractible by \cref{thm:contr_equiv}.
+\end{proof}
+
+\begin{defn}
+A type $A$ is said to be a \define{proposition} if there is a term of type
+\begin{equation*}
+\isprop(A)\defeq\prd{x,y:A}\iscontr(x=y).
+\end{equation*}
+\end{defn}
+
+\begin{lem}\label{lem:prop_char}
+For any type $A$ the following are equivalent:
+\begin{enumerate}
+\item $A$ is a proposition.
+\item $A$ is \define{proof irrelevant} in the sense that $\prd{x,y:A}x=y$.
+\item $A\to\iscontr(A)$. 
+\end{enumerate}
+\end{lem}
+
+\begin{eg}\label{eg:prop_contr}
+Any contractible type is a proposition. The empty type is an equivalence by a direct application of the induction principle of the empty type.
+\end{eg}
+
+\begin{lem}\label{lem:prop_equiv}
+Let $A$ and $B$ be types, and let $e:\eqv{A}{B}$. Then we have
+\begin{equation*}
+\isprop(A)\leftrightarrow\isprop(B).
+\end{equation*}
+\end{lem}
+
+\begin{proof}
+Suppose that $B$ is a proposition. Note that $e$ is an embedding by \cref{cor:emb_equiv}, so for any $x,y:A$ we have the equivalence
+\begin{equation*}
+\apfunc{e} : (x=y)\to (e(x)=e(y))
+\end{equation*}
+and $e(x)=e(y)$ is contractible. Therefore $x=y$ is contractible.
+\end{proof}
+
+\begin{defn}
+A type $A$ is said to be a \define{set} if there is a term of type
+\begin{equation*}
+\isset(A)\defeq \prd{x,y:A}\isprop(\id{x}{y}).
+\end{equation*}
+\end{defn}
+
+\begin{lem}\label{lem:prop_to_id}
+Let $A$ be a type, and let $R:A\to A\to\UU$ be a binary relation on $A$ satisfying
+\begin{enumerate}
+\item Each $R(x,y)$ is a proposition,
+\item $R$ is reflexive, as witnessed by $\rho:\prd{x:A}R(x,x)$.
+\end{enumerate}
+Then any fiberwise map
+\begin{equation*}
+\prd{x,y:A}R(x,y)\to (\id{x}{y})
+\end{equation*}
+is a fiberwise equivalence. Consequently, if there is such a fiberwise map, then $A$ is a set.
+\end{lem}
+
+\begin{proof}
+Let $f:\prd{x,y:A}R(x,y)\to(\id{x}{y})$. 
+Since $R$ is assumed to be reflexive, we also have a fiberwise transformation
+\begin{equation*}
+\ind{x{=}}(\rho(x)):\prd{y:A}(\id{x}{y})\to R(x,y).
+\end{equation*}
+Since each $R(x,y)$ is assumed to be a proposition, it therefore follows that each $R(x,y)$ is a retract of $\id{x}{y}$. We conclude by \autoref{ex:id_fundamental_retr} that for each $x,y:A$, the map $f(x,y):R(x,y)\to(\id{x}{y})$ must be an equivalence.
+
+Now it also follows that $A$ is a set, since its identity types are equivalent to propositions, and therefore they are propositions by \cref{lem:prop_equiv}. 
+\end{proof}
+
+\begin{eg}
+One can apply \cref{lem:prop_to_id} using the \define{observational equality} $\mathrm{Eq}_\N:\N\to (\N\to\UU)$ given by
+\begin{align*}
+\mathrm{Eq}_\N(0,0) & \defeq \unit & \mathrm{Eq}_\N(\mathsf{succ}(n),0) & \defeq \emptyt \\
+\mathrm{Eq}_\N(0,\mathsf{succ}(m)) & \defeq \emptyt & \mathrm{Eq}_\N(\mathsf{succ}(n),\mathsf{succ}(m)) & \defeq \mathrm{Eq}_\N(n,m)
+\end{align*}
+to show that $\N$ is a set. To see that $\mathrm{Eq}_\N$ implies identity, note that $\mathrm{Eq}_\N$ implies any reflexive relation $R:\N\to\N\to\UU$.
+\end{eg}
+
+\begin{defn}
+We define $\istrunc{} : \Z_{\geq-2}\to\UU\to\UU$ by induction on $k:\Z_{\geq -2}$, taking
+\begin{align*}
+\istrunc{-2}(A) & \defeq \iscontr(A) \\
+\istrunc{k+1}(A) & \defeq \prd{x,y:A}\istrunc{k}(\id{x}{y}).\qedhere
+\end{align*}
+For any type $A$, we say that $A$ is \define{$k$-truncated}, or a \define{$k$-type}, if there is a term of type $\istrunc{k}(A)$. We say that a map $f:A\to B$ is $k$-truncated if its fibers are $k$-truncated.
+\end{defn}
+
+\begin{lem}\label{thm:istrunc_next}
+If $A$ is a $k$-type, then $A$ is also a $(k+1)$-type.
+\end{lem}
+
+\begin{thm}\label{thm:ktype_eqv}
+If $e:\eqv{A}{B}$ is an equivalence, and $B$ is a $k$-type, then so is $A$.
+\end{thm}
+
+\begin{proof}
+We have seen in \autoref{ex:contr_equiv} that if $B$ is contractible and $e:\eqv{A}{B}$ is an equivalence, then $A$ is also contractible. This proves the base case.
+
+For the inductive step, assume that the $k$-types are stable under equivalences, and consider $e:\eqv{A}{B}$ where $B$ is a $(k+1)$-type. In \autoref{cor:emb_equiv} we have seen that
+\begin{equation*}
+\apfunc{e}:(\id{x}{y})\to(\id{e(x)}{e(y)})
+\end{equation*}
+is an equivalence for any $x,y$. Note that $\id{e(x)}{e(y)}$ is a $k$-type, so by the induction hypothesis it follows that $\id{x}{y}$ is a $k$-type. This proves that $A$ is a $(k+1)$-type.
+\end{proof}
+
+\begin{cor}\label{cor:emb_into_ktype}
+If $f:A\to B$ is an embedding, and $B$ is a $(k+1)$-type, then so is $A$.
+\end{cor}
+
+\begin{proof}
+By the assumption that $f$ is an embedding, the action on paths
+\begin{equation*}
+\apfunc{f}:(\id{x}{y})\to (\id{f(x)}{f(y)})
+\end{equation*}
+is an equivalence for every $x,y:A$. Since $B$ is assumed to be a $(k+1)$-type, it follows that $f(x)=f(y)$ is a $k$-type for every $x,y:A$. Therefore we conclude by \cref{thm:ktype_eqv} that $\id{x}{y}$ is a $k$-type for every $x,y:A$. In other words, $A$ is a $(k+1)$-type.
+\end{proof}
+
+\begin{thm}
+Let $B$ be a type family over $A$. Then the following are equivalent:
+\begin{enumerate}
+\item For each $x:A$ the type $B(x)$ is $k$-truncated.
+\item The projection map
+\begin{equation*}
+\proj 1 : \Big(\sm{x:A}B(x)\Big)\to A
+\end{equation*}
+is a $k$-truncated map.
+\end{enumerate}
+\end{thm}
+
+\begin{proof}
+By \cref{ex:fib_replacement,ex:fiber_trans} we obtain equivalences
+\begin{equation*}
+\eqv{B(x)}{\fib{\proj 1}{x}}
+\end{equation*}
+for every $x:A$. Therefore the claim follows from \cref{thm:ktype_eqv}.
+\end{proof}
+
+\begin{thm}\label{thm:trunc_ap}
+Let $f:A\to B$ be a map. The following are equivalent:
+\begin{enumerate}
+\item The map $f$ is $(k+1)$-truncated.
+\item For each $x,y:A$, the map
+\begin{equation*}
+\apfunc{f} : (x=y)\to (f(x)=f(y))
+\end{equation*}
+is $k$-truncated. 
+\end{enumerate}
+\end{thm}
+
+\begin{proof}
+First we show that for any $s,t:\fib{f}{b}$ there is an equivalence
+\begin{equation*}
+\eqv{(s=t)}{\fib{\apfunc{f}}{\ct{\proj 2(s)}{\proj 2(t)^{-1}}}}
+\end{equation*}
+We do this by $\Sigma$-induction on $s$ and $t$, and then we calculate using \cref{ex:trans_ap} and basic manipulations of identifications that
+\begin{align*}
+(\pairr{x,p}=\pairr{y,q}) & \eqvsym \sm{r:x=y} \mathsf{tr}_{f(\blank)=b}(r,p)=q \\
+& \eqvsym \sm{r:x=y} \ct{\ap{f}{r}^{-1}}{p}=q \\
+& \eqvsym \sm{r:x=y} \ap{f}{r}=\ct{p}{q^{-1}} \\
+& \jdeq \fib{\apfunc{f}}{\ct{p}{q^{-1}}}.
+\end{align*}
+By these equivalences, it follows that if $\apfunc{f}$ is $k$-truncated, then for each $s,t:\fib{f}{b}$ the identity type $s=t$ is equivalent to a $k$-truncated type, and therefore we obtain by \cref{thm:ktype_eqv} that $f$ is $(k+1)$-truncated.
+
+For the converse, note that we have equivalences
+\begin{align*}
+\fib{\apfunc{f}}{p} & \eqvsym ((x,p)=(y,\refl{f(y)})).
+\end{align*}
+Therefore it follows that if $f$ is $(k+1)$-truncated, then the identity type $(x,p)=(y,\refl{f(y)})$ in $\fib{f}{f(y)}$ is $k$-truncated for any $p:f(x)=f(y)$, and therefore $\fib{\apfunc{f}}{p}$ is $k$-truncated by \cref{thm:ktype_eqv}. 
+\end{proof}
+
+\begin{cor}\label{cor:prop_emb}
+A map is an embedding if and only if its fibers are propositions.
+\end{cor}
+
+\begin{defn}
+A type family $B$ over $A$ is said to be a \define{subtype} of $A$ if for each $x:A$ the type $B(x)$ is a proposition.
+\end{defn}
+
+\begin{cor}\label{thm:subtype}
+A type family $B$ over $A$ is a subtype if and only if the projection map
+\begin{equation*}
+\proj 1 : \Big(\sm{x:A}B(x)\Big)\to A
+\end{equation*}
+is an embedding.
+\end{cor}
+
+\begin{thm}
+Let $f:\prd{x:A}B(x)\to C(x)$ be a fiberwise transformation. Then the following are equivalent:
+\begin{enumerate}
+\item For each $x:A$ the map $f(x)$ is $k$-truncated.
+\item The induced map 
+\begin{equation*}
+\total{f}:\Big(\sm{x:A}B(x)\Big)\to\Big(\sm{x:A}C(x)\Big)
+\end{equation*}
+is $k$-truncated.
+\end{enumerate}
+\end{thm}
+
+\begin{proof}
+This follows directly from \cref{lem:fib_total,thm:ktype_eqv}.
+\end{proof}
 
 \subsection{Function extensionality}
 \begin{thm}\label{thm:funext_wkfunext}\specialindex{function extensionality}
@@ -80,9 +660,9 @@ The following are equivalent:
 \end{equation*}
 the map
 \begin{equation*}
-\Big(\prd{g:\prd{x:A}B(x)}{H:f\htpy g}P(g,H)\Big)\to P(f,\mathsf{htpy.refl}_f)
+\Big(\prd{g:\prd{x:A}B(x)}{H:f\htpy g}P(g,H)\Big)\to P(f,\mathsf{htpy\usc{}refl}_f)
 \end{equation*}
-given by $s\mapsto s(f,\mathsf{htpy.refl}_f)$ has a section.
+given by $s\mapsto s(f,\mathsf{htpy\usc{}refl}_f)$ has a section.
 \item The \define{function extensionality principle}\index{function extensionality}: For every type family $B$ over $A$, and any two dependent functions $f,g:\prd{x:A}B(x)$, the canonical map\index{htpy_eq@{$\mathsf{htpy\usc{}eq}$}|textbf}
 \begin{equation*}
 \mathsf{htpy\usc{}eq}(f,g) : (\id{f}{g})\to (f\htpy g)
@@ -95,84 +675,6 @@ by path induction (sending $\refl{f}$ to $\lam{x}\refl{f(x)}$) is an equivalence
 \end{enumerate}
 \end{thm}
 
-\begin{proof}
-To show that homotopy induction implies function extensionality, note that from homotopy induction and $\Sigma$-induction combined, we obtain that for any type family $P$ over $\sm{g:\prd{x:A}B(x)}f\htpy g$, the evaluation map
-\begin{equation*}
-\Big(\prd{t:\sm{g:\prd{x:A}B(x)}f\htpy g} P(t)\Big)\to P((f,\mathsf{htpy.refl}_f))
-\end{equation*}
-has a section. In other words, the type $\sm{g:\prd{x:A}B(x)}f\htpy g$ satisfies singleton induction and therefore it is contractible. Now we conclude by \cref{thm:id_fundamental} that the canonical map $(f=g)\to (f\htpy g)$ is an equivalence, i.e.~that function extensionality holds.
-
-Conversely, to prove homotopy induction from function extensionality we again note that by function extensionality and \cref{thm:id_fundamental} the type 
-\begin{equation*}
-\sm{g:\prd{x:A}B(x)}f\htpy g
-\end{equation*}
-is contractible. Therefore it satisfies singleton induction, so homotopy induction follows.
-
-To show that function extensionality implies weak function extensionality, suppose that each $B(a)$ is contractible with center of contraction $c(a)$ and contraction $C_a:\prd{y:B(a)}c(a)=y$. Then we take $c\defeq \lam{a}c(a)$ to be the center of contraction of $\prd{x:A}B(x)$. To construct the contraction we have to define a term of type
-\begin{equation*}
-\prd{f:\prd{x:A}B(x)}c=f.
-\end{equation*}
-Let $f:\prd{x:A}B(x)$. By function extensionality we have a map $(c\htpy f)\to (c=f)$, so it suffices to construct a term of type $c\htpy f$. Here we take $\lam{a}C_a(f(a))$. This completes the proof that function extensionality implies weak function extensionality.
-
-To prove function extensionality from weak function extensionality, observe that it suffices by \autoref{thm:id_fundamental} to show that
-\begin{equation*}
-\sm{g:\prd{x:A}B(x)}f\htpy g
-\end{equation*}
-is contractible.
-
-Since the type $\sm{b:B(x)}f(x)=b$ is contractible for each $x:X$, it follows by our assumption of weak function extensionality that the type $\prd{x:A}\sm{b:B(x)}f(x)=b$ is contractible. By \autoref{ex:contr_retr} it therefore suffices to show that
-\begin{equation*}
-\sm{g:\prd{x:A}B(x)}f\htpy g
-\end{equation*}
-is a retract of the type $\prd{x:A}\sm{b:B(x)}f(x)=b$. We have the functions
-\begin{align*}
-i & \defeq \ind{\Sigma}(\lam{g}{H}{x}\pairr{g(x),H(x)}) \\
-r & \defeq \lam{p}\pairr{\lam{x}\proj 1(p(x)),\lam{x}\proj 2(p(x))}.
-\end{align*}
-It remains to show that $r\circ i\htpy \idfunc$. This homotopy is constructed by $\Sigma$-induction. Let $g:\prd{x:A}B(x)$ and let $H:f\htpy g$. Then we have
-\begin{align*}
-r(i(g,H)) & \jdeq r(\lam{x}\pairr{g(x),H(x)}) \\
-& \jdeq \pairr{\lam{x}g(x),\lam{x}H(x)} \\
-& \jdeq \pairr{g,H}.
-\end{align*}
-In other words, the homotopy $r\circ i\htpy \idfunc$ is given by $\ind{\Sigma}(\lam{g}{H}\refl{(\pairr{g,H})})$. 
-\end{proof}
-
-\begin{comment}
-\begin{rmk}
-Since we assumed the $\eta$-rule for $\Sigma$-types, we also have
-\begin{align*}
-\mathsf{pi\usc{}sigma}(\mathsf{sigma\usc{}pi}(p)) & \jdeq \mathsf{pi\usc{}sigma}(\pairr{\lam{x}\proj 1(p(x)),\lam{x}\proj 2(p(x))}) \\
-& \jdeq \lam{x}\pairr{\proj 1(p(x)),\proj 2(p(x))} \\
-& \jdeq \lam{x} p(x) \\
-& \jdeq p.
-\end{align*}
-Therefore, the types $\sum_g f\htpy g$ and $\prod_x\sum_b f(x)=b$ are actually \emph{judgmentally isomorphic}. 
-\end{rmk}
-\end{comment}
-
-\begin{comment}
-\begin{thm}
-Assume weak function extensionality. Then for any type $A$, the type $\iscontr(A)$ is a proposition.
-\end{thm}
-
-\begin{proof}
-Let $A$ be a contractible type with center of contraction $c$, and contraction $C$. We want to show that
-\begin{equation*}
-\prd{d:A}{D:\prd{x:A}d=x} (c,C)=(d,D).
-\end{equation*}
-Since $A$ is contractible, we may proceed by singleton induction. Thus, it suffices to show that
-\begin{equation*}
-\prd{D:\prd{x:A}c=x}(c,C)=(c,D).
-\end{equation*}
-Now recall from \cref{ex:prop_contr} it follows that for any $x:A$ the type $c=x$ is contractible. By the principle of weak function extensionality it follows that the type $\prd{x:A}c=x$ is contractible. Therefore we may proceed by singleton induction on $D$. It suffices to show that
-\begin{equation*}
-(c,C)=(c,C),
-\end{equation*}
-which we have by reflexivity.
-\end{proof}
-\end{comment}
-
 \begin{thm}\label{thm:trunc_pi}
 Assume function extensionality. Then for any type family $B$ over $A$ one has\index{truncated}
 \begin{equation*}
@@ -181,9 +683,7 @@ Assume function extensionality. Then for any type family $B$ over $A$ one has\in
 \end{thm}
 
 \begin{proof}
-The theorem is proven by induction on $k\geq -2$. The base case is just the weak function extensionality principle, which was shown to follow from function extensionality in \autoref{thm:funext_wkfunext}.
-
-For the inductive hypothesis, assume that the $k$-types are closed under dependent function types. Assume that $B$ is a family of $(k+1)$-types. By function extensionality, the type $f=g$ is equivalent to $f\htpy g$ for any two dependent functions $f,g:\prd{x:A}B(x)$. Now observe that $f\htpy g$ is a dependent product of $k$-types, and therefore it is an $k$-type by our inductive hypotheses. Therefore, it follows by \autoref{thm:ktype_eqv} that $f=g$ is an $k$-type, and hence that $\prd{x:A}B(x)$ is an $(k+1)$-type.
+The theorem is proven by induction on $k\geq -2$, where the base case is just the weak function extensionality principle, which was shown to follow from function extensionality in \autoref{thm:funext_wkfunext}.
 \end{proof}
 
 \begin{cor}\label{cor:funtype_trunc}
@@ -200,37 +700,6 @@ Let $C(x,y)$ be a type in context $\Gamma,x:A,y:B(x)$. Then the map
 given by $\lam{h}(\lam{x}\proj 1(h(x)),\lam{x}\proj 2(h(x)))$ is an equivalence.
 \end{thm}
 
-\begin{proof}
-The map $\psi$ in the converse direction is defined by
-\begin{equation*}
-\psi\defeq \ind{\Sigma}(\lam{f}{g}{x}(f(x),g(x))).
-\end{equation*}
-We need to define homotopies $\psi\circ\varphi\htpy \idfunc$ and $\varphi\circ\psi\htpy \idfunc$. 
-
-For the first homotopy, let $h:\prd{x:A}\sm{y:B(x)}C(x,y)$. Then we have
-\begin{align*}
-\psi(\varphi(h)) & \jdeq \psi(\lam{x}\proj 1(h(x)),\lam{x}\proj 2(h(x))) \\
-& \jdeq \lam{x}(\proj 1(h(x)),\proj 2(h(x))).
-\end{align*}
-Note that for each $x:A$ we have an identification
-\begin{equation*}
-(\proj 1(h(x)),\proj 2(h(x)))=h(x).
-\end{equation*}
-Therefore we obtain a \emph{homotopy} $\psi(\varphi(h))\htpy h$, but this suffices because function extensionality now provides us with an identification $\psi(\varphi(h))=h$.
-
-The second homotopy is constructed by $\Sigma$-induction. Let $f:\prd{x:A}B(x)$ and let $g:\prd{x:A}C(x,f(x))$. 
-Then we have
-\begin{align*}
-\varphi(\psi(f,g)) & \jdeq \varphi(\lam{x}(f(x),g(x))) \\
-& \jdeq (\lam{x}f(x),\lam{x}g(x)) \\
-& \jdeq (f,g)
-\end{align*}
-where the last judgmental equality holds by the $\eta$-rule for $\Pi$-types. In other words, the homotopy $\varphi\circ\psi\htpy \idfunc$ is given by
-\begin{equation*}
-\ind{\Sigma}(\lam{f}{g}\refl{(f,g)}).\qedhere
-\end{equation*}
-\end{proof}
-
 \begin{cor}
 For type $A$ and any type family $C$ over $B$, the map
 \begin{equation*}
@@ -239,7 +708,40 @@ For type $A$ and any type family $C$ over $B$, the map
 given by $\lam{(f,g)}{x}(f(x),g(x))$ is an equivalence.
 \end{cor}
 
-\subsubsection{The Yoneda embedding}
+\subsubsection{Characterizing fiberwise transformations}
+
+\begin{defn}
+Consider two functions $f:A\to X$ and $g:B\to X$. We define the type 
+\begin{equation*}
+\mathrm{hom}_X(f,g)\defeq \sm{h:A\to B} f\htpy g\circ h.
+\end{equation*}
+\end{defn}
+
+In other words, the type $\mathrm{hom}_X(f,g)$ is the type of functions $h:A\to B$ equipped with a homotopy witnessing that the triangle
+\begin{equation*}
+\begin{tikzcd}[column sep=tiny]
+A \arrow[dr,swap,"f"] \arrow[rr,"h"] & & B \arrow[dl,"g"] \\
+& X
+\end{tikzcd}
+\end{equation*}
+
+\begin{prp}
+Let $P$ and $Q$ be two type families over $X$, and write $\proj 1^P$ and $\proj 1^Q$ for their first projections, respectively. Then there is an equivalence
+\begin{equation*}
+\mathsf{tot\usc{}triangle}:\Big(\prd{x:X} P(x)\to Q(x)\Big)\to \mathrm{hom}_X(\proj 1^P,\proj 1^Q)
+\end{equation*}
+given by $\mathsf{tot\usc{}triangle}(f)\defeq (\total{f},\lam{(x,y)}\refl{x})$, is an equivalence.
+\end{prp}
+
+\begin{cor}\label{cor:fib_triangle}
+For any two maps $f:A\to X$ and $g:B\to X$, the map
+\begin{equation*}
+\mathsf{fib\usc{}triangle} : \mathrm{hom}_X(f,g) \to \prd{x:X}\fib{f}{x}\to \fib{g}{x}
+\end{equation*}
+given by $\lam{x}{(a,p)}(h(a),\ct{H(a)^{-1}}{p})$ is an equivalence.
+\end{cor}
+
+\subsubsection{The Yoneda lemma}
 The function extensionality principle allows us to prove \emph{universal properties}. The universal property of identity types is sometimes called the type theoretic Yoneda lemma: families of maps out of the identity type are uniquely determined by their action on the reflexivity identification.
 
 \begin{thm}\label{thm:yoneda}
@@ -262,28 +764,11 @@ This follows by path induction on $p$, since $\varphi(f(a,\refl{a}),a,\refl{a})\
 
 \subsubsection{Composing with equivalences}
 
-We show in this section that a map $f:A\to B$ is an equivalence if and only if for any type $X$ the precomposition map 
-\begin{equation*}
-\blank\circ f: (B\to X)\to (A\to X)
-\end{equation*}
-is an equivalence. Moreover, we will show in \cref{ex:equiv_precomp} that the `dependent version' of this statement also holds: a map $f:A\to B$ is an equivalence if and only if for any type family $P$ over $B$, the precomposition map
+We show in this section that a map $f:A\to B$ is an equivalence if and only if for any type family $P$ over $B$, the precomposition map
 \begin{equation*}
 \blank\circ f: \Big(\prd{y:B}P(y)\Big)\to\Big(\prd{x:A}P(f(x))\Big)
 \end{equation*}
-is an equivalence. However, in our proof of this fact we will rely on a piece of data that every equivalence satisfies in addition to being invertible.
-
-\begin{defn}
-We say that a map $f:A\to B$ is a \define{half-adjoint equivalence}\index{half-adjoint equivalence|textbf}, in the sense that there are
-\begin{align*}
-g & : B \to A\\
-G & : f\circ g \htpy \idfunc[B] \\
-H & : g\circ f \htpy \idfunc[A] \\
-K & : G\cdot f \htpy f\cdot H.
-\end{align*}
-We write $\mathsf{half\usc{}adj}(f)$\index{half_adj(f)@{$\mathsf{half\usc{}adj}(f)$}|textbf} for the type of such quadruples $(g,G,H,K)$.
-\end{defn}
-
-To show that every equivalence is a half-adjoint equivalence, we also introduce the notion of \emph{path-split} maps, which were introduced by Rijke, Shulman, and Spitters in \cref{RSS}.
+is an equivalence. In the proof we use the notion of \emph{path-split} maps, which were introduced by Rijke, Shulman, and Spitters in \cref{RSS}.
 
 \begin{defn}
 We say that a map $f:A\to B$ is \define{path-split}\index{path-split|textbf} if $f$ has a section, and for each $x,y:A$ the map
@@ -294,6 +779,19 @@ also has a section. We write $\mathsf{path\usc{}split}(f)$\index{path_split(f)@{
 \begin{equation*}
 \mathsf{sec}(f)\times\prd{x,y:A}\mathsf{sec}(\apfunc{f}(x,y)).
 \end{equation*}
+\end{defn}
+
+We will also use the notion of \emph{half-adjoint equivalences}, which were introduced in \cite{hottbook}.
+
+\begin{defn}[Definition 4.2.1 of \cite{hottbook}]
+We say that a map $f:A\to B$ is a \define{half-adjoint equivalence}\index{half-adjoint equivalence|textbf}, in the sense that there are
+\begin{align*}
+g & : B \to A\\
+G & : f\circ g \htpy \idfunc[B] \\
+H & : g\circ f \htpy \idfunc[A] \\
+K & : G\cdot f \htpy f\cdot H.
+\end{align*}
+We write $\mathsf{half\usc{}adj}(f)$\index{half_adj(f)@{$\mathsf{half\usc{}adj}(f)$}|textbf} for the type of such quadruples $(g,G,H,K)$.
 \end{defn}
 
 \begin{thm}\label{ex:equiv_precomp}
@@ -379,7 +877,7 @@ Of course we have $(\idfunc[B],\refl{f})$ in this fiber. However we claim that t
 & = f\circ \idfunc[A] \\
 & \jdeq f
 \end{align*}
-Now we conclude by the contractibility of the fiber that $(\idfunc[B],\refl{f})=(f\circ h,p)$. In particular we obtain that $\idfunc[B]=f\circ h$, showing that $h$ is a section of $f$.
+Now we conclude by the contractibility of the fiber that there is an identification $(\idfunc[B],\refl{f})=(f\circ h,p)$. In particular we obtain that $\idfunc[B]=f\circ h$, showing that $h$ is a section of $f$.
 \end{proof}
 
 \subsection{Homotopy pullbacks}
@@ -508,15 +1006,15 @@ is contractible. Now we apply \cref{ex:sigma_swap} repeatedly to see that this t
 The types $\sm{p':C\to A} p\htpy p'$ and $\sm{q':C\to B} q\htpy q'$ are contractible by function extensionality, and  we have
 \begin{samepage}
 \begin{align*}
-(p,\mathsf{htpy.refl}_p) & : \sm{p':C'\to A} p\htpy p' \\
-(q,\mathsf{htpy.refl}_q) & : \sm{q':C'\to B} q\htpy q'.
+(p,\mathsf{htpy\usc{}refl}_p) & : \sm{p':C'\to A} p\htpy p' \\
+(q,\mathsf{htpy\usc{}refl}_q) & : \sm{q':C'\to B} q\htpy q'.
 \end{align*}%
 \end{samepage}%
 Thus we apply \cref{ex:contr_in_sigma} to see that the type of tuples $(p',K,q',L,H',M)$ is equivalent to the type
 \begin{equation*}
-\sm{H':f\circ p'\htpy g\circ q'} \ct{H}{\mathsf{htpy.refl}_{g\circ q}}\htpy \ct{\mathsf{htpy.refl}_{f\circ p}}{H'}.
+\sm{H':f\circ p'\htpy g\circ q'} \ct{H}{\mathsf{htpy\usc{}refl}_{g\circ q}}\htpy \ct{\mathsf{htpy\usc{}refl}_{f\circ p}}{H'}.
 \end{equation*}
-Of course, the type $\ct{H}{\mathsf{htpy.refl}_{g\circ q}}\htpy \ct{\mathsf{htpy.refl}_{f\circ p}}{H'}$ is equivalent to the type $H\htpy H'$, and $\sm{H':f\circ p\htpy g\circ q} H\htpy H'$ is contractible.
+Of course, the type $\ct{H}{\mathsf{htpy\usc{}refl}_{g\circ q}}\htpy \ct{\mathsf{htpy\usc{}refl}_{f\circ p}}{H'}$ is equivalent to the type $H\htpy H'$, and $\sm{H':f\circ p\htpy g\circ q} H\htpy H'$ is contractible.
 \end{proof}
 
 As a corollary we obtain the following characterization of the universal property of pullbacks.
@@ -648,7 +1146,7 @@ Thus we see that the triangle
 & \mathsf{cone}(D)
 \end{tikzcd}
 \end{equation*}
-commutes. Therefore it follows from the 3-for-2 property of equivalences established in \cref{ex:3_for_2}, that if any two of the following properties hold, then so does the third:
+commutes. Therefore it follows from the 3-for-2 property of equivalences that if any two of the following properties hold, then so does the third:
 \begin{enumerate}
 \item The map $\mathsf{cone\usc{}map}(p,q,H):(D\to C)\to \mathsf{cone}(D)$ is an equivalence,
 \item The map $\mathsf{cone\usc{}map}(p',q',H'):(D\to C')\to \mathsf{cone}(D)$ is an equivalence,
@@ -776,7 +1274,7 @@ The gap map is homotopic to the composite
 \sm{x:A}P(x) \arrow[r,"\total{g}"] & \sm{x:A}Q(f(x)) \arrow[r,"{\mathsf{gap}'}"] & A \times_B \Big(\sm{y:B}Q(y)\Big)
 \end{tikzcd}
 \end{equation*}
-where $\mathsf{gap}'$ is the gap map for the square in \cref{lem:pb_subst}. Since $\mathsf{gap}'$ is an equivalence, it follows by \cref{ex:3_for_2,thm:fib_equiv} that the gap map is an equivalence if and only if $g$ is a fiberwise equivalence.
+where $\mathsf{gap}'$ is the gap map for the square in \cref{lem:pb_subst}. Since $\mathsf{gap}'$ is an equivalence, it follows by \cref{thm:fib_equiv} that the gap map is an equivalence if and only if $g$ is a fiberwise equivalence.
 \end{proof}
 
 \begin{lem}
@@ -996,60 +1494,9 @@ the map
 \begin{equation*}
 \Big(\prd{B:\UU}{e:\eqv{A}{B}}P(B,e)\Big)\to P(A,\idfunc[A])
 \end{equation*}
-given by $f\mapsto f(A,\idfunc[A])$ has a section.
+given by $f\mapsto f(A,\idfunc[A])$ has a section.\qedhere
 \end{enumerate}
 \end{thm}
-
-\begin{proof}
-The equivalence of (i) and (ii) is a direct consequence of \cref{thm:id_fundamental}. 
-To see that (ii) and (iii) are equivalent, note that we have a commuting triangle
-\begin{equation*}
-\begin{tikzcd}[column sep=-1em]
-\prd{t:\sm{B:\UU}\eqv{A}{B}}P(t) \arrow[rr,"\ind{\Sigma}"] \arrow[dr,"\varphi","{f\mapsto f((A,\idfunc[A]))}"'] & & \prd{B:\UU}{e:\eqv{A}{B}} P((B,e)) \arrow[dl,"{f\mapsto f(A,\idfunc[A])}","\psi"'] \\
-& P((A,\idfunc[A]))
-\end{tikzcd}
-\end{equation*}
-The map $\ind{\Sigma}$ has a section. Therefore it follows from \cref{ex:3_for_2} that $\varphi$ has a section if and only if $\psi$ has a section. By \cref{thm:contractible} it follows that $\varphi$ has a section if and only if $\sm{B:\UU}\eqv{A}{B}$ is contractible. 
-\end{proof}
-
-From now on we will assume that the univalence axiom holds. Our first application of the univalence axiom is to show that the identity type $\idtypevar{A}:A\to (A\to\UU)$ is an embedding. 
-
-\begin{thm}
-Assuming the univalence axiom on $\UU$, the map
-\begin{equation*}
-\idtypevar{A}:A\to (A\to\UU)
-\end{equation*}
-is an embedding, for any type $A:\UU$.\index{identity type!is an embedding|textit}
-\end{thm}
-
-\begin{proof}
-Let $a:A$. By function extensionality it suffices to show that the canonical map
-\begin{equation*}
-(a=b)\to \idtypevar{A}(a)\htpy\idtypevar{A}(b)
-\end{equation*}
-that sends $\refl{a}$ to $\lam{x}\refl{(a=x)}$ is an equivalence for every $b:A$, and by univalence it therefore suffices to show that the canonical map
-\begin{equation*}
-(a=b)\to \prd{x:A}\eqv{(a=x)}{(b=x)}
-\end{equation*}
-that sends $\refl{a}$ to $\lam{x}\idfunc[(a=x)]$ is an equivalence for every $b:B$. To do this we employ the type theoretic Yoneda lemma, \autoref{thm:yoneda}.
-
-By the type theoretic Yoneda lemma\index{Yoneda lemma} we have an equivalence
-\begin{equation*}
-\Big(\prd{x:A} (b=x)\to (a=x)\Big)\to (a=b)
-\end{equation*}
-given by $\lam{f} f(b,\refl{b})$, for every $b:A$. Note that any fiberwise map $\prd{x:A}(b=x)\to (a=x)$ induces an equivalence of total spaces by \autoref{ex:contr_equiv}, since their total spaces are are both contractible by \autoref{cor:contr_path}. It follows that we have an equivalence
-\begin{equation*}
-\varphi_b:\Big(\prd{x:A} \eqv{(b=x)}{(a=x)}\Big)\to (a=b)
-\end{equation*}
-given by $\lam{f} f(b,\refl{b})$, for every $b:A$. 
-
-Note that $\varphi_a(\lam{x}\idfunc[(a=x)])\jdeq\refl{a}$. Therefore it follows by another application of \autoref{thm:yoneda} that the unique family of maps 
-\begin{equation*}
-\alpha_b:(a=b)\to \Big(\prd{x:A} \eqv{(b=x)}{(a=x)}\Big)
-\end{equation*}
-that satisfies $\alpha_a(\refl{a})=\lam{x}\idfunc[(a=x)]$ is a fiberwise section of $\varphi$. 
-It follows that $\alpha$ is a fiberwise equivalence. Now the proof is completed by reverting the direction of the fiberwise equivalences in the codomain.
-\end{proof}
 
 It is a trivial observation, but nevertheless of fundamental importance, that by the univalence axiom the identity types of $\UU$ are equivalent to types in $\UU$, because it provides an equivalence $\eqv{(A=B)}{(\eqv{A}{B})}$, and the type $\eqv{A}{B}$ is in $\UU$ for any $A,B:\UU$. Since the identity types of $\UU$ are equivalent to types in $\UU$, we also say that the universe is \emph{locally small}.
 
@@ -1116,7 +1563,7 @@ The fiber of this map at $(X,f)$ is by univalence and function extensionality eq
 \begin{equation*}
 \sm{B:A\to \UU}{e:\eqv{(\sm{x:A}B(x))}{X}} \proj 1\htpy f\circ e.
 \end{equation*}
-By \cref{ex:triangle_fib} this type is equivalent to the type
+By \cref{cor:fib_triangle} this type is equivalent to the type
 \begin{equation*}
 \sm{B:A\to \UU}\prd{a:A} \eqv{B(a)}{\fib{f}{a}},
 \end{equation*}
@@ -1148,7 +1595,7 @@ A \arrow[r,"\tilde{F}"] \arrow[d,swap,"f"] & \sm{X:\UU}X \arrow[d,"\proj 1"] \\
 B \arrow[r,swap,"F"] & \UU
 \end{tikzcd}
 \end{equation*}
-is a pullback square, as witnessed by $p$\footnote{The universal property of the pullback is not expressible by a type. However, we may take the type of $p:\isequiv(h)$, where $h:A\to B\times_\UU\big(\sm{X:\UU}X\big)$ is the map obtained by the universal property of the canonical pullback.}. If $f$ comes equipped with a term of type $\isclassified(f)$, we also say that $f$ is \define{classified}\index{classified by the universal family|textbf} by the universal family. 
+is a pullback square, as witnessed by $p$. If $f$ comes equipped with a term of type $\isclassified(f)$, we also say that $f$ is \define{classified}\index{classified by the universal family|textbf} by the universal family. 
 \end{thm}
 
 \begin{proof}
@@ -1205,19 +1652,23 @@ In \cref{ex:diagonal} we have established that the identity type $x=y$ is the fi
 Now the result follows from \cref{thm:classifier}.
 \end{proof}
 
-\subsubsection{Move from RPn to here}
-Since the theorem is a statement about pointed $2$\nobreakdash-element sets, 
-we will invoke the following general lemma which computes equality of pointed types.
+\subsection{Fiber sequences}
+
+\begin{defn}
+A \define{pointed type} is a pair $(X,x)$ consisting of a type $X$ equipped with a \define{base point} $x:X$. We will write $\UU_\ast$ for the type $\sm{X:\UU}X$ of all pointed types.
+\end{defn}
+
+In the following lemma we characterize the identity type of $\UU_\ast$. 
 
 \begin{lem}\label{lem:equiv_of_ptdtype}
-For any $A,B:\UU$ and any $a:A$ and $b:B$, we have an equivalence of type
+For any $(A,a),(B,b):\UU_\ast$ we have an equivalence
 \begin{equation*}
 \eqv{\Big(\pairr{A,a}=\pairr{B,b}\Big)}{\Big(\sm{e:\eqv{A}{B}}e(a)=b\Big)}.
 \end{equation*}
 \end{lem}
 
 \begin{proof}[Construction]
-By Theorem 2.7.2 of \cite{hottbook}, the type on the left hand side is
+By \cref{thm:eq_sigma} the type on the left hand side is
 equivalent to the type $\sm{p:A=B}\tr_{\universalfam}({p},{a})=b$.
 By the univalence axiom, the map 
 \begin{equation*}
@@ -1237,8 +1688,58 @@ It follows that $\eqv{(\tr_{\universalfam}({\eqequiv(e)},{a})=b)}
 {(e(a)=b)}$.
 \end{proof}
 
-Furthermore, we will invoke the following general lemma which computes equality of pointed
-equivalences.
+\begin{defn}
+\begin{enumerate}
+\item Let $(X,\ast_X)$ be a pointed type. A \define{pointed family} over $(X,\ast_X)$ consists of a type family $P:X\to \UU$ equipped with a base point $\ast_P:P(\ast_X)$. 
+\item Let $(P,\ast_P)$ be a pointed family over $(X,\ast_X)$. A \define{pointed section} of $(P,\ast_P)$ consists of a dependent function $f:\prd{x:X}P(x)$ and an identification $p:f(\ast_X)=\ast_P$. We define the \define{pointed $\Pi$-type} to be the type of pointed sections:
+\begin{equation*}
+\Pi^\ast_{(x:X)}P(x) \defeq \sm{f:\prd{x:X}P(x)}f(\ast_X)=\ast_P
+\end{equation*}
+In the case of two pointed types $X$ and $Y$, we may also view $Y$ as a pointed family over $X$. In this case we write $X\to_\ast Y$ for the type of pointed functions.
+\item Given any two pointed sections $f$ and $g$ of a pointed family $P$ over $X$, we define the type of pointed homotopies
+\begin{equation*}
+f\htpy_\ast g \defeq \Pi^\ast_{(x:X)} f(x)=g(x),
+\end{equation*}
+where the family $x\mapsto f(x)=g(x)$ is equipped with the base point $\ct{p}{q^{-1}}$. 
+\end{enumerate}
+\end{defn}
+
+\begin{defn}
+\begin{enumerate}
+\item For any pointed type $X$, we define the \define{pointed identity function} $\mathsf{id}^\ast_X\defeq (\idfunc[X],\refl{\ast})$. 
+\item For any two pointed maps $f:X\to_\ast Y$ and $g:Y\to_\ast Z$, we define the \define{pointed composite}
+\begin{equation*}
+g\mathbin{\circ_\ast} f \defeq (g\circ f,\ct{\ap{g}{p_f}}{p_g}).
+\end{equation*}
+\end{enumerate}
+\end{defn}
+
+\begin{defn}
+Let $X$ be a pointed type with base point $x$. We define the \define{loop space} $\loopspace{X,x}$ of $X$ at $x$ to be the pointed type $x=x$ with base point $\refl{x}$. 
+\end{defn}
+
+\begin{defn}
+The loop space operation $\loopspacesym$ is \emph{functorial} in the sense that
+\begin{enumerate}
+\item For every pointed map $f:X\to_\ast Y$ there is a pointed map
+\begin{equation*}
+\loopspace{f}:\loopspace{X}\to_\ast \loopspace{Y},
+\end{equation*}
+defined by $\loopspace{f}(\omega)\defeq \ct{p_f}{\ap{f}{\omega}}{p_f^{-1}}$, which is base point preserving by $\mathsf{right\usc{}inv}(p_f)$. 
+\item For every pointed type $X$ there is a pointed homotopy
+\begin{equation*}
+\loopspace{\mathsf{id}_X^\ast}\htpy_\ast \mathsf{id}^\ast_{\loopspace{X}}.
+\end{equation*}
+\item For any two pointed maps $f:X\to_\ast Y$ and $g:Y\to_\ast X$, there is a pointed homotopy witnessing that the triangle
+\begin{equation*}
+\begin{tikzcd}
+& \loopspace{Y} \arrow[dr,"\loopspace{g}"] \\
+\loopspace{X} \arrow[rr,swap,"\loopspace{g\circ_\ast f}"] \arrow[ur,"\loopspace{f}"] & & \loopspace{Z}
+\end{tikzcd}
+\end{equation*}
+of pointed types commutes.
+\end{enumerate}
+\end{defn}
 
 \begin{lem}\label{lem:equiv_of_ptdequiv}
 For any $\pairr{e,p},\pairr{f,q}:\sm{e:\eqv{A}{B}}e(a)=b$, we have an equivalence of type
@@ -1260,46 +1761,203 @@ $h:e\htpy f$ we have an equivalence of type
 \end{equation*}
 \end{proof}
 
-\section{Higher inductive types}
-\subsection{Homotopy pushouts}
-
-\subsubsection{Pushouts as higher inductive types}
-
-The idea of pushouts is to glue two types $A$ and $B$ together using a mediating type $S$ and maps $f:S\to A$ and $g:S\to B$. In other words, we start with a diagram of the form
+\begin{defn}
+A \define{fiber sequence} $F\hookrightarrow E \twoheadrightarrow B$ consists of:
+\begin{enumerate}
+\item Pointed types $F$, $E$, and $B$, with base points $x_0$, $y_0$, and $b_0$ respectively, 
+\item Base point preserving maps $i:F\to_\ast E$ and $p:E\to_\ast B$, with $\alpha:i(x_0)=y_0$ and $\beta:p(y_0)=b_0$,
+\item A pointed homotopy $H:\mathsf{const}_{b_0}\htpy_\ast p\circ_\ast i$ witnessing that the square
 \begin{equation*}
 \begin{tikzcd}
-A & S \arrow[l,swap,"f"] \arrow[r,"g"] & B.
+F \arrow[r,"i"] \arrow[d] & E \arrow[d,"p"] \\
+\unit \arrow[r,swap,"\mathsf{const}_{b_0}"] & B,
 \end{tikzcd}
 \end{equation*}
-We call such a triple $\mathcal{S}\jdeq (S,f,g)$ a \define{span}\index{span} from $A$ to $B$.
-A span from $A$ to $B$ can be thought of as a relation\index{relation} from $A$ to $B$, relating $f(x)$ to $g(x)$ for any $x:S$.
-Indeed, an equivalence between the type of all spans and the type of relations from $A$ to $B$ is established in \cref{ex:span_rel}.
-
-Given a span $\mathcal{S}$ from $A$ to $B$, we form the higher inductive type $A \sqcup^{\mathcal{S}} B$. It comes equipped with the following constructors\index{inl@{$\inl$}!for pushouts}\index{inr@{$\inr$}!for pushouts}\index{glue@{$\glue$}}
-\begin{align*}
-\inl & : A \to A \sqcup^{\mathcal{S}} B \\
-\inr & : B \to A \sqcup^{\mathcal{S}} B \\
-\glue & : \prd{x:S} \inl(f(x))=\inr(g(x))
-\end{align*}
-and we require that it satisfies an induction principle and computation rules.
-
-To see what the induction principle has to be, consider first a dependent function $s:\prd{x:A\sqcup^{\mathcal{S}}B}P(x)$. When we evaluate this function at the constructors, we obtain
-\begin{align*}
-s\circ \inl & : \prd{a:A} P(\inl(a)) \\
-s\circ \inr & : \prd{b:B} P(\inr(b)) \\
-\apdfunc{s}\circ \glue & : \prd{x:S} \mathsf{tr}_P(\glue(x),s(f(x)))=s(g(x)).
-\end{align*}
-
-\begin{defn}
-Consider a span $\mathcal{S}\jdeq (S,f,g)$ from $A$ to $B$, and let $P$ be a family over $A\sqcup^{\mathcal{S}} B$. The \define{dependent action on generators}\index{dependent action on generators!for pushouts|textbf} is defined to be the map\index{dgen_S@{$\mathsf{dgen}_{\mathcal{S}}$}|textbf}
-\begin{align*}
-\mathsf{dgen}_{\mathcal{S}}^P & : \Big(\prd{x:A\sqcup^{\mathcal{S}} B} P(x)\Big) \to \Big(\sm{f': \prd{a:A}P(\inl(a))}{g':\prd{b:B}P(\inr(b))}\Big.\\
-& \qquad\qquad\qquad\qquad\qquad\qquad \Big.\prd{x:S} \mathsf{tr}_P(\glue(x),f'(f(x)))=g'(g(x))\Big).
-\end{align*}
-given by $s\mapsto (s\circ\inl,s\circ\inr,\apdfunc{s}\circ\glue)$.
+commutes and is a pullback square.
+\end{enumerate}
+We will write $\mathsf{Fib\usc{}Seq}$ for the type of all fiber sequences in $\UU$.
 \end{defn}
 
-We can now fully specify homotopy pushouts.
+\begin{thm}
+The type of all fiber sequences is equivalent to the type
+\begin{equation*}
+\sm{(B,b):\UU_\ast}{P:B\to\UU}P(b).
+\end{equation*}
+\end{thm}
+
+\section{Homotopy pushouts}
+
+\subsection{Pushouts as higher inductive types}
+
+\begin{defn}
+A \define{span} $\mathcal{S}$ from $A$ to $B$ consists of a type $S$ and maps $f:S\to A$ and $g:S\to B$.
+\end{defn}
+
+\begin{defn}
+Consider a span $\mathcal{S}\jdeq (S,f,g)$ from $A$ to $B$, and let $X$ be a type. A cocone with vertex $X$ on $\mathcal{S}$ consists of maps $i:A\to X$, $j:B\to X$, and a homotopy $H:i\circ f\htpy j\circ g$ witnessing that the square
+\begin{equation*}
+\begin{tikzcd}
+S \arrow[d,swap,"f"] \arrow[r,"g"] & B \arrow[d,"j"] \\
+A \arrow[r,swap,"i"] & X
+\end{tikzcd}
+\end{equation*}
+commutes.
+\end{defn}
+
+\begin{defn}
+Consider a commuting square
+\begin{equation*}
+\begin{tikzcd}
+S \arrow[d,swap,"f"] \arrow[r,"g"] & B \arrow[d,"j"] \\
+A \arrow[r,swap,"i"] & X,
+\end{tikzcd}
+\end{equation*}
+and let $Y$ be a type. We define the operation
+\begin{equation*}
+\mathsf{cocone\usc{}map}((i,j,H),Y) \defeq (X\to Y) \to \mathsf{cocone}(Y).
+\end{equation*}
+Furthermore, we say that the cocone $(i,j,H)$ is \define{colimiting} if the operation $\mathsf{cocone\usc{}map}((i,j,H),Y)$ is an equivalence for every type $Y$. In that case we also say that $X$ is the pushout of the span $\mathcal{S}\defeq (S,f,g)$, and 
+\end{defn}
+
+\begin{defn}
+A commuting square
+\begin{equation*}
+\begin{tikzcd}
+S \arrow[r,"g"] \arrow[d,swap,"f"] & B \arrow[d,"j"] \\
+A \arrow[r,swap,"i"] & X
+\end{tikzcd}
+\end{equation*}
+with $H:i\circ f \htpy j\circ g$ is said to be a \define{(homotopy) pushout square}\index{pushout square} if the cocone $(i,j,H)$ with vertex $X$ on the span $\mathcal{S}\jdeq (S,f,g)$
+satisfies the \define{universal property of pushouts}\index{universal property!of pushouts|textbf}, which asserts that the map
+\begin{equation*}
+\mathsf{cocone\usc{}map}(i,j,H):(X\to Y)\to \mathsf{cocone}(Y)
+\end{equation*}
+is an equivalence for any type $Y$. Sometimes pushout squares are also called \define{cocartesian squares}\index{cocartesian square|textbf}.
+\end{defn}
+
+\begin{defn}
+Consider a pushout square
+\begin{equation*}
+\begin{tikzcd}
+S \arrow[r,"g"] \arrow[d,swap,"f"] & B \arrow[d,"j"] \\
+A \arrow[r,swap,"i"] & X
+\end{tikzcd}
+\end{equation*}
+with $H:i\circ f \htpy j\circ g$, and consider a cocone $(i',j',H')$ with vertex $Y$ on the same span $\mathcal{S}\jdeq(S,f,g)$. The unique map $h:X\to Y$ such that 
+\begin{equation*}
+\mathsf{cocone\usc{}map}((i,j,H),Y,h)= (i',j',H')
+\end{equation*}
+is called the \define{cogap map} of $(i',j',H')$. We also write $\mathsf{cogap}(i',j',H')$ for the cogap map. 
+\end{defn}
+
+\begin{lem}\label{lem:cocone_pb}
+For any span $\mathcal{S}\jdeq (S,f,g)$ from $A$ to $B$, and any type $X$ the square\index{cocone_S(X)@{$\mathsf{cocone}_{\mathcal{S}}(X)$}!as a pullback|textit}
+\begin{equation*}
+\begin{tikzcd}
+\mathsf{cocone}_{\mathcal{S}}(X) \arrow[r,"\pi_2"] \arrow[d,swap,"\pi_1"] & X^B \arrow[d,"\blank\circ g"] \\
+X^A \arrow[r,swap,"\blank\circ f"] & X^S,
+\end{tikzcd}
+\end{equation*}
+which commutes by the homotopy $\pi_3' \defeq\lam{(i,j,H)} \mathsf{eq\usc{}htpy}(H)$, is a pullback square.
+\end{lem}
+
+\begin{proof}
+The gap map $\mathsf{cocone}_{\mathcal{S}}(X)\to X^A\times_{X^S} X^B$ is the function 
+\begin{equation*}
+\lam{(i,j,H)}(i,j,\mathsf{eq\usc{}htpy}(H)).
+\end{equation*}
+This is an equivalence by \cref{thm:fib_equiv}, since it is the induced map on total spaces of the fiberwise equivalence $\mathsf{eq\usc{}htpy}$. Therefore, the square is a pullback square by \cref{thm:is_pullback}.
+\end{proof}
+
+In the following theorem we establish an alternative characterization of the universal property of pushouts.
+
+\begin{thm}\label{thm:pushout_up}
+Consider a commuting square\index{universal property!of pushouts|textit}
+\begin{equation*}
+\begin{tikzcd}
+S \arrow[r,"g"] \arrow[d,swap,"f"] & B \arrow[d,"j"] \\
+A \arrow[r,swap,"i"] & X,
+\end{tikzcd}
+\end{equation*}
+with $H:i\circ f\htpy j\circ g$. The following are equivalent:
+\begin{enumerate}
+\item The square is a pushout square.
+\item The square
+\begin{equation*}
+\begin{tikzcd}
+T^X \arrow[r,"\blank\circ j"] \arrow[d,swap,"\blank\circ i"] & T^B \arrow[d,"\blank\circ g"] \\
+T^A \arrow[r,swap,"\blank\circ f"] & T^S
+\end{tikzcd}
+\end{equation*}
+which commutes by the homotopy
+\begin{equation*}
+\lam{h} \mathsf{eq\usc{}htpy}(h\cdot H)
+\end{equation*}
+is a pullback square, for every type $T$.
+\end{enumerate}
+\end{thm}
+
+\begin{proof}
+It is straightforward to verify that the triangle
+\begin{equation*}
+\begin{tikzcd}
+& T^X \arrow[dl,swap,"{\mathsf{cocone\usc{}map}(i,j,H)}"] \arrow[dr,"{\mathsf{gap}(\blank\circ i,\blank\circ j, \mathsf{eq\usc{}htpy}(\blank\cdot H))}"] \\
+\mathsf{cocone}(T) \arrow[rr,swap,"{\mathsf{gap}(i,j,\mathsf{eq\usc{}htpy}(H))}"] & & T^A \times_{T^S} T^B
+\end{tikzcd}
+\end{equation*}
+commutes. Since the bottom map is an equivalence by \cref{lem:cocone_pb}, it follows that if either one of the remaining maps is an equivalence, so is the other. The claim now follows by \cref{thm:is_pullback}.
+\end{proof}
+
+There is also a dependent version of the universal property of pushouts, which is occasionally useful.
+
+\begin{defn}
+Consider a commuting square
+\begin{equation*}
+\begin{tikzcd}
+S \arrow[d,swap,"f"] \arrow[r,"g"] & B \arrow[d,"j"] \\
+A \arrow[r,swap,"i"] & X,
+\end{tikzcd}
+\end{equation*}
+and let $P$ be a family over $X$. 
+\begin{enumerate}
+\item We define the type
+\begin{align*}
+\mathsf{dcocone}((i,j,H),P) & \defeq \sm{f': \prd{a:A}P(i(a))}{g':\prd{b:B}P(j(b))} \\
+& \qquad\qquad \prd{x:S} \mathsf{tr}_P(H(x),f'(f(x)))=g'(g(x)).
+\end{align*}
+\item We define the operation
+\begin{equation*}
+\mathsf{dcocone\usc{}sec} : \Big(\prd{x:X} P(x)\Big) \to \mathsf{dcocone}((i,j,H),P)
+\end{equation*}
+by $s\mapsto (s\circ i,s\circ j,\apdfunc{s}\circ H)$.
+\end{enumerate}
+\end{defn}
+
+\begin{thm}\label{thm:pushout_up}
+Consider a commuting square\index{universal property!of pushouts|textit}
+\begin{equation*}
+\begin{tikzcd}
+S \arrow[r,"g"] \arrow[d,swap,"f"] & B \arrow[d,"j"] \\
+A \arrow[r,swap,"i"] & X,
+\end{tikzcd}
+\end{equation*}
+with $H:i\circ f\htpy j\circ g$. The following are equivalent:
+\begin{enumerate}
+\item The operation
+\begin{equation*}
+\mathsf{dcocone\usc{}sec}:\Big(\prd{x:X}P(x)\Big)\to \mathsf{dcocone}((i,j,H),P)
+\end{equation*}
+has a section.
+\item The operation
+\begin{equation*}
+\mathsf{dcocone\usc{}sec}:\Big(\prd{x:X}P(x)\Big)\to \mathsf{dcocone}((i,j,H),P)
+\end{equation*}
+is an equivalence, for every type family $P$ over $\UU$.
+\item The square is a pushout square.
+\end{enumerate}
+\end{thm}
+
+We can now specify homotopy pushouts as higher inductive types.
 
 \begin{defn}
 Given a span $\mathcal{S}\jdeq (S,f,g)$, the \define{(homotopy) pushout}\index{pushout|textbf} $A\sqcup^{\mathcal{S}} B$ of $\mathcal{S}$ is defined to be the higher inductive\index{higher inductive types} type equipped with\index{inl@{$\inl$}!for pushouts|textbf}\index{inr@{$\inr$}!for pushouts|textbf}\index{glue@{$\glue$}|textbf}
@@ -1308,71 +1966,10 @@ Given a span $\mathcal{S}\jdeq (S,f,g)$, the \define{(homotopy) pushout}\index{p
 \inr & : B \to A \sqcup^{\mathcal{S}} B \\
 \glue & : \prd{x:S} \inl(f(x))=\inr(g(x)),
 \end{align*}
-satisfying the \define{induction principle} for pushouts\index{induction principle!for pushouts|textbf}, which asserts that for each type family $P$ over $A\sqcup^{\mathcal{S}} B$ the map $\mathsf{dgen}_{\mathcal{S}}^P$ has a section.
+satisfying the \define{induction principle} for pushouts\index{induction principle!for pushouts|textbf}, which asserts that for each type family $P$ over $A\sqcup^{\mathcal{S}} B$ the map $\mathsf{dcocone\usc{}sec}((\inl,\inr,\glue),P)$ has a section.
 \end{defn}
 
-\begin{rmk}
-The induction principle of the pushout $A\sqcup^{\mathcal{S}} B$ provides us with a dependent function
-\begin{equation*}
-\ind{\mathcal{S}}(f',g',G) : \prd{x:A\sqcup^{\mathcal{S}} B} P(x),
-\end{equation*}
-for every
-\begin{align*}
-f' & : \prd{a:A}P(\inl(a)) \\
-g' & : \prd{b:B}P(\inr(b)) \\
-G & : \prd{x:S} \mathsf{tr}_P(\glue(x),f'(f(x)))=g'(g(x))
-\end{align*}
-Moreover, the function $\ind{\mathcal{S}}(f',g',G)$ comes equipped with an identification
-\begin{equation*}
-\mathsf{dgen}_{\mathcal{S}}(\ind{\mathcal{S}}(f',g',G))=(f',g',G).
-\end{equation*}
-Writing $s\defeq \ind{\mathcal{S}}(f',g',G)$, we see that such an identification between triples is equivalently described by a triple $(H,K,L)$ consisting of
-\begin{align*}
-H : s\circ \inl \htpy f' \\
-K : s\circ\inr \htpy g' 
-\end{align*}
-and a homotopy $L$ witnessing that the square
-\begin{equation*}
-\begin{tikzcd}[column sep=8em]
-\mathsf{tr}_{P}(\glue(x),s(\inl(f(x)))) \arrow[r,equals,"\ap{\mathsf{tr}_P(\glue(x))}{H(x)}"] \arrow[d,equals,swap,"\apd{s}{\glue(x)}"] & \mathsf{tr}_{P}(\glue(x),f'(f(x))) \arrow[d,equals,"G(x)"] \\
-s(\inr(g(x))) \arrow[r,equals,swap,"K(x)"] & g'(g(x))
-\end{tikzcd}
-\end{equation*}
-commutes, for every $x:S$. These are the \define{computation rules} for pushouts\index{computation rules!for pushouts}.
-\end{rmk}
-
-\begin{comment}
-The \define{formation rule} for pushouts simply states that for any span $\mathcal{S}\defeq (S,f,g)$ from $A$ to $B$, a type $A\sqcup^{\mathcal{S}} B$ can be formed. We call $A\sqcup^{\mathcal{S}} B$ the \define{canonical pushout} of $\mathcal{S}$. 
-
-\begin{prooftree}
-\AxiomC{$\Gamma\vdash f:S\to A$}
-\AxiomC{$\Gamma\vdash g:S\to B$}
-\BinaryInfC{$\Gamma\vdash A\sqcup^{\mathcal{S}} B~\mathrm{type}$}
-\end{prooftree}
-
-The \define{introduction rules} for pushouts provide ways to construct terms of the type $A\sqcup^{\mathcal{S}} B$, and ways to identify some of those.
-\begin{prooftree}
-\AxiomC{$\Gamma\vdash f:S\to A$}
-\AxiomC{$\Gamma\vdash g:S\to B$}
-\BinaryInfC{$\Gamma\vdash \inl : A \to A\sqcup^{\mathcal{S}} B$}
-\end{prooftree}
-
-\begin{prooftree}
-\AxiomC{$\Gamma\vdash f:S\to A$}
-\AxiomC{$\Gamma\vdash g:S\to B$}
-\BinaryInfC{$\Gamma\vdash \inr : B \to A\sqcup^{\mathcal{S}} B$}
-\end{prooftree}
-
-\begin{prooftree}
-\AxiomC{$\Gamma\vdash f:S\to A$}
-\AxiomC{$\Gamma\vdash g:S\to B$}
-\BinaryInfC{$\Gamma\vdash \glue : \inl\circ f \htpy \inr\circ g$}
-\end{prooftree}
-We assume that $A\sqcup^{\mathcal{S}} B$ is span inductive in the sense of \autoref{thm:pushout_up}. Moreover, if $A$, $B$, and $S$ are types in $\UU$, then we assume that also $A\sqcup^{\mathcal{S}} B$ is in $\UU$. In other words, we assume that the universe is \emph{closed under pushouts}.
-\end{comment}
-
-\subsubsection{Examples of pushouts}
-Many interesting types can be defined as homotopy pushouts. 
+\subsection{Examples of pushouts}
 
 \begin{defn}
 Let $X$ be a type. We define the \define{suspension}\index{suspension|textbf} $\susp X$\index{SX@{$\susp X$}|textbf} of $X$ to be the pushout of the span
@@ -1383,6 +1980,22 @@ X \arrow[r] \arrow[d] & \unit \arrow[d,"\inr"] \\
 \end{tikzcd}
 \end{equation*}
 \end{defn}
+
+\begin{lem}
+Let $X$ and $Y$ be types. Then the map\index{universal property!of suspensions|textit}
+\begin{equation*}
+(\susp{X}\to Y)\to \sm{y,y':Y} X\to (y=y')
+\end{equation*}
+given by $f\mapsto (f(\inl(\ttt)),f(\inr(\ttt)),\ap{f}{\glue(\blank)})$ is an equivalence.
+\end{lem}
+
+\begin{proof}
+We have equivalences
+\begin{align*}
+(\susp{X}\to Y) & \eqvsym \sm{y,y':\unit \to Y} X\to (y(\ttt)=y'(\ttt)) \\
+& \eqvsym \sm{y,y':Y} X\to (y=y').\qedhere
+\end{align*}
+\end{proof}
 
 \begin{defn}
 We define the \define{$n$-sphere}\index{n-sphere@{$n$-sphere}|textbf} $\sphere{n}$\index{Sn@{$\sphere{n}$}|textbf} for any $n:\N$ by induction on $n$, by taking
@@ -1437,315 +2050,7 @@ I \arrow[d] \arrow[r,"{\lam{i}(i,a_0(i))}"] & \sm{i:I}A_i \arrow[d] \\
 \end{equation*}
 \end{defn}
 
-\begin{comment}
-\begin{defn}
-Let $X$ and $Y$ be types with base points $x_0$ and $y_0$, respectively.
-We define the \define{wedge} $X\lor Y$ of $X$ and $Y$ to be the pushout
-\begin{equation*}
-\begin{tikzcd}[column sep=8em]
-\bool \arrow[r,"{\ind{\bool}(\inl(x_0),\inr(y_0))}"] \arrow[d,swap,"\mathsf{const}_\ttt"] & X+Y \arrow[d,"\inr"] \\
-\unit \arrow[r,swap,"\inl"] & X\lor Y
-\end{tikzcd}
-\end{equation*}
-\end{defn}
-
-\begin{defn}
-Let $X$ and $Y$ be types with base points $x_0$ and $y_0$, respectively.
-We define a map
-\begin{equation*}
-\mathsf{wedge\usc{}incl} : X \lor Y \to X\times Y.
-\end{equation*}
-as the unique map obtained from the commutative square
-\begin{equation*}
-\begin{tikzcd}[column sep=8em]
-\bool \arrow[r,"{\ind{\bool}(\inl(x_0),\inr(y_0))}"] \arrow[d,swap,"\mathsf{const}_\ttt"] & X+Y \arrow[d,"{\ind{X+Y}(\lam{x}\pairr{x,y_0},\lam{y}\pairr{x_0,y})}"] \\
-\unit \arrow[r,swap,"\lam{t}\pairr{x_0,y_0}"] & X\times Y.
-\end{tikzcd}
-\end{equation*}
-\end{defn}
-
-\begin{defn}
-We define the \define{smash product} $X\wedge Y$ of $X$ and $Y$ to be the pushout
-\begin{equation*}
-\begin{tikzcd}[column sep=huge]
-X\lor Y \arrow[r,"\mathsf{wedge\usc{}incl}"] \arrow[d,swap,"\mathsf{const}_\ttt"] & X\times Y \arrow[d,"\inr"] \\
-\unit \arrow[r,swap,"\inl"] & X\wedge Y.
-\end{tikzcd}
-\end{equation*}
-\end{defn}
-\end{comment}
-
-\subsubsection{The universal property of pushouts}
-
-\begin{defn}
-Consider a span $\mathcal{S}\jdeq (S,f,g)$ from $A$ to $B$, and let $X$ be a type.
-A \define{cocone}\index{cocone|textbf} with vertex $X$ on $\mathcal{S}$ is a triple $(i,j,H)$ consisting of maps $i:A\to X$ and $j:B\to X$, and a homotopy $H:i\circ f\htpy j\circ g$ witnessing that the square
-\begin{equation*}
-\begin{tikzcd}
-S \arrow[r,"g"] \arrow[d,swap,"f"] & B \arrow[d,"j"] \\
-A \arrow[r,swap,"i"] & X
-\end{tikzcd}
-\end{equation*}
-commutes.
-We write $\mathsf{cocone}_{\mathcal{S}}(X)$\index{cocone_S(X)@{$\mathsf{cocone}_{\mathcal{S}}(X)$}|textbf} for the type of cocones on $\mathcal{S}$ with vertex $X$.
-\end{defn}
-
-\begin{defn}
-Consider a cocone $(i,j,H)$ with vertex $X$ on the span $\mathcal{S}\jdeq (S,f,g)$, as indicated in the following commuting square
-\begin{equation*}
-\begin{tikzcd}
-S \arrow[r,"g"] \arrow[d,swap,"f"] & B \arrow[d,"j"] \\
-A \arrow[r,swap,"i"] & X.
-\end{tikzcd}
-\end{equation*}
-For every type $Y$, we define the map\index{cocone_map@{$\mathsf{cocone\usc{}map}$}|textbf}
-\begin{equation*}
-\mathsf{cocone\usc{}map}(i,j,H):(X\to Y)\to \mathsf{cocone}(Y)
-\end{equation*}
-by $f\mapsto (f\circ i,f\circ j,f\cdot H)$.
-\end{defn}
-
-\begin{defn}
-A commuting square
-\begin{equation*}
-\begin{tikzcd}
-S \arrow[r,"g"] \arrow[d,swap,"f"] & B \arrow[d,"j"] \\
-A \arrow[r,swap,"i"] & X.
-\end{tikzcd}
-\end{equation*}
-with $H:i\circ f \htpy j\circ g$ is said to be a \define{(homotopy) pushout square}\index{pushout square} if the cocone $(i,j,H)$ with vertex $X$ on the span $\mathcal{S}\jdeq (S,f,g)$
-satisfies the \define{universal property of pushouts}\index{universal property!of pushouts|textbf}, which asserts that the map
-\begin{equation*}
-\mathsf{cocone\usc{}map}(i,j,H):(X\to Y)\to \mathsf{cocone}(Y)
-\end{equation*}
-is an equivalence for any type $Y$. Sometimes pushout squares are also called \define{cocartesian squares}\index{cocartesian square|textbf}.
-\end{defn}
-
-\begin{comment}
-\begin{rmk}
-Given a pushout square
-\begin{equation*}
-\begin{tikzcd}
-S \arrow[r,"g"] \arrow[d,swap,"f"] & B \arrow[d,"j"] \\
-A \arrow[r,swap,"i"] & X,
-\end{tikzcd}
-\end{equation*}
-we can view the cocone $(i,j,H)$ as \emph{structure} on $X$, in the sense that $X$ comes equipped with
-\begin{align*}
-i & : A\to X \\
-j & : B\to X \\
-H & : \prd{s:S} i(f(s))=j(g(s)).
-\end{align*}
-As we will see in \cref{thm:pushout_up}, the type $X$ is a pushout precisely when it satisfies an \emph{induction principle} formulated in terms of $(i,j,H)$. However, the homotopy $H$ provides \emph{path constructors} of $X$. 
-
-The induction principle of pushouts is formulated with respect to families $P$ over $X$, and provides a way to construct sections of $P$. Note that from any section $s:\prd{x:X}P(x)$ we obtain
-\begin{align*}
-s\circ i & : \prd{a:A}P(i(a)) \\
-s\circ j & : \prd{b:B}P(j(b)) \\
-s\cdot H & : \prd{x:S}\mathsf{tr}_P(H(x),s(i(x)))=s(j(x)).
-\end{align*}
-It will be useful to write
-\begin{equation*}
-i' \htpy_H j' \defeq \prd{s:S} \mathsf{tr}_P(H(s),i'(f(s)))=j'(g(s))
-\end{equation*}
-for the type of $s\cdot H$. Thus we see that there is a map
-\begin{equation*}
-\Big(\prd{x:X}P(x)\Big)\to \sm{i':\prd{a:A}P(i(a))}{j':\prd{b:B}P(j(b))} i'\htpy_H j'
-\end{equation*}
-given by $s\mapsto (s\circ i,s\circ j,s\cdot H)$.
-\end{rmk}
-\end{comment}
-
-\begin{lem}\label{lem:cocone_pb}
-For any span $\mathcal{S}\jdeq (S,f,g)$ from $A$ to $B$, and any type $X$ the square\index{cocone_S(X)@{$\mathsf{cocone}_{\mathcal{S}}(X)$}!as a pullback|textit}
-\begin{equation*}
-\begin{tikzcd}
-\mathsf{cocone}_{\mathcal{S}}(X) \arrow[r,"\pi_2"] \arrow[d,swap,"\pi_1"] & X^B \arrow[d,"\blank\circ g"] \\
-X^A \arrow[r,swap,"\blank\circ f"] & X^S,
-\end{tikzcd}
-\end{equation*}
-which commutes by the homotopy $\pi_3' \defeq\lam{(i,j,H)} \mathsf{eq\usc{}htpy}(H)$, is a pullback square.
-\end{lem}
-
-\begin{proof}
-The gap map $\mathsf{cocone}_{\mathcal{S}}(X)\to X^A\times_{X^S} X^B$ is the function 
-\begin{equation*}
-\lam{(i,j,H)}(i,j,\mathsf{eq\usc{}htpy}(H)).
-\end{equation*}
-This is an equivalence by \cref{thm:fib_equiv}, since it is the induced map on total spaces of the fiberwise equivalence $\mathsf{eq\usc{}htpy}$. Therefore, the square is a pullback square by \cref{thm:is_pullback}.
-\end{proof}
-
-In the following theorem we establish an alternative characterization of the universal property of pushouts.
-\begin{thm}\label{thm:pushout_up}
-Consider a commuting square\index{universal property!of pushouts|textit}
-\begin{equation*}
-\begin{tikzcd}
-S \arrow[r,"g"] \arrow[d,swap,"f"] & B \arrow[d,"j"] \\
-A \arrow[r,swap,"i"] & X,
-\end{tikzcd}
-\end{equation*}
-with $H:i\circ f\htpy j\circ g$. The following are equivalent:
-\begin{enumerate}
-\item The square is a pushout square.
-\item The square
-\begin{equation*}
-\begin{tikzcd}
-T^X \arrow[r,"\blank\circ j"] \arrow[d,swap,"\blank\circ i"] & T^B \arrow[d,"\blank\circ g"] \\
-T^A \arrow[r,swap,"\blank\circ f"] & T^S
-\end{tikzcd}
-\end{equation*}
-which commutes by the homotopy
-\begin{equation*}
-\lam{h} \mathsf{eq\usc{}htpy}(h\cdot H)
-\end{equation*}
-is a pullback square, for every type $T$.
-%\item The type $X$ satisfies \define{span induction} for the span $A\leftarrow S \rightarrow B$, in the sense that for any type family $P$ over $X$, the map
-%\begin{equation*}
-%\Big(\prd{x:X}P(x)\Big)\to \Big(\sm{i':\prd{a:A}P(i(a))}{j':\prd{b:B}P(j(b))} i'\htpy_H j'\Big)
-%\end{equation*}
-%given by $s\mapsto (s\circ i,s\circ j,s\cdot H)$ has a section.
-\end{enumerate}
-\end{thm}
-
-\begin{proof}
-It is straightforward to verify that the triangle
-\begin{equation*}
-\begin{tikzcd}
-& T^X \arrow[dl,swap,"{\mathsf{cocone\usc{}map}(i,j,H)}"] \arrow[dr,"{\mathsf{gap}(\blank\circ i,\blank\circ j, \mathsf{eq\usc{}htpy}(\blank\cdot H))}"] \\
-\mathsf{cocone}(T) \arrow[rr,swap,"{\mathsf{gap}(i,j,\mathsf{eq\usc{}htpy}(H))}"] & & T^A \times_{T^S} T^B
-\end{tikzcd}
-\end{equation*}
-commutes. Since the bottom map is an equivalence by \cref{lem:cocone_pb}, it follows that if either one of the remaining maps is an equivalence, so is the other. The claim now follows by \cref{thm:is_pullback}.
-\end{proof}
-
-\begin{eg}\label{eg:circle_pushout}
-By \autoref{ex:circle_up_pushout} and the second characterization of pushouts in \autoref{thm:pushout_up} it follows that the circle is a pushout\index{circle!S1 equiv susp 2@{$\eqv{\sphere{1}}{\susp\bool}$}|textit}
-\begin{equation*}
-\begin{tikzcd}
-\bool \arrow[r] \arrow[d] & \unit \arrow[d] \\
-\unit \arrow[r] & \sphere{1}.
-\end{tikzcd}
-\end{equation*}
-In other words, $\eqv{\sphere{1}}{\susp{\bool}}$. 
-\end{eg}
-
-\begin{thm}\label{thm:pushout}
-Consider a span $\mathcal{S}\jdeq (S,f,g)$ from $A$ to $B$. Then the square
-\begin{equation*}
-\begin{tikzcd}
-S \arrow[r,"g"] \arrow[d,swap,"f"] & B \arrow[d,"\inr"] \\
-A \arrow[r,swap,"\inl"] & A \sqcup^{\mathcal{S}} B
-\end{tikzcd}
-\end{equation*}
-is a pushout square.\index{pushout!universal property|textit}
-\end{thm}
-
-\begin{proof}
-Let $X$ be a type. Our goal is to show that the map
-\begin{equation*}
-\mathsf{cocone\usc{}map}(\inl,\inr,\glue):(A\sqcup^{\mathcal{S}} B \to X)\to \mathsf{cocone}_{\mathcal{S}}(X)
-\end{equation*}
-is an equivalence. For notational breveity we will just write $\mathsf{gen}_{\mathcal{S}}$\index{gen_S@{$\mathsf{gen}_{\mathcal{S}}$}} for $\mathsf{cocone\usc{}map}_{\mathcal{S}}(\inl,\inr,\glue)$, because $\mathsf{cocone\usc{}map}_{\mathcal{S}}(\inl,\inr,\glue)$ is just the action on generators.
-
-We first note that by \cref{ex:trans_triv} there is a commuting triangle
-\begin{equation*}
-\begin{tikzcd}[column sep=0]
-& X^{A\sqcup^{\mathcal{S}} B} \arrow[dl,swap,"\mathsf{gen}_{\mathcal{S}}"] \arrow[dr,"\mathsf{dgen}_{\mathcal{S}}"] \\
-\mathsf{cocone}_{\mathcal{S}}(X) \arrow[rr,"\eqvsym"] & & \mathsf{cocone}'_{\mathcal{S}}(X)
-\end{tikzcd}
-\end{equation*}
-where we write
-\begin{align*}
-\mathsf{cocone}'_{\mathcal{S}}(X) & : \Big(\sm{f': A\to X}{g':A\to X}\Big.\\
-& \qquad\qquad\Big.\prd{x:S} \mathsf{tr}_{W_{A\sqcup^{\mathcal{S}}B}(X)}(\glue(x),f'(f(x)))=g'(g(x))\Big).
-\end{align*}
-By the induction principle for $A\sqcup^{\mathcal{S}} B$ we have a section $\ind{\mathcal{S}}$ of $\mathsf{dgen}_{\mathcal{S}}$. Thus we obtain a section $\rec{\mathcal{S}}$ of $\mathsf{gen}_{\mathcal{S}}$. Our goal is now to show that $\rec{\mathcal{S}}$ is also a retraction of $\mathsf{gen}_{\mathcal{S}}$. We establish in \cref{lem:pushout_up_htpy} that
-\begin{equation*}
-(\mathsf{gen}_{\mathcal{S}}(\rec{\mathcal{S}}(\mathsf{gen}_{\mathcal{S}}(h)))= \mathsf{gen}_{\mathcal{S}}(h))
-\to (\rec{\mathcal{S}}(\mathsf{gen}_{\mathcal{S}}(h))= h)
-\end{equation*}
-Then we obtain that $\rec{\mathcal{S}}$ is a retraction of $\mathsf{gen}_{\mathcal{S}}$ by using this implication and the fact that $\rec{\mathcal{S}}$ is a section of $\mathsf{gen}_{\mathsf{S}}$.
-\end{proof}
-
-\begin{lem}\label{lem:pushout_up_htpy}
-Let $h,h':A\sqcup^{\mathcal{S}}B\to X$ be two functions. Then we have
-\begin{equation*}
-(\mathsf{gen}_{\mathcal{S}}(h)=\mathsf{gen}_{\mathcal{S}}(h'))\to (h=h').
-\end{equation*}
-\end{lem}
-
-\begin{proof}
-Suppose we have $\mathsf{gen}_{\mathcal{S}}(h)=\mathsf{gen}_{\mathcal{S}}(h')$. This type of equalities between triples is equivalent to the type of triples $(K,L,M)$ consisting of
-\begin{align*}
-K & : h\circ \inl \htpy h'\circ \inl \\
-L & : h\circ \inr \htpy h'\circ \inr,
-\end{align*}
-and a homotopy $M$ witnessing that the square 
-\begin{equation*}
-\begin{tikzcd}
-h\circ \inl\circ f \arrow[r,"{K\cdot f}"] \arrow[d,swap,"{h\cdot\glue}"] & h'\circ\inl\circ f \arrow[d,"{h'\cdot\glue}"] \\
-h\circ \inr\circ f \arrow[r,swap,"{L\cdot g}"] & h'\circ\inr\circ g
-\end{tikzcd}
-\end{equation*}
-of homotopies commutes. By function extensionality, our goal is equivalent to constructing a homotopy (i.e.~a dependent function) of type
-\begin{equation*}
-\prd{t:A\sqcup^{\mathcal{S}} B} f(t)=g(t).
-\end{equation*}
-We will construct such a function by the induction principle for $A\sqcup^{\mathcal{S}} B$. Therefore it suffices to construct
-\begin{align*}
-K & : h\circ \inl \htpy h'\circ \inl \\
-L & : h\circ \inr \htpy h'\circ \inr \\
-M' & : \mathsf{tr}_{E_{h,h'}}(\glue,K)=L
-\end{align*}
-The type of $M'$ is equivalent to the type of $M$, so we obtain the requested structure from our assumptions.
-\end{proof}
-
-\begin{comment}
-\begin{cor}
-Consider two commuting squares
-\begin{equation*}
-\begin{tikzcd}
-S \arrow[r,"g"] \arrow[d,swap,"f"] & B \arrow[d,"j"] & S \arrow[r,"g"] \arrow[d,swap,"f"] & B \arrow[d,"{j'}"] \\
-A \arrow[r,swap,"i"] & X & A \arrow[r,swap,"{i'}"] & {X'}
-\end{tikzcd}
-\end{equation*}
-with homotopies $H:i\circ f\htpy j\circ g$ and $H':i'\circ f\htpy j'\circ g$. Furthermore, consider a map
-\begin{equation*}
-h:X\to X'
-\end{equation*}
-equipped with
-\begin{align*}
-K & : h\circ i\htpy i' \\
-L & : h\circ j\htpy j' \\
-M & : \ct{(h\cdot H)}{(L\cdot g)} \htpy \ct{(K\cdot f)}{H'}.
-\end{align*}
-If any two of the following three properties hold, then so does the third:
-\begin{enumerate}
-\item $X$ is a pushout.
-\item $X'$ is a pushout.
-\item $h$ is an equivalence.
-\end{enumerate}
-\end{cor}
-\end{comment}
-
-As a basic application we establish the universal property of suspensions.
-\begin{cor}
-Let $X$ and $Y$ be types. Then the map\index{universal property!of suspensions|textit}
-\begin{equation*}
-(\susp{X}\to Y)\to \sm{y,y':Y} X\to (y=y')
-\end{equation*}
-given by $f\mapsto (f(\inl(\ttt)),f(\inr(\ttt)),\ap{f}{\glue(\blank)})$ is an equivalence.
-\end{cor}
-
-\begin{proof}
-We have equivalences
-\begin{align*}
-(\susp{X}\to Y) & \eqvsym \sm{y,y':\unit \to Y} X\to (y(\ttt)=y'(\ttt)) \\
-& \eqvsym \sm{y,y':Y} X\to (y=y').\qedhere
-\end{align*}
-\end{proof}
-
-\subsubsection{The pasting property for pushouts}
+\subsection{Properties of iterated pushouts}
 \begin{thm}\label{thm:pushout_pasting}
 Consider the following configuration of commuting squares:\index{pushout!pasting property|textit}\index{pasting property!for pushouts|textit}
 \begin{equation*}
@@ -1770,245 +2075,32 @@ By the assumption that $Y$ is the pushout of $B\leftarrow A \rightarrow X$, it f
 \end{proof}
 
 \begin{lem}
-Consider a map $f:A\to B$. Then the cofiber of the map $\inr:B\to \mathsf{cofib}_f$ is equivalent to the suspension $\susp{A}$ of $A$. 
+Consider a map $f:A\to B$. Then the cofiber of the map $\inr:B\to \mathsf{cof}_f$ is equivalent to the suspension $\susp{A}$ of $A$. 
 \end{lem}
 
-\subsection{Sequential colimits}
-
-\subsubsection{The universal property of sequential colimits}
-
-Type sequences are diagrams of the following form.
-\begin{equation*}
-\begin{tikzcd}
-A_0 \arrow[r,"f_0"] & A_1 \arrow[r,"f_1"] & A_2 \arrow[r,"f_2"] & \cdots.
-\end{tikzcd}
-\end{equation*}
-Their formal specification is as follows.
-
-\begin{defn}
-An \define{(increasing) type sequence} $\mathcal{A}$ consists of
-\begin{align*}
-A & : \N\to\UU \\
-f & : \prd{n:\N} A_n\to A_{n+1}. 
-\end{align*}
-\end{defn}
-
-In this section we will introduce the sequential colimit of a type sequence.
-The sequential colimit includes each of the types $A_n$, but we also identify each $x:A_n$ with its value $f_n(x):A_{n+1}$. 
-Imagine that the type sequence $A_0\to A_1\to A_2\to\cdots$ defines a big telescope, with $A_0$ sliding into $A_1$, which slides into $A_2$, and so forth.
-
-As usual, the sequential colimit is characterized by its universal property.
-
-\begin{defn}
-\begin{enumerate}
-\item A \define{(sequential) cocone} on a type sequence $\mathcal{A}$ with vertex $B$ consists of
-\begin{align*}
-h & : \prd{n:\N} A_n\to B \\
-H & : \prd{n:\N} f_n\htpy f_{n+1}\circ H_n.
-\end{align*}
-We write $\mathsf{cocone}(B)$ for the type of cones with vertex $X$.
-\item Given a cone $(h,H)$ with vertex $B$ on a type sequence $\mathcal{A}$ we define the map
-\begin{equation*}
-\mathsf{cocone\usc{}map}(h,H) : (B\to C)\to \mathsf{cocone}(B)
-\end{equation*}
-given by $f\mapsto (f\circ h,\lam{n}{x}\mathsf{ap}_f(H_n(x)))$. 
-\item We say that a cone $(h,H)$ with vertex $B$ is \define{colimiting} if $\mathsf{cocone\usc{}map}(h,H)$ is an equivalence for any type $C$. 
-\end{enumerate}
-\end{defn}
-
-\begin{thm}\label{thm:sequential_up}
-Consider a cocone $(h,H)$ with vertex $B$ for a type sequence $\mathcal{A}$. The following are equivalent:
-\begin{enumerate}
-\item The cocone $(h,H)$ is colimiting.
-\item The cocone $(h,H)$ is inductive in the sense that for every type family $P:B\to \UU$, the map
-\begin{align*}
-\Big(\prd{b:B}P(b)\Big)\to {}& \sm{h:\prd{n:\N}{x:A_n}P(h_n(x))}\\ 
-& \qquad \prd{n:\N}{x:A_n} \mathsf{tr}_P(H_n(x),h_n(x))={h_{n+1}(f_n(x))}
-\end{align*}
-given by
-\begin{equation*}
-s\mapsto (\lam{n}s\circ h_n,\lam{n}{x} \mathsf{apd}_{s}(H_n(x)))
-\end{equation*}
-has a section.
-\item The map in (ii) is an equivalence.
-\end{enumerate}
-\end{thm}
-
-\subsubsection{The construction of sequential colimits}
-
-We construct sequential colimits using pushouts.
-
-\begin{defn}
-Let $\mathcal{A}\jdeq (A,f)$ be a type sequence. We define the type $A_\infty$ as a pushout
-\begin{equation*}
-\begin{tikzcd}[column sep=large]
-\tilde{A}+\tilde{A} \arrow[r,"{[\idfunc,\sigma_{\mathcal{A}}]}"] \arrow[d,swap,"{[\idfunc,\idfunc]}"] & \tilde{A} \arrow[d,"\inr"] \\
-\tilde{A} \arrow[r,swap,"\inl"] & A_\infty.
-\end{tikzcd}
-\end{equation*}
-\end{defn}
-
-\begin{defn}
-The type $A_\infty$ comes equipped with a cocone structure consisting of
-\begin{align*}
-\mathsf{seq\usc{}in} & : \prd{n:\N} A_n\to A_\infty \\
-\mathsf{seq\usc{}glue} & : \prd{n:\N}{x:A_n} \mathsf{in}_n(x)=\mathsf{in}_{n+1}(f_n(x)).
-\end{align*}
-\end{defn}
-
-\begin{constr}
-We define
-\begin{align*}
-\mathsf{seq\usc{}in}(n,x)\defeq \inr(n,x) \\
-\mathsf{seq\usc{}glue}(n,x)\defeq \ct{\glue(\inl(n,x))^{-1}}{\glue(\inr(n,x))}.
-\end{align*}
-\end{constr}
-
 \begin{thm}
-Consider a type sequence $\mathcal{A}$, and write $\tilde{A}\defeq\sm{n:\N}A_n$. Moreover, consider the map
-\begin{equation*}
-\sigma_{\mathcal{A}}:\tilde{A}\to\tilde{A}
-\end{equation*}
-defined by $\sigma_{\mathcal{A}}(n,a)\defeq (n+1,f_n(a))$. Furthermore, consider a cocone $(h,H)$ with vertex $B$.
-The following are equivalent:
-\begin{enumerate}
-\item The cocone $(h,H)$ with vertex $B$ is colimiting.
-\item The defining square
-\begin{equation*}
-\begin{tikzcd}[column sep=large]
-\tilde{A}+\tilde{A} \arrow[r,"{[\idfunc,\sigma_{\mathcal{A}}]}"] \arrow[d,swap,"{[\idfunc,\idfunc]}"] & \tilde{A} \arrow[d,"{\lam{(n,x)}h_n(x)}"] \\
-\tilde{A} \arrow[r,swap,"{\lam{(n,x)}h_n(x)}"] & A_\infty,
-\end{tikzcd}
-\end{equation*}
-of $A_\infty$ is a pushout square.
-\end{enumerate}
-\end{thm}
-
-\subsection{Reflexive coequalizers}
-
-\subsubsection{Reflexive graphs}
-\begin{defn}
-A \define{reflexive pair} consists of maps $s$, $t$, and $r$ between types $V$ and $E$, as indicated in the diagram
-\begin{equation*}
-\begin{tikzcd}[column sep=large]
-E \arrow[r,yshift=1.5ex,"s"] \arrow[r,yshift=-1.5ex,swap,"t"] & V, \arrow[l,"r" description]
-\end{tikzcd}
-\end{equation*}
-such that $H_{sr}:\idfunc[V]\htpy s\circ r$ and $H_{tr}:\idfunc[V]\htpy t\circ r$.
-\end{defn} 
-
-A reflexive pair determines the following structure, consisting of
-a type $\pts{\Gamma}$, a type family $\edg{\Gamma}:\pts{\Gamma}\to\pts{\Gamma}\to\UU$,
-and a term $\rfx{\Gamma}:\prd{i:\pts{\Gamma}}\edg{\Gamma}(i,i)$.
-\begin{align*}
-\pts{\Gamma} & \defeq V \\
-\edg{\Gamma}(v,w) & \defeq \sm{e:E} (v=s(e))\times (w=t(e)) \\
-\rfx{\Gamma}(v) & \defeq \pairr{r(v),H_{sr}(v),H_{tr}(v)}.
-\end{align*}
-This is what we call a reflexive type-valued graph:
-
-\begin{defn}\label{defn:graphs_ctx}
-A \define{reflexive graph} $\Gamma$ in $\UU$ is a triple $\pairr{\pts{\Gamma},\edg{\Gamma},\rfx{\Gamma}}$ consisting of
-\begin{align*}
-\pts{\Gamma} & : \UU \\
-\edg{\Gamma} & : \pts{\Gamma}\to\pts{\Gamma}\to\UU \\
-\rfx{\Gamma} & : \prd{i:\pts{\Gamma}}\edg{\Gamma}(i,i).
-\end{align*}
-When $\Gamma$ is a reflexive graph in $\UU$, we say that $\pts{\Gamma}$ is its type of \define{vertices}, that $\edg{\Gamma}$ is its family of \define{edges}, and that $\rfx{\Gamma}$ is the \define{proof of reflexivity} of $\Gamma$. We write
-\begin{equation*}
-\mathsf{rGph}\defeq \sm{V:\UU}{E:V\to (V\to\UU)}\prd{v:V}E(v,v)
-\end{equation*}
-for the type of (small) reflexive graphs. 
-\end{defn}
-
-\begin{thm}\label{thm:rpairs_rgraphs}
-There function $\mathsf{rgph\usc{}rpair}:\mathsf{rPair}\to\mathsf{rGph}$ defined by
-\begin{align*}
-\pts{\mathsf{rgph\usc{}rpair}(V,E,s,t,r,H_{sr},H_{tr})} & \defeq V \\
-\edg{\mathsf{rgph\usc{}rpair}(V,E,s,t,r,H_{sr},H_{tr})}(v,w) & \defeq \sm{e:E} (v=s(e))\times (w=t(e)) \\
-\rfx{\Gamma}(v) & \defeq \pairr{r(v),H_{sr}(v),H_{tr}(v)},
-\end{align*}
-is an equivalence.
-\end{thm}
-
-\begin{proof}
-Straightforward.
-\end{proof}
-
-We choose to work with reflexive graphs instead of reflexive pairs, because reflexive graphs are slightly easier to handle in dependent type theory. For instance, when working with a reflexive pair, one might have to deal with the fact that $H_{sr}$ and $H_{tr}$ are only homotopies, whereas in the case of reflexive graphs we use the type dependency to make sure that the source and target of $\rfx{\Gamma}(i)$ is exactly the vertex $i:\pts{\Gamma}$.
-
-\begin{eg}\label{eg:running_graphs}
-We will use the following basic examples throughout this article to illustrate the exposition.
-\begin{enumerate}
-\item \label{eg:disc_codisc} Given a type $X$, we have the \define{discrete graph} $\Delta(X)$ on $X$ consisting of
-\begin{align*}
-\pts{\Delta(X)} & \defeq X \\
-\edg{\Delta(X)} & \defeq \idtypevar{X} \\
-\rfx{\Delta(X)} & \defeq \refl{},
-\end{align*}
-and we have the \define{indiscrete graph} $\nabla(X)$ on $X$ consisting of
-\begin{align*}
-\pts{\nabla(X)} & \defeq X \\
-\edg{\nabla(X)} & \defeq \lam{x}{y}\unit \\
-\rfx{\nabla(X)} & \defeq \ttt.
-\end{align*}
-In particular, we have the \define{unit} graph $\unit\defeq\nabla(\unit)$, which happens to be equal to $\Delta(\unit)$. 
-\item \label{eg:freerfx} Given a non-reflexive graph $\Gamma\jdeq\pairr{\pts{\Gamma},\edg{\Gamma}}$, we can obtain a reflexive graph $F(\Gamma)$ by freely adjoin reflexivity edges by taking
-\begin{align*}
-\pts{F(\Gamma)} & \defeq \pts{\Gamma} \\
-\edg{F(\Gamma)}(i,j) & \defeq \edg{\Gamma}(i,j)+(i=j) \\
-\rfx{F(\Gamma)}(i) & \defeq \inr(\refl{i}).
-\end{align*}
-Because of this construction, we restrict our attention to reflexive
-graphs, with ordinary graphs as a special case. However, as we will see in \autoref{sec:refl-graph-quot} there are some essential differences that occur between graph quotients and reflexive graph quotients. For example, the graph quotient of the terminal non-reflexive graph is the circle, whereas the graph quotient of the terminal reflexive graph is contractible.
-\item To give an example where one might use the non-trivial
-  homotopical structure of a type in a graph, consider the graphs
-  $\Gamma(n)$ given by
-\begin{align*}
-\pts{\Gamma(n)} & \defeq \bool \\
-\edg{\Gamma(n)}(\bfalse,\btrue) & \defeq \sphere{n}
-\end{align*}
-and no other edges. Equivalently, the edges can be given as an inductive family of types over $\pts{\Gamma(n)}$ with a constructor of type $\sphere{n}\to\edg{\Gamma(n)}(\bfalse,\btrue)$. 
-\item A span $X \leftarrow A \rightarrow Y$ consisting of $f:A\to X$ and $g:A\to Y$ defines a non-reflexive graph $\Gamma$ by
-\begin{align*}
-\pts{\Gamma} & \defeq X + Y \\
-\edg{\Gamma}(\inl(x),\inr(y)) & \defeq \sm{a:A}\pairr{x,y}=\pairr{f(a),g(a)},
-\end{align*}
-and no other edges. Equivalently, the edges can be given as an inductive family of types over $\pts{\Gamma}$ with a constructor of type
-\begin{equation*}
-\prd{a:A}\edg{\Gamma}(\inl(f(a)),\inr(g(a))).
-\end{equation*}
-\item A \define{type sequence} in $\UU$ consists of a family $A:\N\to\UU$ and a family $f:\prd{n:\N} A_n\to A_{n+1}$. In other words, a type sequence represents data of the form
+Consider a commuting square
 \begin{equation*}
 \begin{tikzcd}
-A_0 \arrow[r,"f_0"] & A_1 \arrow[r,"f_1"] & A_2 \arrow[r,"f_2"] & \cdots
+A \arrow[r,"i"] \arrow[d,swap,"f"] & B \arrow[d,"g"] \\
+X \arrow[r,swap,"j"] & Y
 \end{tikzcd}
 \end{equation*}
-From a type sequence we obtain a graph $\Gamma$ given by
-\begin{align*}
-\pts{\Gamma} & \defeq \sm{n:\N} A_n \\
-\edg{\Gamma}(\pairr{n,x},\pairr{m,y}) & \defeq \pairr{m,y}=\pairr{n+1,f_n(x)}.
-\end{align*}
-Equivalently, the edges can be given as an inductive family of types over $\pts{\Gamma}$ with a constructor of type
+and write $\mathsf{cogap}: X\sqcup^A B\to Y$ for the cogap map. 
+Then the square
 \begin{equation*}
-\prd{n:\N}{x:A_n}\edg{\Gamma}(\pairr{n,x},\pairr{n+1,f_n(x)}).
+\begin{tikzcd}
+\mathsf{cof}_f \arrow[d] \arrow[r] & \mathsf{cof}_g \arrow[d] \\
+\unit \arrow[r] & \mathsf{cof}_{\mathsf{cogap}}
+\end{tikzcd}
 \end{equation*}
-\item \label{eg:prekernel} The \define{pre-kernel} $\mathcal{K}(f)$ of a map $f:A\to X$ is defined to be the reflexive relation on $A$ given by
-\begin{align*}
-\edg{\mathcal{K}(f)}(a,a') & \defeq f(a) = f(a') \\
-\rfx{\mathcal{K}(f)}(a) & \defeq \refl{f(a)}
-\end{align*}
-We call this relation the \emph{pre}-kernel, because we would like to reserve the name `kernel' for the pre-kernel together with the structure that it is an $\infty$-equivalence relation, according to some internal notion of $\infty$-equivalence relation.
-\end{enumerate}
-\end{eg}
+is a pushout square.
+\end{thm}
 
-\subsection{Colimits of diagrams over graphs}
+\section{Descent for pushouts}\label{sec:descent}
+Descent theorems characterize type families over homotopy colimits. We present descent theorems for three cases: pushouts, reflexive coequalizers, and sequential colimits. The most general form of descent is expressed using modalities in \cref{sec:modal_descent}. 
 
-\section{Descent}\label{sec:descent}
-
-\subsection{Descent for pushouts}
-
-\subsubsection{Type families over pushouts}
+\subsection{Type families over pushouts}
 
 Given a pushout square
 \begin{equation*}
@@ -2057,20 +2149,14 @@ by $P\mapsto (P\circ i,P\circ j,\lam{x}\mathsf{tr}_P(H(x)))$.
 \end{defn}
 
 \begin{thm}\label{thm:desc_fam}
-Consider a pushout square
+Consider a commuting square
 \begin{equation*}
 \begin{tikzcd}
 S \arrow[r,"g"] \arrow[d,swap,"f"] & B \arrow[d,"j"] \\
 A \arrow[r,swap,"i"] & X.
 \end{tikzcd}
 \end{equation*}
-with $H:i\circ f\htpy j\circ g$, where all types involved are in $\UU$, and suppose we have
-\begin{align*}
-P_A & : A \to \UU \\
-P_B & : B \to \UU \\
-P_S & : \prd{x:S} \eqv{P_A(f(x))}{P_B(g(x))}.
-\end{align*}
-Then the function\index{desc_fam@{$\mathsf{desc\usc{}fam}_{\mathcal{S}}$}!is an equivalence|textit}
+with $H:i\circ f\htpy j\circ g$. If the square is a pushout square, then the function\index{desc_fam@{$\mathsf{desc\usc{}fam}_{\mathcal{S}}$}!is an equivalence|textit}
 \begin{equation*}
 \mathsf{desc\usc{}fam}_{\mathcal{S}}(i,j,H) : (X\to \UU)\to \mathsf{Desc}(\mathcal{S})
 \end{equation*}
@@ -2125,7 +2211,7 @@ commutes, is contractible.
 The fiber of this map at $(P_A,P_B,P_S)$ is equivalent to the type of quadruples $(P,e_A,e_B,e_S)$ as described in the theorem, which are contractible by \cref{thm:contr_equiv}.
 \end{proof}
 
-\subsubsection{The flattening lemma for pushouts}
+\subsection{The flattening lemma for pushouts}
 
 In this section we consider a pushout square
 \begin{equation*}
@@ -2165,7 +2251,7 @@ We define a commuting square
 with a homotopy $H':i'\circ f'\htpy j'\circ g'$.
 \end{defn}
 
-\begin{constr}
+\begin{proof}[Construction]
 We define
 \begin{align*}
 f' & \defeq \total[f]{\lam{x}\idfunc[P_A(f(x))]} \\
@@ -2182,7 +2268,7 @@ for any $x:S$ and $y:P_A(f(x))$. We have he identification
 \mathsf{eq\usc{}pair}(H(x),e_S(x,y)^{-1})
 \end{equation*}
 of this type.
-\end{constr}
+\end{proof}
 
 \begin{defn}
 We will write $\mathcal{S'}$ for the span
@@ -2238,7 +2324,7 @@ w' & : \prd{x:S} \mathsf{tr}_{(t\mapsto P(t)\to Y)}(H(x),u'(f(x)))=v'(g(x)),
 Since the dependent action on generators $\mathsf{dgen}_{\mathcal{S}}$ is an equivalence it follows by the 3-for-2 property of equivalences that $\mathsf{cocone\usc{}map}_{\mathcal{S}'}(i',j',H')$ is an equivalence, as desired.
 \end{proof}
 
-\subsubsection{Commuting cubes}
+\subsection{Commuting cubes}
 \begin{defn}\label{defn:cube}
 A \define{commuting cube}\index{commuting cube|textbf}
 \begin{equation*}
@@ -2314,7 +2400,7 @@ By rotating the cube we also obtain:
 By combining these statements it also follows that if the front left, front right, and bottom squares are pullback squares, then if any of the remaining three squares are pullback squares, all of them are. Cubes that consist entirely of pullback squares are sometimes called \define{strongly cartesian}\index{strongly cartesian cube}.
 \end{rmk}
 
-\subsubsection{The descent property for pushouts}
+\subsection{The descent property for pushouts}
 
 In the previous section there was a significant role for fiberwise equivalences, and we know by \cref{thm:pb_fibequiv,cor:pb_fibequiv}: fiberwise equivalences indicate the presence of pullbacks. In this section we reformulate the results of the previous section using pullbacks where we used fiberwise equivalences before, to obtain new and useful results. We begin by considering the type of descent data from the perspective of pullback squares.
 
@@ -2369,7 +2455,7 @@ We define an operation\index{cart map!{$\mathsf{cart\usc{}map}_{\mathcal{S}}$}|t
 \end{equation*}
 \end{defn}
 
-\begin{constr}
+\begin{proof}[Construction]
 Let $X':\UU$ and $h_X:X'\to X$. Then we define the types
 \begin{align*}
 A' & \defeq A\times_X X' \\
@@ -2398,7 +2484,7 @@ A & S \arrow[l] \arrow[r] & B.
 \end{tikzcd}
 \end{equation*}
 Moreover, these squares are pullback squares by \cref{thm:pb_pasting}.
-\end{constr}
+\end{proof}
 
 The following theorem is analogous to \cref{thm:desc_fam}.
 
@@ -2413,15 +2499,15 @@ The operation $\mathsf{cart\usc{}map}_{\mathcal{S}}$\index{cart map!{$\mathsf{ca
 It suffices to show that the square
 \begin{equation*}
 \begin{tikzcd}[column sep=huge]
-X\to \UU \arrow[r,"{\mathsf{desc\usc{}fam}_{\mathcal{S}}(i,j,H)}"] \arrow[d,swap,"\mathsf{map\usc{}fam}_X"] & \mathsf{Desc}(\mathcal{S}) \arrow[d,"\mathsf{cart\usc{}desc}_{\mathcal{S}}"] \\
+X\to \UU \arrow[r,"{\mathsf{desc\usc{}fam}_{\mathcal{S}}(i,j,H)}"] \arrow[d,swap,"\mathsf{map.fam}_X"] & \mathsf{Desc}(\mathcal{S}) \arrow[d,"\mathsf{cart\usc{}desc}_{\mathcal{S}}"] \\
 \sm{X':\UU}X'\to X \arrow[r,swap,"\mathsf{cart\usc{}map}_{\mathcal{S}}"] & \mathsf{Cart}(\mathcal{S})
 \end{tikzcd}
 \end{equation*}
-commutes. To see that this suffices, note that the operation $\mathsf{map\usc{}fam}_X$ is an equivalence by \cref{thm:fam_proj}, the operation $\mathsf{desc\usc{}fam}_{\mathcal{S}}(i,j,H)$ is an equivalence by \cref{thm:desc_fam}, and the operation $\mathsf{cart\usc{}desc}_{\mathcal{S}}$ is an equivalence by \cref{lem:cart_desc}.
+commutes. To see that this suffices, note that the operation $\mathsf{map.fam}_X$ is an equivalence by \cref{thm:fam_proj}, the operation $\mathsf{desc\usc{}fam}_{\mathcal{S}}(i,j,H)$ is an equivalence by \cref{thm:desc_fam}, and the operation $\mathsf{cart\usc{}desc}_{\mathcal{S}}$ is an equivalence by \cref{lem:cart_desc}.
 
 To see that the square commutes, note that the composite
 \begin{equation*}
-\mathsf{cart\usc{}map}_{\mathcal{S}}\circ \mathsf{map\usc{}fam}_X
+\mathsf{cart\usc{}map}_{\mathcal{S}}\circ \mathsf{map.fam}_X
 \end{equation*}
 takes a family $P:X\to \UU$ to the cartesian transformation of spans
 \begin{equation*}
@@ -2507,17 +2593,21 @@ is contractible.
 
 The following theorem should be compared to the flattening lemma, \cref{lem:flattening}.\index{flattening lemma!for pushouts}
 
-\begin{thm}
+\begin{thm}\label{thm:pushout_flattening}
 Consider a commuting cube
 \begin{equation*}
 \begin{tikzcd}
 & S' \arrow[dl,swap,"{f'}"] \arrow[dr,"{g'}"] \arrow[d,"h_S"] \\
 A' \arrow[d,swap,"h_A"] & S \arrow[dl,swap,"f" near start] \arrow[dr,"g" near start] & B' \arrow[dl,crossing over,"{j'}" near end] \arrow[d,"h_B"] \\
 A \arrow[dr,swap,"i"] & X' \arrow[d,"h_X" near start] \arrow[from=ul,crossing over,"{i'}"' near end] & B \arrow[dl,"j"] \\
-& X.
+& X
 \end{tikzcd}
 \end{equation*}
-If each of the vertical squares is a pullback, and the bottom square  is a pushout, then the top square is a pushout.
+in which the bottom square is a pushout, and the two vertical squares in the back are pullbacks. Then the following are equivalent:
+\begin{enumerate}
+\item The two vertical squares in the front are pullback squares.
+\item The top square is a pushout square.
+\end{enumerate}
 \end{thm}
 
 \begin{proof}
@@ -2614,10 +2704,10 @@ A \arrow[dr] & (A\sqcup^{S} B)\times_{X}X' \arrow[d] \arrow[from=ul,crossing ove
 are pullback squares by \cref{thm:pb_pasting}.
 \end{proof}
 
-\begin{eg}
-We list the following applications of \cref{thm:pb_pushout}:
-\begin{enumerate}
-\item Using the characterization of the circle as a pushout given in \cref{eg:circle_pushout} we see that the square
+\subsection{Applications of the descent theorem for pushouts}
+
+\begin{prp}
+The commuting square
 \begin{equation*}
 \begin{tikzcd}[column sep=large]
 \sphere{1}+\sphere{1} \arrow[r,"{[\idfunc,\idfunc]}"] \arrow[d,swap,"{[\idfunc,\idfunc]}"] & \sphere{1} \arrow[d,"{\lam{t}(t,\base)}"] \\
@@ -2625,7 +2715,23 @@ We list the following applications of \cref{thm:pb_pushout}:
 \end{tikzcd}
 \end{equation*}
 is a pushout square.
-\item Let $f:A\to B$ be a map. The \define{codiagonal}\index{codiagonal}\index{nabla@{$\nabla_f$}} $\nabla_f$ of $f$ is the map obtained from the universal property of the pushout, as indicated in the diagram
+\end{prp}
+
+\begin{proof}
+We have the commuting cube
+\begin{equation*}
+\begin{tikzcd}
+& \sphere{1}+\sphere{1} \arrow[dl] \arrow[d] \arrow[dr] \\
+\sphere{1} \arrow[d] & \bool \arrow[dl] \arrow[dr] & \sphere{1} \arrow[dl,crossing over] \arrow[d] \\
+\unit \arrow[dr] & \sphere{1}\times \sphere{1} \arrow[d] \arrow[from=ul,crossing over] & \unit \arrow[dl] \\
+& \sphere{1}
+\end{tikzcd}
+\end{equation*}
+of which the vertical squares are pullback squares. Since the bottom square is a pushout square, it follows by \cref{thm:pushout_flattening} that the top square is a pushout square.
+\end{proof}
+
+\begin{defn}
+Let $f:A\to B$ be a map. The \define{codiagonal}\index{codiagonal}\index{nabla@{$\nabla_f$}} $\nabla_f$ of $f$ is the map obtained from the universal property of the pushout, as indicated in the diagram
 \begin{equation*}
 \begin{tikzcd}
 A \arrow[d,swap,"f"] \arrow[r,"f"] \arrow[dr, phantom, "\ulcorner", very near end] & B \arrow[d,"\inr"] \arrow[ddr,bend left=15,"{\idfunc[B]}"] \\
@@ -2633,22 +2739,14 @@ A \arrow[r,"\inl"] \arrow[drr,bend right=15,swap,"{\idfunc[B]}"] & B\sqcup^{A} B
 & & B
 \end{tikzcd}
 \end{equation*}
-There is an equivalence $\fib{\nabla_f}{b}\eqvsym \susp(\fib{f}{b})$ for any $b:B$.
-\item \label{ex:fib_join}Consider two maps $f:A\to X$ and $g:B\to X$. The \define{fiberwise join}\index{fiberwise join} $\join{f}{g}$ is defined by the universal property of the pushout as the unique map rendering the diagram
-\begin{equation*}
-\begin{tikzcd}
-A\times_X B \arrow[d,"\pi_1"] \arrow[r,"\pi_2"] \arrow[dr, phantom, "\ulcorner", very near end] & B \arrow[d,"\inr"] \arrow[ddr,bend left=15,"g"] \\
-A \arrow[r,"\inl"] \arrow[drr,bend right=15,swap,"f"] & \join[X]{A}{B} \arrow[dr,densely dotted,near start,swap,"\join{f}{g}"] \\
-& & X
-\end{tikzcd}
-\end{equation*}
-commutative, where $\join[X]{A}{B}$ is defined as a pushout, as indicated.
-Construct an equivalence
-\begin{equation*}
-\eqv{\fib{\join{f}{g}}{x}}{\join{\fib{f}{x}}{\fib{g}{x}}}
-\end{equation*}
-for any $x:X$. 
-\item Consider two maps $f:A\to B$ and $g:C\to D$.
+\end{defn}
+
+\begin{prp}
+For any map $f:A\to B$ and any $y:B$, there is an equivalence $\eqv{\fib{\nabla_f}{y}}{\susp(\fib{f}{y})}$. 
+\end{prp}
+
+\begin{defn}
+Consider two maps $f:A\to B$ and $g:C\to D$.
 The \define{pushout-product}\index{pushout-product}
 \begin{equation*}
 f\square g : (A\times D)\sqcup^{A\times C} (B\times C)\to B\times D
@@ -2661,12 +2759,63 @@ A\times D \arrow[r,"\inl"] \arrow[drr,bend right=15,swap,"{f\times\idfunc[D]}"] 
 & & B\times D
 \end{tikzcd}
 \end{equation*}
-commutative. Construct an equivalence
+commutative.
+\end{defn}
+
+\begin{prp}
+For any two maps $f:A\to B$ and $g:C\to D$, and any $(b,d):B\times D$, there is an equivalence
 \begin{equation*}
-\eqv{\fib{f\square g}{b,d}}{\join{\fib{f}{b}}{\fib{g}{d}}}
+\eqv{\fib{f\square g}{b,d}}{\join{\fib{f}{b}}{\fib{g}{d}}}.
 \end{equation*}
-for all $b:B$ and $d:D$.
-\item Let $A$ and $B$ be pointed types with base points $a_0:A$ and $b_0:B$. The \define{wedge inclusion}\index{wedge inclusion} is defined as follows by the universal property of the wedge:
+\end{prp}
+
+\begin{defn}
+Let $f:A\to X$ and $g:B\to X$ be maps into $X$. We define the type $\join[X]{A}{B}$ and the \define{join}\footnote{\emph{Warning}: By $\join{f}{g}$ we do \emph{not} mean the functorial action of the
+join, applied to $(f,g)$.} $\join{f}{g}:\join[X]{A}{B}\to X$ of
+$f$ and $g$, as indicated in the following diagram:
+\begin{equation*}
+\begin{tikzcd}
+A\times_X B \arrow[r,"\pi_2"] \arrow[d,swap,"\pi_1"] \arrow[dr, phantom, "{\ulcorner}", at end] & B \arrow[d,"\inr"] \arrow[ddr,bend left=15,"g"] \\
+A \arrow[r,swap,"\inl"] \arrow[drr,bend right=15,swap,"f"] & \join[X]{A}{B} \arrow[dr,densely dotted,swap,near start,"\join{f}{g}" xshift=1ex] \\
+& & X.
+\end{tikzcd}
+\end{equation*}
+\end{defn}
+
+\begin{thm}\label{defn:join-fiber}
+Let $f:A\to X$ and $g:B\to X$ be maps into $X$, and let $x:X$. Then there is
+an equivalence
+\begin{equation*}
+\eqv{\fib{\join{f}{g}}{x}}{\join{\fib{f}{x}}{\fib{g}{x}}}.
+\end{equation*}
+\end{thm}
+
+\begin{proof}
+We have the following commuting cube
+\begin{equation*}
+\begin{tikzcd}
+& \fib{f}{x}\times\fib{g}{x} \arrow[dl] \arrow[d] \arrow[dr] \\
+\fib{f}{x} \arrow[d] & A\times_X B \arrow[dl] \arrow[dr] & \fib{g}{x} \arrow[dl,crossing over] \arrow[d] \\
+A \arrow[dr] & \unit \arrow[d] \arrow[from=ul,crossing over] & B \arrow[dl] \\
+& X
+\end{tikzcd}
+\end{equation*}
+in which the vertical squares are pullback squares. Therefore it follows by \cref{thm:pb_pushout} that the square
+\begin{equation*}
+\begin{tikzcd}
+\join{\fib{f}{x}}{\fib{g}{x}} \arrow[r] \arrow[d] & \unit \arrow[d] \\
+\join[X]{A}{B} \arrow[r] & X
+\end{tikzcd}
+\end{equation*}
+is a pullback square.
+\end{proof}
+
+\begin{rmk}
+The join operation on maps with a common codomain is associative up to homotopy (this was formalized by Brunerie, see Proposition 1.8.6 of \cite{BruneriePhD}), and it is a commutative operation on the generalized elements of a type $X$. Furthermore, the unique map of type $\emptyt\to X$ is a unit for the join operation.
+\end{rmk}
+
+\begin{defn}
+Let $A$ and $B$ be pointed types with base points $a_0:A$ and $b_0:B$. The \define{wedge inclusion}\index{wedge inclusion} is defined as follows by the universal property of the wedge:
 \begin{equation*}
 \begin{tikzcd}[column sep=huge]
 \unit \arrow[r] \arrow[d] & B \arrow[d,"\inr"] \arrow[ddr,bend left=15,"{\lam{b}(a_0,b)}"] \\
@@ -2674,142 +2823,63 @@ A \arrow[r,"\inl"] \arrow[drr,bend right=15,swap,"{\lam{a}(a,b_0)}"] & A\vee B \
 & & A\times B
 \end{tikzcd}
 \end{equation*}
-The fiber of the wedge inclusion $A\vee B\to A\times B$ is equivalent to $\join{\loopspace{B}}{\loopspace{A}}$.
-\item Let $f:X\vee X\to X$ be the map defined by the universal property of the wedge as indicated in the diagram
+\end{defn}
+
+\begin{prp}
+There is a fiber sequence 
+\begin{equation*}
+\join{\loopspace{A}}{\loopspace{B}}\hookrightarrow A\vee B\twoheadrightarrow A\times B.
+\end{equation*}
+\end{prp}
+
+\begin{defn}
+Consider a pointed type $X$. We define the map $\mathsf{fold}:X\vee X\to X$ by the universal property of the wedge as indicated in the diagram
 \begin{equation*}
 \begin{tikzcd}
 \unit \arrow[d,swap,"x_0"] \arrow[r,"x_0"] \arrow[dr, phantom, "\ulcorner", very near end] & X \arrow[d,"\inr"] \arrow[ddr,bend left=15,"{\idfunc[X]}"] \\
-X \arrow[r,"\inl"] \arrow[drr,bend right=15,swap,"{\idfunc[X]}"] & X\vee X \arrow[dr,densely dotted,near start,swap,"f"] \\
+X \arrow[r,"\inl"] \arrow[drr,bend right=15,swap,"{\idfunc[X]}"] & X\vee X \arrow[dr,densely dotted,near start,swap,"\mathsf{fold}"] \\
 & & X.
 \end{tikzcd}
 \end{equation*}
-Show that $\eqv{\fib{f}{x_0}}{\susp\loopspace{X}}$. 
-\end{enumerate}
-\end{eg}
-
-\subsection{Descent for sequential colimits}
-
-\begin{defn}
-The type of \define{descent data} on a type sequence $\mathcal{A}\jdeq (A,f)$ is defined to be
-\begin{equation*}
-\mathsf{Desc}(\mathcal{A}) \defeq \sm{B:\prd{n:\N}A_n\to\UU}\prd{n:\N}{x:A_n}\eqv{B_n(x)}{B_{n+1}(f_n(x))}.
-\end{equation*}
 \end{defn}
 
-\begin{defn}
-We define a map
+\begin{prp}
+There is a fiber sequence
 \begin{equation*}
-\mathsf{desc\usc{}fam} : (A_\infty\to\UU)\to\mathsf{Desc}(\mathcal{A})
+\susp\loopspace{X} \hookrightarrow X\vee X \twoheadrightarrow X.
 \end{equation*}
-by $B\mapsto (\lam{n}{x}B(\mathsf{seq\usc{}in}(n,x)),\lam{n}{x}\mathsf{tr}_B(\mathsf{seq\usc{}glue}(n,x)))$.
+\end{prp}
+
+\begin{prp}
+There is a fiber sequence
+\begin{equation*}
+(\susp\loopspace{X})^{\vee n} \hookrightarrow X^{\vee (n+1)} \twoheadrightarrow X.
+\end{equation*}
+\end{prp}
+
+\begin{rmk}
+There are fiber sequences
+\begin{align*}
+\sphere{1} \hookrightarrow \rprojective{\infty}\vee \rprojective{\infty} & \twoheadrightarrow \rprojective{\infty} \\
+\sphere{2} \hookrightarrow \cprojective{\infty}\vee \cprojective{\infty} & \twoheadrightarrow \cprojective{\infty}.
+\end{align*}
+\end{rmk}
+
+\begin{defn}\label{defn:coh_hspace}
+A \define{coherent H-space} consists of a type $X$ equipped with $1:X$, $\mu:X \to (X \to X)$ and coherenct unit laws
+\begin{align*}
+\mathsf{right\usc{}unit} & : \prd{x: X} \mu(x,1)= x \\
+\mathsf{left\usc{}unit} & : \prd{y:X} \mu(1,y) = y \\
+\mathsf{coh\usc{}unit} & : \mathsf{left\usc{}unit}(1)=\mathsf{right\usc{}unit}(1),
+\end{align*}
+such that the function $\mu(x,\blank)$ and $\mu(\blank,y)$ are equivalences for each $x:X$ and $y:X$, respectively.
 \end{defn}
 
-\begin{thm}
-The map 
+The following theorem is also known as the Hopf-construction.
+
+\begin{thm}\label{thm:hopf_construction}
+For any coherent H-space $X$ there is a fiber sequence
 \begin{equation*}
-\mathsf{desc\usc{}fam} : (A_\infty\to\UU)\to\mathsf{Desc}(\mathcal{A})
+X \hookrightarrow \join{X}{X} \twoheadrightarrow \susp X.
 \end{equation*}
-is an equivalence.
 \end{thm}
-
-\begin{defn}
-A \define{cartesian transformation} of type sequences from $\mathcal{A}$ to $\mathcal{B}$ is a pair $(h,H)$ consisting of
-\begin{align*}
-h & : \prd{n:\N} A_n\to B_n \\
-H & : \prd{n:\N} g_n\circ h_n \htpy h_{n+1}\circ f_n,
-\end{align*}
-such that each of the squares in the diagram
-\begin{equation*}
-\begin{tikzcd}
-A_0 \arrow[d,swap,"h_0"] \arrow[r,"f_0"] & A_1 \arrow[d,swap,"h_1"] \arrow[r,"f_1"] & A_2 \arrow[d,swap,"h_2"] \arrow[r,"f_2"] & \cdots \\
-B_0 \arrow[r,swap,"g_0"] & B_1 \arrow[r,swap,"g_1"] & B_2 \arrow[r,swap,"g_2"] & \cdots
-\end{tikzcd}
-\end{equation*}
-is a pullback square. We define
-\begin{align*}
-\mathsf{cart}(\mathcal{A},\mathcal{B}) & \defeq\sm{h:\prd{n:\N}A_n\to B_n} \\
-& \qquad\qquad \sm{H:\prd{n:\N}g_n\circ h_n\htpy h_{n+1}\circ f_n}\prd{n:\N}\mathsf{is\usc{}pullback}(h_n,f_n,H_n),
-\end{align*}
-and we write
-\begin{equation*}
-\mathsf{Cart}(\mathcal{B}) \defeq \sm{\mathcal{A}:\mathsf{Seq}}\mathsf{cart}(\mathcal{A},\mathcal{B}).
-\end{equation*}
-\end{defn}
-
-\begin{defn}
-We define a map
-\begin{equation*}
-\mathsf{cart\usc{}map}(\mathcal{B}) : \Big(\sm{X':\UU}X'\to X\Big)\to\mathsf{Cart}(\mathcal{B}).
-\end{equation*}
-which associates to any morphism $h:X'\to X$ a cartesian transformation of type sequences into $\mathcal{B}$.
-\end{defn}
-
-\begin{thm}
-The operation $\mathsf{cart\usc{}map}(\mathcal{B})$ is an equivalence.
-\end{thm}
-
-\subsection{The flattening lemma for sequential colimits}
-
-The flattening lemma for sequential colimits essentially states that sequential colimits commute with $\Sigma$. 
-
-\begin{lem}
-Consider
-\begin{align*}
-B & : \prd{n:\N}A_n\to\UU \\
-g & : \prd{n:\N}{x:A_n}\eqv{B_n(x)}{B_{n+1}(f_n(x))}.
-\end{align*}
-and suppose $P:A_\infty\to\UU$ is the unique family equipped with
-\begin{align*}
-e & : \prd{n:\N}\eqv{B_n(x)}{P(\mathsf{seq\usc{}in}(n,x))}
-\end{align*}
-and homotopies $H_n(x)$ witnessing that the square
-\begin{equation*}
-\begin{tikzcd}[column sep=7em]
-B_n(x) \arrow[r,"g_n(x)"] \arrow[d,swap,"e_n(x)"] & B_{n+1}(f_n(x)) \arrow[d,"e_{n+1}(f_n(x))"] \\
-P(\mathsf{seq\usc{}in}(n,x)) \arrow[r,swap,"{\mathsf{tr}_P(\mathsf{seq\usc{}glue}(n,x))}"] & P(\mathsf{seq\usc{}in}(n+1,f_n(x)))
-\end{tikzcd}
-\end{equation*}
-commutes. Then $\sm{t:A_\infty}P(t)$ satisfies the universal property of the sequential colimit of the type sequence
-\begin{equation*}
-\begin{tikzcd}
-\sm{x:A_0}B_0(x) \arrow[r,"{\total[f_0]{g_0}}"] & \sm{x:A_1}B_1(x) \arrow[r,"{\total[f_1]{g_1}}"] & \sm{x:A_2}B_2(x) \arrow[r,"{\total[f_2]{g_2}}"] & \cdots.
-\end{tikzcd}
-\end{equation*}
-\end{lem}
-
-In the following theorem we rephrase the flattening lemma in using cartesian transformations of type sequences.
-
-\begin{thm}
-Consider a commuting diagram of the form
-\begin{equation*}
-\begin{tikzcd}[column sep=small,row sep=small]
-A_0 \arrow[rr] \arrow[dd] & & A_1 \arrow[rr] \arrow[dr] \arrow[dd] &[-.9em] &[-.9em] A_2 \arrow[dl] \arrow[dd] & & \cdots \\
-& & & X \arrow[from=ulll,crossing over] \arrow[from=urrr,crossing over] \arrow[from=ur,to=urrr] \\
-B_0 \arrow[rr] \arrow[drrr] & & B_1 \arrow[rr] \arrow[dr] & & B_2 \arrow[rr] \arrow[dl] & & \cdots \arrow[dlll] \\
-& & & Y \arrow[from=uu,crossing over] 
-\end{tikzcd}
-\end{equation*}
-If each of the vertical squares is a pullback square, and $Y$ is the sequential colimit of the type sequence $B_n$, then $X$ is the sequential colimit of the type sequence $A_n$. 
-\end{thm}
-
-\begin{cor}
-Consider a commuting diagram of the form
-\begin{equation*}
-\begin{tikzcd}[column sep=small,row sep=small]
-A_0 \arrow[rr] \arrow[dd] & & A_1 \arrow[rr] \arrow[dr] \arrow[dd] &[-.9em] &[-.9em] A_2 \arrow[dl] \arrow[dd] & & \cdots \\
-& & & X \arrow[from=ulll,crossing over] \arrow[from=urrr,crossing over] \arrow[from=ur,to=urrr] \\
-B_0 \arrow[rr] \arrow[drrr] & & B_1 \arrow[rr] \arrow[dr] & & B_2 \arrow[rr] \arrow[dl] & & \cdots \arrow[dlll] \\
-& & & Y \arrow[from=uu,crossing over] 
-\end{tikzcd}
-\end{equation*}
-If each of the vertical squares is a pullback square, then the square
-\begin{equation*}
-\begin{tikzcd}
-A_\infty \arrow[r] \arrow[d] & X \arrow[d] \\
-B_\infty \arrow[r] & Y
-\end{tikzcd}
-\end{equation*} 
-is a pullback square.
-\end{cor}
-
-\subsection{Descent for reflexive coequalizers}

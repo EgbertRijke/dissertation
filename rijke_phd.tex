@@ -1,9 +1,11 @@
-\documentclass[twosided]{memoir}
+\documentclass{memoir}
 
 \setsecnumdepth{subsubsection}
 \settocdepth{subsection}
 
 \usepackage{hott}
+\excludecomment{proof}
+\excludecomment{constr}
 
 \addbibresource{bibliography.bib}
 
@@ -33,9 +35,11 @@
 
 \include{descent}
 
-\include{image}
+\include{rcoeq}
 
-\include{higher_groups}
+\include{simplicial}
+
+\include{image}
 
 \include{reflective_subuniverses}
 
@@ -45,9 +49,9 @@
 
 \include{localization}
 
-\include{giraud}
+\include{higher_groups}
 
-\include{simplicial}
+\include{giraud}
 
 \backmatter
 

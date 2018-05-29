@@ -1,42 +1,34 @@
 \chapter{Homotopy images}
 
-\section{The universal property of the image of a map}
-
-\begin{defn}
-Let $f:A\to X$ and $g:B\to X$ be maps. We define
+The propositional truncation $\brck{A}$ of $A$ is approximated by the type sequence
 \begin{equation*}
-\mathrm{hom}_X(f,g)\defeq\sm{h:A\to B}f\htpy g\circ h.
-\end{equation*}
-\end{defn}
-
-\begin{rmk}
-In other words, a term $(h,H):\mathrm{hom}_X(f,g)$ consists of a map $h:A\to B$ equipped with a homotopy $H:f\htpy g\circ h$ witnessing that the triangle
-\begin{equation*}
-\begin{tikzcd}[column sep=tiny]
-A \arrow[rr,"h"] \arrow[dr,swap,"f"] & & B \arrow[dl,"g"] \\
-& X
+\begin{tikzcd}
+A \arrow[r] & \join{A}{A} \arrow[r] & \join{A}{\join{A}{A}} \arrow[r] & \cdots
 \end{tikzcd}
 \end{equation*}
-commutes. Recall from \cref{ex:triangle_fib} that the type $\mathrm{hom}_X(f,g)$ is equivalent to the type
+Furthermore, we have observed that $\mathsf{rcoeq}(\nabla(A)) \eqvsym \join{A}{A}$, i.e.~we have a reflexive coequalizer diagram
 \begin{equation*}
-\prd{x:X}\fib{f}{x}\to\fib{g}{x}.
+\begin{tikzcd}
+A\times A \arrow[r,yshift=1ex] \arrow[r,yshift=-1ex] & A \arrow[l] \arrow[r] & \join{A}{A}.
+\end{tikzcd}
 \end{equation*}
-\end{rmk}
-
-\begin{lem}
-For any $f:A\to X$ and any embedding\index{embedding} $m:B\to X$, the type $\mathrm{hom}_X(f,m)$ is a proposition.
-\end{lem}
-
-\begin{proof}
-Since propositions are closed under equivalences by \cref{lem:prop_equiv}, it suffices to show that the type
+We will establish in this section that the triple join $\join{A}{\join{A}{A}}$ is also a homotopy colimit of the fom
 \begin{equation*}
-\prd{x:X}\fib{f}{x}\to\fib{m}{x},
+\begin{tikzcd}
+A\times A \times A \arrow[r,yshift=2ex] \arrow[r] \arrow[r,yshift=-2ex] & A \times A \arrow[l,yshift=1ex] \arrow[l,yshift=-1ex] \arrow[r,yshift=1ex] \arrow[r,yshift=-1ex] & A \arrow[l] \arrow[r] & \join{A}{\join{A}{A}}.
+\end{tikzcd}
 \end{equation*}
-is a proposition. Recall from \cref{cor:prop_emb} that a map is an embedding if and only if its fibers are propositions.
-Thus we see that the type $\prd{x:X}\fib{f}{x}\to\fib{m}{x}$ is a product of propositions, so it is a proposition by \cref{thm:trunc_pi}.
-\end{proof}
+The challenge here is to first give a specification of what we mean by a diagram of the form
+\begin{equation*}
+\begin{tikzcd}
+A_2 \arrow[r,yshift=2ex] \arrow[r] \arrow[r,yshift=-2ex] & A_1 \arrow[l,yshift=1ex] \arrow[l,yshift=-1ex] \arrow[r,yshift=1ex] \arrow[r,yshift=-1ex] & A_0. \arrow[l]
+\end{tikzcd}
+\end{equation*}
+Of course, we do so in homotopy type theory, so the task is to write down the correct \emph{homotopy type} of all such diagrams. Then we introduce their homotopy colimits, and show that in the case of the join construction this colimit coincides with the triple join.
 
-\begin{defn}
+\section{The join construction}
+
+\begin{defn}\label{defn:image_up}
 Consider a commuting triangle
 \begin{equation*}
 \begin{tikzcd}[column sep=small]
@@ -53,1179 +45,309 @@ defined by $(i,I)^\ast(h,H)\defeq (h\circ i,\ct{I}{(i\cdot H)})$,
 is an equivalence for every embedding $m':B'\to X$. 
 \end{defn}
 
-\begin{rmk}
-Since $\mathrm{hom}_X(f,m)$ is a proposition for every $f:A\to X$ and every embedding $m:B\to X$, it follows by \cref{ex:prop_equiv} that the universal property of the image of $f$ is equivalent to the property that the implication
+\begin{lem}
+For any $f:A\to X$ and any embedding\index{embedding} $m:B\to X$, the type $\mathrm{hom}_X(f,m)$ is a proposition.
+\end{lem}
+
+\begin{proof}
+From \cref{cor:fib_triangle} we obtain that the type $\mathrm{hom}_X(f,m)$ is equivalent to the type
+\begin{equation*}
+\prd{x:X}\fib{f}{x}\to\fib{m}{x},
+\end{equation*}
+so it suffices to show that this is a proposition. 
+Recall from \cref{cor:prop_emb} that a map is an embedding if and only if its fibers are propositions.
+Thus we see that the type $\prd{x:X}\fib{f}{x}\to\fib{m}{x}$ is a product of propositions, so it is a proposition by \cref{thm:trunc_pi}.
+\end{proof}
+
+\begin{cor}\label{cor:image_up}
+Consider a commuting triangle
+\begin{equation*}
+\begin{tikzcd}[column sep=small]
+A \arrow[rr,"i"] \arrow[dr,swap,"f"] & & B \arrow[dl,"m"] \\
+& X
+\end{tikzcd}
+\end{equation*}
+with $I:f\htpy m\circ i$, and where $m$ is an embedding. Then $m$ satisfies the universal property of the image of $f$ if and only if the implication
 \begin{equation*}
 \mathrm{hom}_X(f,m')\to\mathrm{hom}_X(m,m')
 \end{equation*}
 holds for every embedding $m':B'\to X$. 
-\end{rmk}
+\end{cor}
 
-The homotopy image can be used in many important constructions. In this lecture we discuss two applications: the propositional truncation, and set quotients.
-
-\subsection{The join of maps}\label{sec:join-maps}
+Note that embeddings into the unit type are just propositions. To see this, note that
+\begin{align*}
+\sm{A:\UU}{f:A\to\unit}\isemb(f)
+& \eqvsym \sm{A:\UU}\isemb(\const_\ttt) \\
+& \eqvsym \sm{A:\UU}\prd{x:\unit}\isprop(\fib{\const_\ttt}{x}) \\
+& \eqvsym \sm{A:\UU}\isprop(\fib{\const_\ttt}{\ttt}) \\
+& \eqvsym \sm{A:\UU}\isprop(A).
+\end{align*}
+Therefore, the universal property of the image of the map $A\to\unit$ is a proposition $P$ satisfying the universal property of the propositional truncation:
 
 \begin{defn}
-Let $f:A\to X$ and $g:B\to X$ be maps into $X$. We define the type $\join[X]{A}{B}$ and the \define{join}\footnote{\emph{Warning}: By $\join{f}{g}$ we do \emph{not} mean the functorial action of the
-join, applied to $(f,g)$.} $\join{f}{g}:\join[X]{A}{B}\to X$ of
-$f$ and $g$, as indicated in the following diagram:
+Let $A$ be a type, and let $P$ be a proposition that comes equipped with a map $\eta:A\to P$. We say that $\eta:A\to P$ satisfies the \define{universal property of propositional truncation}\index{univeral property!of propositional truncation|textit} if for every proposition $Q$, the precomposition map
+\begin{equation*}
+\blank\circ\eta:(P\to Q)\to (A\to Q)
+\end{equation*}
+is an equivalence.
+\end{defn}
+
+\subsection{Stage one: constructing the propositional truncation}
+
+\begin{lem}\label{lem:extend_join_prop}
+Suppose $f:A\to P$, where $A$ is any type, and $P$ is a proposition.
+Then the map
+\begin{equation*}
+(\join{A}{B}\to P)\to (B\to P)
+\end{equation*}
+given by $h\mapsto h\circ \inr$ is an equivalence, for any type $B$.
+\end{lem}
+
+\begin{proof}
+Since both types are propositions by \cref{thm:trunc_pi} it suffices to construct a map
+\begin{equation*}
+(B\to P)\to (\join{A}{B}\to P).
+\end{equation*}
+Let $g:B\to P$. Then the square
 \begin{equation*}
 \begin{tikzcd}
-A\times_X B \arrow[r,"\pi_2"] \arrow[d,swap,"\pi_1"] \arrow[dr, phantom, "{\ulcorner}", at end] & B \arrow[d,"\inr"] \arrow[ddr,bend left=15,"g"] \\
-A \arrow[r,swap,"\inl"] \arrow[drr,bend right=15,swap,"f"] & \join[X]{A}{B} \arrow[dr,densely dotted,swap,near start,"\join{f}{g}" xshift=1ex] \\
-& & X.
+A\times B \arrow[r,"\proj 2"] \arrow[d,swap,"\proj 1"] & B \arrow[d,"g"] \\
+A \arrow[r,swap,"f"] & P
+\end{tikzcd}
+\end{equation*}
+commutes since $P$ is a proposition. Therefore we obtain a map $\join{A}{B}\to P$ by the universal property of the join.
+\end{proof}
+
+The idea of the construction of the propositional truncation is that if we are given a map $f:A\to P$, where $P$ is a proposition, then it extends uniquely along $\inr:A\to \join{A}{A}$ to a map $\join{A}{A}\to P$. This extension again extends uniquely along $\inr:\join{A}{A}\to \join{A}{(\join{A}{A})}$ to a map $\join{A}{(\join{A}{A})}\to P$ and so on, resulting in a diagram of the form
+\begin{equation*}
+\begin{tikzcd}
+A \arrow[dr] \arrow[r,"\inr"] & \join{A}{A} \arrow[d,densely dotted] \arrow[r,"\inr"] & \join{A}{(\join{A}{A})} \arrow[dl,densely dotted] \arrow[r,"\inr"] & \cdots \arrow[dll,densely dotted,bend left=10] \\
+& P
+\end{tikzcd}
+\end{equation*}
+
+\begin{defn}
+The \define{join powers} $A^{\ast n}$ of a type $X$ are defined by
+\begin{align*}
+A^{\ast 0} & \defeq \emptyt \\
+A^{\ast 1} & \defeq A \\
+A^{\ast (n+1)} & \defeq \join{A}{A^{\ast n}}.
+\end{align*}
+Furthermore, we define $A^{\ast\infty}$ to be the sequential colimit of the type sequence
+\begin{equation*}
+\begin{tikzcd}
+A^{\ast 0} \arrow[r] & A^{\ast 1} \arrow[r,"\inr"] & A^{\ast 2} \arrow[r,"\inr"] & \cdots.
 \end{tikzcd}
 \end{equation*}
 \end{defn}
 
-\begin{thm}\label{defn:join-fiber}
-Let $f:A\to X$ and $g:B\to X$ be maps into $X$, and let $x:X$. Then there is
-an equivalence
-\begin{equation*}
-\eqv{\fib{\join{f}{g}}{x}}{\join{\fib{f}{x}}{\fib{g}{x}}}.
-\end{equation*}
-\end{thm}
-
-\begin{proof}[Construction]
-Recall that the fiber of the map $\join{f}{g}$ at $x:X$ can be obtained as
-the pullback
-\begin{equation*}
-\begin{tikzcd}
-\fib{\join{f}{g}}{x} \arrow[r] \arrow[d] & \unit \arrow[d,"x"] \\
-\join[X]{A}{B} \arrow[r,swap,"\join{f}{g}"] & X.
-\end{tikzcd}
-\end{equation*}
-By pulling back along the map $\fib{\join{f}{g}}{x}\to \join[X]{A}{B}$ we
-obtain the following cube
-\begin{small}
-\begin{equation*}
-\begin{tikzcd}[column sep=3em]
-& \makebox[5em]{$\sm{a:A}{b:B}(f(a)=g(b))\times (g(b)=x)$} \arrow[rr,start anchor={[xshift=6.3em]}] \arrow[dl,densely dotted] \arrow[dd] 
-  & & \fib{g}{x} \arrow[dd] \arrow[dl] \\
-\fib{f}{x} \arrow[rr,crossing over] \arrow[dd] & & \fib{\join{f}{g}}{x} \\
-  & \sm{a:A}{b:B}f(a)=g(b) \arrow[dl] \arrow[rr] & & B \arrow[dl] \\
-A \arrow[rr] & & \join[X]{A}{B} \arrow[from=uu,crossing over]
-\end{tikzcd}
-\end{equation*}
-\end{small}%
-in which he bottom square is the defining pushout of $\join[X]{A}{B}$. 
-The front, right and back squares are easily seen to be pullback squares, by the pasting lemma of pullbacks. Hence the dotted map, being the unique map such that the top and left squares commute, makes the left square a pullback. Hence the top square is a pushout by the descent theorem or by the flattening lemma for pushouts.
-
-However, to conclude the join formula we need to show that the square
-\begin{equation*}
-\begin{tikzcd}
-\big(\fib{f}{x}\big)\times\big(\fib{g}{x}\big) \arrow[r,"\pi_2"] \arrow[d,swap,"\pi_1"] & \fib{g}{x} \arrow[d] \\
-\fib{f}{x} \arrow[r] & \fib{\join{f}{g}}{x}
-\end{tikzcd}
-\end{equation*}
-is a pushout. This is be shown by giving a fiberwise equivalence of type
-\begin{equation*}
-\prd{a:A}{b:B}{p:g(b)=x} \eqv{(f(a)=x)}{(f(a)=g(b))}.
-\end{equation*}
-We then take this fiberwise equivalence to be post-composition with $\opp{p}$. 
-\end{proof}
-
-\begin{rmk}
-The join operation on maps with a common codomain is associative up to homotopy (this was formalized by Brunerie, see Proposition 1.8.6 of \cite{BruneriePhD}), and it is a commutative operation on the generalized elements of a type $X$. Furthermore, the unique map of type $\emptyt\to X$ is a unit for the join operation.
-\end{rmk}
-
- In the following lemma we will show that the join of embeddings is again an embedding. This is a generalization of the statement that if $P$ and
-$Q$ are mere propositions, then $\join{P}{Q}$ is a mere proposition, and actually the more general statement reduces to this special case. Therefore, the embeddings form a `submonoid' of the `monoid' of generalized elements. The join $\join{P}{Q}$ on embeddings $P$ and $Q$ is the same as the union $P\cup Q$. In \autoref{thm:idempotents} below, we show that the mere propositions are precisely the idempotents for the join operation.
+Our goal is now to show that $A^{\ast\infty}$ is a proposition and satisfies the universal property of the propositional truncation.
 
 \begin{lem}
-Suppose $f$ and $g$ are embeddings. Then $\join{f}{g}$ is also an embedding.
+Consider a type sequence
+\begin{equation*}
+\begin{tikzcd}
+A_0 \arrow[r,"f_0"] & A_1 \arrow[r,"f_1"] & A_2 \arrow[r,"f_2"] & \cdots
+\end{tikzcd}
+\end{equation*}
+with sequential colimit $A_\infty$, and let $P$ be a proposition. Then the map
+\begin{equation*}
+\seqin^\ast: (A_\infty\to P)\to \Big(\prd{n:\N}A_n\to P\Big)
+\end{equation*}
+given by $h\mapsto \lam{n}(h\circ \seqin_n)$ is an equivalence. 
 \end{lem}
 
 \begin{proof}
-By \autoref{defn:join-fiber}, it suffices to show that if $P$ and $Q$ are mere
-propositions, then $\join{P}{Q}$ is also a mere proposition. It is equivalent
-to show that $\join{P}{Q}\to\iscontr(\join{P}{Q})$. Recall that $\iscontr(\blank)$
-is a mere proposition. So it suffices to show that
-\begin{align*}
-& P \to \iscontr(\join{P}{Q}) \\
-& Q \to \iscontr(\join{P}{Q}).
-\end{align*}
-By symmetry, it suffices to show only $P\to\iscontr(\join{P}{Q})$. Let $p:P$. 
-Then $P$ is contractible, and therefore the projection $P\times Q\to Q$ is an
-equivalence. Hence it follows that $\inl:P\to \join{P}{Q}$ is an equivalence,
-which shows that $\join{P}{Q}$ is contractible.
+By the universal property of sequential colimits established in \cref{thm:sequential_up} we obtain that $\coconemap$ is an equivalence. Note that we have a commuting triangle
+\begin{equation*}
+\begin{tikzcd}
+& P^{A_\infty} \arrow[dl,swap,"\coconemap"] \arrow[dr,"\seqin^\ast"] \\
+\cocone(P) \arrow[rr,swap,"\proj 1"] & & \Big(\prd{n:\N}A_n\to P\Big).
+\end{tikzcd}
+\end{equation*}
+Note that for any $g:\prd{n:\N}A_n\to P$ the type 
+\begin{equation*}
+\prd{n:\N} g_n\htpy g_{n+1}\circ f_n
+\end{equation*}
+is a product of contractible types, since $P$ is a proposition. Therefore it is contractible by \cref{thm:funext_wkfunext}, and it follows by \cref{ex:proj_fiber} that the projection is an equivalence. We conclude by the 3-for-2 property of equivalences (\cref{ex:3_for_2}) that $\seqin^\ast$ is an equivalence.
 \end{proof}
 
-\subsection{The join construction}\label{sec:join-construction}
-
-The join construction gives, for any $f:A\to X$, an approximation of the image
-$\im(f)$ by a type sequence. 
-Before we give the join construction, we will show that the universal
-property of the image of $f$, is closed under
-the operation $\join{f}{\blank}$ of joining by $f$, and in \autoref{lem:factor_seq}
-we will also show that this property is closed under sequential colimits.
-
-Let $f:A\to X$ and $f':A'\to X$ be maps, and consider a commuting triangle
+\begin{lem}\label{lem:infjp_up}
+Let $A$ be a type, and let $P$ be a proposition. Then the function
 \begin{equation*}
-\begin{tikzcd}
-A \arrow[rr,"i"] \arrow[dr,swap,"f"] & & A' \arrow[dl,"{f'}"] \\
-& X
-\end{tikzcd}
-\end{equation*}
-with $I:f\htpy f'\circ i$. Then we also obtain a commuting triangle
-\begin{equation*}
-\begin{tikzcd}
-A \arrow[rr,"\inl"] \arrow[dr,swap,"f"] & & \join[X]{A}{A'} \arrow[dl,"{\join{f}{f'}}"] \\
-& X
-\end{tikzcd}
-\end{equation*}
-We will write $C_l$ for the homotopy $f\htpy \join{f}{f'}\circ\inl$ witnessing that the
-above triangle commutes.
-
-\begin{lem}\label{lem:factor_join}
-For every embedding $g:B\to X$, if the map
-\begin{equation*}
-\varphi^g_{i,I}: \mathrm{Hom}_X(f',g)\to\mathrm{Hom}_X(f,g)
-\end{equation*}
-defined in \autoref{eq:precomp_triangle} is an equivalence, then so is 
-\begin{equation*}
-\varphi^g_{\inl,C_l}: \mathrm{Hom}_X(\join{f}{f'},g)\to\mathrm{Hom}_X(f,g).
-\end{equation*}
-\end{lem}
-
-\begin{proof}
-Suppose that $g:B\to X$ is an embedding, and that $\varphi^g_{i,I}$
-Since $\varphi^g_{\inl,C_l}$ is a map between mere propositions, it
-suffices to define a map in the converse direction.
-Some essential ingredients of the proof are illustrated in \autoref{fig}.
-\begin{figure}
-\begin{tikzcd}
-A\times_X A' \arrow[r,"\pi_2"] \arrow[d,swap,"\pi_1"] \arrow[dr, phantom, "{\ulcorner}", at end] & A' \arrow[d,"\inr"] \arrow[ddr,bend left=15,densely dotted,near end,"h"] \arrow[dddrr,end anchor={[xshift=.2em]},bend left=25,"{f'}"] \\
-A \arrow[ur,dashed,"i"] \arrow[r,swap,"\inl"] \arrow[drr,bend right=15,swap,near end,"j"] \arrow[ddrrr,bend right=25,end anchor={[xshift=.5em]},swap,"f"] & \join[X]{A}{A'} \arrow[dr,densely dotted,swap,near start,"k"] \\
-& & B \arrow[dr,end anchor={[xshift=.5em,yshift=-.2em]},swap,"g"] \\
-& & & \makebox[1.5em]{\centering $X$}
-\end{tikzcd}
-\caption{Diagram for the proof of \autoref{lem:factor_join}\label{fig}}
-\end{figure}
-
-Let $j:A\to B$ and $J:f\htpy g\circ j$. By our assumption on $f'$, we find
-$h:A'\to B$ and $H:f'\htpy g\circ h$. Now it follows that the square
-\begin{equation*}
-\begin{tikzcd}
-A\times_X A' \arrow[r] \arrow[d] & A' \arrow[d,"h"] \\
-A \arrow[r,swap,"j"] & B
-\end{tikzcd}
-\end{equation*}
-commutes, because that is equivalent (by the assumption that $g$ is an embedding)
-to the commutativity of the square
-\begin{equation*}
-\begin{tikzcd}
-A\times_X A' \arrow[r] \arrow[d] & A' \arrow[d,"{f'}"] \\
-A \arrow[r,swap,"f"] & X.
-\end{tikzcd}
-\end{equation*}
-Thus, we get from the universal property of $\join[X]{A}{A'}$ a map
-$k:\join[X]{A}{A'}$ and homotopies $j\htpy k\circ\inl$ and $h\htpy k\circ\inr$.
-It follows that $f\htpy (g\circ k)\circ \inl$ and $f'\htpy (g\circ k)\circ\inr$.
-Hence by uniqueness we obtain a homotopy $K:\join{f}{f'}\htpy k\circ g$.
-\end{proof}
-
-\begin{lem}\label{lem:factor_seq}
-Let $f:A\to X$ be a map, and consider a sequence $(A_n)_{n:\N}$ together with
-a cone with vertex $A$ and a cocone with vertex $X$, as indicated in the
-diagram 
-\begin{equation*}
-\begin{tikzcd}[column sep=large]
-& A \arrow[dl,swap,"i_0"] \arrow[d,swap,"i_1"] \arrow[dr,"i_2" near end] \arrow[drr,bend left=5,"i_3"] \\
-A_0 \arrow[dr,swap,near start,"f_0"] \arrow[r,"a_{0}"] & A_1 \arrow[d,swap,near start,"f_1"] \arrow[r,"a_1"] & A_2 \arrow[dl,swap,"f_2" xshift=.5em] \arrow[r,"a_2" near start] & \cdots \arrow[dll,bend left=5,"f_3"] \\
-& X
-\end{tikzcd}
-\end{equation*}
-with colimit
-\begin{equation*}
-\begin{tikzcd}
-A \arrow[r,"i_\infty"] & A_\infty \arrow[r,"f_\infty"] & X.
-\end{tikzcd}
-\end{equation*}
-Let $g:B\to X$ be an embedding. If $\varphi^g_{i_n,I_n}$ is an equivalence for each $n:\N$, then so is $\varphi^g_{i_\infty,I_\infty}$. 
-\end{lem}
-
-\begin{proof}
-To prove that $\varphi^g_{i_\infty,I_\infty}$ is an equivalence, it suffices to
-find a map in the converse direction. Let $j:A\to B$ be a map, and let
-$J:f\htpy g\circ j$ be a homotopy. Since each $\varphi^g_{i_\infty,I_\infty}$
-is an equivalence, we find for each $n:\N$ a map
-$h_n:A_n\to B$ and a homotopy $H_n: f_n\htpy g\circ h_n$. Then it follows that
-the maps $(h_n)_{n:\N}$ form a cocone on $(A_n)_{n:\N}$ with vertex $B$, so
-we obtain a map $h_\infty:A_\infty\to B$. It also follows that the homotopies
-$(H_n)_{n:\N}$ form a compatible family of homotopies, so that we obtain
-$H_\infty:f_\infty\htpy g\circ h_\infty$.
-\end{proof}
-
-\begin{thm}\label{thm:image}
-In Martin-L\"of type theory with a univalent universe $\UU$ that is closed under
-graph quotients we can define for every $f:A\to X$ with $A,X:\UU$ the image
-of $f$ with $\im(f):\UU$.
-\end{thm}
-
-\begin{proof}[Construction]
-Let $f:A\to X$ be a map in $\UU$.
-First, we define a sequence
-\begin{equation*}
-\begin{tikzcd}
-\im_\ast^0(f) \arrow[dr,swap,near start,"f^{\ast 0}"] \arrow[r,"i_{0}"] & \im_\ast^1(f) \arrow[d,swap,near start,"f^{\ast 1}"] \arrow[r,"i_1"] & \im_\ast^2(f) \arrow[dl,swap,"f^{\ast 2}" xshift=.5em] \arrow[r,"i_2"] & \cdots \arrow[dll,"f^{\ast 3}"] \\
-& X.
-\end{tikzcd}
-\end{equation*}
-We take $\im_\ast^0(f)\defeq \emptyt$, with the unique map into $X$. Then we take $\im_\ast^{n+1}(f)\defeq \join[X]{A}{\im_\ast^n(f)}$, and
-$f^{\ast(n+1)}\defeq \join{f}{f^{\ast n}}$. The type $\im_\ast^n(f)$ is called the \define{$n$-th image approximation}, 
-and the function $f^{\ast n}$ is called the \define{$n$-th join-power of $f$}. 
-
-The \define{image} $\im(f)$ of $f$ is defined to be the sequential colimit
-$\im_\ast^\infty(f)$. 
-The embedding $i_f:\im(f)\to X$ is defined to be the map $f^{\ast\infty}$. 
-Furthermore we have a canonical map $q_f:A\to \im(f)$ for which the triangle
-\begin{equation*}
-\begin{tikzcd}
-A \arrow[dr,swap,"f"] \arrow[rr,"q_f"] & & \im(f) \arrow[dl,"i_f"] \\
-& X
-\end{tikzcd}
-\end{equation*}
-commutes. This satisfies the universal property of the image with respect
-to embeddings by \autoref{lem:factor_join,lem:factor_seq}. Thus it remains to show that
-$f^{\ast\infty}$ is an embedding, i.e.~that for any $x:X$, the type $\fib{f^{\ast\infty}}{x}$ is a
-mere proposition. 
-
-Using the equivalence $\eqv{\isprop(T)}{(T\to\iscontr(T))}$ 
-we can reduce the goal of showing that $\fib{f^{\ast\infty}}{x}$ is a mere proposition, to
-\begin{equation*}
-\fib{f^{\ast\infty}}{x}\to \iscontr (\fib{f^{\ast\infty}}{x}).
-\end{equation*}
-To describe such a fiberwise map, it is equivalent to define a commuting triangle
-\begin{equation*}
-\begin{tikzcd}
-\sm{x:X}\fib{f^{\ast\infty}}{x} \arrow[rr] \arrow[dr,swap,"\proj 1"] & & \sm{x:X} \iscontr (\fib{f^{\ast\infty}}{x}) \arrow[dl,"\proj 1"] \\
-& X
-\end{tikzcd}
-\end{equation*}
-Since $\iscontr(\blank)$ is a mere proposition, the projection on the right is an embedding. Since $f^{\ast\infty}$ satisfies the universal property of the image of $f$, we see that it is equivalent to show that
-\begin{equation*}
-\fib{f}{x}\to \iscontr (\fib{f^{\ast\infty}}{x}).
-\end{equation*}
-Let $a:A$ such that $f(a)=x$. then we need to show that $\fib{f^{\ast\infty}}{f(a)}$ is contractible.
-By Brunerie's flattening lemma, see \S 6.12 of \cite{hottbook}, it suffices to show that
-\begin{equation*}
-\tfcolim_n(\fib{f^{\ast n}}{f(a)})
-\end{equation*}
-is contractible. By \autoref{defn:join-fiber}, it follows that $\fib{f^{\ast n}}{f(a)}$ is equivalent
-to $(\fib{f}{f(a)})^{\ast n}$. The sequential colimit of these types is contractible, because
-the maps in this type sequence all factor through the unit type.
-\end{proof}
-
-Using the join construction, we can now give a new definition of the propositional truncation.
-
-\begin{defn}\label{defn:proptrunc}
-The \define{propositional truncation} $\trunc{-1}{A}$ of a type $A:\UU$ is defined to be 
-sequential colimit of the type sequence
-\begin{equation*}
-\begin{tikzcd}
-\emptyt \arrow[r] & A \arrow[r,"\inr"] & \join{A}{A} \arrow[r,"\inr"] & \join{A}{(\join{A}{A})} \arrow[r,"\inr"] & \cdots
-\end{tikzcd}\qedhere
-\end{equation*}
-\end{defn}
-
-\begin{cor}
-The propositional truncation $\trunc{-1}{A}$ of a type $A$ is a mere proposition satisfying the universal property of propositional truncation. 
-\end{cor}
-
-In the following application of the join construction we characterize
-the `canonical' idempotents of the join operation on maps. Note that in the
-definition of canonical idempotent below, there is no special status for
-$\inl:A\to \join[X]{A}{A}$ compared to $\inr:A\to\join[X]{A}{A}$. Indeed, the
-maps $\inl$ and $\inr$ are homotopic, and therefore one of them is an
-equivalence if and only if the other is an equivalence.
-
-\begin{thm}\label{thm:idempotents}
-For any map $f:A\to X$ in $\UU$ the following are equivalent:
-\begin{enumerate}
-\item $f$ is an embedding,
-\item $f$ is a \define{canonical idempotent} for the join operation on maps, 
-in the sense that the map $\inl:A\to\join[X]{A}{A}$ is an equivalence.
-\end{enumerate}
-\end{thm}
-
-\begin{proof}
-Recall that we have a commuting square
-\begin{equation*}
-\begin{tikzcd}[column sep=huge]
-A \arrow[r,"\inl"] \arrow[d,swap,"\eqvsym"] & \join[X]{A}{A} \arrow[d,"\eqvsym"] \\
-\sm{x:X}\fib{f}{x} \arrow[r,swap,"\total{\inl}"] & \sm{x:X}\join{\fib{f}{x}}{\fib{f}{x}}.
-\end{tikzcd}
-\end{equation*}
-It follows that $\inl:A\to\join[X]{A}{A}$ is an equivalence if and only if for
-each $x:X$, the map $\inl:\fib{f}{x}\to\join{\fib{f}{x}}{\fib{f}{x}}$ is an
-equivalence. 
-Since $f:A\to X$ is an embedding precisely when its fibers are mere 
-propositions, we see that it suffices to prove the statement fiberwise.
-More precisely, we show that for any $P:\UU$, the following are equivalent:
-\begin{enumerate}
-\item $P$ is a mere proposition,
-\item $P$ is a \define{canonical idempotent} for the join operation on types, 
-in the sense that the map $\inl:P\to \join{P}{P}$ is an equivalence.
-\end{enumerate}
-Suppose that $P$ is a mere proposition. 
-Then $\join{P}{P}$ is a mere proposition, and we have $P\to\join{P}{P}$.
-Moreover, we may use the universal property of the pushout to show that
-$\join{P}{P}\to P$, since any two maps of type $P\times P\to P$ are equal. 
-Therefore it follows that there is an equivalence $\eqv{P}{\join{P}{P}}$.
-This shows that if $P$ is a mere proposition, then $P$ is an idempotent for
-the join operation. Since any two maps of type $P\to\join{P}{P}$ are equal,
-it also follows that $P$ is canonically idempotent.
-
-For the converse, suppose that $\inl:P\to\join{P}{P}$ is an equivalence. 
-Since we know that $P^{\ast\infty}$ is a mere proposition, 
-we may show that $P$ is a mere proposition by constructing an equivalence of
-type $\eqv{P}{P^{\ast\infty}}$. 
-Since $P$ is the sequential colimit of the constant
-type sequence at $P$, it suffices to show that the natural transformation
-\begin{equation*}
-\begin{tikzcd}
-P \arrow[r,"{\idfunc[P]}"] \arrow[d,swap,"\inl"] & P \arrow[r,"{\idfunc[P]}"] \arrow[d,swap,"\inl"] & P \arrow[r,"{\idfunc[P]}"] \arrow[d,swap,"\inl"] & \cdots \\
-P^{\ast 1} \arrow[r,swap,"\inr"] & P^{\ast 2} \arrow[r,swap,"\inr"] & P^{\ast 3} \arrow[r,swap,"\inr"] & \cdots
-\end{tikzcd}
-\end{equation*}
-of type sequences is in fact a natural equivalence. In other words, we have
-to show that for each $n:\N$, the map $\inl:P\to P^{\ast n}$ is an equivalence.
-
-Of course, $\inl:P\to P^{\ast 1}$ is an equivalence. For the inductive step,
-suppose that $\inl:P\to P^{\ast n}$ is an equivalence. First note that
-we have a commuting triangle
-\begin{equation*}
-\begin{tikzcd}
-P \arrow[rr,"\inl"] \arrow[dr,swap,"\inl"] & & \join{P}{P} \arrow[dl,"{\idfunc[P] \circledast\inl}"] \\
-& P^{\ast(n+1)}
-\end{tikzcd}
-\end{equation*}
-where $\idfunc[P] \circledast\inl$ denotes the functorial action of the join, applied
-to $\idfunc[P]$ and $\inl:P\to P^{\ast n}$. Since both $\idfunc[P]$ and
-$\inl:P\to P^{\ast n}$ are assumed to be equivalences, it follows that
-$\idfunc[P]\circledast \inl$ is an equivalence. Therefore we get from the
-$3$-for-$2$ rule that $\inl:P\to P^{\ast (n+1)}$ is an equivalence. 
-\end{proof}
-
-\section{Partial geometric realizations}
-\subsection{$2$-cospans and $2$-pullbacks}
-
-A $2$-cospan is a diagram of the fom
-\begin{equation*}
-\begin{tikzcd}
-A_{110} \arrow[d] & A_{101} \arrow[dl] \arrow[dr] & A_{011} \arrow[d] \\
-A_{100} \arrow[dr] & A_{010} \arrow[d] \arrow[from=ul,crossing over] \arrow[from=ur,crossing over] & A_{001} \arrow[dl] \\
-& A_{000}
-\end{tikzcd}
-\end{equation*}
-More formally:
-
-\begin{defn}
-A $2$-cospan consists of 
-\begin{enumerate}
-\item types
-\begin{equation*}
-A_{000},A_{001},A_{010},A_{100},A_{011},A_{101},A_{110},
-\end{equation*}
-\item maps
-\begin{align*}
-f_{00\check{1}} & : A_{001}\to A_{000} \\
-f_{0\check{1}0} & : A_{010}\to A_{000} \\
-f_{\check{1}00} & : A_{100}\to A_{000} \\
-f_{0\check{1}1} & : A_{011}\to A_{001} \\
-f_{01\check{1}} & : A_{011}\to A_{010} \\
-f_{\check{1}01} & : A_{101}\to A_{001} \\
-f_{10\check{1}} & : A_{101}\to A_{100} \\
-f_{\check{1}10} & : A_{110}\to A_{010} \\
-f_{1\check{1}0} & : A_{110}\to A_{100},
-\end{align*}
-\item and homotopies
-\begin{align*}
-H_{0\check{1}\check{1}} & : f_{00\check{1}}\circ f_{0\check{1}1} \htpy f_{0\check{1}0}\circ f_{01\check{1}} \\
-H_{\check{1}0\check{1}} & : f_{00\check{1}}\circ f_{\check{1}01} \htpy f_{\check{1}00}\circ f_{10\check{1}} \\
-H_{\check{1}\check{1}0} & : f_{0\check{1}0}\circ f_{\check{1}10} \htpy f_{\check{1}00}\circ f_{1\check{1}0}.
-\end{align*}
-\end{enumerate}
-\end{defn}
-
-\begin{defn}
-A \define{cone} with vertex $X$ on a $2$-cospan $\mathcal{A}$ consists of
-\begin{enumerate}
-\item maps
-\begin{align*}
-p_{011} & : X \to A_{011} \\
-p_{101} & : X \to A_{101} \\
-p_{110} & : X \to A_{110},
-\end{align*}
-\item homotopies
-\begin{align*}
-K_{001} & : f_{0\check{1}1}\circ p_{011} \htpy f_{\check{1}01}\circ p_{101} \\
-K_{010} & : f_{01\check{1}}\circ p_{011} \htpy f_{\check{1}10}\circ p_{110} \\
-K_{100} & : f_{10\check{1}}\circ p_{101} \htpy f_{1\check{1}0}\circ p_{110},
-\end{align*}
-\item and a homotopy
-\begin{align*}
-L_{000} & : \ct{(f_{\check{1}00}\cdot K_{100})}{(H_{\check{1}0\check{1}}\cdot p_{101})}{(f_{00\check{1}}\cdot K_{001})} \\
-& \qquad = \ct{(H_{\check{1}\check{1}0}\cdot p_{110})}{(f_{0\check{1}0}\cdot K_{010})}{(H_{0\check{1}\check{1}}\cdot p_{011})}
-\end{align*}
-\end{enumerate}
-We write $\mathsf{cone}(X)$ for the type of cones with vertex $X$ on $\mathcal{A}$.
-\end{defn}
-
-\begin{defn}
-Consider a $2$-cospan $\mathcal{A}$ and a cone $\mathcal{C}$ with vertex $X$ on $\mathcal{A}$. We define for every type $Y$ a map
-\begin{equation*}
-\mathsf{cone\underline{~}map}(\mathcal{C}) : (Y\to X)\to \mathsf{cone}(X)
-\end{equation*}
-A cone $\mathcal{C}$ is said to be \define{limiting} if the map $\mathsf{cone\underline{~}map}(\mathcal{C})$ is an equivalence for every type $Y$.
-\end{defn}
-
-\begin{defn}
-A \define{global section} of a $2$-span $\mathcal{A}$ consists of
-\begin{enumerate}
-\item terms $\gamma_{011}:A_{011}$, $\gamma_{101}:A_{101}$, and $\gamma_{110}:A_{110}$,
-\item paths
-\begin{align*}
-\gamma_{001} & : f_{0\check{1}1}(\gamma_{011}) = f_{\check{1}01}(\gamma_{101}) \\
-\gamma_{010} & : f_{01\check{1}}(\gamma_{011}) = f_{\check{1}10}(\gamma_{110}) \\
-\gamma_{100} & : f_{10\check{1}}(\gamma_{101}) = f_{1\check{1}0}(\gamma_{110}),
-\end{align*}
-\item and a path
-\begin{align*}
-\gamma_{000} & : \ct{\mathsf{ap}_{f_{\check{1}00}}(\gamma_{100})}{H_{\check{1}0\check{1}}(\gamma_{101})}{\mathsf{ap}_{f_{00\check{1}}}(\gamma_{001})} \\
-& \qquad = \ct{H_{\check{1}\check{1}0}(\gamma_{110})}{\mathsf{ap}_{f_{0\check{1}0}}(\gamma_{010})}{H_{0\check{1}\check{1}}(\gamma_{011})}
-\end{align*}
-\end{enumerate}
-We write $\Gamma(\mathcal{A})$ for the type of global sections of $\mathcal{A}$.
-\end{defn}
-
-\begin{thm}
-For any $2$-span $\mathcal{A}$ the type $\Gamma(\mathcal{A})$ can be given the structure of a limiting cone.
-\end{thm}
-
-\begin{thm}
-Consider a cube
-\begin{equation*}
-\begin{tikzcd}
-& A_{111} \arrow[dl] \arrow[d] \arrow[dr] \\
-A_{110} \arrow[d] & A_{101} \arrow[dl] \arrow[dr] & A_{011} \arrow[d] \\
-A_{100} \arrow[dr] & A_{010} \arrow[d] \arrow[from=ul,crossing over] \arrow[from=ur,crossing over] & A_{001} \arrow[dl] \\
-& A_{000}.
-\end{tikzcd}
-\end{equation*}
-The following are equivalent:
-\begin{enumerate}
-\item The cube is cartesian.
-\item The the square
-\begin{equation*}
-\begin{tikzcd}
-A_{111} \arrow[r] \arrow[d] & A_{101}\times_{A_{001}} A_{011} \arrow[d] \\
-A_{110} \arrow[r] & A_{100} \times_{A_{000}} A_{010}
-\end{tikzcd}
-\end{equation*}
-is cartesian.
-\end{enumerate}
-\end{thm}
-
-\begin{proof}
-Let $X$ be a type. The type of cones with vertex $X$ on the 2-cospan $\mathcal{A}^{\vee}$
-\end{proof}
-
-\begin{cor}
-The $2$-pullback of the $2$-cospan
-\begin{equation*}
-\begin{tikzcd}
-X \arrow[d] & Y \arrow[dl] \arrow[dr] & Z \arrow[d] \\
-\unit \arrow[dr] & \unit \arrow[d] \arrow[from=ul,crossing over] \arrow[from=ur,crossing over] & \unit \arrow[dl] \\
-& \unit
-\end{tikzcd}
-\end{equation*}
-is the product $X\times Y\times Z$. 
-\end{cor}
-
-\begin{cor}
-The $2$-pullback of the $2$-cospan
-\begin{equation*}
-\begin{tikzcd}
-X\times Y \arrow[d] & X\times Z \arrow[dl] \arrow[dr] & Y\times Z \arrow[d] \\
-X \arrow[dr] & Y \arrow[d] \arrow[from=ul,crossing over] \arrow[from=ur,crossing over] & Z \arrow[dl] \\
-& \unit
-\end{tikzcd}
-\end{equation*}
-is the product $X\times Y\times Z$. 
-\end{cor}
-
-\begin{cor}
-The $2$-pullback of the $2$-cospan
-\begin{equation*}
-\begin{tikzcd}
-\unit \arrow[d] & \unit \arrow[dl] \arrow[dr] & \unit \arrow[d] \\
-\unit \arrow[dr] & \unit \arrow[d] \arrow[from=ul,crossing over] \arrow[from=ur,crossing over] & \unit \arrow[dl] \\
-& X
-\end{tikzcd}
-\end{equation*}
-is the double loop space $\loopspace[2]{X}$. 
-\end{cor}
-
-\begin{conj}
-Consider a cube
-\begin{equation*}
-\begin{tikzcd}
-& A_{111} \arrow[dl] \arrow[d] \arrow[dr] \\
-A_{110} \arrow[d] & A_{101} \arrow[dl] \arrow[dr] & A_{011} \arrow[d] \\
-A_{100} \arrow[dr] & A_{010} \arrow[d] \arrow[from=ul,crossing over] \arrow[from=ur,crossing over] & A_{001} \arrow[dl] \\
-& A_{000}.
-\end{tikzcd}
-\end{equation*}
-The following are equivalent:
-\begin{enumerate}
-\item The cube is $n$-cartesian.
-\item The the square
-\begin{equation*}
-\begin{tikzcd}
-A_{111} \arrow[r] \arrow[d] & A_{101}\times_{A_{001}} A_{011} \arrow[d] \\
-A_{110} \arrow[r] & A_{100} \times_{A_{000}} A_{010}
-\end{tikzcd}
-\end{equation*}
-is $n$-cartesian.
-\end{enumerate}
-\end{conj}
-
-\subsection{$2$-spans and $2$-pushouts}
-
-A $2$-span is a diagram of the fom
-\begin{equation*}
-\begin{tikzcd}
-& A_{111} \arrow[dl] \arrow[d] \arrow[dr] \\
-A_{110} \arrow[d] & A_{101} \arrow[dl] \arrow[dr] & A_{011} \arrow[d] \\
-A_{100} & A_{010} \arrow[from=ul,crossing over] \arrow[from=ur,crossing over] & A_{001}
-\end{tikzcd}
-\end{equation*}
-More formally:
-
-\begin{defn}
-A $2$-span consists of 
-\begin{enumerate}
-\item types
-\begin{equation*}
-A_{111},A_{110},A_{101},A_{011},A_{100},A_{010},A_{001},
-\end{equation*}
-\item maps
-\begin{align*}
-f_{11\check{1}} & : A_{111} \to A_{110}\\
-f_{1\check{1}1} & : A_{111} \to A_{101}\\
-f_{\check{1}11} & : A_{111} \to A_{011}\\
-f_{1\check{1}0} & : A_{110} \to A_{100}\\
-f_{10\check{1}} & : A_{101} \to A_{100}\\
-f_{\check{1}10} & : A_{110} \to A_{010}\\
-f_{01\check{1}} & : A_{011} \to A_{010}\\
-f_{\check{1}01} & : A_{101} \to A_{001}\\
-f_{0\check{1}1} & : A_{011} \to A_{001},
-\end{align*}
-\item and homotopies
-\begin{align*}
-H_{\check{1}\check{1}1} & : f_{\check{1}01}\circ f_{1\check{1}1} \htpy f_{0\check{1}1}\circ f_{\check{1}11} \\
-H_{\check{1}1\check{1}} & : f_{\check{1}10}\circ f_{11\check{1}} \htpy f_{01\check{1}}\circ f_{\check{1}11} \\
-H_{1\check{1}\check{1}} & : f_{1\check{1}0}\circ f_{11\check{1}} \htpy f_{10\check{1}}\circ f_{1\check{1}1}.
-\end{align*}
-\end{enumerate}
-\end{defn}
-
-\begin{defn}
-A \define{cocone} with vertex $X$ on a $2$-span $\mathcal{A}$ consists of
-\begin{enumerate}
-\item maps
-\begin{align*}
-i_{100} & : A_{100} \to X\\
-i_{010} & : A_{010} \to X\\
-i_{001} & : A_{001} \to X,
-\end{align*}
-\item homotopies
-\begin{align*}
-K_{110} & : i_{100}\circ f_{1\check{1}0} \htpy i_{010}\circ f_{\check{1}10} \\
-K_{101} & : i_{100}\circ f_{10\check{1}} \htpy i_{001}\circ f_{\check{1}01} \\
-K_{011} & : i_{010}\circ f_{01\check{1}} \htpy i_{001}\circ f_{0\check{1}1},
-\end{align*}
-\item and a homotopy
-\begin{align*}
-L_{111} & : \ct{(K_{011}\cdot f_{\check{1}11})}{(i_{010}\cdot H_{\check{1}1\check{1}})}{(K_{110}\cdot f_{11\check{1}})} \\
-& \qquad = \ct{(i_{001}\cdot H_{\check{1}\check{1}1})}{(K_{101}\cdot f_{1\check{1}1})}{(i_{100}\cdot H_{1\check{1}\check{1}})}
-\end{align*}
-\end{enumerate}
-We write $\mathsf{cocone}(X)$ for the type of cocones with vertex $X$ on $\mathcal{A}$.
-\end{defn}
-
-\begin{defn}
-Consider a $2$-span $\mathcal{A}$ and a cocone $\mathcal{C}$ with vertex $X$ on $\mathcal{A}$. We define for every type $Y$ a map
-\begin{equation*}
-\mathsf{cocone\underline{~}map}(\mathcal{C}) : (X\to Y)\to \mathsf{cocone}(Y)
-\end{equation*}
-A cocone $\mathcal{C}$ is said to be \define{colimiting} if the map $\mathsf{cocone\underline{~}map}(\mathcal{C})$ is an equivalence for every type $Y$.
-\end{defn}
-
-\begin{defn}
-Consider a $2$-span $\mathcal{A}$ and a cocone $\mathcal{C}$ with vertex $X$ on $\mathcal{A}$. A \define{dependent cocone structure} on a dependent type $P:X\to\UU$ over $\mathcal{C}$ consists of
-\begin{enumerate}
-\item dependent functions
-\begin{align*}
-j_{100} & : \prd{x:A_{100}}P(i_{100}(x))\\
-j_{010} & : \prd{x:A_{010}}P(i_{010}(x))\\
-j_{001} & : \prd{x:A_{001}}P(i_{001}(x)),
-\end{align*}
-\item homotopies
-\begin{align*}
-j_{110} & : \prd{x:A_{110}} \dpath{P}{K_{110}(x)}{i_{100}(f_{1\check{1}0}(x))}{i_{010}(f_{\check{1}10}(x))} \\
-j_{101} & : \prd{x:A_{101}} \dpath{P}{K_{101}(x)}{i_{100}(f_{10\check{1}}(x))}{i_{001}(f_{\check{1}01}(x))} \\
-j_{011} & : \prd{x:A_{011}} \dpath{P}{K_{011}(x)}{i_{010}(f_{01\check{1}}(x))}{i_{001}(f_{0\check{1}1}(x))},
-\end{align*}
-\item and a homotopy
-\begin{align*}
-j_{111} & : \ct{(K_{011}\cdot f_{\check{1}11})}{(i_{010}\cdot H_{\check{1}1\check{1}})}{(K_{110}\cdot f_{11\check{1}})} \\
-& \qquad = \ct{(i_{001}\cdot H_{\check{1}\check{1}1})}{(K_{101}\cdot f_{1\check{1}1})}{(i_{100}\cdot H_{1\check{1}\check{1}})}
-\end{align*}
-\end{enumerate}
-We write $\mathsf{cocone}(X)$ for the type of cocones with vertex $X$ on $\mathcal{A}$.
-\end{defn}
-
-\begin{thm}
-Consider a cube
-\begin{equation*}
-\begin{tikzcd}
-& A_{111} \arrow[dl] \arrow[d] \arrow[dr] \\
-A_{110} \arrow[d] & A_{101} \arrow[dl] \arrow[dr] & A_{011} \arrow[d] \\
-A_{100} \arrow[dr] & A_{010} \arrow[d] \arrow[from=ul,crossing over] \arrow[from=ur,crossing over] & A_{001} \arrow[dl] \\
-& A_{000}.
-\end{tikzcd}
-\end{equation*}
-The following are equivalent:
-\begin{enumerate}
-\item The cube is cocartesian.
-\item The the square
-\begin{equation*}
-\begin{tikzcd}
-A_{011}\sqcup^{A_{111}} A_{101} \arrow[r] \arrow[d] & A_{001} \arrow[d] \\
-A_{010}\sqcup^{A_{110}} A_{100} \arrow[r] & A_{000}
-\end{tikzcd}
-\end{equation*}
-is cocartesian.
-\end{enumerate}
-\end{thm}
-
-\begin{proof}
-The cube $\mathcal{A}$ is cocartesian if and only if the cube $X^{\mathcal{A}}$ is cartesian for every type $X$, which happens if and only if the square
-\begin{equation*}
-\begin{tikzcd}
-X^{A_{000}} \arrow[r] \arrow[d] & X^{A_{010}}\times_{X^{A_{110}}} X^{A_{100}} \arrow[d] \\
-X^{A_{001}} \arrow[r] & X^{A_{011}}\times_{X^{A_{111}}} X^{A_{101}}
-\end{tikzcd}
-\end{equation*}
-is cartesian. By the universal property of pushouts, this is equivalent to the condition that the square
-\begin{equation*}
-\begin{tikzcd}
-X^{A_{000}} \arrow[r] \arrow[d] & X^{A_{010}\sqcup^{X^{A_{110}}}A_{100}} \arrow[d] \\
-X^{A_{001}} \arrow[r] & X^{A_{011}\sqcup^{X^{A_{111}}}A_{101}}
-\end{tikzcd}
-\end{equation*}
-is cartesian, for every type $X$. By another application of the universal property of pushouts, this is equivalent to the condition that the square
-\begin{equation*}
-\begin{tikzcd}
-A_{011}\sqcup^{A_{111}} A_{101} \arrow[r] \arrow[d] & A_{001} \arrow[d] \\
-A_{010}\sqcup^{A_{110}} A_{100} \arrow[r] & A_{000}
-\end{tikzcd}
-\end{equation*}
-is cocartesian.
-\end{proof}
-
-\begin{cor}
-The cube
-\begin{equation*}
-\begin{tikzcd}
-& X \arrow[dl] \arrow[d] \arrow[dr] \\
-\unit \arrow[d] & \unit \arrow[dl] \arrow[dr] & \unit \arrow[d] \\
-\unit \arrow[dr] & \unit \arrow[d] \arrow[from=ul,crossing over] \arrow[from=ur,crossing over] & \unit \arrow[dl] \\
-& \Sigma^2 X.
-\end{tikzcd}
-\end{equation*}
-is cocartesian.
-\end{cor}
-
-\begin{cor}
-The cube
-\begin{equation*}
-\begin{tikzcd}
-& \unit \arrow[dl] \arrow[d] \arrow[dr] \\
-\unit \arrow[d] & \unit \arrow[dl] \arrow[dr] & \unit \arrow[d] \\
-X \arrow[dr] & Y \arrow[d] \arrow[from=ul,crossing over] \arrow[from=ur,crossing over] & Z \arrow[dl] \\
-& X\vee Y\vee Z.
-\end{tikzcd}
-\end{equation*}
-is cocartesian.
-\end{cor}
-
-\begin{defn}
-Let $X$, $Y$, and $Z$ be pointed types. We define the \define{fat wedge} $X\blacktriangledown Y\blacktriangledown Z$ to be the $2$-pushout
-\begin{equation*}
-\begin{tikzcd}
-& \unit \arrow[dl] \arrow[d] \arrow[dr] \\
-X \arrow[d] & Y \arrow[dl] \arrow[dr] & Z \arrow[d] \\
-X\times Y \arrow[dr] & X\times Z \arrow[d] \arrow[from=ul,crossing over] \arrow[from=ur,crossing over] & Y\times Z \arrow[dl] \\
-& X\blacktriangledown Y\blacktriangledown Z.
-\end{tikzcd}
-\end{equation*}
-\end{defn}
-
-\begin{thm}
-(Needs results about the total cofiber.) The square
-\begin{equation*}
-\begin{tikzcd}
-X\blacktriangledown Y\blacktriangledown Z \arrow[r] \arrow[d] & X\times Y\times Z \arrow[d] \\
-\unit \arrow[r] & X\wedge Y\wedge Z
-\end{tikzcd}
-\end{equation*}
-is cocartesian.
-\end{thm}
-
-\begin{conj}
-Consider a cube
-\begin{equation*}
-\begin{tikzcd}
-& A_{111} \arrow[dl] \arrow[d] \arrow[dr] \\
-A_{110} \arrow[d] & A_{101} \arrow[dl] \arrow[dr] & A_{011} \arrow[d] \\
-A_{100} \arrow[dr] & A_{010} \arrow[d] \arrow[from=ul,crossing over] \arrow[from=ur,crossing over] & A_{001} \arrow[dl] \\
-& A_{000}.
-\end{tikzcd}
-\end{equation*}
-The following are equivalent:
-\begin{enumerate}
-\item The cube is $n$-cocartesian.
-\item The the square
-\begin{equation*}
-\begin{tikzcd}
-A_{011}\sqcup^{A_{111}} A_{101} \arrow[r] \arrow[d] & A_{001} \arrow[d] \\
-A_{010}\sqcup^{A_{110}} A_{100} \arrow[r] & A_{000}
-\end{tikzcd}
-\end{equation*}
-is $n$-cocartesian.
-\end{enumerate}
-\end{conj}
-
-\subsection{$\Delta_2$-types and their geometric realizations}
-
-\begin{defn}
-Let $\Delta_2$ be the (Rezk-complete) category consisting of the linear orders $\{0\}$, $\{0\leq 1\}$ and $\{0\leq 1\leq 2\}$, and order preserving maps between them.
-\end{defn}
-
-Our first goal in this section is to define a notion of $\Delta_2$-types, and show that for any $\Delta_2$-type $\mathcal{A}$ and any $n\in\{0,1,2\}$, the type $\tilde{A}_n$ of all $n$-cells in $\mathcal{A}$ is equivalent to the type of $\Delta_2$-transformations $\Delta_2[n]\Rightarrow \mathcal{A}$, i.e.~that the Yoneda lemma holds in the appropriate sense.
-
-\begin{defn}
-A $\Delta_2$-type $\mathcal{A}$ consists of:
-\begin{enumerate}
-\item A type $A_0$.
-\item A family $A_1:A_0\to A_0\to\UU$ together with $\alpha:\prd{x:A_0}A_1(x,x)$.
-\item A family
-\begin{equation*}
-A_2:\prd{x_1,x_2,x_3:A_0} A_1(x_1,x_2)\to A_1(x_1,x_3)\to A_1(x_2,x_3)\to\UU
-\end{equation*}
-equipped with
-\begin{align*}
-\beta_{10} & : \prd{x_1,x_2:A_0}{f:A_1(x_1,x_2)} A_2(f,f,\alpha(x_2)) \\
-\beta_{01} & : \prd{x_2,x_3:A_0}{g:A_1(x_2,x_3)} A_2(\alpha(x_2),g,g) 
-\intertext{and a coherence law}
-\beta_{00} & : \prd{x_2:A_0} \beta_{10}(\alpha(x_2))=\beta_{01}(\alpha(x_2)).
-\end{align*}
-\end{enumerate}
-\end{defn}
-
-\begin{defn}
-A cone on a $\Delta_2$-type $\mathcal{A}$ with vertex $X$ consists of:
-\begin{enumerate}
-\item A map $f_0:A_0\to X$.
-\item A homotopy $f_1:\prd{x,y:A_0} A_1(x,y)\to (f_0(x)=f_0(y))$ equipped with
-\begin{equation*}
-f_r : \prd{x:A_0} f_1(\alpha(x))=\refl{f_0(x)}. 
-\end{equation*}
-\item A family of $2$-cells
-\begin{align*}
-f_2 & :\prd{x_1,x_2,x_3:A_0}{y_{ij}:A_1(x_i,x_j)\mid ij\in\{12,13,23\}} \\
-& \qquad A_2(y_{12},y_{13},y_{23})\to (\ct{f_1(y_{12})}{f_1(y_{23})}=f_1(y_{13}))
-\end{align*}
-equipped with
-\end{enumerate}
-\end{defn}
-
-\begin{defn}
-A \define{baricentric $2$-span} is a diagram of the form
-\begin{equation*}
-\begin{tikzcd}
-& A_{111} \arrow[dl] \arrow[d] \arrow[dr] \\
-A_{110} \arrow[d] \arrow[dr] & A_{101} \arrow[dl,crossing over] & A_{011} \arrow[dl] \arrow[d] \\
-A_{100} & A_{010} & A_{001} \arrow[from=ul,crossing over] 
-\end{tikzcd}
-\end{equation*}
-equipped with homotopies for the three squares.
-\end{defn}
-
-\begin{eg}
-The colimit of the baricentric $2$-span
-\begin{equation*}
-\begin{tikzcd}
-& A\times B \times C \arrow[dl] \arrow[d] \arrow[dr] \\
-A\times B \arrow[d] \arrow[dr] & A\times C \arrow[dl,crossing over] & B\times C \arrow[dl] \arrow[d] \\
-A & B & C \arrow[from=ul,crossing over] 
-\end{tikzcd}
-\end{equation*}
-is the join $\join{A}{\join{B}{C}}$. 
-\end{eg}
-
-\begin{defn}
-Every $\Delta_2$-type determines a baricentric $2$-span
-\begin{equation*}
-\begin{tikzcd}
-& \tilde A_2 \arrow[dl] \arrow[d] \arrow[dr] \\
-\tilde A_1 \arrow[d] \arrow[dr] & \tilde A_1 \arrow[dl,crossing over] & \tilde A_1 \arrow[dl] \arrow[d] \\
-A_0 & A_0 & A_0 \arrow[from=ul,crossing over] 
-\end{tikzcd}
-\end{equation*}
-where
-\begin{align*}
-\tilde{A}_1 & \defeq \sm{x,y:A_0}A_1(x,y) \\
-\tilde{A}_2 & \defeq \sm{x_1,x_2,x_3:A_0}{f_{ij}:A_1(x_i,x_j)\mid ij\in\{12,13,23\}} A_2(f_{12},f_{13},f_{23}).
-\end{align*}
-The maps are the projections, and the homotopies are the obvious ones.
-\end{defn}
-
-\begin{thm}
-For any $\Delta_2$-type $\mathcal{A}$, its geometric realization $|\mathcal{A}|$ is equivalent to the colimit of the baricentric span $B(\mathcal{A})$.
-\end{thm}
-
-\begin{thm}
-Let $\mathcal{A}$ be a $\Delta_2$-type. The following are equivalent:
-\begin{enumerate}
-\item For every $f:A_1(x,y)$ and $g:A_1(y,z)$ the type
-\begin{equation*}
-\sm{h:A_1(x,z)}A_2(f,h,g)
-\end{equation*}
-is contractible.
-\item $\mathcal{A}$ satisfies the \define{$\Delta_2$-Segal condition}: the canonical map
-\begin{equation*}
-\tilde{A}_2 \to \tilde{A}_1\times_{A_0} \tilde{A}_1
+\blank\circ \seqin_0: (A^{\ast\infty}\to P)\to (A\to P)
 \end{equation*}
 is an equivalence. 
-\end{enumerate}
-\end{thm}
-
-\begin{rmk}
-A $\Delta_2$-monoid $(X,Y)$ is a $\Delta_2$-set of which $A_0$ is contractible. Equivalently, a $\Delta_2$-monoid consists of:
-\begin{enumerate}
-\item A type $X:\UU$ together with $e:X$.
-\item A family
-\begin{equation*}
-Y: X\to X\to X\to\UU
-\end{equation*}
-equipped with
-\begin{align*}
-\beta_{10} & : \prd{x:X} A_2(x,x,e) \\
-\beta_{01} & : \prd{y:X} A_2(e,y,y) 
-\intertext{and a coherence law}
-\beta_{00} & : \beta_{10}(e)=\beta_{01}(e).
-\end{align*}
-\end{enumerate}
-What do we get if we take the colimit of
-\begin{equation*}
-\begin{tikzcd}
-& Y \arrow[dl] \arrow[d] \arrow[dr] \\
-X \arrow[d] \arrow[dr] & X \arrow[dl,crossing over] & X \arrow[dl] \arrow[d] \\
-\unit & \unit & \unit \arrow[from=ul,crossing over] 
-\end{tikzcd}
-\end{equation*}
-If we impose the Segal-condition, what do we know about the map $X\to \loopspace{|X,Y|}$? Compare to Segal's delooping machine (this should be level 2). In this case, $X$ comes equipped with a multiplication $\mu:X\times X\to X$ satisfying left and right unit laws, and a coherence law, and the diagram in question becomes
-\begin{equation*}
-\begin{tikzcd}
-& X\times X \arrow[dl,swap,"\pi_1"] \arrow[d,"\mu"] \arrow[dr,"\pi_2"] \\
-X \arrow[d] \arrow[dr] & X \arrow[dl,crossing over] & X \arrow[dl] \arrow[d] \\
-\unit & \unit & \unit \arrow[from=ul,crossing over] 
-\end{tikzcd}
-\end{equation*}
-\end{rmk}
-
-\begin{rmk}
-Is the colimit of
-\begin{equation*}
-\begin{tikzcd}
-& \unit \arrow[dl] \arrow[d] \arrow[dr] \\
-\unit \arrow[d] \arrow[dr] & \unit \arrow[dl,crossing over] & \unit \arrow[dl] \arrow[d] \\
-X & Y & Z \arrow[from=ul,crossing over] 
-\end{tikzcd}
-\end{equation*}
-equivalent to $X\vee Y \vee Z$? Let's write $\bigvee(X,Y,Z)$ for this colimit. What do we know of the connectivity of the map $\bigvee(X,Y,Z)\to X\times Y\times Z$. 
-\end{rmk}
-
-\subsection{$\Delta_3$-types and their geometric realizations}
-\begin{defn}
-A $\Delta_3$-type $\mathcal{A}$ consists of the data of a $\Delta_2$-type, and a family
-\begin{align*}
-A_3 & : \prd{x_1,x_2,x_3,x_4:A_0}{f_{12}:A_1(x_1,x_2)}{f_{13}:A_1(x_1,x_3)} \\
-& \qquad \prd{f_{14}:A_1(x_1,x_4)}{f_{23}:A_1(x_2,x_3)}{f_{24}:A_1(x_2,x_4)}\\
-& \qquad \prd{f_{34}:A_1(x_3,x_4)} A_2(f_{12},f_{13},f_{23})\to A_2(f_{12},f_{24},f_{14})\to \\
-& \qquad A_2(f_{13},f_{14},f_{34}) \to A_2(f_{23},f_{24},f_{34})\to\UU
-\end{align*}
-equipped with
-\begin{align*}
-\gamma_{110} & : \prd{x_1,x_2,x_3}{f_{ij}:A_1(x_i,x_j)\mid ij\in\{12,13,23\}} \\
-& \qquad \prd{h:A_2(f_{12},f_{13},f_{23})} A_3(h,h,\beta_{10}(f_{13}),\beta_{10}(f_{23})) \\
-\gamma_{101} & : \prd{x_1,x_2,x_4}{f_{ij}:A_1(x_i,x_j)\mid ij\in\{12,14,24\}}\\
-& \qquad \prd{h:A_2(f_{12},f_{14},f_{24})} A_3(\beta_{10}(f_{12}),h,h,\beta_{01}(f_{24})) \\
-\gamma_{011} & : \prd{x_1,x_3,x_4}{f_{ij}:A_1(x_i,x_j)\mid ij\in\{13,14,34\}} \\
-& \qquad \prd{h:A_2(f_{13},f_{14},f_{34})} A_3(\beta_{01}(f_{13}),\beta_{01}(f_{14}),h,h) \\
-\gamma_{100} & : \prd{x_1,x_2}{f:A_1(x_1,x_2)} \\
-&\qquad \dpath{A_2(\beta_{10}(f),\beta_{10}(f),\beta_{10}(f),\blank)}{\beta_{00}(x_2)}{\gamma_{110}(\beta_{10}(f))}{\gamma_{101}(\beta_{10}(f))}\\
-\gamma_{010} & : \prd{x_1,x_3}{f_{13}:A_1(x_1,x_3)}\\
-&\qquad \dpath{}{}{\gamma_{110}(\beta_{10}(f_{13}))}{\gamma_{011}(\beta_{01}(f_{13}))}\\
-\gamma_{001} & : \prd{x_1,x_4}{f_{14}:A_1(x_1,x_4)}\\
-&\qquad \dpath{}{}{\gamma_{101}(\beta_{01}(f_{14}))}{\gamma_{011}(\beta_{01}(f_{14}))}\\
-\gamma_{000} & : \prd{x_1}
-\end{align*} 
-\end{defn}
-
-\begin{defn}
-A baricentric $2$-span is a diagram of the form
-\begin{equation*}
-\begin{tikzcd}[column sep=small,row sep=huge]
-& & & & &[-1.2em] A_{1111} \arrow[dlll] \arrow[dl] \arrow[dr] \arrow[drrr] &[-1.2em] \\[-1em]
-& & A_{1110} \arrow[dll] \arrow[d] \arrow[drrrr] & & A_{1101} \arrow[dllll,crossing over] \arrow[d,crossing over] \arrow[drrrr] & & A_{1011} \arrow[dllll,crossing over] \arrow[dll,crossing over] \arrow[drrrr] & & A_{0111} \arrow[dll,crossing over] \arrow[d,crossing over] \arrow[drr] \\
-A_{1100} \arrow[drr] \arrow[drrrr] & & A_{1010} \arrow[d,crossing over] \arrow[drrrr] & & A_{1001} \arrow[dll,crossing over] \arrow[drrrr] & & A_{0110} \arrow[dll,crossing over] \arrow[d,crossing over] & & A_{0101} \arrow[dllll,crossing over] \arrow[d] & & A_{0011} \arrow[dllll,crossing over] \arrow[dll] \\
-& & A_{1000} & & A_{0100} & & A_{0010} & & A_{0001}
-\end{tikzcd}
-\end{equation*}
-in which every square and cube is filled by a homotopy.
-\end{defn}
-
-\begin{defn}
-Let $\mathcal{A}$ be a $\Delta_3$-type. We define the baricentric $2$-span $B(\mathcal{A})$ to consist of
-\begin{equation*}
-\begin{tikzcd}[column sep=small,row sep=huge]
-& & & & &[-.8em] \tilde A_3 \arrow[dlll] \arrow[dl] \arrow[dr] \arrow[drrr] &[-.8em] \\[-1em]
-& & \tilde A_2 \arrow[dll] \arrow[d] \arrow[drrrr] & & \tilde A_2 \arrow[dllll,crossing over] \arrow[d,crossing over] \arrow[drrrr] & & \tilde A_2 \arrow[dllll,crossing over] \arrow[dll,crossing over] \arrow[drrrr] & & \tilde A_2 \arrow[dll,crossing over] \arrow[d,crossing over] \arrow[drr] \\
-\tilde A_1 \arrow[drr] \arrow[drrrr] & & \tilde A_1 \arrow[d,crossing over] \arrow[drrrr] & & \tilde A_1 \arrow[dll,crossing over] \arrow[drrrr] & & \tilde A_1 \arrow[dll,crossing over] \arrow[d,crossing over] & & \tilde A_1 \arrow[dllll,crossing over] \arrow[d] & & \tilde A_1 \arrow[dllll,crossing over] \arrow[dll] \\
-& & A_0 & & A_0 & & A_0 & & A_0
-\end{tikzcd}
-\end{equation*}
-where $\tilde A_1$, $\tilde A_2$, and $\tilde A_3$ are the total spaces of $A_1$, $A_2$, and $A_3$, respectively, and the maps are the projections
-\end{defn}
-
-\begin{thm}
-The geometric realization of a $\Delta_3$-type is equivalent to the colimit of the baricentric $2$-span $B(\mathcal{A})$. 
-\end{thm}
-
-\section{Smallness of the image}\label{sec:modified-join}
-
-In this section we modify the join construction slightly, to construct the
-image of a map $f:A\to X$ where we assume $X$ to be only locally small, rather than
-small. To do this, we need to assume `global function extensionality', by which
-we mean that function extensionality holds for all types, regardless of their {size
-\footnote{Note that univalence implies function extensionality \emph{in} the universe $\UU$, but not necessarily global function extensionality.}}\footnote{In fact, we only need function extensionality for function types with a small domain and a locally small codomain.}.
-
-We use the modified join construction to construct some classes of quotients
-of low homotopy complexity: 
-set-quotients and the Rezk completion of a precategory. 
-We note that the modified join construction may also be used to construct
-the $n$-truncation for any $n:\N$. 
-
-There are at least two equivalent ways of defining the notion of local smallness.
-
-\begin{lem}
-Let $X$ be a (possibly large) type. Then the following are equivalent.
-\begin{enumerate}
-\item For every $x,y:X$ there is a type $(x='y):\UU$ and an equivalence
-\begin{equation*}
-e_{x,y}:\eqv{(x=y)}{(x='y)}.
-\end{equation*}
-\item For every $x,y:X$ there is a type $(x='y):\UU$; for every $x:X$ there
-is a term $r_x : (x='x)$, and the canonical map
-\begin{equation*}
-\prd{y:X} (x=y)\to (x='y)
-\end{equation*}
-given by path induction, taking the value $r_x$ at $\refl{x}$, is a fiberwise equivalence.
-\end{enumerate}
-In either case, we call $X$ \define{locally small} (with respect to $\UU$).
 \end{lem}
 
 \begin{proof}
-Suppose we have for every $x,y:X$ a type $(x='y)$ and an equivalence $e_{x,y}:\eqv{(x=y)}{(x='y)}$. Then we have $r_x\defeq e_{x,x}(\refl{x}):x='x$. Since we have a fiberwise equivalence $e_{x,y}$, it follows by Theorem 4.7.7 of \cite{hottbook} that the total space
+We have the commuting triangle
 \begin{equation*}
-\sm{y:X}x='y
+\begin{tikzcd}
+&[-3em] P^{A^{\ast\infty}} \arrow[dl,swap,"\seqin^\ast"] \arrow[dr,"\blank\circ\seqin_0"] \\
+\Big(\prd{n:\N}A^{\ast n} \to P\Big) \arrow[rr,swap,"\lam{h}h_0"] & & P^A.
+\end{tikzcd}
 \end{equation*}
-is contractible. Hence the canonical map taking $\refl{x}$ to $r_x$ is a fiberwise equivalence. Moreover, it follows by path induction that $e_{x,y}$ is this canonical map.
-
-The converse direction is trivial, and it is clear that we have defined mutual inverses between the two structures.
+Therefore it suffices to show that the bottom map is an equivalence. Since this is a map between propositions, it suffices to construct a map in the converse direction. Let $f:A\to P$. We will construct a term of type
+\begin{equation*}
+\prd{n:\N}A^{\ast n} \to P
+\end{equation*}
+by induction on $n:\N$. The base case is trivial. Given a map $g:A^{\ast n}\to P$, we obtain a map $g:A^{\ast(n+1)}\to P$ by \cref{lem:extend_join_prop}.
 \end{proof}
 
-\begin{rmk}
-Being locally small in the above sense is a property, since in a univalent universe
-any two witnesses of local smallness are equal.
+\begin{lem}\label{lem:isprop_infjp}
+The type $A^{\ast\infty}$ is a proposition for any type $A$.
+\end{lem}
 
-In the first of the two equivalent descriptions of local smallness it is clear that local smallness is a (large) mere proposition. The second of the two equivalent descriptions establishes that the equivalences are canonical, at least with respect to the choses proof of reflexivity.
-\end{rmk}
-
-\begin{eg}
-Examples of locally small types include all types in $\UU$, 
-the universe $\UU$ itself (by the univalence axiom), 
-mere propositions of any size, 
-and the exponent $A\to X$, for any $A:\UU$ and any locally small type $X$
-(by global function extensionality).
-\end{eg}
-
-To construct the image of $f:A\to X$, mapping a small type $A$ into a locally
-small type $X$, one can see that
-the fibers of $f$ are equivalent to small types. Indeed, by the
-local smallness condition, we have equivalences of type
+\begin{proof}
+By \cref{cor:contr_prop} it suffices to show that $A^{\ast\infty}\to \iscontr(A^{\ast\infty})$, and by \cref{lem:infjp_up} it suffices to show that
 \begin{equation*}
-\eqv{\Big(\sm{a:A} f(a)=x\Big)}{\Big(\sm{a:A} f(a) =' x\Big)},
+A\to \iscontr(A^{\ast\infty}),
 \end{equation*}
-and the type on the right is small for every $x:X$. We will write
-$\fib'{f}{x}$ for this modified fiber of $f$ at $x$. Since the modified fibers
-are in $\UU$, we may $(-1)$-truncate them using \autoref{defn:proptrunc}. Therefore, we may define
-\begin{equation}\label{eq:im_by_trunc}
-\im'_t(f)\defeq\sm{x:X}\trunc{-1}{\fib'{f}{x}} 
-\end{equation}
-Of course, we have a commuting triangle
-\begin{equation*}
-\begin{tikzcd}
-A \arrow[r] \arrow[dr,swap,"f"] & \im'_t(f) \arrow[d,"\proj 1"] \\
-& X
-\end{tikzcd}
-\end{equation*}
-with the universal property of the image inclusion of $f$, which follows from
-Theorem 7.6.6 of \cite{hottbook}. 
-Although this image exists under our working assumptions, 
-it is not generally the case that $\im'_t(f)$ is a type in $\UU$.
+because $\iscontr(A^{\ast\infty})$ is a proposition by \cref{ex:isprop_istrunc}. 
 
-One might also try the join construction directly to construct the image of
-$f$. `The' join of two maps $f:A\to X$ and $g:B\to X$ into a locally small type
-$X$ is formed taken by first taking the pullback of $f$ and $g$, and then the 
-pushout of the two projections from the pullback.
-However, the pullback of $f$ and $g$ is the type $\sm{a:A}{b:B}f(a)=g(b)$, and
-this is not a type in $\UU$. Therefore, we may not just form the pushout
-of $A \leftarrow (\sm{a:A}{b:B}f(a)=g(b)) \rightarrow B$. 
-Hence we cannot follow the construction of the join of maps directly, in the
-setting where we only assume $\UU$ to be closed under graph quotients.
+Let $x:A$. To see that $A^{\ast\infty}$ is contractible it suffices by \cref{ex:seqcolim_contr} to show that $\inr:A^{\ast n}\to A^{\ast(n+1)}$ is homotopic to the constant function $\const_{\inl(x)}$. However, we get a homotopy $\const_{\inl(x)}\htpy \inr$ immediately from the path constructor $\glue$.  
+\end{proof}
 
-Instead, we modify the definition of the join of maps, using the
-condition that $X$ is locally small. By this condition we have
-an equivalence of type $\eqv{(f(a)=g(b))}{(f(a)='g(b))}$, for any $a:A$ and 
-$b:B$. It therefore follows that the type
-\begin{equation}\label{eq:modified_pullback}
-A\times'_X B \defeq \sm{a:A}{b:B}f(a)='g(b)
-\end{equation} is
-still the pullback of $f$ and $g$. We call this type the \define{modified
-pullback} of $f$ and $g$.
-Since each of the types $A$, $B$ and $f(a)='g(b)$ is in $\UU$, it follows that
-the modified pullback $A\times_X'B$ is in $\UU$.
-
-\begin{thm}\label{thm:modified-join}
-Let $\UU$ be a univalent universe in Martin-L\"of type theory with global function extensionality, 
-and assume that $\UU$ is closed under graph quotients. 
-
-Let $A:\UU$ and let $X$ be any type which is locally small with respect to $\UU$.
-Then we can construct a small type $\im'(f):\UU$, a surjective map $q'_f:A\to\im'(f)$, and an embedding $i'_f:\im'(f)\to X$ such that the triangle
-\begin{equation*}
-\begin{tikzcd}
-A \arrow[r,"{q'_f}"] \arrow[dr,swap,"f"] & \im'(f) \arrow[d,"{i'_f}"] \\
-& X
-\end{tikzcd}
-\end{equation*}
-commutes, and $i_f:\im'(f)\to X$ has the universal property of the image inclusion of $f$, in the sense of \autoref{defn:universal}.
+\begin{thm}
+For any type $A$ there is a type $\brck{A}$ that comes equipped with a map $\eta:A\to \brck{A}$, and satisfies the universal property of propositional truncation.
 \end{thm}
 
 \begin{proof}
-We define the modified join $f \ast' g$ of $f$ and $g$ as the pushout of the
-modified pullback, as indicated in the diagram
+Let $A$ be a type. Then we define $\brck{A}\defeq A^{\ast\infty}$, and we define $\eta\defeq \seqin_0:A\to A^{\ast\infty}$. Then $\brck{A}$ is a proposition by \cref{lem:isprop_infjp}, and $\eta:A\to \brck{A}$ satisfies the universal property of propositional truncation by \cref{lem:infjp_up}.
+\end{proof}
+
+\subsection{Stage two: constructing the image of a map}
+The image of a map $f:A\to X$ can be defined using the propositional truncation:
+\begin{defn}
+For any map $f:A\to X$ we define the \define{image}\index{image|textbf} of $f$ to be the type
+\begin{equation*}
+\im(f) \defeq \sm{x:X}\brck{\fib{f}{x}}
+\end{equation*}
+and we define the \define{image inclusion} to be the projection $\proj 1 :\im(f)\to X$. 
+\end{defn}
+However, the construction of the fiberwise join in \cref{ex:fib_join} suggests that we can also define the image of $f$ as the infinite join power $f^{\ast\infty}$, where we repeatedly take the fiberwise join of $f$ with itself. Our reason for defining the image in this way is twofold: 
+\begin{itemize}
+\item We use this construction to show that the image of a map $f:A\to B$ from an essentially small type $A$ into a locally small type $B$ is again essentially small.
+\item Many interesting types, such as the real and complex projective spaces, appear in specific instances of this construction.
+\end{itemize}
+
+\begin{lem}
+Consider a map $f:A\to X$, an embedding $m:U\to X$, and $h:\mathrm{hom}_X(f,m)$. Then the map
+\begin{equation*}
+\mathrm{hom}_X(\join{f}{g},m)\to \mathrm{hom}_X(g,m)
+\end{equation*}
+is an equivalence for any $g:B\to X$.
+\end{lem}
+
+\begin{proof}
+Note that both types are propositions, so any equivalence can be used to prove the claim. Thus, we simply calculate
+\begin{align*}
+\mathrm{hom}_X(\join{f}{g},m) & \eqvsym \prd{x:X}\fib{\join{f}{g}}{x}\to \fib{m}{x} \\
+& \eqvsym \prd{x:X}\join{\fib{f}{x}}{\fib{g}{x}}\to\fib{m}{x} \\
+& \eqvsym \prd{x:X}\fib{g}{x}\to\fib{m}{x} \\
+& \eqvsym \mathrm{hom}_X(g,m).
+\end{align*}
+The first equivalence holds by \cref{ex:triangle_fib}; the second equivalence holds by \cref{ex:fib_join}, also using \cref{ex:equiv_precomp,lem:postcomp_equiv} where we established that that pre- and postcomposing by an equivalence is an equivalence; the third equivalence holds by \cref{lem:extend_join_prop,lem:postcomp_equiv}; the last equivalence again holds by \cref{ex:triangle_fib}.
+\end{proof}
+
+For the construction of the image of $f:A\to X$ we observe that if we are given an embedding $m:U\to X$ and a map $(i,I):\mathrm{hom}_X(f,m)$, then $(i,I)$ extends uniquely along $\inr:A\to \join[X]{A}{A}$ to a map $\mathrm{hom}_X(\join{f}{f},m)$. This extension again extends uniquely along $\inr:\join[X]{A}{A}\to \join[X]{A}{(\join[X]{A}{A})}$ to a map $\mathrm{hom}_X(\join{f}{(\join{f}{f})},m)$ and so on, resulting in a diagram of the form
 \begin{equation*}
 \begin{tikzcd}
-A\times_X' B \arrow[r,"\pi_2"] \arrow[d,swap,"\pi_1"] \arrow[dr, phantom, "{\ulcorner}", at end] & B \arrow[d,"\inr"] \arrow[ddr,bend left=15,"g"] \\
-A \arrow[r,swap,"\inl"] \arrow[drr,bend right=15,swap,"f"] & A\ast_X' B \arrow[dr,densely dotted,swap,near start,"{f \ast' g}" xshift=1ex] \\
-& & X.
+A \arrow[dr] \arrow[r,"\inr"] & \join[X]{A}{A} \arrow[d,densely dotted] \arrow[r,"\inr"] & \join[X]{A}{(\join[X]{A}{A})} \arrow[dl,densely dotted] \arrow[r,"\inr"] & \cdots \arrow[dll,densely dotted,bend left=10] \\
+& U
 \end{tikzcd}
 \end{equation*}
-Note that this is where we need to know that we can use the induction principle
-of graph quotients to define maps from graph quotients into locally small types.
 
-Now we can consider, for any $f:A\to X$ from $A:\UU$ into a locally small type
-$X$, the modified join powers $f^{\ast'n}$ of $f$. The existence of each of
-them follows from the assumption that $\UU$ is closed under graph quotients.
-By an argument completely analogous to the argument given in the original join
-construction, it follows that the sequential colimit
-$i'_f\defeq f^{\ast'\infty}$ is an embedding with the universal property of the image 
-inclusion of $f$. 
-\end{proof}
-
-\subsection{Direct applications of the modified join construction}
-
-Recall that $\prop_\UU$ is the type $\sm{P:\UU}\isprop(P)$. A $\prop_\UU$-valued
-equivalence relation on a type $A$, is a binary relation $R:A\to A\to\prop_\UU$
-that is reflexive, symmetric and transitive in the expected sense.
-A more thorough discussion on set-quotients can be found in \S 6.10 of
-\cite{hottbook}.
-
-\begin{cor}\label{cor:setquotients}
-For any $\prop_\UU$-valued equivalence relation $R:A\to A\to\prop_\UU$ over a type
-$A:\UU$, we get from the construction in \autoref{thm:modified-join} a type $A/R:\UU$
-with the universal property of the quotient.
-\end{cor}
-
-\begin{proof}
-In \S 10.1.3 of \cite{hottbook}, it is shown that the subtype 
+\begin{defn}
+Suppose $f:A\to X$ is a map. Then we define the \define{fiberwise join powers} 
 \begin{equation*}
-\sm{P:A\to\UU} \trunc{-1}{\sm{a:A} R(a)=P}
-\end{equation*} 
-of the type $A\to\prop_\UU$ has the universal property of the set-quotient.
-Note that this is the image of $R$, as a function from $A$ to the locally small
-type $A\to\prop_\UU$. 
+f^{\ast n}:A_X^{\ast n} X.
+\end{equation*}
+\end{defn}
 
-Since the type $\im'(R):\UU$, which we obtain from \autoref{thm:modified-join},
-has the universal property of the image, the universal property of the
-set-quotient follows from an argument analogous to that given in \S 6.10 of \cite{hottbook}.
+\begin{proof}[Construction]
+Note that the operation $(B,g)\mapsto (\join[X]{A}{B},\join{f}{g})$ defines an endomorphism on the type
+\begin{equation*}
+\sm{B:\UU}B\to X.
+\end{equation*}
+We also have $(\emptyt,\ind{\emptyt})$ and $(A,f)$ of this type. For $n\geq 1$ we define
+\begin{align*}
+A_X^{\ast (n+1)} & \defeq \join[X]{A}{A_X^{\ast n}} \\
+f^{\ast (n+1)} & \defeq \join{f}{f^{\ast n}}.\qedhere
+\end{align*}
 \end{proof}
 
-By a small (pre)category $A$ we mean a (pre)category $A$ for which the type
-$\mathsf{obj}(A)$ of objects is in $\UU$, and for which the type
-$\mathsf{hom}_A(x,y)$ of morphisms from $x$ to $y$ is also in $\UU$, for any
-$x,y:\mathsf{obj}(A)$. Pre-categories and Rezk-complete categories were introduced
-in Homotopy Type Theory in \cite{AKS}.
+\begin{defn}
+We define $A_X^{\ast\infty}$ to be the sequential colimit of the type sequence
+\begin{equation*}
+\begin{tikzcd}
+A_X^{\ast 0} \arrow[r] & A_X^{\ast 1} \arrow[r,"\inr"] & A_X^{\ast 2} \arrow[r,"\inr"] & \cdots.
+\end{tikzcd}
+\end{equation*}
+Since we have a cocone
+\begin{equation*}
+\begin{tikzcd}
+A_X^{\ast 0} \arrow[r] \arrow[dr,swap,"f^{\ast 0}" near start] & A_X^{\ast 1} \arrow[r,"\inr"] \arrow[d,swap,"f^{\ast 1}" near start] & A_X^{\ast 2} \arrow[r,"\inr"] \arrow[dl,swap,"f^{\ast 2}" xshift=1ex] & \cdots \arrow[dll,bend left=10] \\
+& X
+\end{tikzcd}
+\end{equation*}
+we also obtain a map $f^{\ast\infty}:A_X^{\ast\infty}\to X$ by the universal property of $A_X^{\ast\infty}$. 
+\end{defn}
 
-\begin{cor}\label{cor:rezkcompletion}
-The Rezk completion $\hat{A}$ of any small precategory $A$ can be constructed in any 
-univalent universe that is closed under graph quotients,
-and $\hat{A}$ is again a small category. 
+\begin{lem}\label{lem:finfjp_up}
+Let $f:A\to X$ be a map, and let $m:U\to X$ be an embedding. Then the function
+\begin{equation*}
+\blank\circ \seqin_0: \mathrm{hom}_X(f^{\ast\infty},m)\to \mathrm{hom}_X(f,m)
+\end{equation*}
+is an equivalence. 
+\end{lem}
+
+\begin{thm}\label{lem:isprop_infjp}
+For any map $f:A\to X$, the map $f^{\ast\infty}:A_X^{\ast\infty}\to X$ is an embedding that satisfies the universal property of the image inclusion of $f$.
+\end{thm}
+
+\subsection{Stage three: establishing the smallness of the image}
+\begin{lem}
+Consider a commuting square
+\begin{equation*}
+\begin{tikzcd}
+A \arrow[r] \arrow[d] & B \arrow[d] \\
+C \arrow[r] & D.
+\end{tikzcd}
+\end{equation*}
+\begin{enumerate}
+\item If the square is cartesian, $B$ and $C$ are essentially small, and $D$ is locally small, then $A$ is essentially small.
+\item If the square is cocartesian, and $A$, $B$, and $C$ are essentially small, then $D$ is essentially small. 
+\end{enumerate}
+\end{lem}
+
+\begin{cor}
+Suppose $f:A\to X$ and $g:B\to X$ are maps from essentially small types $A$ and $B$, respectively, to a locally small type $X$. Then $A\times_X B$ is again essentially small. 
 \end{cor}
 
-\begin{proof}
-In the first proof of Theorem 9.9.5 of \cite{hottbook}, the Rezk completion of
-a precategory $A$ is constructed as the image of the action on objects of the
-Yoneda embedding $\mathbf{y}:A\to\mathbf{Set}^{\op{A}}$.
+\begin{lem}
+Consider a type sequence
+\begin{equation*}
+\begin{tikzcd}
+A_0 \arrow[r,"f_0"] & A_1 \arrow[r,"f_1"] & A_2 \arrow[r,"f_2"] & \cdots
+\end{tikzcd}
+\end{equation*}
+where each $A_n$ is essentially small. Then its sequential colimit is again essentially small. 
+\end{lem}
 
-The hom-set $\mathbf{Set}^{\op{A}}(F,G)$ is the type of natural transformations
-from $F$ to $G$. It is clear from Definition 9.9.2 of \cite{hottbook}, that the
-type $\mathbf{Set}^{\op{A}}(F,G)$ is in $\UU$ for any two presheaves $F$ and $G$
-on $A$. In particular, the type $F\cong G$ of isomorphisms from $F$ to $G$
-is small for any two presheaves on $A$.
+\begin{thm}
+For any map $f:A\to X$ from a small type $A$ into a locally small type $X$, the image $\im(f)$ is an essentially small type.
+\end{thm}
 
-Since $\mathbf{Set}$ is a category, it follows from Theorem 9.2.5 of
-\cite{hottbook} that the presheaf pre-category $\mathbf{Set}^{\op{A}}$ is a category.
-Since the type of isomorphisms between any two objects is
-small, it follows that the type of objects of
-$\mathbf{Set}^{\op{A}}$ is locally small. 
+Recall that in set theory, the replacement axiom asserts that for any family of sets $\{X_i\}_{i\in I}$ indexed by a set $I$, there is a set $X[I]$ consisting of precisely those sets $x$ for which there exists an $i\in I$ such that $x\in X_i$. In other words: the image of a set-indexed family of sets is again a set. Without the replacement axiom, $X[I]$ would be a class. In the following corollary we establish a type-theoretic analogue of the replacement axiom: the image of a family of small types indexed by a small type is again (essentially) small.
 
-Hence we can use \autoref{thm:modified-join} to construct the image of the
-action on objects of the Yoneda-embedding. The image constructed in this way
-is of course equivalent to the type $\hat{A}_0$ defined in the first proof of
-Theorem 9.9.5. Hence the arguments presented in the rest of that proof apply
-as well to our construction of the image. We therefore conclude that the Rezk completion
-of any small precategory is a small category.
-\end{proof}
+\begin{cor}\label{cor:im_small}
+For any small type family $B:A\to\UU$, where $A$ is small, the image $\im(B)$ is essentially small. We call $\im(B)$ the \define{univalent completion} of $B$. 
+\end{cor}
 
 \section{Set quotients}
+
 \subsection{Equivalence relations}
 
 \begin{defn}\label{defn:eq_rel}
@@ -1346,13 +468,13 @@ We will define a map
 \end{equation*}
 \end{defn}
 
-\begin{constr}
+\begin{proof}[Construction]
 Let $h:B\to X$. Then we have $h\circ q : A\to X$, so it remains to show that
 \begin{equation*}
 \prd{x,y:A}R(x,y)\to (h(q(x))=h(q(y)))
 \end{equation*}
 Consider $x,y:A$ which are related by $R$. Then we have an identification $p:q(x)=q(y)$, so it follows that $\ap{h}{p}:h(q(x))=h(q(y))$.  
-\end{constr}
+\end{proof}
 
 \begin{defn}
 Let $R:A\to (A\to \prop)$ be an equivalence relation\index{equivalence relation|textit}, for $A:\UU$, and consider a map $q:A\to B$ satisfying
@@ -1486,7 +608,7 @@ Some basic results about the join of maps include a generalization of Lemma 8.6.
 \cite{hottbook}, which we call the join extension theorem (\autoref{thm:join-extension}), and a closely
 related theorem which we call the join connectivity theorem (\autoref{thm:join-connectivity}).
 The idea of the join connectivity theorem came from Proposition 8.15 in 
-Rezk's notes on homotopy toposes \cite{Rezk}.
+Rezk's notes on homotopy toposes \cite{Rezk2010toposes}.
 We use the join connectivity theorem in 
 \autoref{thm:joinconstruction-connectivity} to conclude that the connectivity 
 of the approximations of the image inclusion increases.
@@ -1527,7 +649,7 @@ M \arrow[r,"f"] \arrow[d] & A \\
 \unit. \arrow[ur,densely dotted]
 \end{tikzcd}
 \end{equation*}
-Note that being $M$-local in the above sense is a mere proposition, so that the
+Note that being $M$-local in the above sense is a proposition, so that the
 type of all $M$-local types in $\UU$ is a subuniverse of $\UU$%
 \footnote{When $\UU$ is assumed to be closed under recursive higher inductive
 types, there exists an operation $\modal_M : \UU\to\UU$, 
@@ -1654,7 +776,7 @@ Consider an $M$-connected map $f:A\to X$ and an $N$-connected map $g:B\to X$. Th
 \end{thm}
 
 \begin{proof}
-This follows from \autoref{thm:simple-join} and \autoref{defn:join-fiber}.
+This follows from \autoref{thm:simple-join} and \cref{thm:join-fiber}.
 \end{proof}
 
 \begin{thm}\label{thm:joinconstruction-connectivity}
@@ -1700,7 +822,7 @@ are equivalent. Hence the claim follows.
 
 As a corollary, we get that $q_n=q_f^{\ast n}$. Note that $q_f$ is surjective,
 in the sense that $q_f$ is $\bool$-connected, where $\bool$ is the type of booleans%
-\footnote{Recall that the $\bool$-local types are precisely the mere propositions.}.
+\footnote{Recall that the $\bool$-local types are precisely the propositions.}.
 Hence it follows that $q_n$ is $\bool^{\ast n}$-connected. 
 
 Now recall that the $n$-th join power of $\bool$ is the $(n-1)$-sphere $\Sn^{n-1}$, and that
@@ -1879,7 +1001,7 @@ is $M$-connected. Then $f$ is $\susp(M)$-connected.
 
 \begin{proof}
 We have to show that $\fib{f}{x}$ is $\susp(M)$-connected for each $x:X$. 
-Since this is a mere proposition, and we assume that $f$ is surjective, it
+Since this is a proposition, and we assume that $f$ is surjective, it
 is equivalent to show that $\fib{f}{f(a)}$ is $\susp(M)$-connected for each $a:A$. 
 Let $Y$ be a $\susp(M)$-local type. 
 For every $g:\fib{f}{f(a)}\to Y$ be a map we have the point $\theta(g)\defeq g(a,\refl{f(a)})$ in $Y$,
@@ -1927,12 +1049,12 @@ is an equivalence.
 
 \begin{lem}\label{lem:reflective_uniqueness}
   For any $\mathcal{M}:\UU\to\prop$ and any type $X$, the type of triples $(Y,f,I)$ consisting of $Y:\UU_{\mathcal{M}}$,
-  $f:X\to Y$ and $I:\prd{Z:\UU_{\mathcal{M}}}\isequiv(\lam{g}g\circ f:(Y\to Z)\to(X\to Z))$, is a mere proposition.
+  $f:X\to Y$ and $I:\prd{Z:\UU_{\mathcal{M}}}\isequiv(\lam{g}g\circ f:(Y\to Z)\to(X\to Z))$, is a proposition.
 \end{lem}
 
 \begin{proof}
 Consider $(Y,f,I)$ and $(Y',f',I')$ of the described type. Since $I$ and $I'$
-are terms of a mere proposition, it suffices to show that $(Y,f)=(Y',f')$. In
+are terms of a proposition, it suffices to show that $(Y,f)=(Y',f')$. In
 other words, we have to find an equivalence $g:Y\to Y'$ such that $g\circ f'=f$.
 
 By $I(Y')$, the type of
@@ -1950,7 +1072,7 @@ The data of any two reflective subuniverses with the same modal types are the sa
 \end{thm}
 \begin{proof}
   Given the modal types, the rest of the data of a reflective subuniverse consists of, for each type $X$, a triple $(Y,f,I)$ as in \cref{lem:reflective_uniqueness}.
-  Thus, by \cref{lem:reflective_uniqueness}, these data form a mere proposition.
+  Thus, by \cref{lem:reflective_uniqueness}, these data form a proposition.
 \end{proof}
 
 \begin{lem}\label{lem:subuniv-modal}
@@ -2115,15 +1237,15 @@ Here in the penultimate step we use the fact that $\modal Y\to Z$ is modal since
 \end{proof}
 
 \begin{lem}\label{lem:modal-pres-prop}
-Given any reflective subuniverse, the modal operator preserves mere propositions.
+Given any reflective subuniverse, the modal operator preserves propositions.
 \end{lem}
 \begin{proof}
-  A type $P$ is a mere proposition if and only if the diagonal $P\to P\times P$ is an equivalence.
+  A type $P$ is a proposition if and only if the diagonal $P\to P\times P$ is an equivalence.
   The result then follows from \cref{thm:modal-pres-prod}.
 \end{proof}
 
 By contrast, even modalities do not generally preserve $n$-types for any $n\ge 0$.
-For instance, the ``shape'' modality of~\cite{shulman:bfp-realcohesion} takes the topological circle, which is a 0-type, to the homotopical circle, which is a 1-type, and the topological 2-sphere, which is also a 0-type, to the homotopical 2-sphere, which is (conjecturally) not an $n$-type for any finite $n$.
+For instance, the ``shape'' modality of~\cite{shulman2015brouwer} takes the topological circle, which is a 0-type, to the homotopical circle, which is a 1-type, and the topological 2-sphere, which is also a 0-type, to the homotopical 2-sphere, which is (conjecturally) not an $n$-type for any finite $n$.
 However, we will see in~\autoref{modaln-truncated} that lex modalities do preserve $n$-types for all $n$.
 
 \begin{rmk}
