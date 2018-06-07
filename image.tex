@@ -55,7 +55,7 @@ From \cref{cor:fib_triangle} we obtain that the type $\mathrm{hom}_X(f,m)$ is eq
 \prd{x:X}\fib{f}{x}\to\fib{m}{x},
 \end{equation*}
 so it suffices to show that this is a proposition. 
-Recall from \cref{cor:prop_emb} that a map is an embedding if and only if its fibers are propositions.
+Recall from \cref{thm:prop_emb} that a map is an embedding if and only if its fibers are propositions.
 Thus we see that the type $\prd{x:X}\fib{f}{x}\to\fib{m}{x}$ is a product of propositions, so it is a proposition by \cref{thm:trunc_pi}.
 \end{proof}
 
@@ -348,6 +348,47 @@ For any small type family $B:A\to\UU$, where $A$ is small, the image $\im(B)$ is
 
 \section{Set quotients}
 
+\subsection{Sets in homotopy type theory}
+\begin{defn}
+A type $A$ is said to be a \define{set} if there is a term of type
+\begin{equation*}
+\isset(A)\defeq \prd{x,y:A}\isprop(\id{x}{y}).
+\end{equation*}
+\end{defn}
+
+\begin{lem}\label{lem:prop_to_id}
+Let $A$ be a type, and let $R:A\to A\to\UU$ be a binary relation on $A$ satisfying
+\begin{enumerate}
+\item Each $R(x,y)$ is a proposition,
+\item $R$ is reflexive, as witnessed by $\rho:\prd{x:A}R(x,x)$.
+\end{enumerate}
+Then any fiberwise map
+\begin{equation*}
+\prd{x,y:A}R(x,y)\to (\id{x}{y})
+\end{equation*}
+is a fiberwise equivalence. Consequently, if there is such a fiberwise map, then $A$ is a set.
+\end{lem}
+
+\begin{proof}
+Let $f:\prd{x,y:A}R(x,y)\to(\id{x}{y})$. 
+Since $R$ is assumed to be reflexive, we also have a fiberwise transformation
+\begin{equation*}
+\ind{x{=}}(\rho(x)):\prd{y:A}(\id{x}{y})\to R(x,y).
+\end{equation*}
+Since each $R(x,y)$ is assumed to be a proposition, it therefore follows that each $R(x,y)$ is a retract of $\id{x}{y}$. We conclude by \autoref{ex:id_fundamental_retr} that for each $x,y:A$, the map $f(x,y):R(x,y)\to(\id{x}{y})$ must be an equivalence.
+
+Now it also follows that $A$ is a set, since its identity types are (equivalent to) propositions.
+\end{proof}
+
+\begin{eg}
+One can apply \cref{lem:prop_to_id} using the \define{observational equality} $\mathrm{Eq}_\N:\N\to (\N\to\UU)$ given by
+\begin{align*}
+\mathrm{Eq}_\N(0,0) & \defeq \unit & \mathrm{Eq}_\N(\mathsf{succ}(n),0) & \defeq \emptyt \\
+\mathrm{Eq}_\N(0,\mathsf{succ}(m)) & \defeq \emptyt & \mathrm{Eq}_\N(\mathsf{succ}(n),\mathsf{succ}(m)) & \defeq \mathrm{Eq}_\N(n,m)
+\end{align*}
+to show that $\N$ is a set. To see that $\mathrm{Eq}_\N$ implies identity, note that $\mathrm{Eq}_\N$ implies any reflexive relation $R:\N\to\N\to\UU$.
+\end{eg}
+
 \subsection{Equivalence relations}
 
 \begin{defn}\label{defn:eq_rel}
@@ -599,6 +640,130 @@ For each type $A$, the set truncation satisfies the universal property of the se
 \end{thm}
 
 \section{Elementary construction of the $n$-truncations}
+
+\subsection{Truncated types}
+\begin{defn}
+We define $\istrunc{} : \Z_{\geq-2}\to\UU\to\UU$ by induction on $k:\Z_{\geq -2}$, taking
+\begin{align*}
+\istrunc{-2}(A) & \defeq \iscontr(A) \\
+\istrunc{k+1}(A) & \defeq \prd{x,y:A}\istrunc{k}(\id{x}{y}).\qedhere
+\end{align*}
+For any type $A$, we say that $A$ is \define{$k$-truncated}, or a \define{$k$-type}, if there is a term of type $\istrunc{k}(A)$. We say that a map $f:A\to B$ is $k$-truncated if its fibers are $k$-truncated.
+\end{defn}
+
+\begin{lem}\label{thm:istrunc_next}
+If $A$ is a $k$-type, then $A$ is also a $(k+1)$-type.
+\end{lem}
+
+\begin{thm}\label{thm:ktype_eqv}
+If $e:\eqv{A}{B}$ is an equivalence, and $B$ is a $k$-type, then so is $A$.
+\end{thm}
+
+\begin{proof}
+We have seen in \autoref{ex:contr_equiv} that if $B$ is contractible and $e:\eqv{A}{B}$ is an equivalence, then $A$ is also contractible. This proves the base case.
+
+For the inductive step, assume that the $k$-types are stable under equivalences, and consider $e:\eqv{A}{B}$ where $B$ is a $(k+1)$-type. In \autoref{cor:emb_equiv} we have seen that
+\begin{equation*}
+\apfunc{e}:(\id{x}{y})\to(\id{e(x)}{e(y)})
+\end{equation*}
+is an equivalence for any $x,y$. Note that $\id{e(x)}{e(y)}$ is a $k$-type, so by the induction hypothesis it follows that $\id{x}{y}$ is a $k$-type. This proves that $A$ is a $(k+1)$-type.
+\end{proof}
+
+\begin{cor}\label{cor:emb_into_ktype}
+If $f:A\to B$ is an embedding, and $B$ is a $(k+1)$-type, then so is $A$.
+\end{cor}
+
+\begin{proof}
+By the assumption that $f$ is an embedding, the action on paths
+\begin{equation*}
+\apfunc{f}:(\id{x}{y})\to (\id{f(x)}{f(y)})
+\end{equation*}
+is an equivalence for every $x,y:A$. Since $B$ is assumed to be a $(k+1)$-type, it follows that $f(x)=f(y)$ is a $k$-type for every $x,y:A$. Therefore we conclude by \cref{thm:ktype_eqv} that $\id{x}{y}$ is a $k$-type for every $x,y:A$. In other words, $A$ is a $(k+1)$-type.
+\end{proof}
+
+\begin{thm}\label{thm:trunc_pi}
+Assume function extensionality. Then for any type family $B$ over $A$ one has\index{truncated}
+\begin{equation*}
+\Big(\prd{x:A}\istrunc{k}(B(x))\Big)\to \istrunc{k}\Big(\prd{x:A}B(x)\Big).
+\end{equation*}
+\end{thm}
+
+\begin{proof}
+The theorem is proven by induction on $k\geq -2$, where the base case is just the weak function extensionality principle, which was shown to follow from function extensionality in \autoref{thm:funext_wkfunext}.
+\end{proof}
+
+\begin{cor}\label{cor:funtype_trunc}
+Suppose $B$ is a $k$-type. Then $A\to B$ is also a $k$-type, for any type $A$.
+\end{cor}
+
+\begin{thm}
+Let $B$ be a type family over $A$. Then the following are equivalent:
+\begin{enumerate}
+\item For each $x:A$ the type $B(x)$ is $k$-truncated.
+\item The projection map
+\begin{equation*}
+\proj 1 : \Big(\sm{x:A}B(x)\Big)\to A
+\end{equation*}
+is a $k$-truncated map.
+\end{enumerate}
+\end{thm}
+
+\begin{proof}
+By \cref{ex:fib_replacement,ex:fiber_trans} we obtain equivalences
+\begin{equation*}
+\eqv{B(x)}{\fib{\proj 1}{x}}
+\end{equation*}
+for every $x:A$. Therefore the claim follows from \cref{thm:ktype_eqv}.
+\end{proof}
+
+\begin{thm}\label{thm:trunc_ap}
+Let $f:A\to B$ be a map. The following are equivalent:
+\begin{enumerate}
+\item The map $f$ is $(k+1)$-truncated.
+\item For each $x,y:A$, the map
+\begin{equation*}
+\apfunc{f} : (x=y)\to (f(x)=f(y))
+\end{equation*}
+is $k$-truncated. 
+\end{enumerate}
+\end{thm}
+
+\begin{proof}
+First we show that for any $s,t:\fib{f}{b}$ there is an equivalence
+\begin{equation*}
+\eqv{(s=t)}{\fib{\apfunc{f}}{\ct{\proj 2(s)}{\proj 2(t)^{-1}}}}
+\end{equation*}
+We do this by $\Sigma$-induction on $s$ and $t$, and then we calculate using \cref{ex:trans_ap} and basic manipulations of identifications that
+\begin{align*}
+(\pairr{x,p}=\pairr{y,q}) & \eqvsym \sm{r:x=y} \mathsf{tr}_{f(\blank)=b}(r,p)=q \\
+& \eqvsym \sm{r:x=y} \ct{\ap{f}{r}^{-1}}{p}=q \\
+& \eqvsym \sm{r:x=y} \ap{f}{r}=\ct{p}{q^{-1}} \\
+& \jdeq \fib{\apfunc{f}}{\ct{p}{q^{-1}}}.
+\end{align*}
+By these equivalences, it follows that if $\apfunc{f}$ is $k$-truncated, then for each $s,t:\fib{f}{b}$ the identity type $s=t$ is equivalent to a $k$-truncated type, and therefore we obtain by \cref{thm:ktype_eqv} that $f$ is $(k+1)$-truncated.
+
+For the converse, note that we have equivalences
+\begin{align*}
+\fib{\apfunc{f}}{p} & \eqvsym ((x,p)=(y,\refl{f(y)})).
+\end{align*}
+Therefore it follows that if $f$ is $(k+1)$-truncated, then the identity type $(x,p)=(y,\refl{f(y)})$ in $\fib{f}{f(y)}$ is $k$-truncated for any $p:f(x)=f(y)$, and therefore $\fib{\apfunc{f}}{p}$ is $k$-truncated by \cref{thm:ktype_eqv}. 
+\end{proof}
+
+\begin{thm}
+Let $f:\prd{x:A}B(x)\to C(x)$ be a fiberwise transformation. Then the following are equivalent:
+\begin{enumerate}
+\item For each $x:A$ the map $f(x)$ is $k$-truncated.
+\item The induced map 
+\begin{equation*}
+\total{f}:\Big(\sm{x:A}B(x)\Big)\to\Big(\sm{x:A}C(x)\Big)
+\end{equation*}
+is $k$-truncated.
+\end{enumerate}
+\end{thm}
+
+\begin{proof}
+This follows directly from \cref{lem:fib_total,thm:ktype_eqv}.
+\end{proof}
 
 \subsection{The universal property of the $n$-truncations}
 
@@ -1024,234 +1189,3 @@ Therefore it follows, since the map $\mapfunc{f}(a,b):(a=b)\to(f(a)=f(b))$ is co
 \end{equation*}
 This follows by path induction. 
 \end{proof}
-
-\section{Reflective subuniverses}
-
-\subsection{Properties of reflective subuniverses}
-\label{sec:prop-rfsu}
-
-\begin{defn}
-A \define{reflective subuniverse} consists of
-\begin{enumerate}
-\item A subtype $\UU_L\to \UU$ of the universe,
-\item A map $L:\UU\to\UU_L$ called \define{localization}, equipped with a transformation
-\begin{equation*}
-\eta:\prd{X:\UU} X\to LX
-\end{equation*}
-called the \define{unit} of the localization,
-\end{enumerate}
-such that for each $X:\UU$ and $Y:\UU_L$, the precomposition map
-\begin{equation*}
-\blank\circ\eta_X: (LX\to Y)\to (X\to Y)
-\end{equation*}
-is an equivalence.
-\end{defn}
-
-\begin{lem}\label{lem:reflective_uniqueness}
-  For any $\mathcal{M}:\UU\to\prop$ and any type $X$, the type of triples $(Y,f,I)$ consisting of $Y:\UU_{\mathcal{M}}$,
-  $f:X\to Y$ and $I:\prd{Z:\UU_{\mathcal{M}}}\isequiv(\lam{g}g\circ f:(Y\to Z)\to(X\to Z))$, is a proposition.
-\end{lem}
-
-\begin{proof}
-Consider $(Y,f,I)$ and $(Y',f',I')$ of the described type. Since $I$ and $I'$
-are terms of a proposition, it suffices to show that $(Y,f)=(Y',f')$. In
-other words, we have to find an equivalence $g:Y\to Y'$ such that $g\circ f'=f$.
-
-By $I(Y')$, the type of
-pairs $(g,h)$ consisting of a function $g:Y\to Y'$ such that $h:g\circ f=f'$ is contractible. By
-$I'(Y)$, the type of pairs $(g',h')$ consisting of a function $g':Y'\to Y$
-such that $h':g'\circ f'=f$ is contractible.
-
-Now $g'\circ g$ is a function such that $g'\circ g\circ f=g'\circ f'=f$, as
-is $\idfunc[Y]$. By contractibility, it follows that $g'\circ g=\idfunc[Y]$.
-Similarly, $g\circ g'=\idfunc[Y']$.
-\end{proof}
-
-\begin{thm}\label{thm:subuniverse-rs}
-The data of any two reflective subuniverses with the same modal types are the same.
-\end{thm}
-\begin{proof}
-  Given the modal types, the rest of the data of a reflective subuniverse consists of, for each type $X$, a triple $(Y,f,I)$ as in \cref{lem:reflective_uniqueness}.
-  Thus, by \cref{lem:reflective_uniqueness}, these data form a proposition.
-\end{proof}
-
-\begin{lem}\label{lem:subuniv-modal}
-  Given a reflective subuniverse, a type $X$ is modal if and only if $\modalunit[X]$ is an equivalence.
-\end{lem}
-\begin{proof}
-  Certainly if $\modalunit[X]$ is an equivalence, then $X$ is modal since it is equivalent to the modal type $\modal X$.
-  Conversely, if $X$ is modal then $\idfunc[X]$ has the same universal property of $\modalunit[X]$; so by \cref{lem:reflective_uniqueness} they are equivalent and hence $\modalunit[X]$ is an equivalence.
-\end{proof}
-
-\begin{lem}\label{thm:modalunit-retract-equiv}
-  Given a reflective subuniverse, if a modal unit $\modalunit[X]$ has a left inverse (i.e.\ a retraction), then it is an equivalence, and hence $X$ is modal.
-\end{lem}
-\begin{proof}
-  Suppose $f$ is a left inverse of $\modalunit[X]$, i.e.\ $f\circ \modalunit[X] = \idfunc[X]$.
-  Then $\modalunit[X]\circ f\circ \modalunit[X] = \modalunit[X]$, so $\modalunit[X]\circ f$ is a factorization of $\modalunit[X]$ through itself.
-  By uniqueness of such factorizations, $\modalunit[X]\circ f = \idfunc[\modal X]$.
-  Thus $f$ is also a right inverse of $\modalunit[X]$, hence $\modalunit[X]$ is an equivalence.
-\end{proof}
-
-\begin{lem}
-  Any reflective subuniverse is a functor up to homotopy: given $f:A\to B$ we have an induced map $\modal f : \modal A \to \modal B$, preserving identities and composition up to homotopy.
-  Moreover, $\modalunit$ is a natural transformation up to homotopy, i.e.\ for any $f$ we have $\modal f \circ \modalunit[A] = \modalunit[B] \circ f$.
-\end{lem}
-\begin{proof}
-  Define $\modal f$ to be the unique function such that $\modal f \circ \modalunit[A] = \modalunit[B] \circ f$, using the universal property of $\modalunit[A]$.
-  The rest is easy to check using further universal properties.
-\end{proof}
-
-\begin{lem}
-  Given a reflective subuniverse and any type $X$, the map $\modal \modalunit[X] : \modal X \to \modal\modal X$ is an equivalence.
-\end{lem}
-\begin{proof}
-  By naturality, we have $\modal \modalunit[X] \circ \modalunit[X] = \modalunit[\modal X] \circ \modalunit[X]$.
-  Hence $\modal \modalunit[X] = \modalunit[\modal X]$ by the universal property of $\modalunit[X]$, but $\modalunit[\modal X]$ is an equivalence by \cref{lem:subuniv-modal}.
-\end{proof}
-
-\begin{lem}\label{thm:rsu-galois}
-  Given a reflective subuniverse, a type $X$ is modal if and only if $(\blank \circ f) : (B\to X) \to (A\to X)$ is an equivalence for any function $f:A\to B$ such that $\modal f$ is an equivalence.
-\end{lem}
-\begin{proof}
-  If $\modal f$ is an equivalence and $X$ is modal, then by the universal property of $\modalunit$, we have a commutative square
-  \[
-  \begin{tikzcd}
-    (B\to X) \ar[r,"\blank\circ f"] & (A\to X) \\
-    (\modal B\to X) \ar[r,"\blank\circ\modal f"'] \ar[u,"{\blank\circ \modalunit[B]}"] &
-    (\modal A \to X) \ar[u,"{\blank\circ \modalunit[A]}"']
-  \end{tikzcd}
-  \]
-  in which all but the top map are equivalences; thus so is the top map.
-
-  Conversely, since $\modal\modalunit[X]$ is an equivalence, the hypothesis implies that
-  $(\blank \circ \modalunit[X]) : (\modal X\to X) \to (X\to X)$
-  is an equivalence.
-  In particular, its fiber over $\idfunc[X]$ is inhabited, i.e.\ $\modalunit[X]$ has a retraction; hence $X$ is modal.
-\end{proof}
-
-\begin{lem}\label{lem:sum_idempotent}
-Consider a reflective subuniverse with modal operator $\modal$, and let $P:X\to\UU$ for some type $X:\UU$.
-Then the unique map for which the triangle
-\begin{equation*}
-\begin{tikzcd}
-\sm{x:X}P(x) \arrow[d,swap,"\modalunit"] \arrow[dr,"{\lam{\pairr{x,y}}\modalunit(x,\modalunit(y))}"] \\
-\modal(\sm{x:X}P(x)) \arrow[r,densely dotted] & \modal(\sm{x:X}\modal(P(x)))
-\end{tikzcd}
-\end{equation*}
-commutes, is an equivalence.
-\end{lem}
-\begin{proof}
-  Since both codomains are modal, it suffices to show that ${\lam{\pairr{x,y}}\modalunit(x,\modalunit(y))}$ has the universal property of $\modalunit[\sm{x:X}P(x)]$, i.e.\ that any map $(\sm{x:X}P(x)) \to Y$, where $Y$ is modal, extends uniquely to $\modal(\sm{x:X}\modal(P(x)))$.
-  But we have
-  \begin{align*}
-    ((\sm{x:X}P(x)) \to Y)
-    &\simeq
-    \prd{x:X} P(x) \to Y\\
-    &\simeq
-    \prd{x:X} \modal(P(x)) \to Y\\
-    &\simeq
-    (\sm{x:X}\modal(P(x))) \to Y\\
-    &\simeq
-    \modal (\sm{x:X}\modal(P(x))) \to Y
-  \end{align*}
-  and it is easy to see that this is the desired precomposition map.
-\end{proof}
-
-\begin{lem}\label{lem:rs_idstable}
-  For any reflective subuniverse, if $X$ is modal, then so is the identity type $x=y$ for any $x,y:X$.
-\end{lem}
-
-\begin{proof}
-Let $X$ be a modal type, and let $x,y:X$. We have a map
-$\modal(x=y)\to\unit$. The outer square in the diagram
-\begin{equation*}
-\begin{tikzcd}
-\modal(x=y) \arrow[ddr,bend right=15] \arrow[drr,bend left=15] \\
-& (x=y) \arrow[r] \arrow[d] \arrow[ul,"\modalunit"] \arrow[dr, phantom, "\lrcorner", very near start] & \unit \arrow[d,"x"] \\
-& \unit \arrow[r,swap,"y"] & X
-\end{tikzcd}
-\end{equation*}
-commutes, because both maps extend the map $(x=y)\to X$ along $\modalunit$, and
-such extensions are unique because $X$ is assumed to be modal.
-Hence the universal property of the pullback gives
-an inverse of $\modalunit:(x=y)\to\modal(x=y)$.
-\end{proof}
-
-\begin{lem}\label{lem:modal-Pi}
-Given a reflective subuniverse,
-if $P(x)$ is modal for all $x:X$, then so is $\prd{x:X}P(x)$.
-\end{lem}
-
-\begin{proof}
-By \cref{thm:modalunit-retract-equiv}, it suffices to define a left inverse of the modal unit
-$\modalunit:(\prd{x:A}P(x))\to \modal(\prd{x:A}P(x))$. By the universal property
-of dependent product, extending
-\begin{equation*}
-\begin{tikzcd}
-\prd{x:A}P(x) \arrow[r,"{\idfunc}"] \arrow[d,"\modalunit"] & \prd{a:A}P(a) \arrow[d,"{\psi\,\defeq\,\lam{f}{a}\modalunit[P(a)](f(a))}"] \\
-\modal(\prd{x:A}P(x)) \arrow[r,densely dotted] & \prd{a:A}\modal(P(a))
-\end{tikzcd}
-\end{equation*}
-is equivalent to extending
-\begin{equation*}
-\begin{tikzcd}[column sep=large]
-\prd{x:A}P(x) \arrow[r,"{\mathsf{ev}_a}"] \arrow[d,swap,"{\modalunit}"]
-& P(a) \arrow[d,"{\modalunit}"] \\
-\modal(\prd{x:A}P(x)) \arrow[r,densely dotted,swap,"{\modal(\mathsf{ev}_a)}"] & \modal(P(a))
-\end{tikzcd}
-\end{equation*}
-for any $a:A$. Thus, we find
-\begin{equation*}
-f\defeq\lam{m}{a}\modal(\mathsf{ev}_a)(m):\modal(\prd{x:A}P(x))\to\prd{a:A}P(a).
-\end{equation*}
-as the solution to the first extension problem. In the first extension problem,
-the function $\psi$ is an equivalence by the assumption that each $P(a)$ is
-modal, so we obtain a retraction of the modal unit.
-\end{proof}
-
-\begin{lem}\label{thm:modal-pres-prod}
-Given any reflective subuniverse, the modal operator $\modal$ preserves cartesian products.
-\end{lem}
-
-\begin{proof}
-We have to show that the modal extension
-\begin{equation*}
-\begin{tikzcd}
-X\times Y \arrow[d,swap,"{\modalunit[X\times Y]}"] \arrow[dr,"\lam{\pairr{x,y}}\pairr{\modalunit[X](x),\modalunit[Y](y)}"] \\
-\modal(X\times Y) \arrow[r,densely dotted] & \modal X\times\modal Y
-\end{tikzcd}
-\end{equation*}
-is an equivalence.
-By \cref{lem:reflective_uniqueness} it suffices to show that $\lam{\pairr{x,y}}\pairr{\modalunit[X](x),\modalunit[Y](y)}$ has the same universal property of $\modalunit[X\times Y]$.
-But for any modal type $Z$ we have
-\begin{align*}
-  (X\times Y \to Z)
-  &\eqvsym X\to (Y\to Z)\\
-  &\eqvsym X\to (\modal Y\to Z)\\
-  &\eqvsym \modal X\to (\modal Y\to Z)\\
-  &\eqvsym \modal X\times \modal Y\to Z
-\end{align*}
-given by precomposition as desired.
-Here in the penultimate step we use the fact that $\modal Y\to Z$ is modal since $Z$ is, by \cref{lem:modal-Pi}.
-\end{proof}
-
-\begin{lem}\label{lem:modal-pres-prop}
-Given any reflective subuniverse, the modal operator preserves propositions.
-\end{lem}
-\begin{proof}
-  A type $P$ is a proposition if and only if the diagonal $P\to P\times P$ is an equivalence.
-  The result then follows from \cref{thm:modal-pres-prod}.
-\end{proof}
-
-By contrast, even modalities do not generally preserve $n$-types for any $n\ge 0$.
-For instance, the ``shape'' modality of~\cite{shulman2015brouwer} takes the topological circle, which is a 0-type, to the homotopical circle, which is a 1-type, and the topological 2-sphere, which is also a 0-type, to the homotopical 2-sphere, which is (conjecturally) not an $n$-type for any finite $n$.
-However, we will see in~\autoref{modaln-truncated} that lex modalities do preserve $n$-types for all $n$.
-
-\begin{rmk}
-  The basic properties of types and maps in homotopy type theory, such as being contractible, being a proposition, being an $n$-type, being an equivalence, and so on, are all constructed (perhaps inductively) out of identity types and $\Sigma$- and $\Pi$-types.
-  Thus, a $\Sigma$-closed reflective subuniverse is closed under them as well.
-  That is, if $A$ and $B$ are modal and $f:A\to B$, then the propositions ``$A$ is contractible'', ``$A$ is an $n$-type'', ``$f$ is an equivalence'', and so on, are all modal as well.
-\end{rmk}
-
-\subsection{The reflective subuniverse of separated types}

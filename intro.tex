@@ -15,14 +15,14 @@ Homotopy type theory is based on Martin-L\"of's theory of dependent types \cite{
 was developed during the 1970's and 1980's.
 The novel additions of homotopy type theory are Voevodsky's univalence axiom \cite{Voevodsky06,Voevodsky10},
 and higher inductive types \cite{Lumsdaine11Blog,Shulman11Blog,hottbook}. The univalence axiom characterizes the identity
-type on the universe, and thereby establishes the universe as an object classifier \cite{RijkeSpitters}.
+type on the universe, and establishes the universe as an object classifier \cite{RijkeSpitters}.
 Higher inductive types are a generalization of inductive types, in which both
 point constructors (generators) and path constructors (relations) may be specified.
 A simple class of higher inductive types, which includes most known higher inductive
-types, are the homotopy coequalizers. When the universe is assumed to be closed
-under homotopy coequalizers, it is also closed under pushouts \cite{hottbook}, 
+types, are the homotopy pushouts. When the universe is assumed to be closed
+under homotopy pushouts, it is also closed under homotopy coequalizers \cite{hottbook}, 
 sequential colimits \cite{hottbook}, and propositional truncation truncation \cite{VanDoorn15}.
-For instance, we get the $n$-spheres \cite{Lumsdaine12Blog} by setting $\sphere{-1}\defeq\emptyt$ and
+For instance, one way of obtaining the $n$-spheres \cite{Lumsdaine12Blog} using homotopy pushouts is by setting $\sphere{-1}\defeq\emptyt$ and
 by inductively defining the $(n+1)$-sphere $\sphere{n+1}$ to be the pushout
 of the span $\unit \leftarrow\sphere{n}\rightarrow\unit$. 
 Then we can attach $(n+1)$-cells to a type $X$.

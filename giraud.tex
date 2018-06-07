@@ -2,93 +2,478 @@
 
 \section{Principal equivalence relations}
 
-\begin{comment}
-In the setting of homotopy type theory, as described by the Univalent Foundations Program in \cite{hottbook}, `ordinary' equivalence relations on a type $A$ are specified as $\prop$-valued binary relations which are reflexive, symmetric, and transitive. When $\mathcal{R}$ is an equivalence relation in this sense, then the quotient $A/\mathcal{R}$ can be specified as the image of $\mathcal{R}:A\to (A\to \prop)$, as a subtype of $A\to\prop$, which is always a set. Such `set-quotients' have been first constructed in \cite{UniMath2015,UniMath} using propositional resizing, and as higher inductive types in \cite{hottbook} in the case where $A$ is assumed to be a set. In fact, using the join construction \cite{joinconstruction}, the quotient $A/\mathcal{R}$ can be constructed as a sequential colimit of pushouts. 
+Let $R: X\to (X\to\UU)$ be a binary relation on $X$, with a proof $\rho:\prd{x:X}R(x,x)$ of reflexivity. We seek to define a quotient type $Y$, with a map $q : X\to Y$ such that for any $x,x':X$ we have an equivalence $\eqv{R(x,x')}{(q(x)=q(x'))}$. 
 
-Prop-valued equivalence relations as described above are just one level in a hierarchy of equivalence relations. The next level up consists of `$1$-equivalence relations', or `pre-groupoid structures' on a type $A$, the data of which endows $A$ with the structure of a pre-groupoid in the sense of Ahrens, Kapulkin, Shulman \cite{AhrensKapulkinShulman}. In the case of pre-groupoid structures one also needs to account for associativity, unit laws, and inverse laws. Groupoid quotients have been defined as higher inductive types in homotopy type theory by Sojakova \cite{SojakovaPhD}.
+This would certainly be the case if we can find a map $P:Y\to\im(R)$ such that $P\circ q=R$ and such that for every $x:X$ and $y:Y$ we have an equivalence $\eqv{P(y)}{(q(x)=y)}$. Hence it suffices to require that there exist $P:Y\to\im(R)$ such that $\sm{y:Y}P(y)$ is contractible. 
 
-The notions of prop-valued equivalence relations and $1$-equivalence relations fit in a hierarchy of $n$-equivalence relations that actually starts at level $-1$ with \emph{trivial} relations. In this hierarchy, displayed in \autoref{tab:hierarchy}, the index corresponds to the truncation level of the quotient, so that a $1$-equivalence relation is indeed a pre-groupoid structure in the sence of \cite{AhrensKapulkinShulman}.
+Notice that the function $P:Y\to\im(R)$ is equivalently described as a type family $O:\im(R)\to\UU$, and that the function $q:X\to Y$ such that $P\circ q=R$ is equivalently described as a term of type $\prd{x:X} O(R(x))$. We choose these as ingredients of our definition of principal equivalence relation.
 
-\begin{table}\label{tab:hierarchy}
-\caption{The truncation hierarchy of equivalence relations}
-\begin{tabular}{cll}
-\toprule
-\emph{level} & \emph{equivalence structure} & \emph{quotient operation} \\
-\midrule
-$-1$ & trivial relation & propositional truncation \\
-$0$ & $\prop$-valued equivalence relation & set-quotient \\
-$1$ & pre-$1$-groupoid structure & Rezk completion \\
-$\vdots$ & \qquad$\vdots$ & \qquad$\vdots$ \\
-$\infty$ & `pre-$\infty$-groupoid structure' & $\infty$-quotient \\
-\bottomrule
-\end{tabular}
-\end{table}
+Based on this idea, Mike Shulman found an alternative proof of the fact that $\mathcal{Q}_X$, defined in \autoref{defn:Q}, is an equivalence. His proof is more direct, and more type theoretical in nature, whereas our proof follows a more traditional line of reasoning, in which first the kernel is constructed.
 
-In order to formulate a notion of $2$-equivalence relations, one requires higher-dimensional structure analogous to that found in the notion of a bi-groupoid. As one goes higher up the hierarchy of general `$n$-equivalence relations we get a combinatorial explosion of data to be specified to account for all the higher coherences. In this work, we propose a way to bypass the problem of having to specify an infinite amount of coherence data by using a coinductive definition of $\infty$-equivalence relations involving involving homotopy pushouts.
-
-The identity type of any type is the initial reflexive type-valued binary relation on types.
-By virtue of their (homotopy) initiality, they obtain the structure
-of a higher groupoid. This can be made precise externally, as is done in the
-work of Van den Berg and Garner \cite{VanDenBergGarner}, and LeFanu Lumsdaine 
-\cite{Lumsdaine10}, but so far it has been an open problem to give in type theory
-a satisfactory, sufficiently explicit description for a reflexive relation
-to be an $\infty$-equivalence relation.
-
-A more general class of examples that possess higher groupoid structure consist of kernels of maps.
-Given a map $f:A\to B$ we have a reflexive relation $\prekersym_A(f)$ given by
-\begin{equation*}
-x,y\mapsto f(x)=f(y).
-\end{equation*}
-The proof of reflexivity is given by $\lam{x}\refl{f(x)}$.
-We call $\prekersym_A(f)$ the \define{pre-kernel} of $f$, since it is only the underlying reflexive relation of the kernel but it lacks an explicit structure of an equivalence relation. Note that the image of $f$ is a model for the $\infty$-quotient $A/\prekersym_A(f)$, because the identification type of $\im(f)$ coincides with that of $X$.
-
-We turn to the question of specifying what it means to define a notion of homotopy coherent equivalence relations in homotopy type theory, and thus the formal specification of the problem we set out to solve. In the following, we write 
-$(A\mathbin{\downarrow_s}\UU)$ for the type of \emph{surjective} maps out of $A$, that is:
-\begin{equation*}
-(A\mathbin{\downarrow_s}\UU)\defeq \sm{B:\UU}{f:A\to B}\mathsf{isSurj}(f).
-\end{equation*}
-Recall that a \emph{(type-valued) reflexive relation} $\mathcal{R}$ on a type $A$ consists of a binary relation $R:A\to A\to \UU$ and a proof of reflexivity $\rho:\prd{x:A}R(x,x)$. The type of all reflexive relations on $A$ is denoted by $\mathsf{rRel}_A$. Using this notation we see that the operation that associates the pre-kernel to a surjective map $f:A\to B$ is a function
-\begin{equation*}
-\prekersym_A(f):(A\mathbin{\downarrow_s}\UU)\to \mathsf{rRel}_A.
-\end{equation*}
-We now formulate our main problem.
-
-\begin{prob}\label{prob:main}
-To define for each type $A$, a structure $\mathsf{isEqRel}_A:\mathsf{rRel}_A\to\UU$ defined on the type $\mathsf{rRel}_A$ of type-valued reflexive relations, with the following additional structure:
+\begin{defn}
+A \define{principal equivalence relation} on a type $X$ consists of
 \begin{enumerate}
-\item A lift $\prekersym_A$ to an operation $\kersym_A$ as indicated in the diagram
+\item A binary relation $R:X\to (X\to \UU)$ with a proof $\rho:\prd{x:X}R(x,x)$ of reflexivity,
+\item A type family
 \begin{equation*}
-\begin{tikzcd}[column sep=large]
-& \sm{\mathcal{R}:\mathsf{rRel}(A)}\mathsf{isEqRel}_A(\mathcal{R}) \arrow[d,->>] \\
-(A \mathbin{{\downarrow}_s} U) \arrow[r,swap,"\prekersym_A"] \arrow[ur,densely dotted,"\kersym_A"] & \mathsf{rRel}(A)
-\end{tikzcd}
+\mathcal{O}_R : \im(R)\to\UU \\
 \end{equation*}
-In other words, every pre-kernel needs to be given the structure of an equivalence relation so that it becomes a kernel.
-\item A term witnessing that the function $\kersym_A$ is an equivalence.
+of \define{$R$-orientations} on the predicates $P:X\to \UU$ in the image of $R$, with a \define{canonical $R$-orientation}
+\begin{equation*}
+o_R : \prd{x:X}\mathcal{O}_R(R(x)),
+\end{equation*}
 \end{enumerate}
-\end{prob}
-
-The first requirement just means that any pre-kernel must possess (in a canonical way) the structure of a homotopy coherent equivalence relation. The second requirement involves finding for every equivalence relation $\mathcal{R}$ on $A$, the quotient $A/\mathcal{R}$ and a surjective map $q_{\mathcal{R}} : A\to A/\mathcal{R}$. This gives the inverse $\qsym_A$ of $\kersym_A$. Then, to show that $\qsym_A\circ \kersym_A=1$, you need to show that there is a commuting triangle
+such that the type
 \begin{equation*}
-\begin{tikzcd}[column sep=small]
-& A \arrow[dl,swap,"q_{\kersym_A(f)}"] \arrow[dr,"f"] \\
-A/\kersym_A(f) \arrow[rr] & & B
+\sm{P:\im(R)}\mathcal{O}_R(P)\times P(x)
+\end{equation*}
+is contractible for every $x:X$. 
+\end{defn}
+
+\begin{eg}
+A principal equivalence relation on $\unit$ is the same thing as a principal H-space.
+\end{eg}
+
+\begin{eg}
+A $\prop$-valued equivalence relation on a type $X$ is a principal equivalence relation. The type of orientations is always contractible.
+\end{eg}
+
+\begin{eg}
+Given any pre-category $\mathcal{C}$, the isomorphisms form a principal equivalence relation on $\mathrm{ob}(\mathcal{C})$. 
+\end{eg}
+
+\begin{defn}
+Given a principal equivalence relation $R$ on $X$, we define the \define{quotient} 
+\begin{equation*}
+X/R\defeq\sm{P:\im(R)}\mathcal{O}_R(P).
+\end{equation*}
+The \define{quotient map} $q_R:X\to X/R$ is defined to be $x\mapsto\pairr{R(x),o_R(x)}$. 
+\end{defn}
+
+\begin{lem}
+Let $R$ be a principal equivalence relation on $X$. Then the quotient map $q_R$ is surjective.
+\end{lem}
+
+\begin{proof}
+Let $P:\im(R)$ and $o:\mathcal{O}_R(P)$. We need to show that
+\begin{equation*}
+\brck{\sm{x:X}\pairr{P,o}=\pairr{R(x),o_R(x)}}.
+\end{equation*}
+By the contractibility condition of principal equivalence relations, this is equivalent to
+\begin{equation*}
+\brck{\sm{x:X}P(x)}.
+\end{equation*}
+Since $P:\im(R)$, we get to assume $x:X$ and $e:P=R(x)$. Now, since $R$ is reflexive, we obtain $\brck{\sm{x:X}P(x)}$. 
+\end{proof}
+
+\subsection{The quotient as a classifier}
+
+Recall that a span from $Y$ to $X$ in dependent type theory is equivalently described as a binary relation of type $Y\to (X\to \UU)$. 
+
+\begin{defn}
+Let $R$ be a principal equivalence relation on $X$, and let $Y$ be a type. An \define{$R$-span} on $Y$ is defined to be a span $S:Y\to (X\to\UU)$ so that $S(y):\im(R)$ for any $y:Y$. An \define{oriented $R$-span} from $Y$ to $X$ is an $R$-span $S$ with an $R$-orientation for each $S(y,x)$.
+\end{defn}
+
+\begin{rmk}
+Equivalently, an oriented $R$-span from $Y$ to $X$ is a map $Y\to X/R$. 
+\end{rmk}
+
+\begin{thm}\label{thm:classifying}
+Let $R$ be a principal equivalence relation on $X$. Then the quotient map $q_R$
+classifies the oriented $R$-spans, in the sense that for each $R$-span $S$ from $Y$ to $X$, the type of maps $g:Y\to X/R$ such that the square
+\begin{equation}\label{eq:classifier}
+\begin{tikzcd}
+\sm{x:X}{y:Y}S(y,x) \arrow[r,"\pi_1"] \arrow[d,swap,"\pi_2"] & X \arrow[d,"q_R"] \\
+Y \arrow[r,swap,"g"] & X/R
+\end{tikzcd}
+\end{equation}
+is a pullback square, is equivalent to the type of $R$-orientations of $S$.  
+\end{thm}
+
+\begin{proof}
+Let $g\defeq\pairr{S',\gamma'}:Y\to X/R$ be a map, and let $K:g\circ\pi_2\htpy q_X\circ \pi_1$ such that the square in \autoref{eq:classifier} is a pullback. An equivalent way of saying that the square in \autoref{eq:classifier} is a pullback, is that the map
+\begin{equation*}
+K_{x,y}: S'(y,x)\to (\pairr{S(y),\gamma(y)}=q_R(x))
+\end{equation*}
+is an equivalence. By the contractibility condition of principal equivalence relations, the type of fiberwise equivalences $K_{x,y}$ is equivalent to the type of fiberwise equivalences
+\begin{equation*}
+K'_{x,y} : S'(y,x)\to S(y,x).
+\end{equation*}
+The type of pairs consisting of $S'$ and the equivalences $K'$ is contractible with $S$ at the center of contraction, so the type of triples $\pairr{S',\gamma',K}$ is equivalent to the type of orientations of $S$.
+\begin{comment}
+\begin{equation*}
+\prd{y:Y}\mathcal{O}_R(S(y))
+\end{equation*}
+
+Let $\gamma$ be an $R$-orientation of $S$, and define $g\defeq\pairr{S,\gamma}:Y\to X/R$. 
+By the contractibility condition of principal equivalence relations, we obtain a fiberwise equivalence
+\begin{equation*}
+H^\gamma_{x,y}:\eqv{S(y,x)}{(g(y)=q_R(x))}
+\end{equation*}
+which serves at the same time as a homotopy of type $\pi_2\circ g\htpy \pi_1\circ q_X$. 
+From the fact that $H_{x,y}$ we see that the square is a pullback.
+
+Now we need to show that the map $\varphi\defeq\gamma\mapsto\pairr{\pairr{S,\gamma},H^\gamma}$ is an equivalence. Consider a map $g\defeq\pairr{S',\gamma'}:Y\to X/R$ and a homotopy
+$K:g\circ\pi_2\htpy q_X\circ \pi_1$ such that the square in \autoref{eq:classifier} is a pullback. An equivalent way of saying that the square in \autoref{eq:classifier} is a pullback, is that the map
+\begin{equation*}
+K_{x,y}: S'(y,x)\to (g(y)=q_R(x))
+\end{equation*}
+is an equivalence for each $x:X$ and $y:Y$.
+
+The fiber of $\varphi$ at a pair $\pairr{g,K}$ consisting of a map $g:Y\to X/R$ and a homotopy $K: g\circ\pi_2\htpy q_X\circ \pi_2$ for which the square in \autoref{eq:classifier} is a pullback, is equivalent to the type
+\begin{align*}
+\sm{\gamma:\prd{y:Y}\mathcal{O}_R(S(y))} \pairr{g,K}=\pairr{S,\gamma,H^\gamma}
+\end{align*}
+This type is equivalent to
+\begin{equation*}
+\sm{\gamma:\prd{y:Y}\mathcal{O}_R(S(y))}{\alpha:\pi_1\circ g=S}{\beta:\trans{\alpha}{\pi_2\circ g}=\gamma} \trans{\pairr{\alpha,\beta}}{K}=H^\gamma.
+\end{equation*}
+Since $\gamma$ appears free on one side of an equality, this type is equivalent to the type
+\begin{equation*}
+\sm{\alpha:\pi_1\circ g=S} \trans{\alpha}{K}=H^{\trans{\alpha}{\pi_2\circ g}}.
+\end{equation*}
+This is equivalent to the type
+\begin{equation*}
+\pairr{\pi_1\circ g,K}=
+\end{equation*}
+This is an identity type in the fiber 
+By type theoretic choice, this type is equivalent to the type
+\begin{align*}
+\prd{y:Y}\sm{\gamma(y):\mathcal{O}_R(S(y))} \pairr{S(y),\gamma(y)}=g(y)
+\end{align*}
+By the pullback square of \autoref{eq:classifier}, it follows that $\pi_1\circ g:Y\to \im(R)$ is equal to $S$. By transporting $\pi_2(g(y))$ along this equality, we see that the type $\pairr{S(y),\gamma(y)}=g(y)$ is equivalent to the type $\pairr{S(y),\gamma(y)}=\pairr{S(y),\beta(y)}$ for some orientation $\beta(y):\mathcal{O}_R(S(y))$. Hence we see that the fiber is contractible.
+\end{comment}
+\end{proof}
+
+\subsection{The quotient approximation construction}
+
+The quotient $X/R$, as stated, is not in $\UU$. The goal of the current section is to give a resizing argument, showing that for any principal equivalence relation $R$ on $X$, there is a type in $\UU$ which is equivalent to the quotient $X/R$. We do this via the quotient approximation construction, which constructs a type sequence with an equivalence from its sequential colimit to $X/R$.
+
+\begin{defn}\label{defn:qac}
+Let $R$ be a principal equivalence relation on $X$. The \define{quotient approximation construction} is an endomorphism on the type
+\begin{equation*}
+\sm{Y:\UU} Y\to X/R.
+\end{equation*}
+The empty type inhabits the above type, so we obtain a map of type
+\begin{equation*}
+\N_{-1}\to\Big(\sm{Y:\UU} Y\to X/R\Big).
+\end{equation*}
+We denote the types in this sequence by $(X/R)_n$. Furthermore, we get for each $n:\N_{-1}$ a relation $\tilde{R}_n:(X/R)_n\to (X\to\UU)$, and an orientation
+\begin{equation*}
+o_{\tilde{R}_n}:\prd{t:(X/R)_n} \mathcal{O}_R(\tilde{R}_n(t)).
+\end{equation*}
+\end{defn}
+
+\begin{proof}[Construction]
+Let $Y:\UU$ and $\pairr{S,\gamma}:Y\to X/R$. By pulling back along the tautological map $q_R$ and pushing out again, we obtain $Y^+$ and $\pairr{S^+,\gamma^+}$ as indicated in the following diagram
+\begin{equation*}
+\begin{tikzcd}
+\sm{x:X}{y:Y}S(y,x) \arrow[r,"\pi_1"] \arrow[d,swap,"\pi_2"] & X \arrow[d,"\inl"] \arrow[ddr,bend left=15,"q_R"] \\
+Y \arrow[r,"\inr"] \arrow[drr,bend right=15,swap,"{\pairr{S,\gamma}}"] & Y^+ \arrow[dr,densely dotted,near start,swap,"{\pairr{S^+,\gamma^+}}"] \\
+& & X/R
 \end{tikzcd}
 \end{equation*}
-in which the bottom map is an equivalence. Finally, the quotenting operation $\qsym_A$ needs to be shown effective, i.e. it needs to be shown that \[\kersym_A\circ \qsym_A =1.\]
-This involves first showing that, for any equivalence relation $\mathcal{R}:=(R,\rho,H)$ there is a fiberwise equivalence
+\end{proof}
+
+It will be useful in the examples below to abstract the above definition to a notion of `quotient approximation system' that does not directly involve a principal equivalence relation. 
+
+\begin{thm}\label{thm:iteratedjoin}
+Let $R$ be a principal equivalence relation on $X$, and consider $\pairr{S,\gamma}:Y\to X/R$. Then there is an equivalence
 \begin{equation*}
-\prd{x,y:A} (q_{\mathcal{R}}(x)=q_{\mathcal{R}}(y)) \to{} R(x,y)
+\eqv{\Big(\sm{y:Y^+}S^+(y,x)\Big)}{\join{\Big(\sm{y:X}R(y,x)\Big)}{\Big(\sm{y:Y}S(y,x)\Big)}}.
 \end{equation*}
-preserving reflexivity. This determines a path $p : \prekersym_A(q_{\mathcal{R}})=(R,\rho)$. To complete the proof of effectiveness, it needs to be shown that \[\trans{p}{\mathsf{pr}_2(\kersym_A(\qsym_A(\mathcal{R})))}= H.\] 
-In other words, that the canonical structure of being an equivalence relation that the pre-kernel $\prekersym_A(\qsym_A(\mathcal{R}))$ possesses, agrees with the assumed structure $H$, that $(R,\rho)$ is an equivalence relation.
+\end{thm}
 
-The problem described here, of finding a structure $\mathsf{isEqRel}$ satisfying the described conditions, is in fact trivial when we drop the requirement that $\mathsf{isEqRel}_A$ is a family of \emph{small} types. The type of all such structures is contractible, with $\mathsf{fib}_{\prekersym_A}$ at the center of contraction. However, it should be noted that this is a completely uninformative solution, and our goal is to describe a \emph{small} structure equivalent to $\mathsf{fib}_{\prekersym_A}$.
+\begin{proof}
+Let $x:X$, giving us the map $q_R(x):\unit\to X/R$. Since $q_R(x)\jdeq\pairr{R(x),o_R(x)}$. We will pull back the pushout square along $q_R(x):\unit\to X/R$. This gives the diagram
+\begin{equation*}
+\begin{tikzcd}
+\sm{x':X}{y:Y} S(y,x)\times S(y,x') \arrow[r,densely dotted,"\alpha"] \arrow[d,swap,"\pi_2"] & \sm{x':X}R(x',x) \arrow[d,"\inl"] \arrow[ddr,bend left=15] \\
+\sm{y:Y}S(y,x) \arrow[r,"\inr"] \arrow[drr,bend right=15] & \sm{y:Y^+}S^+(y,x) \arrow[dr] \\
+& & \unit
+\end{tikzcd}
+\end{equation*}
+where the $\alpha$ is uniquely determined by the universal property of the pullback, so that 
+the triangle
+\begin{equation*}
+\begin{tikzcd}
+\sm{x':X}{y:Y} S(y,x)\times S(y,x') \arrow[r,densely dotted,"\alpha"] \arrow[dr,swap,"\pi_1"] & \sm{x':X}R(x',x) \arrow[d,"\pi_1"] \\
+& X
+\end{tikzcd}
+\end{equation*}
+commutes. We assert that for any $p:S(y,x)$ and any $x':X$, there is an equivalence of type $\eqv{S(y,x')}{R(x',x)}$, inducing an equivalence such that the diagram
+\begin{small}
+\begin{equation*}
+\begin{tikzcd}
+\sm{x':X}{y:Y} S(y,x)\times S(y,x') \arrow[dr,densely dotted] \arrow[d,"\eqvsym"] \\
+\Big(\sm{x':X}R(x',x)\Big)\times\Big(\sm{y:Y}S(y,x)\Big) \arrow[r] & \sm{x':X}R(x',x)
+\end{tikzcd}
+\end{equation*}
+\end{small}
+commutes. By the contractibility condition of principal equivalence relations, we have an equivalences of type 
+\begin{align*}
+S(y,x) & \eqvsym (\pairr{S(y),\gamma(y)}=q_R(x)) \\
+S(y,x') & \eqvsym (\pairr{S(y),\gamma(y)}=q_R(x')).
+\end{align*} 
+The equivalence $\eqv{S(y,x')}{R(x',x)}$ is therefore given by concatenation with the path induced $p:S(y,x)$. This finishes the construction of the asserted equivalence.
 
-As a final remark on the statement of \autoref{prob:main} we note that in the special case where the base type $A$ is taken to be the unit type $\unit$, the problem reduces to specifying what it means for a pointed type to possess in a homotopy coherent way the structure of a \emph{loop space}. Indeed, a reflexive relation on the unit type is nothing more than a pointed type, and the type of surjective maps out of the unit type is nothing more than the type of \emph{pointed connected types}.
+Thus, we conclude that the outer square in the diagram
+\begin{equation*}
+\begin{tikzcd}
+\Big(\sm{x':X}R(x',x)\Big)\times\Big(\sm{y:Y}S(y,x)\Big) \arrow[r,"\pi_1"] \arrow[d,swap,"\pi_2"] & \sm{x':X}R(x',x) \arrow[d,"\inl"] \arrow[ddr,bend left=15] \\
+\sm{y:Y}S(y,x) \arrow[r,"\inr"] \arrow[drr,bend right=15] & \sm{y:Y^+}S^+(y,x) \arrow[dr] \\
+& & \unit
+\end{tikzcd}
+\end{equation*}
+is a pullback. By the descent theorem, the inner square is a pushout.
+\end{proof}
+
+Recall that by convention, the $0$-fold join of a type with itself is empty. Of course, for any type $A$ we have $\join{\emptyt}{A}\eqvsym A$. 
+
+\begin{cor}
+Let $R$ be a principal equivalence relation on $X$. Then, for any $x:X$, the type $\sm{y:(X/R)_n}\tilde{R}_n(y,x)$ is equivalent to the $(n+1)$-fold join of $\sm{y:X}R(y,x)$ with itself. 
+\end{cor}
+
+\begin{thm}\label{thm:quotients_are_small}
+The map $\pairr{\tilde{R}_\infty,o_{\tilde{R}_n}}:(X/R)_\infty \to X/R$ is an equivalence. 
+\end{thm}
+
+\begin{proof}
+Note that, since $q_R$ is surjective, we only need to prove contractibility of the fibers at $q_R(x)\jdeq\pairr{R(x),o_R(x)}$, for each $x:X$. 
+
+The fiber of $\pairr{\tilde{R}_\infty,o_{\tilde{R}_\infty}}$ at a pair $\pairr{R(x),o_R(x)}$ in $X/R$ is given by
+\begin{equation*}
+\sm{t:(X/R)_\infty} \pairr{\tilde{R}_\infty(t),o_{\tilde{R}_\infty}(t)}=\pairr{R(x),o_R(x)}
+\end{equation*}
+By the flattening lemma, this fiber is equivalent to
+\begin{equation*}
+\tfcolim\Big(\sm{t:(X/R)_n} \pairr{\tilde{R}_n(t),o_{\tilde{R}_n}(t)}=\pairr{R(x),o_R(x)}\Big)
+\end{equation*}
+Of course, the type $\pairr{\tilde{R}_n(t),o_{\tilde{R}_n}(t)}=\pairr{R(x),o_R(x)}$ is equivalent to the type $\tilde{R}_n(t,x)$, so our goal is to show that
+\begin{equation*}
+\tfcolim\Big(\sm{t:(X/R)_n}\tilde{R}_n(t,x)\Big)
+\end{equation*}
+is contractible. This follows from the fact that $\sm{t:(X/R)_n}\tilde{R}_n(t,x)$ is equivalent to the $(n+1)$-fold join of $\sm{t:X}R(t,x)$ with itself.
+\end{proof}
+
+\begin{eg}
+For any type $X$, the kernel of the unique map $X\to\unit$ is a principal equivalence relation, called the \define{trivial equivalence relation}. The quotient approximation construction shows that the sequential colimit of
+\begin{equation*}
+\begin{tikzcd}
+\emptyt \arrow[r] & X \arrow[r] & \join{X}{X} \arrow[r] & \join{X}{(\join{X}{X})} \arrow[r] & \cdots
+\end{tikzcd}
+\end{equation*}
+is the propositional truncation $\trunc{-1}{X}$. 
+\end{eg}
+
+\subsection{Effectiveness of the quotient}
+
+\begin{defn}
+The type of all principal equivalence relations on $X$ is denoted by $\mathrm{PrER}(X)$. 
+\end{defn}
+
+\begin{defn}
+We define
+\begin{equation*}
+(X\downarrow_{\mathsf{surj}}\UU)\defeq\sm{B:\UU}{f:X\to B}\mathsf{isSurj}(f),
+\end{equation*}
+where $\mathsf{isSurj}(f)$ is the mere proposition asserting that $f$ is surjective.
+\end{defn}
+
+\begin{defn}\label{defn:Q}
+We define the map $\mathcal{Q}_X: \mathrm{PrER}(X)\to (X\downarrow_{\mathsf{surj}}\UU)$
+by
+\begin{equation*}
+\mathcal{Q}_X(R)\defeq \pairr{X/R,q_R,\nameless}
+\end{equation*}
+where the proof that $q_R$ is surjective is left unnamed.
+\end{defn}
+
+\begin{defn}
+Let $f:X\to B$ be a function. Then we define the principal equivalence relation $\mathcal{K}_X(f)$, the \define{kernel of $f$}. 
+\end{defn}
+
+\begin{proof}[Construction]
+We first define the reflexive relation and the type of orientations.
+\begin{enumerate}
+\item We take $R(x,y)\defeq (f(x)=f(y))$, with $\rho(x)\defeq \refl{f(x)}$. 
+\item To define the $R$-orientations, we will first define a comparison map $c_f : \im(f)\to\im(R)$ for which the triangle
+\begin{equation}\label{eq:intro_cf}
+\begin{tikzcd}
+& X \arrow[dl,swap,"f"] \arrow[dr,"q_R"] \\
+\im(f) \arrow[rr,swap,"c_f"] & & \im(R)
+\end{tikzcd}
+\end{equation}
+commutes. We take $c_f(b)\defeq x\mapsto f(x)=b$, so it is obvious that the mentioned triangle commutes. To see that $c_f(b)$ is in the image of $R$, we have to show that $\brck{\sm{y:X} c_f(b)=R(y)}$. Since we have $\brck{\hfib{f}{b}}$, it is equivalent to show that
+\begin{equation*}
+\hfib{f}{b}\to\brck{\sm{y:X}c_f(b)=R(y)}.
+\end{equation*}
+For this, it suffices to show that
+\begin{equation*}
+\hfib{f}{b}\to\sm{y:X}c_f(b)=R(y).
+\end{equation*}
+Let $\pairr{y,p}:\hfib{f}{b}$. Then we have $c_f(b)=c_f(f(y))\defeq R(y)$, completing the definition of $c_f$. 
+
+Now we can define 
+\begin{equation*}
+\mathcal{O}_R(P)\defeq \hfib{c_f}{P}
+\end{equation*}
+Then we have $o_R(x)\defeq \pairr{x,\refl{R(x)}}:\mathcal{O}_R(R(x))$. 
+\end{enumerate}
+It remains to show that
+\begin{equation*}
+\sm{P:\im(R)}\mathcal{O}_R(P)\times P(x)
+\end{equation*}
+is contractible. Recall the canonical equivalence $b\mapsto\pairr{c_f(b),b,\refl{c_f(b)}}$, for which the triangle
+\begin{equation*}
+\begin{tikzcd}
+\im(f) \arrow[dr,swap,"c_f"] \arrow[rr,"\eqvsym"] & & \sm{P:\im(R)}\mathcal{O}_R(P) \arrow[dl,"\proj1"] \\
+& \im(R)
+\end{tikzcd}
+\end{equation*}
+commutes. By this equivalence it follows that $\sm{P:\im(R)}\mathcal{O}_R(P)\times P(x)$ is equivalent to $\sm{b:\im(f)}c_f(b,x)$, which is contractible.
+\end{proof}
+
+\begin{defn}\label{defn:QKid}
+Let $f:X\to B$ be a function. Then there is a commuting triangle
+\begin{equation*}
+\begin{tikzcd}
+& X \arrow[dl,swap,"f"] \arrow[dr,"q_{\mathcal{K}_X(f)}"] \\
+\im(f) \arrow[rr,swap,"\alpha_f"] & & X/\mathcal{K}_X(f)
+\end{tikzcd}
+\end{equation*}
+in which the bottom map is an equivalence.
+\end{defn}
+
+\begin{proof}[Construction]
+We already have the map $c_f:\im(f)\to\im(R)$, introduced in \autoref{eq:intro_cf}. Since $\mathcal{O}_R(P)\jdeq\hfib{c_f}{P}$, we immediately obtain the term
+\begin{equation*}
+\delta_f\defeq \lam{b}\pairr{b,\refl{c_f(b)}}:\prd{b:\im(f)}\mathcal{O}_R(c_f(b)).
+\end{equation*}
+This gives us $\alpha_f\defeq\pairr{c_f,\delta_f}$. The triangle of the specification of $\alpha_f$ commutes trivially.
+
+Now we need to show that $\alpha_f$ is an equivalence. We do this by showing that $\hfib{\alpha_f}{P,o}$ is contractible for any $P:\im(R)$ and $o:\mathcal{O}_R(P)$. Since contractibility is a mere proposition, we get to use $x:X$ and $e:P= R(x)$ from the fact that $P:\im(R)$. Moreover, by the fact that $\eqv{(\pairr{R(x),o}=\pairr{R(x),o_R(x)})}{R(x,x)}$ and that $R$ is reflexive, we see that we have $\pairr{P,o}=\pairr{R(x),o_R(x)}$. So it suffices to show that
+\begin{equation*}
+\sm{b:\im(f)} \pairr{c_f(b),\delta_f(b)}=\pairr{R(x),o_R(x)}
+\end{equation*}
+is contractible. The summand is equivalent to $c_f(b)$, and it is immediate from the defintion of $c_f$ that $\sm{b:\im(f)}c_f(b)$ is contractible.
+\end{proof}
+
+\begin{thm}\label{thm:PrER_effective}
+The map $\mathcal{Q}_X:\mathrm{PrER}(X)\to(X\downarrow_{\mathsf{surj}}\UU)$ is an equivalence, with inverse $\mathcal{K}_X$.
+\end{thm}
+
+\begin{proof}
+\autoref{defn:QKid} gives us an equality $\mathcal{Q}_X(\mathcal{K}_X(B,f,\nameless))=\pairr{B,f,\nameless}$, for each surjective map $f:X\to B$. Hence it remains to show that $\mathcal{K}_X(q_R)=R$ for each principal equivalence relation $R$. 
+
+Let $R$ be a principal equivalence relation on $X$. By the contractibility condition of principal equivalence relations, we get a fiberwise equivalence $\eqv{R(x,y)}{(q_R(x)=q_R(y))}$ which respects reflexivity.
+So it remains to find a fiberwise equivalence $e_P:\eqv{\mathcal{O}_R(P)}{\mathcal{O}_{\mathcal{K}_X(q_R)}(P)}$ such that $e_{R(x)}(o_R(x))=o_{\mathcal{K}_X(q_R)}(x)$ for each $x:X$.
+
+We first show that the bottom triangle in
+\begin{equation*}
+\begin{tikzcd} & X \arrow[dl,swap,"q_R"] \arrow[dr,"q_R"] \\
+\im(q_R) \arrow[dr,swap,"c_{q_R}"] \arrow[rr,"\eqvsym"] & & X/R \arrow[dl,"\proj1"] \\
+& \im(R)
+\end{tikzcd}
+\end{equation*}
+commutes, where the horizontal map is the canonnical equivalence obtained from the fact that $q_R:X\to X/R$ is surjective. Recall that $c_{q_R}(P,o)$ is the type family $x\mapsto (q_R(x)=\pairr{P,o})$ over $X$. Since $q_R(x)\jdeq\pairr{R(x),o_R(x)}$, it follows that
+\begin{equation*}
+c_{q_R}(P,o)(x)\eqvsym P(x).
+\end{equation*}
+Hence it must be the case that $c_{q_R}(P,o)=P$, as desired. Now note that 
+\begin{align*}
+\mathcal{O}_R(P)
+& \eqvsym \hfib{\proj1}{P} \\
+& \eqvsym \hfib{c_{q_R}}{P} \\
+& \jdeq \mathcal{O}_{\mathcal{K}_X(q_R)}(P),
+\end{align*}
+and since the top triangle commutes this equivalence maps $o_R(x)$ to $o_{\mathcal{K}_X(q_R)}(x)$. 
+\end{proof}
+
+The following corollary proves the natural interpretation of the replacement axiom in a univalent setting. Moreover, it associates to any type family $P$ on $X$ a type family on $\im(P)$ which could be called the \define{univalent completion of $P$}. 
+
+\begin{cor}[Typal replacement]
+For any $P:X\to\UU$, the type $\im(P)$ is equivalent to a small type.
+\end{cor}
+
+\begin{proof}
+The relation $P^\star\idtypevar{\UU}$ is equivalent to a small relation, so each of the higher inductive types $(X/\mathcal{K}_X(P))_n$ is equivalent to a small higher inductive type. It follows that the sequential colimit $(X/\mathcal{K}_X(P))_\infty$ is equivalent to a small type, and hence also $X/\mathcal{K}_X(P)$ itself. Since $X/\mathcal{K}_X(P)$ is equivalent to $\im(P)$, the claim follows.
+\end{proof}
+
+\subsection{The modality $\modal^+$ of types with $\modal$-modal identity types}
+
+It has already been known for a while that for any map $f:A\to B$, a type $X$ is $\nabla_f$-local if and only if the identity types of $X$ are $f$-local. Using the ideas of the previous sections, we construct, given any modality $\modal$ of which the modal units are all surjective, a new modality $\modal^+$ for which the modal types are precisely those which have $\modal$-modal identity types. Since modalities are completely determined by their modal types, it follows that for any map $f:A\to B$, if $\modal$ is given by localizing at $f$, then $\modal^+$ is given by localizing at $\nabla_f$. 
+
+\begin{comment}
+\begin{defn}
+Let $R:X\to X\to\UU$ be a reflexive binary relation on $X$. A \define{quotient approximation system} on $R$ consists of a \define{mediating type} $M$ fitting in a commuting triangle
+\begin{equation*}
+\begin{tikzcd}
+X \arrow[rr,"R"] \arrow[dr,swap,"f"] & & \im(R) \\
+& M \arrow[ur,swap,"g"]
+\end{tikzcd}
+\end{equation*}
+and for every $S:Y\to M$ a homotopy
+\begin{equation*}
+H : \prd{x:X}{y:Y}{p:g(S(y),x)} f(x)= S(y).
+\end{equation*}
+\end{defn}
+
+\begin{rmk}
+The idea behind the definition of quotient approximation system is that any $S:Y\to M$ extends to the pushout as indicated in the diagram
+\begin{equation*}
+\begin{tikzcd}
+\sm{x:X}{y:Y}g(S(y),x) \arrow[d,swap,"\pi_2"] \arrow[r,"\pi_1"] & X \arrow[d,swap,"\inl"] \arrow[ddr,bend left=15,"f"] \\ 
+Y \arrow[r,swap,"\inr"] \arrow[drr,bend right=15,swap,"S"] & Y' \arrow[dr,swap,near start,densely dotted,"{S'}"] \\
+& & M
+\end{tikzcd}
+\end{equation*}
+The type $Y'$ is a slightly better approximation of the quotient $X/R$ than $Y$, and iterating this process shall lead us to the quotient.
+\end{rmk}
+
+\begin{eg}
+If $R$ is a principal equivalence relation, then a quotient approximation system on $R$ can be defined with mediating type $X/R$. In \autoref{eg:idmodal} we will see a class of quotient approximation systems with mediating type $\im(R)$. 
+\end{eg}
 \end{comment}
 
-\section{Motivating observations}
+\begin{defn}\label{eg:idmodal}
+Let $\modal$ be any modality for which the modal unit $\modalunit[X]:X\to\modal(X)$ is always surjective. Then the reflexive relation 
+\begin{equation*}
+I_\modal \defeq x,y\mapsto\modal(x=y)
+\end{equation*}
+can be given the structure of a principal equivalence relation. 
+\end{defn}
+
+\begin{proof}[Construction]
+We first show that for any $R:Y\to\im(I_\modal)$, we can extend $R$ to the pushout $Y'$, as indicated in the diagram
+\begin{equation*}
+\begin{tikzcd}
+\sm{x:X}{y:Y}R(y,x) \arrow[r,"\pi_1"] \arrow[d,swap,"\pi_2"] & X \arrow[d,"\inl"] \arrow[ddr,bend left=15,"I_\modal"] \\
+Y \arrow[drr,swap,bend right=15,"R"] \arrow[r,"\inr"] & Y' \arrow[dr,densely dotted] \\
+& & \im(I_\modal)
+\end{tikzcd}
+\end{equation*}
+Since $R(y):\im(I_\modal)$ for any $y:Y$, it follows that $R(y,x)$ is modal for any $x:X$. Hence for any $p:R(y,b)$, a function $\alpha_p:\prd{x:X}\modal(b=x)\to R(y,x)$ is obtained from the function of type $(b=x)\to R(y,x)$ which maps $\refl{b}$ to $p$.
+
+We need to show that $\alpha_p$ is a fiberwise equivalence, for any $p:R(y,b)$. This is a mere porposition, so we can use the property of $R(y)$ that 
+\begin{equation*}
+\brck{\hfib{I_\modal}{R(y)}}.
+\end{equation*}
+Let $a:X$ be such that $R(y)=I_\modal(a)$. Then we have $q:\modal(a=b)$ corresponding to $p:R(y,b)$. The composite $\modal(b=x)\to R(y,x)\to \modal(a,x)$ is the unique map which sends $\refl{b}$ to $q$. Since the modal unit is surjective we may assume that $q$ is of the form $\modalunit(s)$ for some $s:a=b$. Now it follows by uniqueness that the map $\modal(b=x)\to\modal(a=x)$ is induced by precomposition with $s$. Hence it is an equivalence. This finishes the construction of the extension.
+
+Since we have this extension property, we can perform the quotient approximation construction without already having a notion of orientations. The argument of \autoref{thm:iteratedjoin} can be adjusted so that it applies to the current situation, so we obtain the universal type $\modal^+(X)$ with a map $\eta:X\to \modal^+(X)$ so that the identity types of $\modal^+(X)$ are $\modal$-modal.
+\end{proof}
+
+\begin{rmk}
+I'm not really sure whether the assumption that the modal units are surjective is really necessary.
+\end{rmk}
+
+\begin{eg}
+For any type $X$ and any $n:\N_{-1}$, the reflexive relation $x,y\mapsto\trunc{n}{x=y}$ can be given the structure of a principal equivalence relation, and we obtain that $\trunc{n+1}{X}$ is the sequential colimit of a type sequence involving only $n$-truncation.
+\end{eg}
+
+\section{Saturated relations}
+\subsection{Motivating observations}
 Recall that a \emph{reflexive graph} consists of a type $A$ and a reflexive relation on it. Given a reflexive graph $\pairr{A,R,\rho}$ we can form the \emph{reflexive graph quotient} as the pushout
 \begin{equation*}
 \begin{tikzcd}

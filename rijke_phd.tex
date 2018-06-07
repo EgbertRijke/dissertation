@@ -4,14 +4,13 @@
 \settocdepth{subsection}
 
 \usepackage{hott}
-\excludecomment{proof}
-\excludecomment{constr}
+%\excludecomment{proof}
 
 \addbibresource{bibliography.bib}
 
-\title{Classifying types}
+\title{Classifying Types}
 \author{Egbert Rijke}
-\date{July 2018}
+\date{July 2018\thanks{draft}}
 
 \begin{document}
 
@@ -24,7 +23,7 @@
 \clearpage
 \thispagestyle{empty}
 \par
-\vspace*{.35\textheight}{\begin{flushright}With profound gratitude I dedicate this thesis to my parents.\par\end{flushright}}
+\vspace*{.35\textheight}{\begin{flushright}With infinite gratitude I dedicate this thesis to my parents.\par\end{flushright}}
 
 \clearpage
 \tableofcontents
@@ -32,6 +31,8 @@
 \include{intro}
 
 \mainmatter
+
+\include{univalent}
 
 \include{descent}
 
@@ -41,15 +42,19 @@
 
 \include{image}
 
-\include{reflective_subuniverses}
+\include{reflective}
 
 \include{modalities}
 
 \include{equifibrant}
 
-\include{localization}
+\include{compact}
+
+\include{prime}
 
 \include{higher_groups}
+
+\include{coinductive}
 
 \include{giraud}
 

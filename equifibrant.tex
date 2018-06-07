@@ -17,7 +17,7 @@ is a pullback square. We will write
 \end{equation*}
 \end{defn}
 
-It is immediate from the definition that any equivalence is $\modal$-\'etale, and that the $\modal$-\'etale maps are closed under composition.
+It is immediate from the definition that any equivalence is $\modal$-\'etale, and that the $\modal$-\'etale maps are closed under composition, and that every equivalence is $\modal$-\'etale.
 
 \begin{eg}\label{eg:etale_prop}
 We claim that a map $f:A\to B$ is $\brck{\blank}$-\'etale if and only if $A\to \isequiv(f)$. Examples of maps that satisfy this condition include equivalences, maps between propositions, and any map of the form $\emptyt\to B$.
@@ -39,7 +39,7 @@ is an equivalence, we will show that its fibers are contractible. Let $b:B$, $x:
 \end{eg}
 
 \begin{lem}\label{lem:etale_modal}
-Any map between $\modal$-modal types is formaly \'etale.
+Any map between $\modal$-modal types is $\modal$-\'etale.
 \end{lem}
 
 \begin{proof}
@@ -244,10 +244,10 @@ and suppose that $p:E\to B$ is $\modal$-\'etale. Then $p':E'\to B'$ is $\modal$-
 Consider the commuting cube
 \begin{equation*}
 \begin{tikzcd}
-&[-.5ex] E' \arrow[dr] \arrow[d] \arrow[dl] \\
+& E' \arrow[dr] \arrow[d] \arrow[dl] \\
 \modal E' \arrow[d] & B' \arrow[dl] \arrow[dr] & E \arrow[dl,crossing over] \arrow[d] \\
 \modal B' \arrow[dr] & \modal E \arrow[d] \arrow[from=ul,crossing over] & B \arrow[dl] \\
-& \modal B.
+& \modal B. & \phantom{\modal E'}
 \end{tikzcd}
 \end{equation*}
 The vertical squares on the back right and front right are pullback squares by assumption.
@@ -320,57 +320,6 @@ X \arrow[r,swap,"\modalunit"] & \modal X
 \end{equation*}
 is a pullback square. In particular the top map is $\modal$-connected, so this square is in fact a $\modal$-naturality square.
 \end{cor}
-
-\begin{lem}
-If $f$ is $n$-\'etale, then it is right orthogonal to $\unit\to\sphere{n+1}$.
-\end{lem}
-
-\begin{proof}
-Suppose $f:X\to Y$ is $n$-\'etale, and consider the commuting cube
-\begin{equation*}
-\begin{tikzcd}
-&[-1ex] X^{\sphere{n+1}} \arrow[dl] \arrow[d] \arrow[dr] &[2ex] \\
-\trunc{n}{X}^{\sphere{n+1}} \arrow[d] & Y^{\sphere{n+1}} \arrow[dl] \arrow[dr] & X \arrow[dl,crossing over] \arrow[d] \\
-\trunc{n}{Y}^{\sphere{n+1}} \arrow[dr] & \trunc{n}{X} \arrow[d] \arrow[from=ul,crossing over] & Y \arrow[dl] \\
-& \trunc{n}{Y}
-\end{tikzcd}
-\end{equation*}
-In this cube the front right square is a pullback square by the assumption that $f$ is $n$-\'etale. The back left square is an exponent of this pullback square, so it is again pullback. The front left square is a pullback square because its top and bottom map are both equivalences. Therefore we conclude that the back right square is a pullback square, which shows that $f$ is right orthogonal to the map $\unit\to\sphere{n+1}$.
-\end{proof}
-
-\begin{conj}
-Let $f:X\to Y$ be a map, and let $n\geq -1$. The following are equivalent:
-\begin{enumerate}
-\item $f$ is $n$-\'etale.
-\item $f$ is right orthogonal to the maps $\sphere{n+1}\to 1$ and $\unit\to\sphere{n+1}$. 
-\end{enumerate}
-\end{conj}
-
-\begin{proof}[Incomplete proof]
-By \cref{thm:modal_descent} it suffices to show that the type $\trunc{n}{X}\to\UU^{\leq n}$ of families of $n$-types over $\trunc{n}{X}$ is equivalent to the type of families $P:X\to\UU^{\leq n}$ of $n$-types over $X$, for which the square
-\begin{equation*}
-\begin{tikzcd}[column sep=huge]
-\Big(\sm{x:X}P(x)\Big)^{\sphere{n+1}} \arrow[r,"{h\mapsto h(\base)}"] \arrow[d,swap,"\proj 1\circ\blank"] & \sm{x:X}P(x) \arrow[d,"\proj 1"] \\
-X^{\sphere{n+1}} \arrow[r,swap,"{h\mapsto h(\base)}"] & X
-\end{tikzcd}
-\end{equation*}
-is a pullback square. Note that this square is a pullback square if and only if the square
-\begin{equation*}
-\begin{tikzcd}[column sep=9em]
-\sm{f:X^{\sphere{n+1}}}\prd{t:\sphere{n+1}}P(f(t)) \arrow[r,"{(f,g)\mapsto (f(\base),g(\base))}"] \arrow[d,swap,"\proj 1"] & \sm{x:X}P(x) \arrow[d,"\proj 1"] \\
-X^{\sphere{n+1}} \arrow[r,swap,"{f\mapsto f(\base)}"] & X
-\end{tikzcd}
-\end{equation*}
-is a pullback square. This is equivalent to showing that the map
-\begin{equation*}
-g\mapsto g(\base):\Big(\prd{t:\sphere{n+1}}P(f(t))\Big)\to P(f(\base))
-\end{equation*}
-is an equivalence for every $f:\sphere{n+1}\to X$. The fiber of this map at $p:P(f(\base))$ is equivalent to the type
-\begin{equation*}
-\sm{q:P(f(\base))}\prd{t:\sphere{n}}\mathsf{tr}_P(\glue(t)
-\end{equation*}
-....
-\end{proof}
 
 \subsection{The reflective factorization system of a modality}
 
@@ -446,38 +395,31 @@ Therefore $(\modal f\circ g,p)$ is in the fiber of $\precomp{\modal f}:\modal B^
 Every $\modal$-connected map is a $\modal$-equivalence.
 \end{cor}
 
-\begin{lem}\label{lem:rfs_factor}
-Every map factors as a $\modal$-equivalence followed by a $\modal$-\'etale map.
-\end{lem}
-
-\begin{proof}
-Consider a map $f:A\to B$, and the diagram
+\begin{defn}
+Let $f:A\to B$ be a map. We define
+\begin{align*}
+[A] & \defeq B \times_{\modal B}\modal \modal A
+\intertext{and we define the maps}
+\mathsf{et}(f) & : [A] \to B \\
+\bar{\eta} : A \to [A]
+\end{align*}
+by the universal property of pullbacks, as indicated in the following diagram
 \begin{equation*}
 \begin{tikzcd}
-A \arrow[ddr,bend right=15,swap,"f"] \arrow[drr,bend left=15,"\modalunit"] \arrow[dr,"\mathsf{gap}" description] \\
-& B\times_{\modal B} \modal A \arrow[d,swap,"\pi_1"] \arrow[r,"\pi_2"] & \modal A \arrow[d,"\modal f"] \\
+A \arrow[ddr,bend right=15,swap,"f"] \arrow[drr,bend left=15,"\modalunit"] \arrow[dr,"\bar{\eta}" description] \\
+& {[A]} \arrow[d,swap,"\mathsf{et}(f)"] \arrow[r,"\pi_2"] & \modal A \arrow[d,"\modal f"] \\
 & B \arrow[r,swap,"\modalunit"] & \modal B.
 \end{tikzcd}
 \end{equation*}
-Then $\pi_1:B\times_{\modal B} \modal A\to B$ is a pullback of a map between modal types, so it is $\modal$-\'etale by \cref{cor:etale_pb}. Furthermore, the map $\pi_2:B\times_{\modal B}\modal A\to \modal A$ is a pullback of a $\modal$-connected map, so it is $\modal$-connected. It follows from \cref{cor:mequiv_mconn} that it is a $\modal$-equivalence. Since the modal unit $\modalunit :A\to\modal A$ is also $\modal$-connected, and therefore a $\modal$-equivalence, we obtain by the 3-for-2 property of $\modal$-equivalences established in \cref{lem:3for2_mequiv} that the gap map is also a $\modal$-equivalence.
-\end{proof}
+\end{defn}
 
-Recall that a map $i:A\to B$ is said to be \define{left orthogonal} to a map $f:X\to Y$, or that the map $f$ is \define{right orthogonal} to the map $i$,
-if each commuting square of the form
-\begin{equation*}
-\begin{tikzcd}
-A \arrow[r] \arrow[d,swap,"i"] & X \arrow[d,"f"] \\
-B \arrow[r] & Y
-\end{tikzcd}
-\end{equation*}
-has a unique diagonal filler. Following \cite{AnelBiedermanFinsterJoyal}, we note that this can be expressed conviniently as the condition that the square
-\begin{equation*}
-\begin{tikzcd}
-X^B \arrow[r,"f\circ\blank"] \arrow[d,swap,"\blank\circ i"] & Y^B \arrow[d,"\blank\circ i"] \\
-X^A \arrow[r,swap,"f\circ\blank"] & Y^A
-\end{tikzcd}
-\end{equation*}
-is a pullback square.
+\begin{lem}\label{lem:rfs_factor}
+For every map $f:A\to B$, the map $\bar{\eta}:A\to[A]$ is a $\modal$-equivalence, and the map $\mathsf{et}(f)$ is $\modal$-\'etale.
+\end{lem}
+
+\begin{proof}
+The map $\mathsf{et}(f)$ is a pullback of a map between modal types, so it is $\modal$-\'etale by \cref{cor:etale_pb}. Furthermore, the map $\pi_2:[A] \to \modal A$ is a pullback of a $\modal$-connected map, so it is $\modal$-connected. It follows from \cref{cor:mequiv_mconn} that it is a $\modal$-equivalence. Since the modal unit $\modalunit :A\to\modal A$ is also $\modal$-connected, and therefore a $\modal$-equivalence, we obtain by the 3-for-2 property of $\modal$-equivalences established in \cref{lem:3for2_mequiv} that the gap map is also a $\modal$-equivalence.
+\end{proof}
 
 \begin{lem}\label{lem:rfs_orthogonal}
 The class of $\modal$-equivalences is left orthogonal to the class of $\modal$-\'etale maps.
@@ -494,10 +436,10 @@ X^A \arrow[r] & Y^A
 is a pullback square. Consider the commuting cube
 \begin{equation*}
 \begin{tikzcd}
-&[-1ex] X^B \arrow[dl] \arrow[d] \arrow[dr] \\
+& X^B \arrow[dl] \arrow[d] \arrow[dr] \\
 (\modal X)^B \arrow[d] & X^A \arrow[dl] \arrow[dr] & Y^B \arrow[d] \arrow[dl,crossing over] \\
 (\modal X)^A \arrow[dr] & (\modal Y)^B \arrow[from=ul,crossing over] \arrow[d] & Y^A \arrow[dl] \\
-& (\modal Y)^A
+& (\modal Y)^A & \phantom{(\modal X)^B}
 \end{tikzcd}
 \end{equation*}
 In this cube the top and bottom squares are pullback by the assumption that $f$ is $\modal$-\'etale and the fact that exponents of pullback squares are again pullback squares. Furthermore, the square in the front left is pullback, because the two vertical maps are equivalences by the assumption that $i:A\to B$ is a $\modal$-equivalence. Therefore we conclude that the square in the back right is also a pullback square, as desired.
@@ -507,7 +449,41 @@ In this cube the top and bottom squares are pullback by the assumption that $f$ 
 For any map $f:X\to Y$, the type of factorizations into a $\modal$-connected map followed by a $\modal$-\'etale map is contractible.
 \end{cor}
 
-\section{\texorpdfstring{$\Delta$}{Δ}-\'etale maps}
+The class of $\modal$-\'etale morphisms into a given type $A$, thought of as objects of the slice category $\UU/A$, form a reflective subuniverse in the following sense.
+
+\begin{thm}
+Let $f:A\to X$ be a map. Then the pre-composition function
+\begin{equation*}
+\mathrm{hom}_X(\mathsf{et}(f),e)\to \mathrm{hom}_X(f,e)
+\end{equation*}
+is an equivalence for every \'etale map $e:B\to X$. 
+\end{thm}
+
+\begin{proof}
+Let $e:B\to X$ be a $\modal$-\'etale map. Then the square
+\begin{equation*}
+\begin{tikzcd}
+B^{[A]} \arrow[r,"\blank\circ\eta_f"] \arrow[d,swap,"e\circ\blank"] & B^A \arrow[d,"e\circ\blank"] \\
+X^{[A]} \arrow[r,swap,"\blank\circ\eta_f"] & X^A
+\end{tikzcd}
+\end{equation*}
+is a pullback square by \cref{lem:rfs_factor,lem:rfs_orthogonal}. Therefore we have a fiberwise equivalence
+\begin{equation*}
+\prd{i:[A]\to X} \fib{e\circ\blank}{i}\to \fib{e\circ\blank}{i\circ\eta_f}
+\end{equation*}
+by \cref{cor:pb_fibequiv}. Now the claim follows, since we have a commuting square
+\begin{equation*}
+\begin{tikzcd}
+\fib{e\circ\blank}{i} \arrow[r] \arrow[d,swap,"\eqvsym"] & \fib{e\circ\blank}{i\circ\eta_f} \arrow[d,"\eqvsym"] \\
+\mathrm{hom}_X(\mathsf{et}(f),e) \arrow[r] & \mathrm{hom}_X(f,e)
+\end{tikzcd}
+\end{equation*}
+with equivalences on both sides, for each $i:[A]\to X$.
+\end{proof}
+ 
+\section{The reflective factorization system for the reflexive coequalizer}
+
+\subsection{\texorpdfstring{$\Delta$}{Δ}-\'etale maps}
 
 \begin{prp}
 Consider a commuting square
@@ -531,19 +507,36 @@ are pullback squares.
 \end{enumerate}
 \end{prp}
 
+\begin{prp}\label{prp:rcoeq_flattening}
+Consider a commuting square
+\begin{equation*}
+\begin{tikzcd}
+\mathcal{A} \arrow[r] \arrow[d] & \Delta(X) \arrow[d] \\
+\mathcal{B} \arrow[r] & \Delta(Y)
+\end{tikzcd}
+\end{equation*}
+of reflexive graphs. If the square is a pullback square, then so is
+\begin{equation*}
+\begin{tikzcd}
+\rcoeq(\mathcal{A}) \arrow[r] \arrow[d] & X \arrow[d] \\
+\rcoeq(\mathcal{B}) \arrow[r] & Y
+\end{tikzcd}
+\end{equation*}
+\end{prp}
+
 \begin{defn}
 Let $f:\mathsf{rGph}(\mathcal{A},\mathcal{B})$ be a morphism of reflexive graphs. We say that $f$ is \define{$\Delta$-\'etale} if the square
 \begin{equation*}
 \begin{tikzcd}
-\mathcal{A} \arrow[d] \arrow[r] & \Delta(\rcoeq(\mathcal{A})) \arrow[d] \\
+\mathcal{A} \arrow[d,swap,"f"] \arrow[r] & \Delta(\rcoeq(\mathcal{A})) \arrow[d,"\Delta(\rcoeq(f))"] \\
 \mathcal{B} \arrow[r] & \Delta(\rcoeq(\mathcal{B}))
 \end{tikzcd}
 \end{equation*}
 is a pullback square of reflexive graphs. We write $\mathsf{is\usc{}etale}_\Delta(f)$ for the proposition that $f$ is $\Delta$-\'etale, and we also write $\mathcal{R}^\Delta$ for the class of $\Delta$-\'etale morphisms of reflexive graphs.
 \end{defn}
 
-\begin{thm}
-Consider a morphism $f:\mathcal{A}\to\mathcal{B}$ of reflexive graphs. The following are equivalent:
+\begin{thm}\label{thm:etale_fibration}
+Consider a morphism $f:\mathsf{rGph}(\mathcal{A},\mathcal{B})$ of reflexive graphs. The following are equivalent:
 \begin{enumerate}
 \item The morphism $f$ is a fibration in the sense of \cref{defn:graph_fibration}.
 \item The morphism $f$ is $\Delta$-\'etale.
@@ -551,7 +544,7 @@ Consider a morphism $f:\mathcal{A}\to\mathcal{B}$ of reflexive graphs. The follo
 \end{thm}
 
 \begin{proof}
-Consider the diagram
+Consider the commuting diagram
 \begin{equation*}
 \begin{tikzcd}
 & & \pts{\tilde A} \arrow[d] \arrow[dr] \\
@@ -561,31 +554,201 @@ Consider the diagram
 \phantom{\rcoeq(\mathcal{B})} & \rcoeq(\mathcal{B})
 \end{tikzcd}
 \end{equation*}
+If $f$ is $\Delta$-\'etale, then the three parallel vertical squares are pullback squares, hence so are the two squares on the back left side. This shows that (ii) implies (i). 
+
+Now suppose that $f$ is a fibration, or equivalently, that $f$ is cartesian. Then the map $\rcoeq(f)$ is the unique map such that the naturality squares are pullback squares. In particular, $f$ is a $\Delta$-\'etale map.
 \end{proof}
 
 \begin{cor}
 Let $\mathcal{B}$ be a family of reflexive graphs over $\mathcal{A}$. The following are equivalent:
 \begin{enumerate}
 \item The family $\mathcal{B}$ is equifibered.
-\item The morphism $\proj 1 : \mathsf{rGph}(\msm{\mathcal{A}}{\mathcal{B}})$ is $\Delta$-\'etale.
+\item The morphism $\proj 1 : \mathsf{rGph}(\msm{\mathcal{A}}{\mathcal{B}},\mathcal{A})$ is $\Delta$-\'etale.
 \end{enumerate}
 \end{cor}
 
-\section{Equifibrant replacement}
-
-\begin{defn}
-Let $f:\Gamma'\to\Gamma$ be a morphism of reflexive graphs. We say that $f$ is a \define{$\Delta$-equivalence} if the map
+\begin{prp}
+Consider a pullback square
 \begin{equation*}
 \begin{tikzcd}
-\rcoeq(f):\rcoeq(\Gamma')\to \rcoeq(\Gamma)
+\mathcal{A}' \arrow[r] \arrow[d,swap,"{f'}"] & \mathcal{A} \arrow[d,"f"] \\
+\mathcal{B}' \arrow[r] & \mathcal{B}
+\end{tikzcd}
+\end{equation*}
+of reflexive graphs, and suppose that $f$ is a fibration. Then the square
+\begin{equation*}
+\begin{tikzcd}
+\rcoeq(\mathcal{A}') \arrow[r] \arrow[d,swap,"\rcoeq({f'})"] & \rcoeq(\mathcal{A}) \arrow[d,"\rcoeq(f)"] \\
+\rcoeq(\mathcal{B}') \arrow[r] & \rcoeq(\mathcal{B})
+\end{tikzcd}
+\end{equation*}
+is again a pullback square.
+\end{prp}
+
+\begin{proof}
+Consider the diagram
+\begin{equation*}
+\begin{tikzcd}
+\mathcal{A}' \arrow[r] \arrow[d,swap,"{f'}"] & \mathcal{A} \arrow[d,"f"] \arrow[r,"\mathsf{constr}"] &[1ex] \Delta(\rcoeq(\mathcal{A})) \arrow[d,"\Delta(\rcoeq(f))"] \\
+\mathcal{B}' \arrow[r] & \mathcal{B} \arrow[r,"\mathsf{constr}"'] & \Delta(\rcoeq(\mathcal{B}))
+\end{tikzcd}
+\end{equation*}
+of reflexive graphs. Since $f$ is assumed to be a fibration, we obtain by \cref{thm:etale_fibration} that the square on the right is a pullback square. Furthermore, since the left square is a pullback square by assumption, it follows that the outer rectangle is again a pullback square. Hence the assertion follows from \cref{prp:rcoeq_flattening}.
+\end{proof}
+
+\begin{prp}
+Consider a pullback square
+\begin{equation*}
+\begin{tikzcd}
+\mathcal{A}' \arrow[r] \arrow[d,swap,"{f'}"] & \mathcal{A} \arrow[d,"f"] \\
+\mathcal{B}' \arrow[r] & \mathcal{B}
+\end{tikzcd}
+\end{equation*}
+of reflexive graphs, and suppose that $f$ is a fibration. Then $f'$ is a fibration.
+\end{prp}
+
+\begin{proof}
+Consider the cube
+\begin{equation*}
+\begin{tikzcd}
+& \mathcal{A}' \arrow[dr] \arrow[d] \arrow[dl] \\
+\Delta(\rcoeq(\mathcal{A}')) \arrow[d] & \mathcal{B}' \arrow[dl] \arrow[dr] & \mathcal{A} \arrow[dl,crossing over] \arrow[d] \\
+\Delta(\rcoeq(\mathcal{B}')) \arrow[dr] & \Delta(\rcoeq(\mathcal{A})) \arrow[d] \arrow[from=ul,crossing over] & \mathcal{B} \arrow[dl] \\
+& \Delta(\rcoeq(\mathcal{B})). & \phantom{\Delta(\rcoeq(\mathcal{A}'))}
+\end{tikzcd}
+\end{equation*}
+Then the two squares in the front and the square in the back right are pullback squares, so it follows that the square in the back left is a pullback square.
+\end{proof}
+
+\subsection{The reflective factorization system of discrete graphs}
+
+\begin{defn}
+Let $f:\mathsf{rGph}(\mathcal{B},\mathcal{A})$ be a morphism of reflexive graphs. We say that $f$ is a \define{$\Delta$-equivalence} if the map
+\begin{equation*}
+\begin{tikzcd}
+\rcoeq(f):\rcoeq(\mathcal{B})\to \rcoeq(\mathcal{A})
 \end{tikzcd}
 \end{equation*}
 is an equivalence. We also write $\mathcal{L}^\Delta$ for the class of $\Delta$-equivalences of reflexive graphs.
 \end{defn}
 
+\begin{lem}
+The $\Delta$-equivalences satisfy the 3-for-2 property.
+\end{lem}
+
+\begin{prp}
+Let $f:\mathsf{rGph}(\mathcal{B},\mathcal{A})$ be a morphism of reflexive graphs. The following are equivalent:
+\begin{enumerate}
+\item $f$ is a $\Delta$-equivalence.
+\item For any type $X$, the map
+\begin{equation*}
+\mathsf{rGph}(\mathcal{A},\Delta(X))\to\mathsf{rGph}(\mathcal{B},\Delta(X))
+\end{equation*}
+is an equivalence.
+\end{enumerate}
+\end{prp}
+
+\begin{defn}
+Let $f:\mathsf{rGph}(\mathcal{B},\mathcal{A})$ be a morphism of reflexive graphs. We define the morphisms
+\begin{align*}
+\mathsf{et}_\Delta(f) & : \mathsf{rGph}(\mathcal{B}^{\eqvsym},\mathcal{A}) \\
+\mathsf{\eta}_f & : \mathsf{rGph}(\mathcal{B},\mathcal{B}^{\eqvsym})
+\end{align*}
+by the universal property of pullbacks, as indicated in the following diagram
+\begin{equation*}
+\begin{tikzcd}
+\mathcal{B} \arrow[ddr,bend right=15] \arrow[drr,bend left=15] \arrow[dr,densely dotted,"\eta_f" near end] \\
+& \mathcal{B}^{\eqvsym} \arrow[dr,phantom,"\lrcorner" {very near start,xshift=-1ex}] \arrow[d,"\mathsf{et}_\Delta(f)"] \arrow[r] & \Delta(\rcoeq(\mathcal{B})) \arrow[d] \\[1ex]
+& \mathcal{A} \arrow[r,swap,"\mathsf{constr}"] & \Delta(\rcoeq(\mathcal{A}))
+\end{tikzcd}
+\end{equation*}
+The morphism $\mathsf{et}_\Delta(f)$ is called the \define{equifibrant replacement} of $f$, and the morphism $\eta_f$ is called the \define{unit} of the equifibrant replacement.
+\end{defn}
+
+\begin{lem}
+For any morphism $f:\mathsf{rGph}(\mathcal{B},\mathcal{A})$, the unit $\eta_f$ of the equifibrant replacement of $f$ is a $\Delta$-equivalence. 
+\end{lem}
+
+\begin{proof}
+By \cref{lem:rcoeq_flattening}, it follows that the square
+\begin{equation*}
+\begin{tikzcd}
+\rcoeq(\mathcal{B}^{\eqvsym}) \arrow[d] \arrow[r] & \rcoeq(\Delta(\rcoeq(\mathcal{B}))) \arrow[d] \\
+\rcoeq(\mathcal{A}) \arrow[r] & \rcoeq(\Delta(\rcoeq(\mathcal{A})))
+\end{tikzcd}
+\end{equation*}
+is a pullback square. Since the bottom map is an equivalence of reflexive graphs, it follows that the top map is an equivalence of reflexive graphs. In other words, we have shown that the map
+\begin{equation*}
+\begin{tikzcd}
+\mathcal{B}^{\eqvsym} \arrow[r] & \Delta(\rcoeq(\mathcal{B}))
+\end{tikzcd}
+\end{equation*}
+is a $\Delta$-equivalence. Of course, the morphism $\mathsf{constr}:\mathcal{B}\to\Delta(\rcoeq(\mathcal{B}))$ is also a $\Delta$-equivalence, so the claim follows by the 3-for-2 property of $\Delta$-equivalences.
+\end{proof}
+
 \begin{thm}
 The pair $(\mathcal{L}^\Delta,\mathcal{R}^\Delta)$ forms an orthogonal factorization system of reflexive graphs.
 \end{thm}
+
+\begin{proof}
+It follows from \cref{thm:fibration_pullback,lem:D_equiv_pullback} that every morphism of reflexive graphs factors as a $\Delta$-equivalence followed by a $\Delta$-\'etale map. Therefore it remains to show that the class of $\Delta$-equivalences is left orthogonal to the class of $\Delta$-\'etale maps.
+
+We have to show that for every $\Delta$-equivalence $i:\mathcal{A}\to\mathcal{B}$, and every $\Delta$-\'etale morphism $f:\mathcal{X}\to\mathcal{Y}$, the square
+\begin{equation*}
+\begin{tikzcd}
+\mathcal{X}^{\mathcal{B}} \arrow[r] \arrow[d] & \mathcal{Y}^{\mathcal{B}} \arrow[d] \\
+\mathcal{X}^{\mathcal{A}} \arrow[r] & \mathcal{Y}^{\mathcal{A}}
+\end{tikzcd}
+\end{equation*}
+is a pullback square. Consider the commuting cube
+\begin{equation*}
+\begin{tikzcd}
+& \mathcal{X}^{\mathcal{B}} \arrow[dl] \arrow[d] \arrow[dr] \\
+\Delta(\rcoeq(\mathcal{X}))^{\mathcal{B}} \arrow[d] & \mathcal{X}^{\mathcal{A}} \arrow[dl] \arrow[dr] & \mathcal{Y}^{\mathcal{B}} \arrow[d] \arrow[dl,crossing over] \\
+\Delta(\rcoeq(\mathcal{X}))^{\mathcal{A}} \arrow[dr] & \Delta(\rcoeq(\mathcal{Y}))^{\mathcal{B}} \arrow[from=ul,crossing over] \arrow[d] & \mathcal{Y}^{\mathcal{A}} \arrow[dl] \\
+& \Delta(\rcoeq(\mathcal{Y}))^{\mathcal{A}} & \phantom{\Delta(\rcoeq(\mathcal{X}))^{\mathcal{B}}}
+\end{tikzcd}
+\end{equation*}
+In this cube the top and bottom squares are pullback by the assumption that $f$ is $\Delta$-\'etale and the fact that exponents of pullback squares are again pullback squares. Furthermore, the square in the front left is pullback, because the two vertical maps are equivalences by the assumption that $i:\mathcal{A}\to\mathcal{B}$ is a $\Delta$-equivalence. Therefore we conclude that the square in the back right is also a pullback square, as desired.
+\end{proof}
+
+\begin{thm}
+For any morphism $f:\mathsf{rGph}(\mathcal{B},\mathcal{A})$, the pre-composition map
+\begin{equation*}
+\mathsf{rGph}_{\mathcal{A}}(\mathsf{et}_\Delta(f),e)\to \mathrm{hom}_{\mathcal{A}}(f,e)
+\end{equation*}
+is an equivalence for every $\Delta$-\'etale map $e:\mathcal{C}\to\mathcal{A}$.
+\end{thm}
+
+\subsection{Equifibrant replacement}
+
+\begin{defn}
+Let $\mathcal{B}$ and $\mathcal{C}$ be families of reflexive graphs over $\mathcal{A}$. We define the type
+\begin{equation*}
+\mathsf{rGph}_{\mathcal{A}}(\mathcal{B},\mathcal{C})
+\end{equation*}
+of morphisms of reflexive graphs \define{over} $\mathcal{A}$ to consist of triples $(\pts{f},\edg{f},\rfx{f})$ consisting of
+\begin{align*}
+\pts{f}(x) & : \pts{B}(x)\to \pts{C}(x) \\
+\edg{f}(e) & : \prd{u:\pts{B}(x)}{v:\pts{B}(y)} \edg{B}(e,u,v)\to \edg{C}(e,\pts{f}(u),\pts{f}(v)) \\
+\rfx{f}(x) & : \prd{u:\pts{B}(x)} \edg{f}(\rfx{\mathcal{B}}(x,u))=\rfx{\mathcal{C}}(x,\pts{f}(u))
+\end{align*}
+\end{defn}
+
+\begin{lem}
+Let $\mathcal{B}$ and $\mathcal{C}$ be families of reflexive graphs over $\mathcal{A}$. Then there is an equivalence
+\begin{equation*}
+\eqv{\mathsf{rGph}_{\mathcal{A}}(\mathcal{B},\mathcal{C})}{\sm{f:\mathsf{rGph}(\msm{\mathcal{A}}{\mathcal{B}},\msm{\mathcal{A}}{\mathcal{B}})} \proj 1 = \proj 1 \circ f}
+\end{equation*}
+\end{lem}
+
+\begin{defn}
+Let $\mathcal{B}$ be a family of reflexive graphs over $\mathcal{A}$. We define the equifibrant replacement $\mathsf{EqF}(\mathcal{B})$ of $\mathcal{B}$ by
+\begin{equation*}
+\mathsf{EqF}(\mathcal{B}) \defeq \mathsf{equifib\usc{}fam}(\fibf{\rcoeq(\proj 1)}),
+\end{equation*}
+and we define the morphism $\eta_{\mathcal{B}}:\mathsf{rGph}_{\mathcal{A}}(\mathcal{B},\mathsf{EqF}(\mathcal{B}))$. 
+\end{defn}
 
 \begin{thm}\label{thm:eqf_initial}
 Consider a family $\mathcal{B}$ of reflexive graphs over $\mathcal{A}$, and let $\mathcal{E}$ be an equifibered family over $\mathcal{A}$. Then the pre-composition operation
@@ -594,6 +757,41 @@ Consider a family $\mathcal{B}$ of reflexive graphs over $\mathcal{A}$, and let 
 \end{equation*}
 is an equivalence for every equifibered family $\mathcal{E}$ over $\mathcal{A}$.
 \end{thm}
+
+\section{Equifibrant replacement for other homotopy colimits}
+
+\subsection{Equifibrant replacement for diagrams over graphs}
+
+\begin{defn}
+Let $\tau:\mathcal{D}'\to\mathcal{D}$ be a natural transformation of diagrams over a reflexive graph $\mathcal{A}$. 
+\begin{enumerate}
+\item We say that $\tau$ is a \define{weak equivalence} if it induces an equivalence
+\begin{equation*}
+\tfcolim(\tau):\tfcolim(\mathcal{D}')\to\tfcolim(\mathcal{D}).
+\end{equation*}
+We write $\mathcal{W}$ for the class of weak equivalences.
+\item We say that $\tau$ is \define{\'etale} if the square
+\begin{equation*}
+\begin{tikzcd}
+\msm{\mathcal{A}}{\mathcal{D}'} \arrow[d,swap,"\tau"] \arrow[r] & \Delta(\tfcolim(\mathcal{D}')) \arrow[d,"\tfcolim(\tau)"] \\
+\msm{\mathcal{A}}{\mathcal{D}} \arrow[r] & \Delta(\tfcolim(\mathcal{D}))
+\end{tikzcd}
+\end{equation*}
+is a pullback square of reflexive graphs. We write $\mathcal{R}$ for the class of \'etale maps.
+\end{enumerate}
+\end{defn}
+
+\begin{thm}
+A natural transformation $\tau:\mathcal{D}'\to\mathcal{D}$ is \'etale if and only if it is cartesian.
+\end{thm}
+
+\begin{thm}
+The pair $(\mathcal{W},\mathcal{R})$ forms an orthogonal factorization system. 
+\end{thm}
+
+\subsection{Equifibrant replacement for pushouts}
+
+\subsection{Equifibrant replacement for sequential colimits}
 
 \section{Identity types of colimits}
 \subsection{Identity types of reflexive coequalizers}

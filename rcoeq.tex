@@ -1,5 +1,26 @@
 \chapter{Reflexive coequalizers}
 
+\section{The Yoneda lemma}
+The universal property of identity types is sometimes called the type theoretic Yoneda lemma: families of maps out of the identity type are uniquely determined by their action on the reflexivity identification.
+
+\begin{thm}\label{thm:yoneda}
+Let $B$ be a type family over $A$, and let $a:A$. Then the map
+\begin{equation*}
+\mathsf{ev\usc{}refl}:\Big(\prd{x:A} (a=x)\to B(x)\Big)\to B(a)
+\end{equation*}
+given by $\lam{f} f(a,\refl{a})$ is an equivalence. 
+\end{thm}
+
+\begin{proof}
+The inverse $\varphi$ is defined by path induction, taking $b:B(a)$ to the function $f$ satisfying $f(a,\refl{a})\jdeq b$. It is immediate that $\mathsf{ev\usc{}refl}\circ\varphi\htpy \idfunc$.
+
+To see that $\varphi\circ \mathsf{ev\usc{}refl}\htpy\idfunc$, let $f:\prd{x:A}(a=x)\to B(x)$. To show that $\varphi(f(a,\refl{a}))=f$ we use function extensionality (twice), so it suffices to show that
+\begin{equation*}
+\prd{x:A}{p:a=x} \varphi(f(a,\refl{a}),x,p)=f(x,p).
+\end{equation*}
+This follows by path induction on $p$, since $\varphi(f(a,\refl{a}),a,\refl{a})\jdeq f(a,\refl{a})$.
+\end{proof}
+
 \section{Discrete reflexive graphs}
 
 \begin{defn}\label{defn:graphs_ctx}
