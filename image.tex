@@ -1,23 +1,24 @@
 \chapter{Homotopy images}
 
+We have observed in ???? that the reflexive coequalier of the pre-kernel of a map $f:A\to X$ is the fiberwise join $\join[X]{A}{A}$, i.e.~we have a reflexive coequalizer diagram
+\begin{equation*}
+\begin{tikzcd}
+A\times A \arrow[r,yshift=1ex] \arrow[r,yshift=-1ex] & A \arrow[l] \arrow[r] & \join{A}{A}.
+\end{tikzcd}
+\end{equation*}
+Furthermore, we have observed in ???? that the geometric realization of the 2-pre-kernel of a map $f:A\to X$ is the triple fiberwise join $\join[X]{A}{\join[X]{A}{A}}$, i.e.~we have a colimiting 
+\begin{equation*}
+\begin{tikzcd}
+A\times A \times A \arrow[r,yshift=2ex] \arrow[r] \arrow[r,yshift=-2ex] & A \times A \arrow[l,yshift=1ex] \arrow[l,yshift=-1ex] \arrow[r,yshift=1ex] \arrow[r,yshift=-1ex] & A \arrow[l] \arrow[r] & \join{A}{\join{A}{A}}.
+\end{tikzcd}
+\end{equation*}
 The propositional truncation $\brck{A}$ of $A$ is approximated by the type sequence
 \begin{equation*}
 \begin{tikzcd}
 A \arrow[r] & \join{A}{A} \arrow[r] & \join{A}{\join{A}{A}} \arrow[r] & \cdots
 \end{tikzcd}
 \end{equation*}
-Furthermore, we have observed that $\mathsf{rcoeq}(\nabla(A)) \eqvsym \join{A}{A}$, i.e.~we have a reflexive coequalizer diagram
-\begin{equation*}
-\begin{tikzcd}
-A\times A \arrow[r,yshift=1ex] \arrow[r,yshift=-1ex] & A \arrow[l] \arrow[r] & \join{A}{A}.
-\end{tikzcd}
-\end{equation*}
-We will establish in this section that the triple join $\join{A}{\join{A}{A}}$ is also a homotopy colimit of the fom
-\begin{equation*}
-\begin{tikzcd}
-A\times A \times A \arrow[r,yshift=2ex] \arrow[r] \arrow[r,yshift=-2ex] & A \times A \arrow[l,yshift=1ex] \arrow[l,yshift=-1ex] \arrow[r,yshift=1ex] \arrow[r,yshift=-1ex] & A \arrow[l] \arrow[r] & \join{A}{\join{A}{A}}.
-\end{tikzcd}
-\end{equation*}
+
 The challenge here is to first give a specification of what we mean by a diagram of the form
 \begin{equation*}
 \begin{tikzcd}

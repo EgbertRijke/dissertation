@@ -1,0 +1,634 @@
+\chapter{Coinductive types}
+
+\section{Limits in HoTT}
+
+Recall that a graph $\Gamma$ in $\UU$ is a pair $\pairr{\Gamma_0,\Gamma_1}$ 
+consisting of a type $\Gamma_0:\UU$ of vertices, 
+and binary relation $\Gamma_1:\Gamma_0\to\Gamma_0\to\UU$ of edges. 
+A diagram $D$ over $\Gamma$ in $\UU$ is a pair $\pairr{D_0,D_1}$ consisting of
+$D_0:\Gamma_0\to\UU$ and $D_1:\prd{i,j:\Gamma_0}\Gamma_1(i,j)\to D_0(i)\to D_0(j)$. 
+A cone on $D$ with vertex $X$ is a pair $\pairr{c_0,c_1}$ consisting of
+\begin{align*}
+c_0 & : \prd{i:\Gamma_0} X\to D_0(i) \\
+c_1 & : \prd{i,j:\Gamma_0}{e:\Gamma_1(i,j)}{x:X} D_1(e,c_0(i,x))=c_0(j,x).
+\end{align*}
+There is an actions of functions into $X$ on cones with vertex $X$, which
+we call $\mathsf{coneMap}$. 
+Given any $f:Y\to X$, and any cone $c\defeq \pairr{c_0,c_1}$ with vertex $X$,
+we define the cone $\mathsf{coneMap}(f,c)$ with vertex $Y$ by
+\begin{align*}
+\mathsf{coneMap}(f,c)_0(i,y) & \defeq c_0(i,f(y)) \\
+\mathsf{coneMap}(f,c)_1(e,y) & \defeq c_1(e,f(y)).
+\end{align*}
+Note that $\mathsf{coneMap}$ can also be seen as a map of type
+\begin{equation*}
+\prd{X,Y:\UU}{c:\mathsf{cone}(X)} (Y\to X)\to\mathsf{cone}(Y).
+\end{equation*}
+A cone $c$ with vertex $X$ is said to be limiting if $\mathsf{coneMap}(X,Y,c)$
+is an equivalence for every $Y:\UU$. 
+
+\begin{defn}
+Let $D$ be a diagram over $\Gamma$. Then we define the type $\mathsf{limit}(D)$
+to be the type of pairs $\pairr{x,h}$ consisting of
+\begin{align*}
+x & : \prd{i:\Gamma_0}D_0(i) \\
+p & : \prd{i,j:\Gamma_0}{e:\Gamma_1(i,j)}D_1(e,x_i)=x_j.
+\end{align*}
+We define the cone $\mathsf{limitCone}(D)$ with vertex $\mathsf{limit}(D)$ by
+\begin{align*}
+\mathsf{limitCone}(D)_0(i,\pairr{x,h}) & \defeq x_i \\
+\mathsf{limitCone}(D)_1(e,\pairr{x,h}) & \defeq p_e.
+\end{align*}
+\end{defn}
+
+\begin{lem}
+If the function extensionality axiom holds, the cone $\mathsf{limitCone}(D)$ 
+with vertex $\mathsf{limit}(D)$ is a limiting cone on $D$.
+\end{lem}
+
+We are especially interested in the case where 
+$\Gamma\defeq\pairr{\N,\mathsf{pred}}$, consisting of the natural numbers, 
+and an edge from $n+1$ to $n$ for each $n:\N$. 
+In this case, a diagram $D$ over $\pairr{\N,\mathsf{pred}}$ is equivalently
+described as a pair $\pairr{D_0,D_1}$ consisting of
+\begin{align*}
+D_0 & : \N\to\UU \\
+D_1 & : \prd{n:\N} D_0(n+1)\to D_0(n)
+\end{align*}
+Similarly, the type $\mathsf{limit}(D)$ for a diagram $D$ over
+$\pairr{\N,\mathsf{pred}}$ is equivalently described as the type
+\begin{equation}\label{eq:sequential_limit}
+\sm{x:\prd{n:\N}D_0(n)}\prd{n:\N}D_1(n,x_{n+1})=x_n.
+\end{equation}
+We shall use this description of sequential limits to study coinductive types.
+
+Let $\pairr{x,h}$ and $\pairr{y,k}$ be in $\mathsf{limit}(D)$.
+Then by function extensionality, the type $\pairr{x,h}=\pairr{y,k}$ 
+is equivalent to the type of pairs $\pairr{p,q}$ consisting of
+$p : \prd{i:\Gamma_0} x_i=y_i$ and for each $e:\Gamma_1(i,j)$ a path
+$q_e$ witnessing that the square
+\begin{equation*}
+\begin{tikzcd}[column sep=huge]
+D_1(e,x_i) \arrow[r,equals,"\mapfunc{D_1(e)}(p_i)"] \arrow[d,equals,swap,"h_i"] & D_1(e,y_i) \arrow[d,equals,"k_i"] \\
+x_j \arrow[r,equals,swap,"p_j"] & y_j
+\end{tikzcd}
+\end{equation*}
+commutes. In other words:
+
+\begin{lem}\label{lem:id_limit}
+For any $\pairr{x,h},\pairr{y,k}:\mathsf{limit}(D)$, the identity type
+$\pairr{x,h}=\pairr{y,k}$ is equivalent to the limit of the diagram $I(D)$ over
+$\Gamma$, defined by
+\begin{align*}
+I(D)_0(i) & \defeq x_i=y_i \\
+I(D)_1(e,h) & \defeq \ct{\opp{p_i}}{\mapfunc{D_1(e)}(\alpha_i)}{q_i}.
+\end{align*}
+\end{lem}
+
+\section{Ordinary coinductive types}
+A coinductive type is specified by
+a type $A$ and a type family $B:A\to\UU$, just as inductive types. 
+Such a pair $(A,B)$ determines the polynomial endofunctor given on objects by
+\begin{equation*}
+X \mapsto P_{A,B}(X)\defeq \sm{a:A} (B(a)\to X)
+\end{equation*}
+and on morphisms $h:X\to Y$ by
+\begin{equation*}
+\pairr{a,f}\mapsto \pairr{a,h\circ f}.
+\end{equation*}
+A coalgebra for the polynomial endofunctor $P_{A,B}$ is a type $X$ together
+with a map $X\to P_{A,B}(X)$. A homomorphism of coalgebras, from $(X,f)$ to
+$(Y,g)$ consists of a map $h:X\to Y$ such that the square
+\begin{equation*}
+\begin{tikzcd}[column sep=large]
+X \arrow[r,"h"] \arrow[d,swap,"f"] & Y \arrow[d,"g"] \\
+P_{A,B}(X) \arrow[r,swap,"P_{A,B}(h)"] & P_{A,B}(Y)
+\end{tikzcd}
+\end{equation*}
+commutes. The coinductive type $\mathsf{M}(A,B)$ is defined to be a coalgebra
+--- so it comes with a map $\mathsf{destr}_{A,B} : \mathsf{M}(A,B)\to P_{A,B}(\mathsf{M}(A,B))$ ---
+with the property that for any coalgebra $(X,f)$ the type of homomorphisms
+from $(X,f)$ to $\mathsf{M}(A,B)$ is contractible.
+Using the type $\N$ of natural numbers and function extensionality, the coinductive types 
+$\mathsf{M}(A,B)$ can be shown to exist in homotopy type theory
+\cite{AhrensCapriottiSpadotti}, as the limit of the diagram
+\begin{equation*}
+\begin{tikzcd}
+\cdots \arrow[r,"u_2"] & P^2_{A,B}(\unit) \arrow[r,"u_1"] & P_{A,B}(\unit) \arrow[r,"u_0"] & \unit
+\end{tikzcd}
+\end{equation*}
+where $u_{n+1}\defeq P_{A,B}(u_n)$.
+This limit may also defined as the type
+\begin{equation*}
+\sm{x:\prd{n:\N} P^n_{A,B}(\unit)}\prd{n:\N} u_n(x_{n+1})=x_n.
+\end{equation*}
+
+\begin{defn}
+Consider $A:\UU$ and $B:A\to\UU$. Then we define
+\begin{equation*}
+\mathsf{M}(A,B)\defeq \sm{x:\prd{n:\N} P^n_{A,B}(\unit)}\prd{n:\N} u_n(x_{n+1})=x_n.
+\end{equation*}
+\end{defn}
+
+\begin{defn}
+Let $\pairr{x,h}:\mathsf{M}(A,B)$. 
+We will define for each $n:\N$ an identification
+\begin{equation*}
+\mathsf{desc\nameless path}(\pairr{x,h})_{n+1} : \proj 1(x_{n+2})=\proj 1(x_{n+1}),
+\end{equation*} 
+with a homotopy $\mathsf{desc\nameless htpy}(\pairr{x,h})_n$ 
+witnessing that the square
+\begin{equation*}
+\begin{tikzcd}[column sep=9em]
+B(\proj 1(x_{n+2})) \arrow[r,"\transf{(\mathsf{desc\nameless path}(\pairr{x,h})_{n+1})}"] \arrow[d,swap,"\proj 2(x_{n+2})"] & B(\proj 1(x_{n+1})) \arrow[d,"\proj 2(x_{n+1})"] \\
+P_{A,B}^{n+1}(\unit) \arrow[r,swap,"u_n"] & P_{A,B}^n(\unit)
+\end{tikzcd}
+\end{equation*}
+commutes.
+\end{defn}
+
+\begin{proof}[Construction]
+First we decompose $x_{n+2}$ as $\pairr{a,f}$ and $x_{n+1}$ as $\pairr{a',f'}$. 
+We have $u_{n+1}(\pairr{a,f})\jdeq \pairr{a,u_n\circ f}$. 
+It follows that $\proj 1(\pairr{a,f})\jdeq \proj 1(u_{n+1}(\pairr{a,f}))$.
+Since $h_n:u_{n+1}(\pairr{a,f})=\pairr{a',f'}$, we have
+$\mapfunc{\proj 1}(h_n) : \proj 1(\pairr{a,f})=\proj 1(\pairr{a',f'})$. 
+
+We construct the homotopy by a generalization. 
+We show that for any $\pairr{a,f}:P_{A,B}^{n+2}(\unit)$,
+any $\pairr{a',f'}:P_{A,B}^{n+1}(\unit)$ and any $p:u_{n+1}(a,f)=\pairr{a',f'}$
+\end{proof}
+
+\begin{defn}
+This allows us to define for each $n:\N$ the identification
+\begin{equation*}
+\mathsf{m\nameless full\nameless desc}(\pairr{x,h})_n : \proj 1(x_{n+1})=\proj 1(x_{1})
+\end{equation*} 
+as the concatenation $\ct{\mathsf{desc\nameless path}(\pairr{x,h})_{n}}{\cdots}{\mathsf{desc\nameless path}(\pairr{x,h})_1}$.
+\end{defn}
+
+\begin{defn}
+We define the map
+\begin{equation*}
+\mathsf{destr}_{A,B} : \mathsf{M}(A,B)\to P_{A,B}(\mathsf{M}(A,B))
+\end{equation*}
+which gives $\mathsf{M}(A,B)$ the structure of a $P_{A,B}$-coalgebra.
+\end{defn}
+
+\begin{proof}[Construction]
+We will construct $\mathsf{destr}_{A,B}$
+as a pair $\pairr{\mathsf{destr}_0,\mathsf{destr}_1}$ consisting of maps
+\begin{align*}
+\mathsf{destr}_0 & : \mathsf{M}(A,B)\to A \\
+\mathsf{destr}_1 & : \prd{\pairr{x,h}:\mathsf{M}(A,B)} B(\mathsf{destr}_0(x,p))\to \mathsf{M}(A,B).
+\end{align*}
+First, we define $\mathsf{destr}_0(x,p)\defeq \proj 1(x_1)$,
+for any $\pairr{x,h}:\mathsf{M}(A,B)$. 
+To define $\mathsf{destr}_1$, let $\pairr{x,h}:\mathsf{M}(A,B)$. 
+Note that for any $n:\N$, 
+we have $\proj 2(x_{n+1}):B(\proj 1(x_{n+1}))\to P_{A,B}^n(\unit)$.
+This can be used to obtain $\mathsf{destr}_1(\pairr{x,h},b)_0$. 
+More specifically, we will construct a type sequence of types
+$B(\proj 1(x_{n+1}))$, in which the connecting maps are all equivalences, 
+and for which the maps $\proj 2(x_{n+1})$ form a natural transformation, 
+as indicated in the diagram.
+\begin{equation*}
+\begin{tikzcd}
+\cdots \arrow[r,"\eqvsym"] & B(\proj 1(x_3)) \arrow[r,"\eqvsym"] \arrow[d] & B(\proj 1(x_2)) \arrow[r,"\eqvsym"] \arrow[d] & B(\proj 1(x_1)) \arrow[d]
+  \\
+\cdots \arrow[r,swap,"u_2"] & P_{A,B}^2 \arrow[r,swap,"u_1"] & P_{A,B}^1(\unit) \arrow[r,swap,"u_0"] & P_{A,B}^0(\unit)
+\end{tikzcd}
+\end{equation*}
+With this type sequence consisting only of equivalences,
+and with the indictated natural transformation, we obtain a cone on the bottom
+type sequence with vertex $B(\proj 1(x_1))$. Since $\mathsf{M}(A,B)$ is the
+limit, this defines the desired map 
+$\mathsf{destr}_1(x,p):B(\proj 1(x_1))\to \mathsf{M}(A,B)$.
+
+We obtain the individual commutative squares of the above diagram by 
+generalization: we show that for any $\pairr{a,f}:P_{A,B}^{n+2}(\unit)$ and
+any $\pairr{b,g}:P_{A,B}^{n+1}(\unit)$ such that $\alpha:u_{n+1}(a,f)=\pairr{b,g}$,
+we have a commuting square
+\begin{equation*}
+\begin{tikzcd}
+B(a) \arrow[r,densely dotted,"\eqvsym"] \arrow[d,swap,"f"] & B(b) \arrow[d,"g"] \\
+P_{A,B}^{n+1}(\unit) \arrow[r,swap,"u_n"] & P_{A,B}^n(\unit)
+\end{tikzcd}
+\end{equation*}
+Of course, since the endpoint of $\alpha$ is free, it suffices to prove the 
+assertion for $\alpha\jdeq \refl{u_{n+1}(a,f)}$. 
+Since $u_{n+1}(a,f)\jdeq \pairr{a,u_{n}\circ f}$, 
+we have to construct a commuting square
+\begin{equation*}
+\begin{tikzcd}
+B(a) \arrow[r,densely dotted,"\eqvsym"] \arrow[d,swap,"f"] & B(a) \arrow[d,"u_n\circ f"] \\
+P_{A,B}^{n+1}(\unit) \arrow[r,swap,"u_n"] & P_{A,B}^n(\unit)
+\end{tikzcd}
+\end{equation*}
+Of course, the above square commutes when we take the identity map on $B(a)$.
+\end{proof}
+
+\begin{eg}
+The type $\mathsf{Stream}(A)$ of streams in $A$ can either be introduced as
+the final coalgebra for the polynomial endofunctor $X\mapsto A\times X$ 
+associated to the (constant) type family $\lam{a}\unit : A\to\UU$, 
+or as the coinductive type with destructors
+\begin{align*}
+\mathsf{head} & : \mathsf{Stream}(A)\to A \\
+\mathsf{tail} & : \mathsf{Stream}(A)\to\mathsf{Stream}(A).
+\end{align*}
+\end{eg}
+
+\begin{lem}
+The map
+\begin{equation*}
+\mathsf{destr}_{A,B} : \mathsf{M}(A,B)\to P_{A,B}(\mathsf{M}(A,B))
+\end{equation*}
+is an equivalence.
+\end{lem}
+
+\begin{proof} 
+We have the coalgebra 
+\begin{equation*}
+\begin{tikzcd}[column sep=8em]
+P_{A,B}(\mathsf{M}(A,B)) \arrow[r,"{P_{A,B}(\mathsf{destr}_{A,B})}"] & P_{A,B}^2(\mathsf{M}(A,B)),
+\end{tikzcd}
+\end{equation*}
+so the type of homomorphisms from this coalgebra to $\mathsf{M}(A,B)$ is
+contractible. We call the underlying map of this unique algebra homomorphism
+$\mathsf{constr}_{A,B}:P_{A,B}(\mathsf{M}(A,B))\to \mathsf{M}(A,B)$. 
+
+Now we have the commuting squares
+\begin{equation*}
+\begin{tikzcd}
+\mathsf{M}(A,B) \arrow[r,"\mathsf{destr}_{A,B}"] \arrow[d,"\mathsf{destr}_{A,B}",swap] & P_{A,B}(\mathsf{M}(A,B)) \arrow[d,swap,"P_{A,B}(\mathsf{destr}_{A,B})"] \arrow[r,"\mathsf{constr}_{A,B}"] & \mathsf{M}(A,B) \arrow[d,"\mathsf{destr}_{A,B}"] \\
+P_{A,B}(\mathsf{M}(A,B)) \arrow[r] & P_{A,B}(P_{A,B}(\mathsf{M}(A,B))) \arrow[r] & P_{A,B}(\mathsf{M}(A,B))
+\end{tikzcd}
+\end{equation*}
+By contractibility of the type of homomorphisms from $\mathsf{M}(A,B)$ to itself, 
+it must be the case that $\mathsf{constr}_{A,B}\circ \mathsf{destr}_{A,B}=\idfunc$. 
+The fact that $\mathsf{destr}_{A,B}\circ \mathsf{constr}_{A,B}=\idfunc$ is now just a computation: 
+\begin{align*}
+\mathsf{destr}_{A,B}\circ\mathsf{constr}_{A,B} & = P_{A,B}(\mathsf{constr}_{A,B})\circ P(\mathsf{destr}_{A,B}) \\
+& = P_{A,B}(\mathsf{constr}_{A,B}\circ \mathsf{destr}_{A,B}) \\
+& = P_{A,B}(\idfunc) \\
+& = \idfunc.\qedhere
+\end{align*}
+\end{proof}
+
+The construction of Ahrens, Capriotti and Spadotti of the coinductive type
+$\mathsf{M}(A,B)$ also gives further characterizations of the identity type
+on $\mathsf{M}(A,B)$. 
+
+\begin{lem}\label{lem:mtype_id}
+Let $\pairr{x,h}$ and $\pairr{y,k}$ be terms of $\mathsf{M}(A,B)$. 
+The following types are equivalent:
+\begin{enumerate}
+\item the type $\pairr{x,h}=\pairr{y,k}$,
+\item the type of pairs $\pairr{\alpha,\beta}$ consisting of
+\begin{align*}
+\alpha & : \mathsf{destr}_0(x,h)=\mathsf{destr}_0(y,k)\\
+\beta & : \prd{z:B(\mathsf{destr}_0(x,h))}\mathsf{destr}_1(\pairr{x,h},z)=\mathsf{destr}_1(\pairr{y,k},\trans{\alpha}{z}),
+\end{align*}
+\item the limit of the type sequence
+\begin{equation*}
+\begin{tikzcd}
+\cdots \arrow[r,"v_2"] & x_2=y_2 \arrow[r,"v_1"] & x_1=y_1 \arrow[r,"v_0"] & x_0=y_0.
+\end{tikzcd}
+\end{equation*}
+where $v_n(p)\defeq \ct{\opp{h_n}}{\mapfunc{u_n}(p)}{k_n}$. 
+\end{enumerate}
+\end{lem}
+
+\begin{rmk}
+In \autoref{conj:bisim_id} we add one more equivalent description of this type.
+\end{rmk}
+
+\begin{proof}
+The type $\pairr{x,h}=\pairr{y,k}$ is equivalent to the indicated type of pairs
+$\pairr{\alpha,\beta}$, because $\mathsf{destr}_{A,B}$ is an equivalence. 
+The third equivalent description of $\pairr{x,h}=\pairr{y,k}$ follows from
+\autoref{lem:id_limit}.
+\end{proof}
+
+\begin{comment}
+\begin{defn}
+Consider $B:A\to\UU$, defining the coinductive type $\mathsf{M}(A,B)$, and let 
+$C:\mathsf{M}(A,B)\to\UU$ be a family.
+
+We define a map $\mathsf{lazyDef}_{A,B,C}$, that assigns to each 
+\begin{equation*}
+IH : \prd{a:A}{f:B(a)\to \mathsf{M}(A,B)} (\prd{b:B(a)} C(f(b)))\to C(\mathsf{cons}_{A,B}(a,f))
+\end{equation*}
+a section $s : \prd{x:\mathsf{M}(A,B)}C(x)$ satisfying
+\begin{equation*}
+s(\mathsf{cons}_{A,B}(a,f)) = IH(a,f,\lam{b}s(f(b))).
+\end{equation*}
+\end{defn}
+
+\begin{proof}[Construction]
+It suffices to construct a term of type
+\begin{equation*}
+\prd{a:A}{f:B(a)\to \mathsf{M}(A,B)}C(\mathsf{cons}_{A,B}(a,f)).
+\end{equation*}
+Let $a:A$, $f:B(a)\to \mathsf{M}(A,B)$. Then we have
+\begin{equation*}
+IH(a,f) : (\prd{b:B(a)} C(f(b)))\to C(\mathsf{cons}_{A,B}(a,f)),
+\end{equation*}
+so it suffices to construct a term of type $\prd{b:B(a)} C(f(b))$. Let $b:B(a)$.
+Then we have $f(b):\mathsf{M}(A,B)$. 
+
+Then we have a map $g:B(a)\to\sm{x:\mathsf{M}(A,B)}C(x)$, given by
+\begin{equation*}
+g(b)\defeq \pairr{f(b),CH(b)}.
+\end{equation*}
+and hence we have
+a term of type $P_{A,B}(\sm{x:\mathsf{M}(A,B)}C(x))$. In particular, it follows
+that $\sm{x:\mathsf{M}(A,B)}C(x)$ has the structure of a $P_{A,B}$-coalgebra.
+
+Since $\mathsf{M}(A,B)$ is the terminal coalgebra, there is a unique
+\end{proof}
+
+\begin{defn}
+Let $C:\mathsf{M}(A,B)\to\UU$ be a type family for which we have a term
+\begin{equation*}
+CH : \prd{a:A}{f:B(a)\to \mathsf{M}(A,B)}{y:C(\mathsf{cons}_{A,B}(a,f))}\prd{b:B(a)} C(f(b)).
+\end{equation*}
+Then we get the map
+\begin{equation*}
+c : (\sm{x:\mathsf{M}(A,B)}C(x))\to P_{A,B}(\sm{x:\mathsf{M}(A,B)}C(x)),
+\end{equation*}
+defined by
+\begin{equation*}
+c(\mathsf{cons}_{A,B}(a,f),y) \defeq \pairr{a, \lam{b}\pairr{f(b),CH(a,f,y,b)}},
+\end{equation*}
+for which the square
+\begin{equation*}
+\begin{tikzcd}[column sep=huge]
+\sm{x:\mathsf{M}(A,B)}C(x) \arrow[r,"\proj 1"] \arrow[d,swap,"c"] & \mathsf{M}(A,B) \arrow[d,"\mathsf{destr}_{A,B}"] \\
+P_{A,B}(\sm{x:\mathsf{M}(A,B)}C(x)) \arrow[r,swap,"P_{A,B}(\proj 1)"] & P_{A,B}(\mathsf{M}(A,B))
+\end{tikzcd}
+\end{equation*}
+commutes. Then coalgebra homomorphisms
+\begin{equation*}
+\begin{tikzcd}[column sep=large]
+\mathsf{M}(A,B) \arrow[d,swap,"\mathsf{destr}_{A,B}"] \arrow[r,"h"] & \sm{x:\mathsf{M}(A,B)}C(x) \arrow[d,"c"] \\
+P_{A,B}(\mathsf{M}(A,B)) \arrow[r,swap,"P_{A,B}(h)"] & P_{A,B}(\sm{x:\mathsf{M}(A,B)}C(x)) 
+\end{tikzcd}
+\end{equation*}
+define terms of type $\prd{x:\mathsf{M}(A,B)}C(x)$.
+\end{defn} 
+
+\begin{proof}[Construction]
+Let $h$ be an coalgebra homomorphism of the indicated type. Since $\mathsf{M}(A,B)$
+is the terminal coalgebra, it follows that $\proj 1\circ h=\idfunc$. Since
+ we have an equivalence
+\begin{equation*}
+\eqv{\Big(\prd{x:\mathsf{M}(A,B)}C(x)\Big)}{\Big(\sm{g:\mathsf{M}(A,B)\to\sm{x:\mathsf{M}(A,B)}C(x)}\proj 1\circ g=\idfunc\Big)}
+\end{equation*}
+we get a section of $C$.
+\end{proof}
+\end{comment}
+
+\section{Indexed coinductive types}
+An indexed coinductive type is specified by an indexed container.
+
+\begin{defn}
+An indexed container is a quadruple $\pairr{I,A,B,j}$ consisting of
+\begin{align*}
+I & : \UU \\
+A & : I\to \UU\\
+B & : \prd*{i:I} A(i)\to \UU \\
+j & : \prd*{i:I}*{a:A(i)} B(i)\to I.
+\end{align*}
+\end{defn}
+
+\begin{defn}
+Let $C\defeq\pairr{I,A,B,j}$ be an indexed container. We define the polynomial
+endofunctor $P_C$ on type families over $I$ by
+\begin{equation*}
+P_C(X)(i) \defeq \sm{a:A(i)}\prd{b:B(i,a)} X(j(b))
+\end{equation*}
+The functoriality of $P_C$ is given by post-composition. 
+\end{defn}
+
+Using this polynomial functor, we can again define the type family $\mathsf{M}(C) : I \to \UU$ to
+be the final coalgebra of $P_C$. The final coalgebra comes with a map
+\begin{equation*}
+\mathsf{destr}_C : \prd{i:I} \mathsf{M}(C)(i) \to P_C(\mathsf{M}(C))(i)
+\end{equation*}
+Existence of this final coalgebra is shown in \cite{AhrensCapriottiSpadotti}.
+They define $\mathsf{M}(C)(i)$ to be the limit of the
+sequence
+\begin{equation*}
+\begin{tikzcd}
+\cdots \arrow[r,"u_2(i)"] & P^2_C(\lam{\nameless}\unit)(i) \arrow[r,"u_1(i)"] & P_C(\lam{\nameless}\unit)(i) \arrow[r,"u_0(i)"] & \unit
+\end{tikzcd}
+\end{equation*}
+where $\lam{\nameless}\unit:I\to\UU$ is the constant type family at the unit type.
+More specifically, 
+\begin{equation*}
+\mathsf{M}(C)(i)\defeq \sm{x:\prd{n:\N}P_C^n(\lam{\nameless}\unit)(i)}\prd{n:\N} u_n(i,x_{n+1})= x_n.
+\end{equation*}
+
+\begin{lem}
+Let $C\defeq\pairr{I,A,B,j}$ be an indexed container. Then $\mathsf{destr}_C(i)$ is an
+equivalence for each $i:I$. 
+\end{lem}
+
+\begin{proof}
+Since we have a coalgebra $(P_{C}(\mathsf{M}(C)), P_{C}(\mathsf{destr}_C))$,
+so the type of homomorphisms from this coalgebra to $\mathsf{M}(A,B)$ is
+contractible. Again, we call the underlying map of this unique algebra homomorphism
+\begin{equation*}
+\mathsf{constr}_{C}:\prd{i:I} P_{C}(\mathsf{M}(C))(i)\to \mathsf{M}(C)(i).
+\end{equation*} 
+
+Now we have the commuting squares
+\begin{equation*}
+\begin{tikzcd}
+\mathsf{M}(C)(i) \arrow[r,"\mathsf{destr}_C(i)"] \arrow[d,"\mathsf{destr}_C(i)",swap] & P_{C}(\mathsf{M}(A,B))(i) \arrow[d,swap,"P_{C}(\mathsf{destr}_C)(i)"] \arrow[r,"\mathsf{constr}_C(i)"] & \mathsf{M}(C)(i) \arrow[d,"\mathsf{destr}_C(i)"] \\
+P_{C}(\mathsf{M}(C))(i) \arrow[r] & P_{C}(P_{C}(\mathsf{M}(C)))(i) \arrow[r] & P_{C}(\mathsf{M}(C))(i)
+\end{tikzcd}
+\end{equation*}
+for each $i:I$. In particular, we have a coalgebra homomorphism from
+$\mathsf{M}(C)$ to itself with underlying map $\mathsf{constr}_C\circ \mathsf{destr}_C$.
+By contractibility of the type of homomorphisms from $\mathsf{M}(C)$ to itself, 
+it follows that $\mathsf{constr}_C\circ \mathsf{destr}_C=\idfunc$. 
+
+The fact that $\mathsf{destr}_C\circ \mathsf{constr}_C=\idfunc$ is now just a computation: 
+\begin{align*}
+\mathsf{destr}_C\circ\mathsf{constr}_C & = P_{C}(\mathsf{constr}_C)\circ P(\mathsf{destr}_C) \\
+& = P_{C}(\mathsf{constr}_C\circ \mathsf{destr}_C) \\
+& = P_{C}(\idfunc) \\
+& = \idfunc.\qedhere
+\end{align*}
+\end{proof}
+
+\begin{cor}
+Let $C\defeq\pairr{I,A,B,j}$ be an indexed container and consider
+$\pairr{a_i,f_i},\pairr{b_i,g_i}:P_C(\mathsf{M}(C))(i)$. Then we have
+an equivalence of type
+\begin{align*}
+& \Big(\mathsf{constr}_C(i)(a_i,f_i)=\mathsf{constr}_C(i)(b_i,g_i) \\
+& \qquad\eqvsym \Big(\sm{p:a_i=b_i}\prd{x:B(i,a_i)} \trans{p}{f_i(x)}=g_i(\trans{p}{x})\Big).
+\end{align*}
+\end{cor}
+
+\begin{defn}
+Let $B:A\to\UU$ be a type family. We define the \define{bisimilation relation}
+$\mathsf{Bisim}_{A,B}:\mathsf{M}(A,B)\to \mathsf{M}(A,B)\to\UU$ as an
+indexed coinductive type, with container
+\begin{align*}
+I & \defeq \mathsf{M}(A,B)\times \mathsf{M}(A,B) \\
+A'(i,j) & \defeq \mathsf{destr}_0(i)=\mathsf{destr}_0(j) \\
+B'(i,j,p) & \defeq B(\mathsf{destr}_0(i)) \\
+j(i,j,p,z) & \defeq \pairr{\mathsf{destr}_1(i,z),\mathsf{destr}_1(j,\trans{p}{z})}.
+\end{align*} 
+\end{defn}
+
+\begin{rmk}
+Alternatively, the indexed coinductive type $\mathsf{Bisim}_{A,B}$ can be
+introduced by its destructors
+\begin{align*}
+\mathsf{bdestr}_0(p) & : \mathsf{destr}_0(m)=\mathsf{destr}_0(n) \\
+\mathsf{bdestr}_1(p) & : \prd{z:B(\mathsf{destr}_0(i))} \mathsf{Bisim}_{A,B}(\mathsf{destr}_1(i,z),\mathsf{destr}_1(j,\trans{\mathsf{bdestr}_0(p)}{z}))
+\end{align*}
+for every $i,j:\mathsf{M}(A,B)$ and $p:\mathsf{Bisim}_{A,B}(i,j)$. 
+\end{rmk}
+
+\begin{conj}
+Let $\pairr{x,h}$ and $\pairr{y,k}$ be terms of $\mathsf{M}(A,B)$. Then 
+$x_{n+1}=y_{n+1}$ is equivalent to the type of pairs $\pairr{\alpha,\beta}$
+consisting of
+\begin{align*}
+\alpha & : \proj 1 (x_1)= \proj 1(y_1) \\
+\beta & : \prd{z:B(\mathsf{destr}_0(x,h))}
+P_C^n(\lam{\nameless}\unit)(\mathsf{destr}_1(\pairr{x,h},z),\mathsf{destr}_1(\pairr{y,k},\trans{\alpha}{z}))
+\end{align*}
+for any $n:\N$.
+\end{conj}
+
+\begin{conj}\label{conj:bisim_id} 
+For any type family $B:A\to\UU$, and any $i,j:\mathsf{M}(A,B)$, 
+there is an equivalence of type
+\begin{equation*}
+\eqv{(i=j)}{\mathsf{Bisim}_{A,B}(i,j)}.
+\end{equation*}
+\end{conj}
+
+\begin{proof}[Proof attempt] 
+In \autoref{lem:mtype_id}, we characterized the identity type $\pairr{x,h}=
+\pairr{y,k}$ as a sequential limit, so it suffices
+to construct a natural equivalence
+\begin{equation*}
+\begin{tikzcd}
+\cdots \arrow[r,"v_2"] & x_2=y_2 \arrow[r,"v_1"] \arrow[d,"\eqvsym"] & x_1=y_1 \arrow[d,"\eqvsym"] \arrow[r,"v_0"] & x_0=y_0 \arrow[d,"\eqvsym"] \\
+\cdots \arrow[r,swap,"{u_2(i,j)}"] & P^2_C(\lam{\nameless}\unit)(i,j) \arrow[r,swap,"{u_1(i,j)}"] & P_C(\lam{\nameless}\unit)(i,j) \arrow[r,swap,"{u_0(i,j)}"] & \unit
+\end{tikzcd}
+\end{equation*}
+of type sequences, where $i\jdeq\pairr{x,h}$ and $j\jdeq\pairr{y,k}$, and where 
+$C\jdeq\pairr{I,A',B',j}$ is the defining container
+of the bisimilation relation on $\mathsf{M}(A,B)$.
+
+We show that for any $n:\N$, for any $\pairr{x,h},\pairr{y,k}:\mathsf{M}(A,B)$
+there is an equivalence of type $(x_n=y_n)\to $ [...]
+
+The type $x_0=y_0$ is an equality type in a contractible type,
+so it is uniquely equivalent to the unit type. Since it is contractible, we may
+just ignore this part.
+
+Next, note that the type 
+\begin{equation*}
+P_C(\lam{\nameless}\unit)(i,j)\jdeq\sm{p:A'(\pairr{x,h},\pairr{y,k}}\prd{b:B'(i,j,p)}\unit
+\end{equation*}
+is equivalent to the type $A'(\pairr{x,h},\pairr{y,k})\jdeq (\proj 1(x_1)=\proj 1(y_1))$.
+Note that $x_1$ and $y_1$ are in $P_{A,B}(\unit)\jdeq\sm{a:A}\unit^{B(a)}$, so
+we see that the type $x_1=y_1$ is equivalent to the type $P_C(\lam{\nameless}\unit)(i,j)$.
+
+For the remainder of the proof, it suffices to show that for each equivalence
+\begin{equation*}
+e_{n+1}:\eqv{(x_{n+1}=y_{n+1})}{P^{n+1}_C(\lam{\nameless}\unit)(i,j)}
+\end{equation*} 
+we can construct a commuting square
+\begin{equation*}
+\begin{tikzcd}
+x_{n+2}=y_{n+2} \arrow[r,"v_{n+1}"] \arrow[d,densely dotted,swap,"e_{n+2}"] 
+& x_{n+1}=y_{n+1} \arrow[d,"e_{n+1}"] \\
+P^{n+2}_C(\lam{\nameless}\unit)(i,j) \arrow[r,swap,"u_{n+1}"] & P^{n+1}_C(\lam{\nameless}\unit)(i,j)
+\end{tikzcd}
+\end{equation*}
+in which $e_{n+2}$ is an equivalence.
+This follows, once we show that for any $\pairr{a',f'}$ and 
+$\pairr{b',g'}$ in $P^{n+1}_{A,B}(\unit)$ such that $p:u_{n+1}(x_{n+2})=\pairr{a',f'}$
+and $q:u_{n+1}(y_{n+2})=\pairr{b',g'}$, any equivalence
+\begin{equation*}
+e:\eqv{(\pairr{a',f'}=\pairr{b',g'})}{P^{n+1}_C(\lam{\nameless}\unit)(i,j)},
+\end{equation*}
+we can construct a commuting square
+\begin{equation*}
+\begin{tikzcd}[column sep=8em]
+x_{n+2}=y_{n+2} \arrow[r,"\lam{\alpha}\ct{\opp{p}}{\mapfunc{u_{n+1}}(\alpha)}{q}"] \arrow[d,densely dotted,swap,"\eqvsym"] 
+& \pairr{a',f'}=\pairr{b',g'} \arrow[d,"e"] \\
+P^{n+2}_C(\lam{\nameless}\unit)(i,j) \arrow[r,swap,"u_{n+1}"] & P^{n+1}_C(\lam{\nameless}\unit)(i,j)
+\end{tikzcd}
+\end{equation*}
+Since the endpoints of $p$ and $q$ are free, it suffices to construct a commuting
+square
+\begin{equation*}
+\begin{tikzcd}[column sep=large]
+\pairr{a,f}=\pairr{b,g} \arrow[r,"\mapfunc{u_{n+1}}"] \arrow[d,densely dotted,swap,"\eqvsym"] 
+& \pairr{a,u_n\circ f}=\pairr{b,u_n\circ g} \arrow[d,"e"] \\
+P^{n+2}_C(\lam{\nameless}\unit)(i,j) \arrow[r,swap,"u_{n+1}"] & P^{n+1}_C(\lam{\nameless}\unit)(i,j)
+\end{tikzcd}
+\end{equation*}
+where $x_{n+2}=\pairr{a,f}$ and $y_{n+2}=\pairr{b,g}$. 
+Note that $P^{n+2}_C(\lam{\nameless}\unit)(i,j)$ is defined
+as the type
+\begin{equation*}
+\sm{\alpha:\proj 1(x_1)=\proj 1(y_1)}\prd{z:B(\proj 1(x_1))}P^{n+1}_C(\lam{\nameless}\unit)(\mathsf{destr}_1(i,z),\mathsf{destr}_1(j,\trans{\alpha}{z}))
+\end{equation*}
+
+Since we have $x_{n+2},y_{n+2}:\sm{a:A} (B(a)\to P^{n+1}_{A,B}(\unit))$, 
+so we can decompose them as $x_{n+2}\defeq\pairr{a,f}$ 
+and $y_{n+2}\defeq\pairr{b,g}$. 
+
+The equality type $x_{n+2}=y_{n+2}$ is then
+equivalent to the type $\sm{p:a=b}\prd{c:B(a)}f(c)=g(\trans{p}{c})$. 
+We need to construct a commuting square of the form
+\begin{equation*}
+\begin{tikzcd}
+\pairr{a,f}=\pairr{b,g} \arrow[r] \arrow[d,densely dotted] & x_{n+1}=y_{n+1} \arrow[d] \\
+P^{n+2}_C(\lam{\nameless}\unit)(i,j) \arrow[r] & P^{n+1}_C(\lam{\nameless}\unit)(i,j)
+\end{tikzcd}
+\end{equation*}
+Note that
+\begin{equation*}
+P^{n+2}_C(\lam{\nameless}\unit)(i,j)\jdeq 
+\sm{\alpha:\proj 1(x_1)=\proj 1(y_1)}\prd{z:B(\proj 1(x_1))}P^{n+1}_C(\lam{\nameless}\unit)(\mathsf{destr}_1(i,z),\mathsf{destr}_1(j,\trans{\alpha}{z}))
+\end{equation*}
+
+Our goal is to show that this type is equivalent to the type of pairs
+$\pairr{\alpha,\beta}$ consisting of
+\begin{align*}
+\alpha & :\mathsf{destr}_0(x,h)=\mathsf{destr}_0(y,k) \\
+\beta & : \prd{z:B(\mathsf{destr}_0(x,h))}
+P_C^n(\lam{\nameless}\unit)(\mathsf{destr}_1(\pairr{x,h},z),\mathsf{destr}_1(\pairr{y,k},\trans{\alpha}{z}))
+\end{align*}
+\end{proof}
+\begin{comment}
+\begin{defn}
+Let $C\defeq \pairr{I,A,B,k}$ be an indexed container, defining the indexed
+coinductive type $\mathsf{M}(C)$, and let $D:\prd{i:I}\mathsf{M}(C)(i)\to\UU$ be a family.
+
+Then a section
+\begin{equation*}
+f : \prd{i:I}{x:\mathsf{M}(C)(i)}D(i,x)
+\end{equation*}
+can be defined by specifying 
+\begin{equation*}
+\prd{i:I}{CH:\prd{a:A(i)}{c:B(i,a)\to \mathsf{M}(C)(i)} X(k(i,a,c),\mathsf{cons}_C(a,c))}\prd{a:A(i)}{c:B(i,a)\to \mathsf{M}(C)(i)}\cdots
+\end{equation*}
+\end{defn}
+\end{comment}
+
