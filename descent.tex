@@ -2,7 +2,7 @@
 
 In this chapter we study homotopy pushouts, which were established as higher inductive types in section 6.8 of \cite{hottbook}. From this chapter on, we will assume that universes are closed under homotopy pushouts. This is the last assumption that we will be making in the present work. In particular, we will not assume the existence of higher inductive types with some self-reference in the constructors (e.g.~the propositional truncation).
 
-Our first main result is the descent theorem for homotopy pushouts (\cref{thm:descent}), in which we establish that a cartesian transformation of spans
+Our first main result is the descent theorem for homotopy pushouts (\cref{thm:descent,cor:descent_fib}), in which we establish that a cartesian transformation of spans
 \begin{equation*}
 \begin{tikzcd}
 A' \arrow[d]  & S' \arrow[l] \arrow[r] \arrow[d] & B' \arrow[d] \\
@@ -526,7 +526,7 @@ for any $x:S$ and $y:P_A(f(x))$. We have he identification
 of this type.
 \end{proof}
 
-We now state the flattening lemma for pushouts, which should be compared to Lemma 6.12.2 of \cite{hottbook}. We note that the flattening lemma can be proven using the \emph{dependent} universal property of pushouts, which we established in \cref{thm:pushout_hit}. This leads to a substantially shorter proof than the proof of \cite{hottbook}, which is slightly under 4 pages long.
+We now state the flattening lemma for pushouts, which should be compared to Lemma 6.12.2 of \cite{hottbook}.
 
 \begin{lem}[The flattening lemma]\label{lem:flattening}
 The commuting square\index{flattening lemma!for pushouts|textit}
@@ -572,88 +572,12 @@ which we have for any $x:S$.
 It follows that $\mathsf{cocone\usc{}map}_{\mathcal{S}'}(i',j',H')$ is a composite of equivalences, and therefore is an equivalence.
 \end{proof}
 
-\subsection{Commuting cubes}
-\begin{defn}\label{defn:cube}
-A \define{commuting cube}\index{commuting cube|textbf}
-\begin{equation*}
-\begin{tikzcd}
-& A_{111} \arrow[dl] \arrow[dr] \arrow[d] \\
-A_{110} \arrow[d] & A_{101} \arrow[dl] \arrow[dr] & A_{011} \arrow[dl,crossing over] \arrow[d] \\
-A_{100} \arrow[dr] & A_{010} \arrow[d] \arrow[from=ul,crossing over] & A_{001} \arrow[dl] \\
-& A_{000},
-\end{tikzcd}
-\end{equation*}
-consists of 
-\begin{enumerate}
-\item types
-\begin{equation*}
-A_{111},A_{110},A_{101},A_{011},A_{100},A_{010},A_{001},A_{000},
-\end{equation*}
-\item \begin{samepage}%
-maps
-\begin{align*}
-f_{11\check{1}} & : A_{111}\to A_{110} & f_{\check{1}01} & : A_{101}\to A_{001} \\
-f_{1\check{1}1} & : A_{111}\to A_{101} & f_{01\check{1}} & : A_{011}\to A_{010} \\
-f_{\check{1}11} & : A_{111}\to A_{011} & f_{0\check{1}1} & : A_{011}\to A_{001} \\
-f_{1\check{1}0} & : A_{110}\to A_{100} & f_{\check{1}00} & : A_{100}\to A_{000} \\
-f_{\check{1}10} & : A_{110}\to A_{010} & f_{0\check{1}0} & : A_{010}\to A_{000} \\
-f_{10\check{1}} & : A_{101}\to A_{100} & f_{00\check{1}} & : A_{001}\to A_{000},
-\end{align*}
-\end{samepage}%
-\item homotopies
-\begin{align*}
-H_{1\check{1}\check{1}} & : f_{1\check{1}0}\circ f_{11\check{1}} \htpy f_{10\check{1}}\circ f_{1\check{1}1} & H_{0\check{1}\check{1}} & : f_{0\check{1}0}\circ f_{01\check{1}} \htpy f_{00\check{1}}\circ f_{0\check{1}1} \\
-H_{\check{1}1\check{1}} & : f_{\check{1}10}\circ f_{11\check{1}} \htpy f_{01\check{1}}\circ f_{\check{1}11} & H_{\check{1}0\check{1}} & : f_{\check{1}00}\circ f_{10\check{1}} \htpy f_{00\check{1}}\circ f_{\check{1}01} \\
-H_{\check{1}\check{1}1} & : f_{\check{1}01}\circ f_{1\check{1}1} \htpy f_{0\check{1}1}\circ f_{\check{1}11} & H_{\check{1}\check{1}0} & : f_{\check{1}00}\circ f_{1\check{1}0} \htpy f_{0\check{1}0}\circ f_{\check{1}10},
-\end{align*}
-\item and a homotopy 
-\begin{align*}
-C & : \ct{(f_{\check{1}00}\cdot H_{1\check{1}\check{1}})}{(\ct{(H_{\check{1}0\check{1}}\cdot f_{1\check{1}1})}{(f_{00\check{1}}\cdot H_{\check{1}\check{1}1})})} \\
-& \qquad \htpy \ct{(H_{\check{1}\check{1}0}\cdot f_{11\check{1}})}{(\ct{(f_{0\check{1}0}\cdot H_{\check{1}1\check{1}})}{(H_{0\check{1}\check{1}}\cdot f_{\check{1}11})})}
-\end{align*}
-filling the cube.
-\end{enumerate}
-\end{defn}
-
-\begin{lem}
-Given a commuting cube as in \cref{defn:cube} we obtain a commuting square
-\begin{equation*}
-\begin{tikzcd}
-\fib{f_{1\check{1}1}}{x} \arrow[r] \arrow[d] & \fib{f_{0\check{1}1}}{f_{\check{1}01}(x)} \arrow[d] \\
-\fib{f_{1\check{1}0}}{f_{10\check{1}}(x)} \arrow[r] & \fib{f_{0\check{1}0}}{f_{00\check{1}}(x)}
-\end{tikzcd}
-\end{equation*}
-for any $x:A_{101}$. 
-\end{lem}
-
-\begin{lem}
-Consider a commuting cube
-\begin{equation*}
-\begin{tikzcd}
-& A_{111} \arrow[dl] \arrow[dr] \arrow[d] \\
-A_{110} \arrow[d] & A_{101} \arrow[dl] \arrow[dr] & A_{011} \arrow[dl,crossing over] \arrow[d] \\
-A_{100} \arrow[dr] & A_{010} \arrow[d] \arrow[from=ul,crossing over] & A_{001} \arrow[dl] \\
-& A_{000}.
-\end{tikzcd}
-\end{equation*}
-If the bottom and front right squares are pullback squares, then the back left square is a pullback if and only if the top square is.
-\end{lem}
-
-\begin{rmk}
-By rotating the cube we also obtain:
-\begin{enumerate}
-\item If the bottom and front left squares are pullback squares, then the back right square is a pullback if and only if the top square is.
-\item If the front left and front right squares are pullback, then the back left square is a pullback if and only if the back right square is.
-\end{enumerate}
-By combining these statements it also follows that if the front left, front right, and bottom squares are pullback squares, then if any of the remaining three squares are pullback squares, all of them are. Cubes that consist entirely of pullback squares are sometimes called \define{strongly cartesian}\index{strongly cartesian cube}.
-\end{rmk}
-
 \subsection{The descent property for pushouts}
 
 In the previous section there was a significant role for fiberwise equivalences, and we know by \cref{thm:pb_fibequiv,cor:pb_fibequiv}: fiberwise equivalences indicate the presence of pullbacks. In this section we reformulate the results of the previous section using pullbacks where we used fiberwise equivalences before, to obtain new and useful results. We begin by considering the type of descent data from the perspective of pullback squares.
 
 \begin{defn}
-Consider a span $\mathcal{S}$ from $A$ to $B$, and a span $\mathcal{S}'$ from $A'$ to $B'$. A \define{cartesian transformation}of spans\index{cartesian transformation!of spans|textbf} from $\mathcal{S}'$ to $\mathcal{S}$ is a diagram of the form
+Consider a span $\mathcal{S}$ from $A$ to $B$, and a span $\mathcal{S}'$ from $A'$ to $B'$. A \define{cartesian transformation} of spans\index{cartesian transformation!of spans|textbf} from $\mathcal{S}'$ to $\mathcal{S}$ is a diagram of the form
 \begin{equation*}
 \begin{tikzcd}
 A' \arrow[d,swap,"h_A"]  & S' \arrow[l,swap,"{f'}"] \arrow[r,"{g'}"] \arrow[d,swap,"h_S"] & B' \arrow[d,"h_B"] \\
@@ -672,11 +596,24 @@ where $p_f:\mathsf{is\usc{}pullback}(h_S,h_A,F)$ and $p_g:\mathsf{is\usc{}pullba
 \end{equation*}
 \end{defn}
 
-\begin{lem}\label{lem:cart_desc}
-There is an equivalence\index{cart_desc@{$\mathsf{cart\usc{}desc}_{\mathcal{S}}$}|textit}
+Given descent data $(P_A,P_B,P_S)$ on a span $\mathcal{S}$ from $A$ to $B$, we obtain a cartesian transformation
+\begin{equation*}
+\begin{tikzcd}[column sep=large]
+\sm{a:A}P_A(a) \arrow[d,swap,"\proj 1"] & \sm{x:S}P_A(f(x)) \arrow[d,swap,"\proj 1"] \arrow[l,swap,"{\total[f]{\idfunc}}"] \arrow[r,"{\total[g]{P_S}}"] & \sm{b:B}P_B(b) \arrow[d,"\proj 1"] \\
+A & S \arrow[l,"f"] \arrow[r,swap,"g"] & B
+\end{tikzcd}
+\end{equation*}
+with the canonical homotopies witnessing that the squares commute. Note that the commuting square on the left is a pullback by \cref{lem:pb_subst}, and the square on the right is a pullback by \cref{thm:pb_fibequiv}. Thus we obtain an operation
 \begin{equation*}
 \mathsf{cart\usc{}desc}_{\mathcal{S}}:\mathsf{Desc}(\mathcal{S})\to \mathsf{Cart}(\mathcal{S}).
 \end{equation*}
+
+\begin{lem}\label{lem:cart_desc}
+For any span $\mathcal{S}$, the operation\index{cart_desc@{$\mathsf{cart\usc{}desc}_{\mathcal{S}}$}|textit}
+\begin{equation*}
+\mathsf{cart\usc{}desc}_{\mathcal{S}}:\mathsf{Desc}(\mathcal{S})\to \mathsf{Cart}(\mathcal{S})
+\end{equation*}
+is an equivalence.
 \end{lem}
 
 \begin{proof}
@@ -697,6 +634,14 @@ However, the type of $\varphi$ is equivalent to the type $P_A\circ f=Q$. Thus we
 \end{proof}
 
 \begin{defn}
+Consider a commuting square
+\begin{equation*}
+\begin{tikzcd}
+S \arrow[r,"g"] \arrow[d,swap,"f"] & B \arrow[d,"j"] \\
+A \arrow[r,swap,"i"] & X
+\end{tikzcd}
+\end{equation*}
+with $H:i\circ f\htpy j\circ g$. 
 We define an operation\index{cart map!{$\mathsf{cart\usc{}map}_{\mathcal{S}}$}|textbf}
 \begin{equation*}
 \mathsf{cart\usc{}map}_{\mathcal{S}}:{\Big(\sm{X':\UU}X'\to X\Big)}\to \mathsf{Cart}(\mathcal{S}).
@@ -737,7 +682,15 @@ Moreover, these squares are pullback squares by \cref{thm:pb_pasting}.
 The following theorem is analogous to \cref{thm:desc_fam}.
 
 \begin{thm}[The descent theorem for pushouts]\label{thm:descent}\index{descent theorem!for pushouts|textit}
-The operation $\mathsf{cart\usc{}map}_{\mathcal{S}}$\index{cart map!{$\mathsf{cart\usc{}map}_{\mathcal{S}}$}!is an equivalence|textit} is an equivalence
+Consider a commuting square
+\begin{equation*}
+\begin{tikzcd}
+S \arrow[r,"g"] \arrow[d,swap,"f"] & B \arrow[d,"j"] \\
+A \arrow[r,swap,"i"] & X
+\end{tikzcd}
+\end{equation*}
+with $H:i\circ f\htpy j\circ g$. 
+If this square is a pushout square, then the operation $\mathsf{cart\usc{}map}_{\mathcal{S}}$\index{cart map!{$\mathsf{cart\usc{}map}_{\mathcal{S}}$}!is an equivalence|textit} is an equivalence
 \begin{equation*}
 \eqv{\Big(\sm{X':\UU}X'\to X\Big)}{\mathsf{Cart}(\mathcal{S})}
 \end{equation*}
@@ -747,15 +700,15 @@ The operation $\mathsf{cart\usc{}map}_{\mathcal{S}}$\index{cart map!{$\mathsf{ca
 It suffices to show that the square
 \begin{equation*}
 \begin{tikzcd}[column sep=huge]
-X\to \UU \arrow[r,"{\mathsf{desc\usc{}fam}_{\mathcal{S}}(i,j,H)}"] \arrow[d,swap,"\mathsf{map.fam}_X"] & \mathsf{Desc}(\mathcal{S}) \arrow[d,"\mathsf{cart\usc{}desc}_{\mathcal{S}}"] \\
-\sm{X':\UU}X'\to X \arrow[r,swap,"\mathsf{cart\usc{}map}_{\mathcal{S}}"] & \mathsf{Cart}(\mathcal{S})
+\UU^X \arrow[r,"{\mathsf{desc\usc{}fam}_{\mathcal{S}}(i,j,H)}"] \arrow[d,swap,"\mathsf{map\usc{}fam}_X"] & \mathsf{Desc}(\mathcal{S}) \arrow[d,"\mathsf{cart\usc{}desc}_{\mathcal{S}}"] \\
+\sm{X':\UU}X^{X'} \arrow[r,swap,"\mathsf{cart\usc{}map}_{\mathcal{S}}"] & \mathsf{Cart}(\mathcal{S})
 \end{tikzcd}
 \end{equation*}
-commutes. To see that this suffices, note that the operation $\mathsf{map.fam}_X$ is an equivalence by \cref{thm:fam_proj}, the operation $\mathsf{desc\usc{}fam}_{\mathcal{S}}(i,j,H)$ is an equivalence by \cref{thm:desc_fam}, and the operation $\mathsf{cart\usc{}desc}_{\mathcal{S}}$ is an equivalence by \cref{lem:cart_desc}.
+commutes. To see that this suffices, note that the operation $\mathsf{map\usc{}fam}_X$ is an equivalence by \cref{thm:fam_proj}, the operation $\mathsf{desc\usc{}fam}_{\mathcal{S}}(i,j,H)$ is an equivalence by \cref{thm:desc_fam}, and the operation $\mathsf{cart\usc{}desc}_{\mathcal{S}}$ is an equivalence by \cref{lem:cart_desc}.
 
 To see that the square commutes, note that the composite
 \begin{equation*}
-\mathsf{cart\usc{}map}_{\mathcal{S}}\circ \mathsf{map.fam}_X
+\mathsf{cart\usc{}map}_{\mathcal{S}}\circ \mathsf{map\usc{}fam}_X
 \end{equation*}
 takes a family $P:X\to \UU$ to the cartesian transformation of spans
 \begin{equation*}
@@ -780,9 +733,51 @@ A & S \arrow[l] \arrow[r] & B
 These cartesian natural transformations are equal by \cref{lem:pb_subst}
 \end{proof}
 
-Since $\mathsf{cart\usc{}map}_{\mathcal{S}}$ is an equivalence it follows that its fibers are contractible. This is essentially the content of the following corollary.
+Since $\mathsf{cart\usc{}map}_{\mathcal{S}}$ is an equivalence it follows that its fibers are contractible. We will first specify the data of a commuting cube.
 
-\begin{cor}
+\begin{defn}\label{defn:cube}
+A \define{commuting cube}\label{defn:cube}\index{commuting cube|textbf}
+\begin{equation*}
+\begin{tikzcd}
+& A_{111} \arrow[dl] \arrow[dr] \arrow[d] \\
+A_{110} \arrow[d] & A_{101} \arrow[dl] \arrow[dr] & A_{011} \arrow[dl,crossing over] \arrow[d] \\
+A_{100} \arrow[dr] & A_{010} \arrow[d] \arrow[from=ul,crossing over] & A_{001} \arrow[dl] \\
+& A_{000},
+\end{tikzcd}
+\end{equation*}
+consists of 
+\begin{enumerate}
+\item types
+\begin{equation*}
+A_{111},A_{110},A_{101},A_{011},A_{100},A_{010},A_{001},A_{000},
+\end{equation*}
+\item \begin{samepage}%
+maps
+\begin{align*}
+f_{11\check{1}} & : A_{111}\to A_{110} & f_{\check{1}01} & : A_{101}\to A_{001} \\
+f_{1\check{1}1} & : A_{111}\to A_{101} & f_{01\check{1}} & : A_{011}\to A_{010} \\
+f_{\check{1}11} & : A_{111}\to A_{011} & f_{0\check{1}1} & : A_{011}\to A_{001} \\
+f_{1\check{1}0} & : A_{110}\to A_{100} & f_{\check{1}00} & : A_{100}\to A_{000} \\
+f_{\check{1}10} & : A_{110}\to A_{010} & f_{0\check{1}0} & : A_{010}\to A_{000} \\
+f_{10\check{1}} & : A_{101}\to A_{100} & f_{00\check{1}} & : A_{001}\to A_{000},
+\end{align*}
+\end{samepage}%
+\item homotopies
+\begin{align*}
+H_{1\check{1}\check{1}} & : f_{1\check{1}0}\circ f_{11\check{1}} \htpy f_{10\check{1}}\circ f_{1\check{1}1} & H_{0\check{1}\check{1}} & : f_{0\check{1}0}\circ f_{01\check{1}} \htpy f_{00\check{1}}\circ f_{0\check{1}1} \\
+H_{\check{1}1\check{1}} & : f_{\check{1}10}\circ f_{11\check{1}} \htpy f_{01\check{1}}\circ f_{\check{1}11} & H_{\check{1}0\check{1}} & : f_{\check{1}00}\circ f_{10\check{1}} \htpy f_{00\check{1}}\circ f_{\check{1}01} \\
+H_{\check{1}\check{1}1} & : f_{\check{1}01}\circ f_{1\check{1}1} \htpy f_{0\check{1}1}\circ f_{\check{1}11} & H_{\check{1}\check{1}0} & : f_{\check{1}00}\circ f_{1\check{1}0} \htpy f_{0\check{1}0}\circ f_{\check{1}10},
+\end{align*}
+\item and a homotopy 
+\begin{align*}
+C & : \ct{(f_{\check{1}00}\cdot H_{1\check{1}\check{1}})}{(\ct{(H_{\check{1}0\check{1}}\cdot f_{1\check{1}1})}{(f_{00\check{1}}\cdot H_{\check{1}\check{1}1})})} \\
+& \qquad \htpy \ct{(H_{\check{1}\check{1}0}\cdot f_{11\check{1}})}{(\ct{(f_{0\check{1}0}\cdot H_{\check{1}1\check{1}})}{(H_{0\check{1}\check{1}}\cdot f_{\check{1}11})})}
+\end{align*}
+filling the cube.
+\end{enumerate}
+\end{defn}
+
+\begin{cor}\label{cor:descent_fib}
 Consider a diagram of the form 
 \begin{equation*}
 \begin{tikzcd}
@@ -915,7 +910,7 @@ We have seen that the top square is a pushout. The vertical maps are all equival
 %is a pushout square.
 %\end{cor}
 
-\begin{thm}\label{thm:flattening}
+\begin{thm}\label{thm:cartesian_cube}
 Consider a commuting cube of types 
 \begin{equation*}\label{eq:cube}
 \begin{tikzcd}
@@ -925,7 +920,10 @@ A \arrow[dr] & X' \arrow[d] \arrow[from=ul,crossing over] & B \arrow[dl] \\
 & X,
 \end{tikzcd}
 \end{equation*}
-and suppose the vertical squares are pullback squares. Then the commuting square
+and suppose the two vertical squares in the back are pullback squares. Then the following are equivalent:
+\begin{enumerate}
+\item The two vertical squares in the front are pullback squares.
+\item The commuting square
 \begin{equation*}
 \begin{tikzcd}
 A' \sqcup^{S'} B' \arrow[r] \arrow[d] & X' \arrow[d] \\
@@ -933,6 +931,7 @@ A\sqcup^{S} B \arrow[r] & X
 \end{tikzcd}
 \end{equation*}
 is a pullback square.
+\end{enumerate}
 \end{thm}
 
 \begin{proof}
@@ -952,7 +951,8 @@ A \arrow[dr] & (A\sqcup^{S} B)\times_{X}X' \arrow[d] \arrow[from=ul,crossing ove
 are pullback squares by \cref{thm:pb_pasting}.
 \end{proof}
 
-\subsection{Applications of the descent theorem for pushouts}
+\section{Applications of the descent theorem for pushouts}
+\sectionmark{Applications of the descent theorem}
 
 \begin{prp}
 The commuting square
@@ -983,7 +983,7 @@ Let $f:A\to B$ be a map. The \define{codiagonal}\index{codiagonal}\index{nabla@{
 \begin{equation*}
 \begin{tikzcd}
 A \arrow[d,swap,"f"] \arrow[r,"f"] \arrow[dr, phantom, "\ulcorner", very near end] & B \arrow[d,"\inr"] \arrow[ddr,bend left=15,"{\idfunc[B]}"] \\
-A \arrow[r,"\inl"] \arrow[drr,bend right=15,swap,"{\idfunc[B]}"] & B\sqcup^{A} B \arrow[dr,densely dotted,near start,swap,"\nabla_f"] \\
+B \arrow[r,"\inl"] \arrow[drr,bend right=15,swap,"{\idfunc[B]}"] & B\sqcup^{A} B \arrow[dr,densely dotted,near start,swap,"\nabla_f"] \\
 & & B
 \end{tikzcd}
 \end{equation*}
@@ -992,6 +992,26 @@ A \arrow[r,"\inl"] \arrow[drr,bend right=15,swap,"{\idfunc[B]}"] & B\sqcup^{A} B
 \begin{prp}
 For any map $f:A\to B$ and any $y:B$, there is an equivalence $\eqv{\fib{\nabla_f}{y}}{\susp(\fib{f}{y})}$. 
 \end{prp}
+
+\begin{proof}
+For any $b:B$ we have the commuting cube 
+\begin{equation*}
+\begin{tikzcd}
+& \fib{f}{b} \arrow[dl] \arrow[d] \arrow[dr] \\
+\unit \arrow[d] & A \arrow[dl] \arrow[dr] & \unit \arrow[dl,crossing over] \arrow[d] \\
+B \arrow[dr] & \unit \arrow[from=ul,crossing over] \arrow[d,swap,"b"] & B \arrow[dl] \\
+& B
+\end{tikzcd}
+\end{equation*}
+of which the vertical sides are pullback squares. Hence we obtain the pullback square
+\begin{equation*}
+\begin{tikzcd}
+\susp{\fib{f}{b}} \arrow[r] \arrow[d] & \unit \arrow[d,"b"] \\
+B\sqcup^{A} B \arrow[r] & B
+\end{tikzcd}
+\end{equation*}
+from \cref{thm:cartesian_cube}, from which the claim follows.
+\end{proof}
 
 \begin{defn}
 Consider two maps $f:A\to B$ and $g:C\to D$.
@@ -1016,6 +1036,19 @@ For any two maps $f:A\to B$ and $g:C\to D$, and any $(b,d):B\times D$, there is 
 \eqv{\fib{f\square g}{b,d}}{\join{\fib{f}{b}}{\fib{g}{d}}}.
 \end{equation*}
 \end{prp}
+
+\begin{proof}
+Let $b:B$ and $d:D$. Then we have the commuting cube 
+\begin{equation*}
+\begin{tikzcd}
+& \fib{f}{b}\times \fib{g}{d} \arrow[dl] \arrow[d] \arrow[dr] \\
+\fib{f}{b} \arrow[d] & A\times C \arrow[dl] \arrow[dr] & \fib{g}{d} \arrow[dl,crossing over] \arrow[d] \\
+A\times D \arrow[dr] & \unit \arrow[from=ul,crossing over] \arrow[d] & B\times C \arrow[dl] \\
+& B\times D
+\end{tikzcd}
+\end{equation*}
+of which the vertical sides are pullback squares. Hence the claim follows from \cref{thm:cartesian_cube}.
+\end{proof}
 
 \begin{defn}
 Let $f:A\to X$ and $g:B\to X$ be maps into $X$. We define the type $\join[X]{A}{B}$ and the \define{join}\footnote{\emph{Warning}: By $\join{f}{g}$ we do \emph{not} mean the functorial action of the
@@ -1048,7 +1081,7 @@ A \arrow[dr] & \unit \arrow[d] \arrow[from=ul,crossing over] & B \arrow[dl] \\
 & X
 \end{tikzcd}
 \end{equation*}
-in which the vertical squares are pullback squares. Therefore it follows by \cref{thm:flattening} that the square
+in which the vertical squares are pullback squares. Therefore it follows by \cref{thm:cartesian_cube} that the square
 \begin{equation*}
 \begin{tikzcd}
 \join{\fib{f}{x}}{\fib{g}{x}} \arrow[r] \arrow[d] & \unit \arrow[d] \\
@@ -1080,6 +1113,19 @@ There is a fiber sequence
 \end{equation*}
 \end{prp}
 
+\begin{proof}
+We have the commuting cube 
+\begin{equation*}
+\begin{tikzcd}
+& \loopspace{B}\times\loopspace{A} \arrow[dl] \arrow[d] \arrow[dr] \\
+\loopspace{B} \arrow[d,swap,"\mathsf{const}_a"] & \unit \arrow[dl] \arrow[dr] & \loopspace{A} \arrow[dl,crossing over] \arrow[d,"\mathsf{const}_b"] \\
+A \arrow[dr] & \unit \arrow[from=ul,crossing over] \arrow[d] & B \arrow[dl] \\
+& A\times B
+\end{tikzcd}
+\end{equation*}
+of which the vertical sides are pullback squares. Hence the claim follows from \cref{thm:cartesian_cube}.
+\end{proof}
+
 \begin{defn}
 Consider a pointed type $X$. We define the map $\mathsf{fold}:X\vee X\to X$ by the universal property of the wedge as indicated in the diagram
 \begin{equation*}
@@ -1098,29 +1144,42 @@ There is a fiber sequence
 \end{equation*}
 \end{prp}
 
-\begin{prp}
-There is a fiber sequence
+\begin{proof}
+We have the commuting cube 
 \begin{equation*}
-(\susp\loopspace{X})^{\vee n} \hookrightarrow X^{\vee (n+1)} \twoheadrightarrow X.
+\begin{tikzcd}
+& \loopspace{X} \arrow[dl] \arrow[d] \arrow[dr] \\
+\unit \arrow[d] & \unit \arrow[dl] \arrow[dr] & \unit \arrow[dl,crossing over] \arrow[d] \\
+X \arrow[dr] & \unit \arrow[from=ul,crossing over] \arrow[d] & X \arrow[dl] \\
+& X
+\end{tikzcd}
 \end{equation*}
-\end{prp}
+of which the vertical sides are pullback squares. Hence the claim follows from \cref{thm:cartesian_cube}.
+\end{proof}
 
 \begin{rmk}
-There are fiber sequences
+As a corollary, there are fiber sequences
 \begin{align*}
 \sphere{1} \hookrightarrow \rprojective{\infty}\vee \rprojective{\infty} & \twoheadrightarrow \rprojective{\infty} \\
 \sphere{2} \hookrightarrow \cprojective{\infty}\vee \cprojective{\infty} & \twoheadrightarrow \cprojective{\infty}.
 \end{align*}
+Here we take $\rprojective{\infty}\defeq K(\Z/2,1)$ and $\cprojective{\infty}\defeq K(\Z,2)$, where the Eilenberg-Mac Lane space $K(G,n)$ is defined in \cite{FinsterLicata}.
 \end{rmk}
 
+\begin{cor}
+There is a fiber sequence
+\begin{equation*}
+(\susp\loopspace{X})^{\vee n} \hookrightarrow X^{\vee (n+1)} \twoheadrightarrow X.
+\end{equation*}
+\end{cor}
+
 \begin{defn}\label{defn:coh_hspace}
-A \define{coherent H-space} consists of a type $X$ equipped with $1:X$, $\mu:X \to (X \to X)$ and coherenct unit laws
+A \define{coherent H-space} consists of a type $X$ equipped with a unit $1:X$, a multiplication operation $\mu:X \to (X \to X)$ such that the function $\mu(x,\blank)$ and $\mu(\blank,y)$ are equivalences for each $x:X$ and $y:X$, respectively, and \emph{coherent} unit laws
 \begin{align*}
 \mathsf{right\usc{}unit} & : \prd{x: X} \mu(x,1)= x \\
 \mathsf{left\usc{}unit} & : \prd{y:X} \mu(1,y) = y \\
-\mathsf{coh\usc{}unit} & : \mathsf{left\usc{}unit}(1)=\mathsf{right\usc{}unit}(1),
+\mathsf{coh\usc{}unit} & : \mathsf{left\usc{}unit}(1)=\mathsf{right\usc{}unit}(1).
 \end{align*}
-such that the function $\mu(x,\blank)$ and $\mu(\blank,y)$ are equivalences for each $x:X$ and $y:X$, respectively.
 \end{defn}
 
 The following theorem is also known as the Hopf-construction.
@@ -1131,3 +1190,18 @@ For any coherent H-space $X$ there is a fiber sequence
 X \hookrightarrow \join{X}{X} \twoheadrightarrow \susp X.
 \end{equation*}
 \end{thm}
+
+\begin{proof}
+We have the commuting cube
+\begin{equation*}
+\begin{tikzcd}
+& X \times X \arrow[dl,swap,"\pi_1"] \arrow[d,swap,"\mu"] \arrow[dr,"\pi_2"] \\
+X \arrow[d] & X \arrow[dl] \arrow[dr] & X \arrow[dl,crossing over] \arrow[d] \\
+\unit \arrow[dr] & \join{X}{X} \arrow[from=ul,crossing over] \arrow[d,densely dotted] & \unit \arrow[dl] \\
+& \susp X,
+\end{tikzcd}
+\end{equation*}
+where the front map is obtained by the universal property of the pushout.
+
+In this cube, the two vertical squares in the back are pullback squares by \cref{thm:pb_fibequiv}, since $\mu(\blank,y)$ and $\mu(x,\blank)$ are equivalences for every $x:X$ and $y:X$, respectively. Since the bottom and top squares are pushout squares it follows by \cref{thm:cartesian_cube} that the front two squares are pullback squares.
+\end{proof}

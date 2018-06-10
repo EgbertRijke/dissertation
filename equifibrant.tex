@@ -485,44 +485,6 @@ with equivalences on both sides, for each $i:[A]\to X$.
 
 \subsection{\texorpdfstring{$\Delta$}{Δ}-\'etale maps}
 
-\begin{prp}
-Consider a commuting square
-\begin{equation*}
-\begin{tikzcd}
-\mathcal{C} \arrow[r] \arrow[d] & \mathcal{B} \arrow[d] \\
-\mathcal{A} \arrow[r] & \mathcal{X}
-\end{tikzcd}
-\end{equation*}
-of reflexive graphs. The following are equivalent:
-\begin{enumerate}
-\item The square is a pullback square.
-\item The squares
-\begin{equation*}
-\begin{tikzcd}
-\tilde{C}_0 \arrow[r] \arrow[d] & \tilde{B}_0 \arrow[d] & \tilde{C}_1 \arrow[r] \arrow[d] & \tilde{B}_1 \arrow[d] \\
-\tilde{A}_0 \arrow[r] & \tilde{X}_0 & \tilde{A}_1 \arrow[r] & \tilde{X}_1
-\end{tikzcd}
-\end{equation*}
-are pullback squares.
-\end{enumerate}
-\end{prp}
-
-\begin{prp}\label{prp:rcoeq_flattening}
-Consider a commuting square
-\begin{equation*}
-\begin{tikzcd}
-\mathcal{A} \arrow[r] \arrow[d] & \Delta(X) \arrow[d] \\
-\mathcal{B} \arrow[r] & \Delta(Y)
-\end{tikzcd}
-\end{equation*}
-of reflexive graphs. If the square is a pullback square, then so is
-\begin{equation*}
-\begin{tikzcd}
-\rcoeq(\mathcal{A}) \arrow[r] \arrow[d] & X \arrow[d] \\
-\rcoeq(\mathcal{B}) \arrow[r] & Y
-\end{tikzcd}
-\end{equation*}
-\end{prp}
 
 \begin{defn}
 Let $f:\mathsf{rGph}(\mathcal{A},\mathcal{B})$ be a morphism of reflexive graphs. We say that $f$ is \define{$\Delta$-\'etale} if the square
@@ -593,7 +555,7 @@ Consider the diagram
 \mathcal{B}' \arrow[r] & \mathcal{B} \arrow[r,"\mathsf{constr}"'] & \Delta(\rcoeq(\mathcal{B}))
 \end{tikzcd}
 \end{equation*}
-of reflexive graphs. Since $f$ is assumed to be a fibration, we obtain by \cref{thm:etale_fibration} that the square on the right is a pullback square. Furthermore, since the left square is a pullback square by assumption, it follows that the outer rectangle is again a pullback square. Hence the assertion follows from \cref{prp:rcoeq_flattening}.
+of reflexive graphs. Since $f$ is assumed to be a fibration, we obtain by \cref{thm:etale_fibration} that the square on the right is a pullback square. Furthermore, since the left square is a pullback square by assumption, it follows that the outer rectangle is again a pullback square. Hence the assertion follows from \cref{thm:rcoeq_cartesian}.
 \end{proof}
 
 \begin{prp}

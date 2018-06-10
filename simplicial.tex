@@ -1,12 +1,60 @@
 \chapter{$2$-simplicial types}
 
-We have observed in \cref{eg:rcoeq_is_pushout} that we have a reflexive coequalizer diagram
+We have observed in \cref{eg:rcoeq} that for any $f:A\to X$ we have a reflexive coequalizer diagram
 \begin{equation*}
 \begin{tikzcd}
-\Big(\sm{x,y:A}f(x)=f(y)\Big) \arrow[r,yshift=1ex] \arrow[r,yshift=-1ex] & A \arrow[l] \arrow[r] & \join[X]{A}{A}
+\Big(\sm{x,y:A}f(x)=f(y)\Big) \arrow[r,yshift=1ex] \arrow[r,yshift=-1ex] & A \arrow[l] \arrow[r] & \join[X]{A}{A},
 \end{tikzcd}
 \end{equation*}
-In other words, the fiberwise join $\join[X]{A}{A}$ is can be thought of as a geometric realization of a $1$-truncated simplicial type. Thus, $\join[X]{A}{A}$ is a first approximation to `the' geometric realization of the nerve of $f$, which remains undefined in homotopy type theory since the problem of defining simplicial types is still open.
+and for any coherent H-space $X$ we have a reflexive coequalizer diagram
+\begin{equation*}
+\begin{tikzcd}
+X \arrow[r,yshift=1ex] \arrow[r,yshift=-1ex] & \unit \arrow[l] \arrow[r] & \susp X,
+\end{tikzcd}
+\end{equation*}
+However, both the pre-kernel of a map and a coherent H-space come equipped with a multiplicative structure that satisfies unit laws. What spaces do we get when take not only the reflexive coequalizer, but also take the multiplicative structure and unit laws into account?
+
+We answer this question by studying at `$2$-truncated simplicial types', by which we understand tiples $(A_0,A_1,A_2)$ consisting of
+\begin{align*}
+A_0 & : \UU \\
+A_1 & : A_0 \to A_0 \to \UU\\
+A_2 & : \prd{x,y,z:A_0} A_1(x,y) \to A_1(x,z)\to A_1(y,z) \to \UU,
+\end{align*}
+representing the $0$-, $1$-, and $2$-cells, equipped with a `unital' or `simplicial' structure consisting of a unit (the reflexivity term of $A_1$), a right and left unit law and a coherence between them.
+
+In \cref{prp:2disc_emb} we show that the operation $\Delta:\UU\to \mathsf{sType}_2$, taking types to discrete $2$-simplicial types, is an embedding. Moreover, its action on morphisms
+\begin{equation*}
+(X\to Y) \to \mathsf{sType}_2(\Delta X,\Delta Y)
+\end{equation*}
+is an equivalence. As in the case of reflexive graphs, discrete $2$-simplicial types play a pivotal role in this chapter. We analyze the discrete $2$-simplicial types further by showing that they are right orthogonal to the morphisms between the walking $0$-, $1$-, and $2$-cells, also known as the standard $0$-, $1$-, and $2$-simplices. The standard simplices organize themselves in a cosimplicial object
+\begin{equation*}
+\begin{tikzcd}
+\Delta[2] \arrow[r,yshift=1ex] \arrow[r,yshift=-1ex] & \Delta[1] \arrow[l,yshift=2ex] \arrow[l] \arrow[l,yshift=-2ex] \arrow[r] & \Delta[0] \arrow[l,yshift=1ex] \arrow[l,yshift=-1ex]
+\end{tikzcd}
+\end{equation*}
+and a fibration is a morphism that is right orthogonal with respect to all morphisms in the above cosimplicial diagram. This condition is equivalent to being right orthogonal to the horn inclusions.
+
+Analogous to \cref{thm:rcoeq_is_pushout}, we show that the geometric realization of a $2$-simplicial type $\mathcal{A}$ is simply the homotopy colimit of the diagram
+\begin{equation*}
+\begin{tikzcd}
+& \tilde{A}_2 \arrow[dl] \arrow[d] \arrow[dr] \\
+\tilde{A}_1 \arrow[d] & \tilde{A}_1 \arrow[dl] \arrow[dr] & \tilde{A}_1 \arrow[dl,crossing over] \arrow[d] \\
+\tilde{A}_0 & \tilde{A}_0 \arrow[from=ul,crossing over] & \tilde{A}_0,
+\end{tikzcd}
+\end{equation*}
+where $\tilde{A}_i$ is the total space of all $i$-cells.
+This presentation of the geometric realization allows us to compute geometric realizations as iterated pushouts.
+
+We will show in \cref{eg:2-pre-kernel} that the geometric realization of the $2$-pre-kernel of a map $f:A\to X$ is the triple fiberwise join $\join[X]{A}{\join[X]{A}{A}}$, and we will show in \cref{eg:geom_hspace} that the geometric realization of a coherent H-space is the cofiber of the Hopf fibration
+\begin{equation*}
+\begin{tikzcd}
+\join{X}{X} \arrow[r,"\eta_X"] \arrow[d] & \susp X \arrow[d] \\
+\unit \arrow[r] & \mathsf{cof}_{\eta_X}.
+\end{tikzcd}
+\end{equation*}
+Of course, in this result we use the coherence of a coherent H-space. I do not know what one gets without it.
+
+We will also be able to use the material of this chapter to show that the join and smash product are associative operations. 
 
 \section{Discrete and Segal $2$-simplicial types}
 

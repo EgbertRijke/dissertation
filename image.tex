@@ -454,49 +454,6 @@ Another to think about this is as the \emph{image}\index{image} of $R$ in $A\to 
 The construction of the (homotopy) image of a map can be done with \emph{higher inductive types}\index{higher inductive type}, which we will do in \cref{chap:image}.
 \end{rmk}
 
-The notion of $0$-equivalence relation which we defined in \cref{defn:eq_rel} fits in a hierarchy of `$n$-equivalence relations'\index{n-equivalence relation@{$n$-equivalence relation}}, the study of which is a research topic on its own. However, we already know an example of a relation that should count as an `$\infty$-equivalence relation'\index{infinity-equivalence relation@{$\infty$-equivalence relation}}: the identity type. Analogous to \cref{thm:equivalence_classes}, the following theorem shows that the canonical map
-\begin{equation*}
-(x=y)\to (\idtypevar{A}(x)=\idtypevar{A}(y))
-\end{equation*}
-is an equivalence, for any $x,y:A$. In other words, $\idtypevar{A}(x)$ can be thought of as the equivalence class of $x$ with respect to the relation $\idtypevar{A}$.
-
-\begin{thm}
-Assuming the univalence axiom on $\UU$, the map
-\begin{equation*}
-\idtypevar{A}:A\to (A\to\UU)
-\end{equation*}
-is an embedding, for any type $A:\UU$.\index{identity type!is an embedding|textit}
-\end{thm}
-
-\begin{proof}
-Let $a:A$. By function extensionality it suffices to show that the canonical map
-\begin{equation*}
-(a=b)\to \idtypevar{A}(a)\htpy\idtypevar{A}(b)
-\end{equation*}
-that sends $\refl{a}$ to $\lam{x}\refl{(a=x)}$ is an equivalence for every $b:A$, and by univalence it therefore suffices to show that the canonical map
-\begin{equation*}
-(a=b)\to \prd{x:A}\eqv{(a=x)}{(b=x)}
-\end{equation*}
-that sends $\refl{a}$ to $\lam{x}\idfunc[(a=x)]$ is an equivalence for every $b:B$. To do this we employ the type theoretic Yoneda lemma, \autoref{thm:yoneda}.
-
-By the type theoretic Yoneda lemma\index{Yoneda lemma} we have an equivalence
-\begin{equation*}
-\Big(\prd{x:A} (b=x)\to (a=x)\Big)\to (a=b)
-\end{equation*}
-given by $\lam{f} f(b,\refl{b})$, for every $b:A$. Note that any fiberwise map $\prd{x:A}(b=x)\to (a=x)$ induces an equivalence of total spaces by \autoref{ex:contr_equiv}, since their total spaces are are both contractible by \autoref{cor:contr_path}. It follows that we have an equivalence
-\begin{equation*}
-\varphi_b:\Big(\prd{x:A} \eqv{(b=x)}{(a=x)}\Big)\to (a=b)
-\end{equation*}
-given by $\lam{f} f(b,\refl{b})$, for every $b:A$. 
-
-Note that $\varphi_a(\lam{x}\idfunc[(a=x)])\jdeq\refl{a}$. Therefore it follows by another application of \autoref{thm:yoneda} that the unique family of maps 
-\begin{equation*}
-\alpha_b:(a=b)\to \Big(\prd{x:A} \eqv{(b=x)}{(a=x)}\Big)
-\end{equation*}
-that satisfies $\alpha_a(\refl{a})=\lam{x}\idfunc[(a=x)]$ is a fiberwise section of $\varphi$. 
-It follows that $\alpha$ is a fiberwise equivalence. Now the proof is completed by reverting the direction of the fiberwise equivalences in the codomain.
-\end{proof}
-
 \subsection{The universal property of set quotients}
 
 \begin{defn}
