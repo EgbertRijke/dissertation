@@ -1,9 +1,11 @@
 \chapter{Compact types}
 
+In this chapter we introduce the notion of sequentially compact type. Our main result is that any pushout of sequentially compact types is again sequentially compact. In particular it follows that the spheres are sequentially compact.
+
 \section{Compact types}
 
 \begin{defn}
-Call a type $X$ $\omega$-compact, if for any
+Call a type $X$ sequentially compact, if for any type sequence
 \begin{equation*}
 \begin{tikzcd}
 A_0 \arrow[r] & A_1 \arrow[r] & A_2 \arrow[r] & \cdots
@@ -11,20 +13,43 @@ A_0 \arrow[r] & A_1 \arrow[r] & A_2 \arrow[r] & \cdots
 \end{equation*}
 the map
 \begin{equation*}
-\xi_A\defeq\mathsf{rec}(\lam{f} \iota_n\circ f,\lam{f} \kappa_n\circ f)
+\mathsf{seq\usc{}ind}(\lam{f} \mathsf{seq\usc{}in}_n\circ f,\lam{f} \mathsf{seq\usc{}glue}_n\circ f)
   : \tfcolim(X\to A_n)\to(X\to A_\infty)
 \end{equation*}
 is an equivalence.
 \end{defn}
 
+\begin{eg}
+The empty type is sequentially compact, simply because $X^\emptyt$ is contractible for any type $X$, and a sequential colimit of contractible types is contractible.
+\end{eg}
+
+\begin{eg}
+The unit type is sequentially compact because $\lam{x}\mathsf{const}_x:X\to X^\unit$ is an equivalence for any type $X$. Thus we obtain a natural equivalence
+\begin{equation*}
+\begin{tikzcd}
+A_0 \arrow[d] \arrow[r] & A_1 \arrow[d] \arrow[r] & A_2 \arrow[d] \arrow[r] & \cdots \\
+A_0^\unit \arrow[r] & A_1^\unit \arrow[r] & A_2^\unit \arrow[r] & \cdots.
+\end{tikzcd}
+\end{equation*}
+Therefore we have a commuting triangle
+\begin{equation*}
+\begin{tikzcd}[column sep=0]
+ & A_\infty \arrow[dl] \arrow[dr] & \phantom{\mathsf{colim}(A_n^\unit)} \\
+\mathsf{colim}(A_n^\unit) \arrow[rr] & & A_\infty^\unit.
+\end{tikzcd}
+\end{equation*}
+where two out of three maps are equivalences. Therefore the unit type is sequentially compact by the 3-for-2 rule.
+\end{eg}
+
+\begin{comment}
 \begin{rmk}
-In the literature, an object $X$ of a category $\cat{C}$ is said to be $\omega$-compact if for any
+In the literature, an object $X$ of a category $\cat{C}$ is said to be sequentially compact if for any
 functor $F:P\to\cat{C}$ from a directed countable partially ordered set $P$, there
 is a natural isomorphism
 \begin{equation*}
 \mathrm{hom}(X,\mathrm{colim}(F(p))) \cong \mathrm{colim}(\mathrm{hom}(X,p))
 \end{equation*}
-The notion of $\omega$-compact type $X$ is equivalent to the classical notion,
+The notion of sequentially compact type $X$ is equivalent to the classical notion,
 if one takes a directed poset $P$ to be a Rezk-complete category $P$ in which
 each hom-set is a mere proposition, for which there merely is a term of type
 \begin{equation*}
@@ -36,8 +61,9 @@ a function $f:\nat\to X$ such that $\prd{x:X}\hfib{f}{x}$.
 In other settings, it might be more useful to replace $\Pi$ and $\Sigma$ in the
 notion of directed poset, with the truncated versions $\forall$ and $\exists$. 
 \end{rmk}
+\end{comment}
 
-In this section we will prove that the $\omega$-compact types are closed under
+In this section we will prove that the sequentially compact types are closed under
 various type theoretical constructions. Most of these proofs decompose the
 function $\xi_A$ as a chain of canonical equivalences. In a rigorous proofs,
 such chains should be accompanied by the verification that such chains of
@@ -45,24 +71,26 @@ canonical equivalences can indeed be identified with the functions $\xi_A$, but
 we leave this to the computer verification. 
 
 \begin{lem}
-The empty type and the unit type are $\omega$-compact and the $\omega$-compact types are closed under
-disjoint sums. Thus, all sub-finite types are $\omega$-compact.
+Finite coproducts of sequentially compact types are sequentially compact.
 \end{lem}
 
 \begin{proof}
-The fact that the empty type and the unit type are $\omega$-compact is trivial.
+We have already seen that the empty type is sequentially compact. 
+Thus it remains to show that sequentially compact types are closed under disjoint
+sums. 
 
-Thus it remains to show that $\omega$-compact types are closed under disjoint
-sums. Suppose that $X$ and $Y$ are $\omega$-compact. Then we have
-\begin{align*}
-(X+Y)\to A_\infty & \eqvsym (X\to A_\infty)\times(Y\to A_\infty) \\
-& \eqvsym \tfcolim((X\to A_n)\to (Y\to A_n)) \tag{By \autoref{thm:colim_sm}} \\
-& \eqvsym \tfcolim((X+Y)\to A_n).
-\end{align*}
+Suppose that $X$ and $Y$ are sequentially compact. Then we have a commuting diagram of the form
+\begin{equation*}
+\begin{tikzcd}
+\mathsf{colim}(A_n^{X+Y}) \arrow[r] \arrow[d] & \mathsf{colim}(A_n^X\times A_n^Y) \arrow[r] & \mathsf{colim}(A_n^X)\times\mathsf{colim}(A_n^Y) \arrow[d] \\
+A_{\infty}^{X+Y} \arrow[rr] & & A_\infty^X \times A_\infty^Y
+\end{tikzcd}
+\end{equation*}
+where all but one of the maps are equivalences. Thus the remaining map is an equivalence too.
 \end{proof}
 
 \begin{lem}
-Let $X$ be an $\omega$-compact type and consider
+Let $X$ be an sequentially compact type and consider
 \begin{equation*}
 \begin{tikzcd}
 A_{0} \arrow[r] \arrow[d,->>] & A_{1} \arrow[r] \arrow[d,->>] & A_{2} \arrow[r] \arrow[d,->>] & \cdots \\
@@ -87,11 +115,11 @@ The proof is a simple calculation:
 
 \begin{defn}
 A graph is said to be $\omega$-small if its type of vertices and each type of
-edges is $\omega$-compact. 
+edges is sequentially compact. 
 \end{defn}
 
 \begin{thm}
-The colimit of an $\omega$-small graph is $\omega$-compact. 
+The colimit of an $\omega$-small graph is sequentially compact. 
 \end{thm}
 
 \begin{proof}
@@ -115,30 +143,30 @@ Then we have
 \end{proof}
 
 \begin{cor}
-The $\omega$-compact types are closed under dependent pair types, subtypes,
+The sequentially compact types are closed under dependent pair types, subtypes,
 cartesian products, suspension and pushouts.
 \end{cor}
 
 \begin{rmk}
-The $\omega$-compact types are not closed under identity types, because $\Z$ is not $\omega$-compact
-and $\eqv{\Z}{\Omega(\Sn^1)}$. To see that $\Z$ is not $\omega$-compact, consider
+The sequentially compact types are not closed under identity types, because $\Z$ is not sequentially compact
+and $\eqv{\Z}{\Omega(\Sn^1)}$. To see that $\Z$ is not sequentially compact, consider
 the sequence $A_n\defeq\nat_{-n}$, where $\nat_{-n}$ is a version of the natural
 numbers of starting at $-n$ and $A_n\to A_{n+1}$ is the inclusion map. The colimit
 of $A_n$ is $\Z$ and the image of the map $\tfcolim(\Z\to A_n)\to (\Z\to\Z)$ is
 the set of maps that are bounded from below. Thus, it is not surjective.
 
-Also, the $\omega$-compact types are not closed under exponentiation. We have
+Also, the sequentially compact types are not closed under exponentiation. We have
 the equivalence $\eqv{(\Sn^1\to\Sn^1)}{\Sn^1\times\Z}$, which is not
-$\omega$-compact. It is not know to me whether or not the type $X=Y$ is $\omega$-compact
-for any two $\omega$-compact types $X$ and $Y$.
+sequentially compact. It is not know to me whether or not the type $X=Y$ is sequentially compact
+for any two sequentially compact types $X$ and $Y$.
 \end{rmk}
 
 \begin{thm}
-The $\omega$-compact types are closed under retracts.
+The sequentially compact types are closed under retracts.
 \end{thm}
 
 \begin{proof}
-Let $Y$ be a retract of an $\omega$-compact type $X$, and consider
+Let $Y$ be a retract of an sequentially compact type $X$, and consider
 the infinite sequence
 \begin{equation*}
 \begin{tikzcd}
@@ -164,24 +192,24 @@ it is an equivalence.
 \end{proof}
 
 \begin{conj}
-Consider a function $f:X\to Y$ in which the domain $X$ is $\omega$-compact. If
-each $\id{f(x)}{f(x')}$ is $\omega$-compact, then $\im{f}$ is $\omega$-compact.
+Consider a function $f:X\to Y$ in which the domain $X$ is sequentially compact. If
+each $\id{f(x)}{f(x')}$ is sequentially compact, then $\im{f}$ is sequentially compact.
 \end{conj}
 
 \begin{conj}
-Is it the case that $\trunc{n}{X}$ is $\omega$-compact for any $\omega$-compact
-type $X$? Does any modality preserve $\omega$-compactness?
+Is it the case that $\trunc{n}{X}$ is sequentially compact for any sequentially compact
+type $X$? Does any modality preserve sequentially compactness?
 \end{conj}
 
 \begin{conj}
-Let $\sequence{A}{a}$ be a type sequence. If each $A_n$ is $\omega$-compact, and
-each $a_n$ is surjective, is it the case that $A_\infty$ is $\omega$-compact? And
-if just $A_0$ is $\omega$-compact and each $a_n$ is surjective?
+Let $\sequence{A}{a}$ be a type sequence. If each $A_n$ is sequentially compact, and
+each $a_n$ is surjective, is it the case that $A_\infty$ is sequentially compact? And
+if just $A_0$ is sequentially compact and each $a_n$ is surjective?
 \end{conj}
 
 \begin{comment}
 \begin{conj}
-Suppose $X$ and $Y$ are $\omega$-compact. Then $X=Y$ is $\omega$-compact.
+Suppose $X$ and $Y$ are sequentially compact. Then $X=Y$ is sequentially compact.
 \end{conj}
 
 \begin{proof}[Non-proof]
@@ -191,7 +219,7 @@ Consider the infinite sequence
 A_0 \arrow[r] & A_1 \arrow[r] & A_2 \arrow[r] & \cdots
 \end{tikzcd}
 \end{equation*}
-Since $\isequiv(f)$ is a mere proposition (and hence $\omega$-compact) for
+Since $\isequiv(f)$ is a mere proposition (and hence sequentially compact) for
 any $f:X\to Y$, we have
 \begin{align*}
 (X=Y)\to A_\infty 
@@ -205,11 +233,11 @@ any $f:X\to Y$, we have
 \prd{f:X\to Y} \tfcolim_n(\isequiv(f)\to A_n)
 \end{align*}
 This reduction is not going to help, because $X\to Y$ does not need to be
-$\omega$-compact.
+sequentially compact.
 \end{proof}
 
 \begin{conj}
-If $X$ is $\omega$-compact, then so is $\mathrm{Aut}(X)$.
+If $X$ is sequentially compact, then so is $\mathrm{Aut}(X)$.
 \end{conj}
 
 \begin{proof}
@@ -230,7 +258,7 @@ is a an equivalence.
 The idea is to approximate the $F$-localization of $X$ by iterated `quasi $F$-local extensions' of $X$. Those will be maps $l:X\to Y$ with certain extra structure, so when we have iterated extensions, we will be working with type sequences. Thus, we need the following technical lemma.
 
 \begin{lem}\label{lem}
-Suppose that $F$ is a family of maps between $\omega$-compact types. Consider a type sequence
+Suppose that $F$ is a family of maps between sequentially compact types. Consider a type sequence
 \begin{equation*}
 \begin{tikzcd}
 X_0 \arrow[r,"\alpha_0"] & X_1 \arrow[r,"\alpha_1"] & X_2 \arrow[r,"\alpha_2"] & \cdots
@@ -243,7 +271,7 @@ and let $f:P(a)\to X_0$. Then we have an equivalence
 \end{lem}
 
 \begin{proof}
-This follows from a simple calculation using the facts about $\omega$-compact
+This follows from a simple calculation using the facts about sequentially compact
 types of the previous section:
 \begin{align*}
 \hfib{\psi_{X_\infty}}{\iota_0\circ f}
@@ -297,7 +325,7 @@ factors through the unit type.
 \end{rmk}
 
 \begin{thm}
-Suppose $F$ is a family of maps between $\omega$-compact types, and let
+Suppose $F$ is a family of maps between sequentially compact types, and let
 \begin{equation*}
 \begin{tikzcd}
 X_0 \arrow[r,"l"] & X_1 \arrow[r,"l"] & X_2 \arrow[r,"l"] & \cdots
@@ -319,7 +347,7 @@ all factor through the unit type, the colimit is contractible. It follows (by ge
 \begin{equation*}
 \hfib{\psi_{X_\infty}}{\iota_n\circ f}
 \end{equation*}
-is contractible for any $f:P(a)\to X_n$. Now, by $\omega$-compactness of $P(a)$, it follows that $X_\infty$ is $F$-local.
+is contractible for any $f:P(a)\to X_n$. Now, by sequentially compactness of $P(a)$, it follows that $X_\infty$ is $F$-local.
 \end{proof}
 
 Note that the initial quasi $F$-local extension of $X$ can be specified as a higher inductive type (with a $2$-path constructor).
@@ -435,7 +463,7 @@ Let $X$ be a type and let $f:P(a)\to X$. Then we have an equivalence
 \end{lem}
 
 \begin{proof}
-This follows from a simple calculation using the facts about $\omega$-compact
+This follows from a simple calculation using the facts about sequentially compact
 types of the previous section:
 \begin{align*}
 \hfib{\psi_{L^\infty(X)}}{\iota_0\circ f}
@@ -464,7 +492,7 @@ For any $m:\nat$ and $f:P(a)\to L^m(X)$, we have an equivalence
 \begin{comment}
 \begin{lem}
 For any type $X$, and any $F:\prd{a:A}P(a)\to Q(a)$ where each $P(a)$ and $Q(a)$
-is $\omega$-compact, the type $L^\infty(X)$ is $F$-local.
+is sequentially compact, the type $L^\infty(X)$ is $F$-local.
 \end{lem}
 
 \begin{proof}
@@ -472,7 +500,7 @@ We have to show that
 \begin{equation*}
 \prd{a:A}{f:P(a)\to L^\infty(X)}\iscontr(\hfib{\psi_{L^\infty(X)}(a)}{f})
 \end{equation*}
-By our assumption of $\omega$-compactness, this type is equivalent to
+By our assumption of sequentially compactness, this type is equivalent to
 \begin{equation*}
 \prd{a:A}{f:\tfcolim(P(a)\to L^n(X))}\iscontr(\hfib{\psi_{L^\infty(X)}(a)}{\xi_A(f)})
 \end{equation*}
@@ -531,7 +559,7 @@ We have to show that
 \begin{equation*}
 \prd{a:A}{f:P(a)\to L^\infty(X)}\iscontr(\sm{g:Q(a)\to L^\infty(X)} \id{g\circ F(a)}{f})
 \end{equation*}
-By our assumption of $\omega$-compactness, this type is equivalent to
+By our assumption of sequentially compactness, this type is equivalent to
 \begin{equation*}
 \prd{a:A}{f:\tfcolim(P(a)\to L^n(X))}\iscontr(\sm{g:Q(a)\to L^\infty(X)} \id{g\circ F(a)}{\xi_A(f)})
 \end{equation*}
@@ -608,7 +636,7 @@ This is done by recognizing that the diagram commutes.
 
 \begin{thm}
 For any type $X$ and any family $F:\prd{a:A}P(a)\to Q(a)$ of maps between
-$\omega$-compact types, $L_F^\infty(X)$ is the localization of $X$ at $F$.
+sequentially compact types, $L_F^\infty(X)$ is the localization of $X$ at $F$.
 \end{thm}
 
 \begin{proof}
@@ -635,4 +663,4 @@ The above universal property and the fact that $L^\infty(X)$ is $F$-local
 together give that $L^\infty(X)$ is the localization of $X$ at $F$.
 \end{proof}
 
-\section{Inductive types specified by families of $\omega$-compact types}
+\section{Inductive types specified by families of sequentially compact types}

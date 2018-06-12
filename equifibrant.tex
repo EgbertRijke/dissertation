@@ -1,5 +1,38 @@
 \chapter{The equifibrant replacement operation}
 
+We begin this chapter with a vast generalization of the descent theorems: modal descent.
+Any modality $\modal$ gives rise to a class of maps $f:A\to B$ satisfying the condition that the naturality square
+\begin{equation*}
+\begin{tikzcd}
+A \arrow[r,"f"] \arrow[d,swap,"\eta"] & B \arrow[d,"\eta"] \\
+\modal A \arrow[r,swap,"\modal f"] & \modal B
+\end{tikzcd}
+\end{equation*}
+is a pullback square. We call such maps $\modal$-\'etale maps. The modal descent theorem asserts that a $\modal$-\'etale map into $A$ is equivalently described as a modal map into $\modal A$. Every $\modal$-\'etale map is certainly modal, but the conditioin of beign $\modal$-\'etale is slightly stronger than the condition of being modal. 
+
+The difference between the notions of $\modal$-\'etale maps and modal maps becomes perhaps most visible when we look at the left orthogonal classes of the $\modal$-\'etale maps and modal maps. The $\modal$-connected maps are left orthogonal to the modal maps, whereas a map is left orthogonal to the $\modal$-\'etale maps if and only if it is a $\modal$-equivalence (i.e.~a map $f$ such that $\modal f$ is an equivalence). In the case of the $n$-truncation there is a clear difference: a map $f:X\to Y$ is an $n$-equivalence if and only if it induces an isomorphism of homotopy groups $\pi_i(X)\to \pi_i(Y)$ for any $i\leq n$, whereas an $n$-connected map is an $n$-equivalence satisfying the further condition that it $\pi_{n+1}(X)\to\pi_{n+1}(Y)$ is surjective.
+
+In \cref{thm:modal_rofs} we show that the $\modal$-equivalences and the $\modal$-\'etale maps form an orthogonal factorization system. We call this factorization system the \emph{reflective} factorization system of a modality. The reflective factorization system is not stable, so it does not form a new modality. What does follow is that for the unique factorization $f=f_r\circ f_l$ of $f:A\to X$ as a $\modal$-equivalence $f_l$ followed by a $\modal$-\'etale map $f_r$, the canonical map
+\begin{equation*}
+\mathsf{hom}_X(f_r,e)\to\mathsf{hom}_X(f,e)
+\end{equation*}
+is an equivalence for any $\modal$-\'etale map $e$ into $X$. 
+
+We then proceed to apply these ideas to the case of reflexive graphs and the reflexive coequalizer. The class of $\Delta$-\'etale maps is introduces as the class of morphisms $f:\mathsf{rGph}(\mathcal{B},\mathcal{A})$ of reflexive graphs satisfying the condition that the square
+\begin{equation*}
+\begin{tikzcd}[column sep=huge]
+\mathcal{B} \arrow[r,"f"] \arrow[d,swap,"\mathsf{constr}"] & \mathcal{A} \arrow[d,"\mathsf{constr}"] \\
+\Delta(\mathsf{rcoeq}(\mathcal{B})) \arrow[r,swap,"\Delta(\mathsf{rcoeq}(f))"] & \Delta(\mathsf{rcoeq}(\mathcal{A}))
+\end{tikzcd}
+\end{equation*}
+is a pullback square, and we show that the class of $\Delta$-\'etale morphisms is precisely the class of fibrations of reflexive graphs. 
+
+In the case of sequential colimits, another way of obtaining a cartesian transformation from an arbitrary one is to take the sequential colimit fiberwise. We establish this result in \cref{thm:colim_fib}. It has many important consequences. First of all, we show in \cref{thm:colim_id} that sequential colimits commute with identity types. Second, we show in \cref{thm:colim_fiberseq} that the sequential colimit of a fiber sequence is again a fiber sequence. Third, we show in \cref{thm:colim_hlevel} that truncation levels are closed under sequential colimits, and that sequential colimits commute with truncations. Finally, we show in \cref{thm:colim_hgroup} that sequential colimits commute with homotopy groups. 
+
+The idea of a modal version of the descent theorem first arose in my unpublished work on reflexive graphs with Bas Spitters, in the spring of 2016. However, I only learned about $\modal$-\'etale maps much later from Felix Wellen, and many of the results presented in \cref{seq:modal_descent} came out of a discussion I had with Felix Wellen and Mike Shulman. 
+The material in \cref{seq:equifibrant_replacement} on the equifibrant replacement operation on reflexive graphs is joint work with Bas Spitters. 
+The material in \cref{sec:seqcolim_eqf} on sequential colimits is joint work with Floris van Doorn and Kristina Sojakova, and all our results are formalized in the proof assistant Lean. 
+
 \section{Modal descent}\label{sec:modal_descent}
 \subsection{\texorpdfstring{$\modal$}{○}-\'etale maps}
 
@@ -398,16 +431,16 @@ Every $\modal$-connected map is a $\modal$-equivalence.
 \begin{defn}
 Let $f:A\to B$ be a map. We define
 \begin{align*}
-[A] & \defeq B \times_{\modal B}\modal \modal A
+[A]_f & \defeq B \times_{\modal B}\modal A
 \intertext{and we define the maps}
-\mathsf{et}(f) & : [A] \to B \\
-\bar{\eta} : A \to [A]
+\mathsf{et}(f) & : [A]_f \to B \\
+\bar{\eta} : A \to [A]_f
 \end{align*}
 by the universal property of pullbacks, as indicated in the following diagram
 \begin{equation*}
 \begin{tikzcd}
 A \arrow[ddr,bend right=15,swap,"f"] \arrow[drr,bend left=15,"\modalunit"] \arrow[dr,"\bar{\eta}" description] \\
-& {[A]} \arrow[d,swap,"\mathsf{et}(f)"] \arrow[r,"\pi_2"] & \modal A \arrow[d,"\modal f"] \\
+& {[A]_f} \arrow[d,"\mathsf{et}(f)"] \arrow[r,"\pi_2"] & \modal A \arrow[d,"\modal f"] \\
 & B \arrow[r,swap,"\modalunit"] & \modal B.
 \end{tikzcd}
 \end{equation*}
@@ -751,11 +784,6 @@ A natural transformation $\tau:\mathcal{D}'\to\mathcal{D}$ is \'etale if and onl
 The pair $(\mathcal{W},\mathcal{R})$ forms an orthogonal factorization system. 
 \end{thm}
 
-\subsection{Equifibrant replacement for pushouts}
-
-\subsection{Equifibrant replacement for sequential colimits}
-
-\section{Identity types of colimits}
 \subsection{Identity types of reflexive coequalizers}
 
 \begin{defn}
@@ -810,4 +838,162 @@ X\to_\ast (\eqv{Y}{Y}).
 In particular, the loop space of the $(n+1)$-sphere is the initial pointed type $Y$ equipped with a a pointed map $\sphere{n}\to (\eqv{Y}{Y})$, or equivalently, an $(n+1)$-loop $\loopspace[n+1]{\mathrm{BAut}(Y)}$. Even more in particular, the loop space of the $2$-sphere is the initial pointed type $Y$ equipped with a homotopy $\idfunc[Y]\htpy\idfunc[Y]$. 
 \end{cor}
 
-\subsection{Identity types of sequential colimits}
+\section{Equifibrant replacement for sequential colimits}\label{sec:seqcolim_eqf}
+
+\begin{defn}
+Let $\mathcal{B}$ be a sequential family over $\mathcal{A}$, and consider $x:A_n$. We write $\mathcal{B}_n[x]$ for the type sequence
+\begin{equation*}
+\begin{tikzcd}
+B_n(x) \arrow[r] & B_{n+1}(f_n(x)) \arrow[r] & B_{n+2}(f_{n+1}(x)) \arrow[r] & \cdots.
+\end{tikzcd}
+\end{equation*}
+\end{defn}
+
+\begin{defn}
+Let $\mathcal{B}$ be a sequential family over $\mathcal{A}$. We will define an equifibered sequential family $\square\mathcal{B}$ over $\mathcal{A}$ equipped with a morphism 
+\begin{equation*}
+\mathsf{hom}_{\mathcal{A}}(\mathcal{B},\square\mathcal{B})
+\end{equation*}
+\end{defn}
+
+\begin{proof}[Construction]
+We define
+\begin{equation*}
+\square B : \prd{n:\N}A_n\to\UU
+\end{equation*}
+by $\square B_n(x)\defeq \tfcolim \mathcal{B}_n[x]$. Next, we have to construct a fiberwise equivalence
+\begin{equation*}
+g_\infty : \prd{n:\N}{x:A_n} \square B_n \eqvsym \square B_{n+1}
+\end{equation*}
+\end{proof}
+
+\begin{thm}\label{thm:colim_fib}
+The equifibered family $\square\mathcal{B}$ over $\mathcal{A}$ satisfies the universal property that
+\begin{equation*}
+\mathsf{hom}_{\mathcal{A}}(\square\mathcal{B},\mathcal{E})\to\mathrm{hom}_{\mathcal{A}}(\mathcal{B},\mathcal{E})
+\end{equation*}
+is an equivalence for any equifibered family $\mathcal{E}$ over $\mathcal{A}$. 
+\end{thm}
+
+\begin{proof}
+Let $\mathcal{E}$ be an equifibered family over $\mathcal{A}$, and consider a morphism $\mathrm{hom}_{\mathcal{A}}(\mathcal{B},\mathcal{E})$. First we show that the type 
+\begin{equation*}
+\mathsf{seq\usc{}cocone}_{\mathcal{B}_n[x]}(E_n(x)) \to \mathsf{nat}(\mathcal{B}_n[x],\mathcal{E}_n[x])
+\end{equation*}
+is an equivalence
+\end{proof}
+
+\begin{cor}\label{thm:colim_sigma}
+Let $\mathcal{B}$ be a sequential family over $\mathcal{A}$. Then we have a commuting triangle
+\begin{equation*}
+\begin{tikzcd}[column sep=tiny]
+\mathsf{colim}\Big(\msm{\mathcal{A}}{\mathcal{B}}\Big) \arrow[rr] \arrow[dr] & & \sm{x:A_\infty} B_\infty(x) \arrow[dl] \\
+\phantom{\sm{x:A_\infty} B_\infty(x)} & A_\infty & \phantom{\mathsf{colim}\Big(\msm{\mathcal{A}}{\mathcal{B}}\Big)}
+\end{tikzcd}
+\end{equation*}
+in which the top map is an equivalence.
+\end{cor}
+
+\begin{cor}\label{thm:colim_id}
+Consider a type sequence
+\begin{equation*}
+\begin{tikzcd}
+A_0 \arrow[r] & A_1 \arrow[r] & A_2 \arrow[r] & \cdots.
+\end{tikzcd}
+\end{equation*}
+Then the canonical map
+\begin{equation*}
+\mathsf{colim}(f^n(x)= f^n(y)) \to (\mathsf{seq\usc{}in}_0(x)=\mathsf{seq\usc{}in}_0(y))
+\end{equation*}
+is an equivalence for every $x,y:A_0$.
+\end{cor}
+
+\begin{thm}
+Consider a sequence
+\begin{equation*}
+\begin{tikzcd}[column sep=small,row sep=small]
+& C_0 \arrow[dl] \arrow[dd] \arrow[rr] & & C_1 \arrow[dl] \arrow[dd] \arrow[rr] & & C_2 \arrow[dl] \arrow[dd] \arrow[rr] & & \cdots \\
+A_0 \arrow[dd] \arrow[rr,crossing over] & & A_1 \arrow[rr,crossing over] & & A_2 \arrow[rr,crossing over] & & \cdots \\
+& B_0 \arrow[dl] \arrow[rr] & & B_1 \arrow[dl] \arrow[rr] & & B_2 \arrow[dl] \arrow[rr] & & \cdots \\
+X_0 \arrow[rr] & \phantom{B_2} & X_1 \arrow[rr] \arrow[from=uu,crossing over] & \phantom{B_2} & X_2 \arrow[rr] \arrow[from=uu,crossing over] & \phantom{B_2} & \cdots
+\end{tikzcd}
+\end{equation*}
+of pullback squares. Then the sequential colimit
+\begin{equation*}
+\begin{tikzcd}
+C_\infty \arrow[r] \arrow[d] & B_\infty \arrow[d] \\
+A_\infty \arrow[r] & X_\infty
+\end{tikzcd}
+\end{equation*}
+is again a pullback square.
+\end{thm}
+
+\begin{cor}\label{thm:colim_fiberseq}
+Consider a sequence of fiber sequences
+\begin{equation*}
+\begin{tikzcd}
+F_0 \arrow[d] \arrow[r] & F_1 \arrow[d] \arrow[r] & F_2 \arrow[d] \arrow[r] & \cdots \\
+E_0 \arrow[d] \arrow[r] & E_1 \arrow[d] \arrow[r] & E_2 \arrow[d] \arrow[r] & \cdots \\
+B_0 \arrow[r] & B_1 \arrow[r] & B_2 \arrow[r] & \cdots
+\end{tikzcd}
+\end{equation*}
+in which all maps and homotopies are assumed to be pointed. Then the colimit
+\begin{equation*}
+\begin{tikzcd}
+F_\infty \hookrightarrow E_\infty \twoheadrightarrow B_\infty
+\end{tikzcd}
+\end{equation*}
+is again a fiber sequence.
+\end{cor}
+
+\begin{cor}
+Consider a type sequence
+\begin{equation*}
+\begin{tikzcd}
+A_0 \arrow[r] & A_1 \arrow[r] & A_2 \arrow[r] & \cdots
+\end{tikzcd}
+\end{equation*}
+of pointed types (and pointed maps between them). Then the canonical map
+\begin{equation*}
+\mathsf{colim}(\loopspace{A_{n}}) \to \loopspace{A_{\infty}}
+\end{equation*}
+is an equivalence.
+\end{cor}
+
+\begin{prp}\label{thm:colim_hlevel}
+Consider a type sequence
+\begin{equation*}
+\begin{tikzcd}
+A_0 \arrow[r] & A_1 \arrow[r] & A_2 \arrow[r] & \cdots
+\end{tikzcd}
+\end{equation*}
+If each $A_n$ is $k$-truncated, then so is the sequential colimit $A_\infty$.
+\end{prp}
+
+\begin{thm}
+Consider a type sequence
+\begin{equation*}
+\begin{tikzcd}
+A_0 \arrow[r] & A_1 \arrow[r] & A_2 \arrow[r] & \cdots
+\end{tikzcd}
+\end{equation*}
+Then the canonical map
+\begin{equation*}
+\mathsf{colim}_n \trunc{k}{A_n} \to \trunc{k}{A_\infty}
+\end{equation*}
+is an equivalence. 
+\end{thm}
+
+\begin{thm}\label{thm:colim_hgroup}
+Consider a type sequence
+\begin{equation*}
+\begin{tikzcd}
+A_0 \arrow[r] & A_1 \arrow[r] & A_2 \arrow[r] & \cdots
+\end{tikzcd}
+\end{equation*}
+Then the canonical map
+\begin{equation*}
+\mathsf{colim}_n(\pi_k(A_n))\to \pi_k(A_\infty)
+\end{equation*}
+is a group isomorphism, for any $k\geq 1$.
+\end{thm}
