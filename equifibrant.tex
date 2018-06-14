@@ -14,7 +14,7 @@ The difference between the notions of $\modal$-\'etale maps and modal maps becom
 
 In \cref{thm:modal_rofs} we show that the $\modal$-equivalences and the $\modal$-\'etale maps form an orthogonal factorization system. We call this factorization system the \emph{reflective} factorization system of a modality. The reflective factorization system is not stable, so it does not form a new modality. What does follow is that for the unique factorization $f=f_r\circ f_l$ of $f:A\to X$ as a $\modal$-equivalence $f_l$ followed by a $\modal$-\'etale map $f_r$, the canonical map
 \begin{equation*}
-\mathsf{hom}_X(f_r,e)\to\mathsf{hom}_X(f,e)
+\mathrm{hom}_X(f_r,e)\to\mathrm{hom}_X(f,e)
 \end{equation*}
 is an equivalence for any $\modal$-\'etale map $e$ into $X$. 
 
@@ -753,37 +753,6 @@ Consider a family $\mathcal{B}$ of reflexive graphs over $\mathcal{A}$, and let 
 is an equivalence for every equifibered family $\mathcal{E}$ over $\mathcal{A}$.
 \end{thm}
 
-\section{Equifibrant replacement for other homotopy colimits}
-
-\subsection{Equifibrant replacement for diagrams over graphs}
-
-\begin{defn}
-Let $\tau:\mathcal{D}'\to\mathcal{D}$ be a natural transformation of diagrams over a reflexive graph $\mathcal{A}$. 
-\begin{enumerate}
-\item We say that $\tau$ is a \define{weak equivalence} if it induces an equivalence
-\begin{equation*}
-\tfcolim(\tau):\tfcolim(\mathcal{D}')\to\tfcolim(\mathcal{D}).
-\end{equation*}
-We write $\mathcal{W}$ for the class of weak equivalences.
-\item We say that $\tau$ is \define{\'etale} if the square
-\begin{equation*}
-\begin{tikzcd}
-\msm{\mathcal{A}}{\mathcal{D}'} \arrow[d,swap,"\tau"] \arrow[r] & \Delta(\tfcolim(\mathcal{D}')) \arrow[d,"\tfcolim(\tau)"] \\
-\msm{\mathcal{A}}{\mathcal{D}} \arrow[r] & \Delta(\tfcolim(\mathcal{D}))
-\end{tikzcd}
-\end{equation*}
-is a pullback square of reflexive graphs. We write $\mathcal{R}$ for the class of \'etale maps.
-\end{enumerate}
-\end{defn}
-
-\begin{thm}
-A natural transformation $\tau:\mathcal{D}'\to\mathcal{D}$ is \'etale if and only if it is cartesian.
-\end{thm}
-
-\begin{thm}
-The pair $(\mathcal{W},\mathcal{R})$ forms an orthogonal factorization system. 
-\end{thm}
-
 \subsection{Identity types of reflexive coequalizers}
 
 \begin{defn}
@@ -838,7 +807,39 @@ X\to_\ast (\eqv{Y}{Y}).
 In particular, the loop space of the $(n+1)$-sphere is the initial pointed type $Y$ equipped with a a pointed map $\sphere{n}\to (\eqv{Y}{Y})$, or equivalently, an $(n+1)$-loop $\loopspace[n+1]{\mathrm{BAut}(Y)}$. Even more in particular, the loop space of the $2$-sphere is the initial pointed type $Y$ equipped with a homotopy $\idfunc[Y]\htpy\idfunc[Y]$. 
 \end{cor}
 
-\section{Equifibrant replacement for sequential colimits}\label{sec:seqcolim_eqf}
+\section{Equifibrant replacement for other homotopy colimits}
+
+\subsection{Equifibrant replacement for diagrams over graphs}
+
+\begin{defn}
+Let $\tau:\mathcal{D}'\to\mathcal{D}$ be a natural transformation of diagrams over a reflexive graph $\mathcal{A}$. 
+\begin{enumerate}
+\item We say that $\tau$ is a \define{weak equivalence} if it induces an equivalence
+\begin{equation*}
+\tfcolim(\tau):\tfcolim(\mathcal{D}')\to\tfcolim(\mathcal{D}).
+\end{equation*}
+We write $\mathcal{W}$ for the class of weak equivalences.
+\item We say that $\tau$ is \define{\'etale} if the square
+\begin{equation*}
+\begin{tikzcd}
+\msm{\mathcal{A}}{\mathcal{D}'} \arrow[d,swap,"\tau"] \arrow[r] & \Delta(\tfcolim(\mathcal{D}')) \arrow[d,"\tfcolim(\tau)"] \\
+\msm{\mathcal{A}}{\mathcal{D}} \arrow[r] & \Delta(\tfcolim(\mathcal{D}))
+\end{tikzcd}
+\end{equation*}
+is a pullback square of reflexive graphs. We write $\mathcal{R}$ for the class of \'etale maps.
+\end{enumerate}
+\end{defn}
+
+\begin{thm}
+A natural transformation $\tau:\mathcal{D}'\to\mathcal{D}$ is \'etale if and only if it is cartesian.
+\end{thm}
+
+\begin{thm}
+The pair $(\mathcal{W},\mathcal{R})$ forms an orthogonal factorization system. 
+\end{thm}
+
+\section{Equifibrant replacement for sequential colimits}\label{sec:seqcolim_eqf}%
+\sectionmark{Sequential colimits}
 
 \begin{defn}
 Let $\mathcal{B}$ be a sequential family over $\mathcal{A}$, and consider $x:A_n$. We write $\mathcal{B}_n[x]$ for the type sequence
@@ -852,7 +853,7 @@ B_n(x) \arrow[r] & B_{n+1}(f_n(x)) \arrow[r] & B_{n+2}(f_{n+1}(x)) \arrow[r] & \
 \begin{defn}
 Let $\mathcal{B}$ be a sequential family over $\mathcal{A}$. We will define an equifibered sequential family $\square\mathcal{B}$ over $\mathcal{A}$ equipped with a morphism 
 \begin{equation*}
-\mathsf{hom}_{\mathcal{A}}(\mathcal{B},\square\mathcal{B})
+\mathrm{hom}_{\mathcal{A}}(\mathcal{B},\square\mathcal{B})
 \end{equation*}
 \end{defn}
 
@@ -870,29 +871,40 @@ g_\infty : \prd{n:\N}{x:A_n} \square B_n \eqvsym \square B_{n+1}
 \begin{thm}\label{thm:colim_fib}
 The equifibered family $\square\mathcal{B}$ over $\mathcal{A}$ satisfies the universal property that
 \begin{equation*}
-\mathsf{hom}_{\mathcal{A}}(\square\mathcal{B},\mathcal{E})\to\mathrm{hom}_{\mathcal{A}}(\mathcal{B},\mathcal{E})
+\mathrm{hom}_{\mathcal{A}}(\square\mathcal{B},\mathcal{E})\to\mathrm{hom}_{\mathcal{A}}(\mathcal{B},\mathcal{E})
 \end{equation*}
 is an equivalence for any equifibered family $\mathcal{E}$ over $\mathcal{A}$. 
 \end{thm}
 
 \begin{proof}
-Let $\mathcal{E}$ be an equifibered family over $\mathcal{A}$, and consider a morphism $\mathrm{hom}_{\mathcal{A}}(\mathcal{B},\mathcal{E})$. First we show that the type 
+Let $\mathcal{E}$ be an equifibered family over $\mathcal{A}$, and consider a morphism $\mathrm{hom}_{\mathcal{A}}(\mathcal{B},\mathcal{E})$. First we note that the canonical map
 \begin{equation*}
 \mathsf{seq\usc{}cocone}_{\mathcal{B}_n[x]}(E_n(x)) \to \mathsf{nat}(\mathcal{B}_n[x],\mathcal{E}_n[x])
 \end{equation*}
-is an equivalence
+is an equivalence.
 \end{proof}
 
 \begin{cor}\label{thm:colim_sigma}
 Let $\mathcal{B}$ be a sequential family over $\mathcal{A}$. Then we have a commuting triangle
 \begin{equation*}
 \begin{tikzcd}[column sep=tiny]
-\mathsf{colim}\Big(\msm{\mathcal{A}}{\mathcal{B}}\Big) \arrow[rr] \arrow[dr] & & \sm{x:A_\infty} B_\infty(x) \arrow[dl] \\
+\mathsf{colim}\Big(\msm{\mathcal{A}}{\mathcal{B}}\Big) \arrow[rr] \arrow[dr,swap,"\mathsf{colim}(\proj 1)"] & & \sm{x:A_\infty} B_\infty(x) \arrow[dl,"\proj 1"] \\
 \phantom{\sm{x:A_\infty} B_\infty(x)} & A_\infty & \phantom{\mathsf{colim}\Big(\msm{\mathcal{A}}{\mathcal{B}}\Big)}
 \end{tikzcd}
 \end{equation*}
 in which the top map is an equivalence.
 \end{cor}
+
+\begin{proof}
+Since $\square\mathcal{B}$ and $\mathsf{EqF}\mathcal{B}$ both satisfy the universal property of the equifibrant replacement of $\mathcal{B}$, they are the same sequences over $\mathcal{A}$. It follows that the square
+\begin{equation*}
+\begin{tikzcd}
+\msm{\mathcal{A}}{\square\mathcal{B}} \arrow[r] \arrow[d,swap,"\proj 1"] & \Delta(\mathsf{colim}(\msm{\mathcal{A}}{\mathcal{B}})) \arrow[d,"\Delta(\mathsf{colim}(\mathcal{A}))"] \\
+\mathcal{A} \arrow[r,swap,"\mathsf{seq\usc{}in}"] & \Delta(\mathsf{colim}(\mathcal{A}))
+\end{tikzcd}
+\end{equation*}
+is a pullback square of type sequences. We conclude that the top arrow is a colimiting cocone, so the result follows.
+\end{proof}
 
 \begin{cor}\label{thm:colim_id}
 Consider a type sequence
@@ -908,7 +920,7 @@ Then the canonical map
 is an equivalence for every $x,y:A_0$.
 \end{cor}
 
-\begin{thm}
+\begin{thm}\label{thm:seq_colim_pb}
 Consider a sequence
 \begin{equation*}
 \begin{tikzcd}[column sep=small,row sep=small]
@@ -927,6 +939,10 @@ A_\infty \arrow[r] & X_\infty
 \end{equation*}
 is again a pullback square.
 \end{thm}
+
+\begin{proof}
+Since sequential colimits commute with $\Sigma$ and identity types, they commute with pullbacks.
+\end{proof}
 
 \begin{cor}\label{thm:colim_fiberseq}
 Consider a sequence of fiber sequences
@@ -969,6 +985,10 @@ A_0 \arrow[r] & A_1 \arrow[r] & A_2 \arrow[r] & \cdots
 \end{equation*}
 If each $A_n$ is $k$-truncated, then so is the sequential colimit $A_\infty$.
 \end{prp}
+
+\begin{proof}
+We prove the claim by induction on $k\geq -2$. The base case is trivial, and the inductive step follows since sequential colimits commute with identity types.
+\end{proof}
 
 \begin{thm}
 Consider a type sequence

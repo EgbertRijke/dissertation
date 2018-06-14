@@ -1,11 +1,49 @@
 \chapter{Compact types}
 
-In this chapter we introduce the notion of sequentially compact type. Our main result is that any pushout of sequentially compact types is again sequentially compact. In particular it follows that the spheres are sequentially compact.
+In this chapter we introduce the notion of compact type, and we show that the compact types are closed under finite coproducts, $\Sigma$-types, finite products, pushouts, reflexive coequalizers, and retracts. In particular it follows that the spheres are compact.
+
+In \cref{sec:localization_compact} we show that if $P$ and $Q$ are families of compact types, then the subuniverse of $F$-local types is reflective. Of course, one might impose stronger assumptions on the type theory so that the subuniverse of $F$-local types is reflective for any family $F$ of maps (see for instance \cite{RijkeShulmanSpitters}). The setting of this dissertation is that of univalent type theory in which the universes are closed under homotopy pushouts, so we have to find a different way to define localizations.
+
+The idea is to approximate the $F$-localization of a type $X$ by iterated `quasi $F$-local extensions' of $X$, by which we mean a map $l:X\to Y$ equipped with a diagonal filler for the square
+\begin{equation*}
+\begin{tikzcd}
+X^{Q_i} \arrow[r,"l\circ\blank"] \arrow[d,swap,"\blank\circ F_i"] & Y^{Q_i} \arrow[d,"\blank\circ F_i"] \\
+X^{P_i} \arrow[r,swap,"l\circ \blank"] & Y^{P_i},
+\end{tikzcd}
+\end{equation*}
+for each $i:I$. We show in \cref{prp:colim_local} that, provided that $F$ is a family of maps between compact types, the sequential colimit of type sequence
+\begin{equation*}
+\begin{tikzcd}
+X_0 \arrow[r,"l_0"] & X_1 \arrow[r,"l_1"] & X_2 \arrow[r,"l_2"] & \cdots
+\end{tikzcd}
+\end{equation*}
+is $F$-local if each $l_n$ has the structure of a quasi $F$-local extension. In \cref{lem:qflocal_initial} we show that there is an initial quasi $F$-local extension $l:X\to QL_F X$, for every type $X$, and in \cref{thm:localization} we show that the sequential colimit $X\to QL_F^\infty$ is an $F$-localization. Thus we establish that if $F$ is a family of maps between compact types, then the subuniverse of $F$-local types is a reflective subuniverse. Furthermore, if $A$ is a family of compact types, then the subuniverse of $A$-null types is a modality.
+
+Dan Christensen pointed out that this construction of $F$-localization already appears in section 1.B of \cite{DrorFarjoun}, where arbitrary localizations are constructed by iterating the initial quasi $F$-local extension transfinitely many times. We stick to the case $\omega$ since larger ordinals are not yet as well understood in homotopy type theory. A minor note is that in Theorem B.5 Dror Farjoun only establishes that the transfinite colimit $QL_F^\kappa X$ localizes the homotopy groups.
 
 \section{Compact types}
 
 \begin{defn}
-Call a type $X$ sequentially compact, if for any type sequence
+Consider a type sequence $\mathcal{A}\jdeq (A,f)$, and let $X$ be a type. We define the type sequence $\mathcal{A}^X$ to consist of
+\begin{equation*}
+\begin{tikzcd}
+A_0^X \arrow[r,"f_0\circ \blank"] & A_1^X \arrow[r,"f_1\circ\blank"] & A_2^X \arrow[r,"f_2\circ\blank"] & \cdots. 
+\end{tikzcd}
+\end{equation*}
+Futhermore, given a natural transformation $\tau:\mathsf{Seq}(\mathcal{A},\mathcal{B})$ of type sequences, we define the natural transformation $\tau^X$ to consist of
+\begin{equation*}
+\begin{tikzcd}[column sep=large]
+A_0^X \arrow[r,"f_0\circ \blank"] \arrow[d,swap,"\tau_0\circ\blank"] & A_1^X \arrow[r,"f_1\circ\blank"] \arrow[d,swap,"\tau_1\circ\blank"] & A_2^X \arrow[r,"f_2\circ\blank"] \arrow[d,swap,"\tau_2\circ\blank"] & \cdots \\
+B_0^X \arrow[r,swap,"g_0\circ \blank"] & B_1^X \arrow[r,swap,"g_1\circ\blank"] & B_2^X \arrow[r,swap,"g_2\circ\blank"] & \cdots
+\end{tikzcd}
+\end{equation*}
+where the naturality squares commute by whiskering the natulity squares of $\tau$. 
+\end{defn}
+
+In particular, if $\tau:\mathsf{Seq}(\mathcal{A},\Delta Y)$ is a cocone with vertex $Y$, then $\tau^X :\mathsf{Seq}(\mathcal{A}^X,(\Delta Y)^X)$ is a cocone with vertex $Y^X$, since $(\Delta Y)^X \jdeq \Delta (Y^X)$.  
+
+\begin{defn}
+We call a type $X$ \define{(sequentially) compact} if for any type sequence
 \begin{equation*}
 \begin{tikzcd}
 A_0 \arrow[r] & A_1 \arrow[r] & A_2 \arrow[r] & \cdots
@@ -13,633 +51,357 @@ A_0 \arrow[r] & A_1 \arrow[r] & A_2 \arrow[r] & \cdots
 \end{equation*}
 the map
 \begin{equation*}
-\mathsf{seq\usc{}ind}(\lam{f} \mathsf{seq\usc{}in}_n\circ f,\lam{f} \mathsf{seq\usc{}glue}_n\circ f)
+\mathsf{seq\usc{}ind}(\mathsf{constr}(\mathcal{A})^X)
   : \tfcolim(X\to A_n)\to(X\to A_\infty)
 \end{equation*}
 is an equivalence.
 \end{defn}
 
 \begin{eg}
-The empty type is sequentially compact, simply because $X^\emptyt$ is contractible for any type $X$, and a sequential colimit of contractible types is contractible.
+The empty type is compact, simply because $X^\emptyt$ is contractible for any type $X$, and a sequential colimit of contractible types is contractible.
 \end{eg}
 
 \begin{eg}
-The unit type is sequentially compact because $\lam{x}\mathsf{const}_x:X\to X^\unit$ is an equivalence for any type $X$. Thus we obtain a natural equivalence
+The unit type is compact because $\lam{x}\mathsf{const}_x:X\to X^\unit$ is an equivalence for any type $X$. Thus we obtain a natural equivalence
 \begin{equation*}
 \begin{tikzcd}
 A_0 \arrow[d] \arrow[r] & A_1 \arrow[d] \arrow[r] & A_2 \arrow[d] \arrow[r] & \cdots \\
 A_0^\unit \arrow[r] & A_1^\unit \arrow[r] & A_2^\unit \arrow[r] & \cdots.
 \end{tikzcd}
 \end{equation*}
-Therefore we have a commuting triangle
+Thus we obtain a commuting triangle
 \begin{equation*}
 \begin{tikzcd}[column sep=0]
  & A_\infty \arrow[dl] \arrow[dr] & \phantom{\mathsf{colim}(A_n^\unit)} \\
 \mathsf{colim}(A_n^\unit) \arrow[rr] & & A_\infty^\unit.
 \end{tikzcd}
 \end{equation*}
-where two out of three maps are equivalences. Therefore the unit type is sequentially compact by the 3-for-2 rule.
+where two out of three maps are equivalences. Therefore the unit type is compact by the 3-for-2 property.
 \end{eg}
 
-\begin{comment}
+We will show in the remainder of this section that the compact types are closed under finite coproducts, $\Sigma$-types (and therefore also finite products), pushouts, reflexive coequalizers, and retracts. In the following example we note that compact types are not closed under pullbacks, and are not closed under exponentiation either.
+
 \begin{rmk}
-In the literature, an object $X$ of a category $\cat{C}$ is said to be sequentially compact if for any
-functor $F:P\to\cat{C}$ from a directed countable partially ordered set $P$, there
-is a natural isomorphism
-\begin{equation*}
-\mathrm{hom}(X,\mathrm{colim}(F(p))) \cong \mathrm{colim}(\mathrm{hom}(X,p))
-\end{equation*}
-The notion of sequentially compact type $X$ is equivalent to the classical notion,
-if one takes a directed poset $P$ to be a Rezk-complete category $P$ in which
-each hom-set is a mere proposition, for which there merely is a term of type
-\begin{equation*}
-\prd{p,q:P}\sm{r:P} (p\leq r)\land (q\leq r).
-\end{equation*}
-and if one takes a countable set to be a set $X$ for which there merely exists
-a function $f:\nat\to X$ such that $\prd{x:X}\hfib{f}{x}$.
+The compact types are not closed under identity types, because $\Z$ is not compact
+and $\eqv{\Z}{\Omega(\Sn^1)}$. To see that $\Z$ is not compact, consider
+the sequence $A_n\defeq\nat_{-n}$, where $\nat_{-n}$ is a version of the natural
+numbers of starting at $-n$ and $A_n\to A_{n+1}$ is the inclusion map. The colimit
+of $A_n$ is $\Z$ and the image of the map $\tfcolim(\Z\to A_n)\to (\Z\to\Z)$ is
+the set of maps that are bounded from below. Thus, it is not surjective.
 
-In other settings, it might be more useful to replace $\Pi$ and $\Sigma$ in the
-notion of directed poset, with the truncated versions $\forall$ and $\exists$. 
+Also, the compact types are not closed under exponentiation. We have
+the equivalence $\eqv{(\Sn^1\to\Sn^1)}{\Sn^1\times\Z}$, which is not
+compact.
 \end{rmk}
-\end{comment}
-
-In this section we will prove that the sequentially compact types are closed under
-various type theoretical constructions. Most of these proofs decompose the
-function $\xi_A$ as a chain of canonical equivalences. In a rigorous proofs,
-such chains should be accompanied by the verification that such chains of
-canonical equivalences can indeed be identified with the functions $\xi_A$, but
-we leave this to the computer verification. 
 
 \begin{lem}
-Finite coproducts of sequentially compact types are sequentially compact.
+Finite coproducts of compact types are compact.
 \end{lem}
 
 \begin{proof}
-We have already seen that the empty type is sequentially compact. 
-Thus it remains to show that sequentially compact types are closed under disjoint
+We have already seen that the empty type is compact. 
+Thus it remains to show that compact types are closed under disjoint
 sums. 
 
-Suppose that $X$ and $Y$ are sequentially compact. Then we have a commuting diagram of the form
+Suppose that $X$ and $Y$ are compact. Then we have a commuting diagram of the form
 \begin{equation*}
 \begin{tikzcd}
-\mathsf{colim}(A_n^{X+Y}) \arrow[r] \arrow[d] & \mathsf{colim}(A_n^X\times A_n^Y) \arrow[r] & \mathsf{colim}(A_n^X)\times\mathsf{colim}(A_n^Y) \arrow[d] \\
+\mathsf{colim}(\mathcal{A}^{X+Y}) \arrow[r] \arrow[d] & \mathsf{colim}(\mathcal{A}^X\times \mathcal{A}^Y) \arrow[r] & \mathsf{colim}(\mathcal{A}^X)\times\mathsf{colim}(\mathcal{A}^Y) \arrow[d] \\
 A_{\infty}^{X+Y} \arrow[rr] & & A_\infty^X \times A_\infty^Y
 \end{tikzcd}
 \end{equation*}
 where all but one of the maps are equivalences. Thus the remaining map is an equivalence too.
 \end{proof}
 
-\begin{lem}
-Let $X$ be an sequentially compact type and consider
+\begin{defn}
+Let $\mathcal{A}:X\to \mathsf{Seq}$ be an indexed type sequence. Then we define the type sequence $\prd{x:X}\mathcal{A}(x)$ to consist of
 \begin{equation*}
-\begin{tikzcd}
-A_{0} \arrow[r] \arrow[d,->>] & A_{1} \arrow[r] \arrow[d,->>] & A_{2} \arrow[r] \arrow[d,->>] & \cdots \\
-X \arrow[r,equals] & X \arrow[r,equals] & X \arrow[r,equals] & \cdots
+\begin{tikzcd}[column sep=7em]
+\prd{x:X}A_0(x) \arrow[r,"{\lam{h}{x}f_0(x,h(x))}"] & \prd{x:X}A_1(x) \arrow[r,"{\lam{h}{x}f_1(x,h(x))}"] & \cdots
 \end{tikzcd}
 \end{equation*}
-Then there is an equivalence
-\begin{equation*}
-\eqv{(\prd{x:X} A_\infty(x))}{\tfcolim(\prd{x:X}A_n(x))}.
-\end{equation*}
-\end{lem}
-
-\begin{proof}
-The proof is a simple calculation:
-\begin{align*}
-(\prd{x:X} A_\infty(x)) & \eqvsym \sm{f:X\to\sm{x:X}A_\infty(x)}\id{\fst\circ f}{\catid{X}} \\
-& \eqvsym \sm{f:X\to\tfcolim(\sm{x:X} A_n(x))}\id{\mathsf{rec}(\fst,\blank)\circ f}{\catid{X}} \\
-& \eqvsym \tfcolim(\sm{f:X\to\sm{x:X}A_n(x)} \id{\fst\circ f}{\catid{X}}) \\
-& \eqvsym \tfcolim(\prd{x:X}A_n(x)).\qedhere
-\end{align*}
-\end{proof}
-
-\begin{defn}
-A graph is said to be $\omega$-small if its type of vertices and each type of
-edges is sequentially compact. 
 \end{defn}
 
-\begin{thm}
-The colimit of an $\omega$-small graph is sequentially compact. 
-\end{thm}
+\begin{prp}
+Let $\mathcal{A}:X\to\mathsf{Seq}$ be an indexed type sequence, indexed by a compact type $X$.
+Then the canonical map
+\begin{equation*}
+\tfcolim\Big(\prd{x:X}A_n(x)\Big) \to \Big(\prd{x:X} A_\infty(x)\Big)
+\end{equation*}
+is an equivalence.
+\end{prp}
 
 \begin{proof}
-Let $\Gamma$ be an $\omega$-small graph and consider a sequence
+Consider the commuting diagram
 \begin{equation*}
 \begin{tikzcd}
-A_0 \arrow[r] & A_1 \arrow[r] & A_2 \arrow[r] & \cdots
+\mathsf{colim}\Big(\prd{x:X}\mathcal{A}(x)\Big) \arrow[d] \arrow[r] & \prd{x:X}A_\infty(x) \arrow[d] \arrow[r] & \unit \arrow[d,"\mathsf{const}_{\idfunc[X]}"] \\
+\mathsf{colim}\Big(X\to\sm{x:X}A_n(x)\Big) \arrow[r] & \Big(X\to \sm{x:X}A_\infty(x)\Big) \arrow[r,swap,"\proj 1\circ\blank"] & (X\to X).
 \end{tikzcd}
 \end{equation*}
-Then we have
-\begin{align*}
-\tfcolim(\Gamma)\to A_\infty
-& \eqvsym \sm{f:\pts{\Gamma}\to A_\infty}\prd{i,j:\pts{\Gamma}}\edg{\Gamma}(i,j)\to(\id{f(i)}{f(j)}) \\
-& \eqvsym \tfcolim(\sm{f:\pts{\Gamma}\to A_n}\prd{i,j:\pts{\Gamma}}\edg{\Gamma}(i,j)\to(\id{\iota_n(f(i))}{\iota_n(f(j))})) \\
-& \eqvsym \tfcolim(\sm{f:\pts{\Gamma}\to A_n}\prd{i,j:\pts{\Gamma}}\edg{\Gamma}(i,j)\to\tfcolim(\id{\iota_{n+k}(a^k_n(f(i)))}{\iota_{n+k}(a^k_n(f(i)))}))\\
-& \eqvsym \tfcolim(\sm{f:\pts{\Gamma}\to A_n}\prd{i,j:\pts{\Gamma}} \tfcolim(\edg{\Gamma}(i,j)\to\id{\iota_{n+k}(a^k_n(f(i)))}{\iota_{n+k}(a^k_n(f(i)))}))\\
-& \eqvsym \tfcolim(\sm{f:\pts{\Gamma}\to A_n}\tfcolim(\prd{i,j:\pts{\Gamma}} \edg{\Gamma}(i,j)\to\id{\iota_{n+k}(a^k_n(f(i)))}{\iota_{n+k}(a^k_n(f(i)))}))\\
-& \eqvsym \tfcolim(\sm{f:\pts{\Gamma}\to A_n}\prd{i,j:\pts{\Gamma}} \edg{\Gamma}(i,j)\to\id{\iota_{n}(a_n(f(i)))}{\iota_{n}(a_n(f(i)))})) \\
-& \eqvsym \tfcolim(\tfcolim(\Gamma)\to A_n).\qedhere
-\end{align*}
+The square on the right and the outer rectangle are pullback squares. Hence the square on the left is a pullback square. Now observe that the type $\sm{x:X}A_\infty(X)$ is the sequential colimit of the type sequence $\sm{x:X}A_n(x)$, by \cref{thm:colim_sigma}. Therefore it follows by the assumption that $X$ is compact, that the bottom map in the left square is an equivalence. We conclude that the top map in the left square is an equivalence, proving the claim.
 \end{proof}
 
 \begin{cor}
-The sequentially compact types are closed under dependent pair types, subtypes,
-cartesian products, suspension and pushouts.
+Suppose $X$ is compact, and $Y(x)$ is compact for each $x:X$. Then the total space $\sm{x:X}Y(x)$ is also compact.
 \end{cor}
 
-\begin{rmk}
-The sequentially compact types are not closed under identity types, because $\Z$ is not sequentially compact
-and $\eqv{\Z}{\Omega(\Sn^1)}$. To see that $\Z$ is not sequentially compact, consider
-the sequence $A_n\defeq\nat_{-n}$, where $\nat_{-n}$ is a version of the natural
-numbers of starting at $-n$ and $A_n\to A_{n+1}$ is the inclusion map. The colimit
-of $A_n$ is $\Z$ and the image of the map $\tfcolim(\Z\to A_n)\to (\Z\to\Z)$ is
-the set of maps that are bounded from below. Thus, it is not surjective.
+\begin{proof}
+Let $\mathcal{A}$ be a type sequence. Then we have the following commuting pentangle
+\begin{equation*}
+\begin{tikzcd}[column sep=-5em]
+& \mathsf{colim}\Big(\mathcal{A}^{\sm{x:X}Y(x)}\Big) \arrow[rr] \arrow[dl] & & A_\infty^{\sm{x:X}Y(x)} \arrow[dr] \\
+\mathsf{colim}\Big(\prd{x:X}\mathcal{A}^{Y(x)}\Big) \arrow[drr] & & & & \prd{x:X} A_\infty^{Y(x)} \\
+& & \prd{x:X}\mathsf{colim}\Big(\mathcal{A}^{Y(x)}\Big) \arrow[urr] & \phantom{\mathsf{colim}\Big(\mathcal{A}^{\sm{x:X}Y(x)}\Big)} & \phantom{\mathsf{colim}\Big(\prd{x:X}\mathcal{A}^{Y(x)}\Big)}
+\end{tikzcd}
+\end{equation*}
+in which all but the top map are known to be equivalences. Hence it follows that the top map is an equivalence, which shows that $\sm{x:X}Y(x)$ is compact.
+\end{proof}
 
-Also, the sequentially compact types are not closed under exponentiation. We have
-the equivalence $\eqv{(\Sn^1\to\Sn^1)}{\Sn^1\times\Z}$, which is not
-sequentially compact. It is not know to me whether or not the type $X=Y$ is sequentially compact
-for any two sequentially compact types $X$ and $Y$.
-\end{rmk}
+\begin{cor}
+Compact types are closed under finite products.
+\end{cor}
 
-\begin{thm}
-The sequentially compact types are closed under retracts.
-\end{thm}
+\begin{prp}\label{prp:pushout_compact}
+Compact types are closed under pushouts.
+\end{prp}
 
 \begin{proof}
-Let $Y$ be a retract of an sequentially compact type $X$, and consider
-the infinite sequence
+Consider a span $\mathcal{S}\jdeq (S,f,g)$ from $X$ to $Y$, where $X$, $Y$, and $S$ are assumed to be compact, and let $\mathcal{A}$ be a type sequence.
+Then we have the commuting pentagon
 \begin{equation*}
-\begin{tikzcd}
-A_0 \arrow[r] & A_1 \arrow[r] & A_2 \arrow[r] & \cdots
+\begin{tikzcd}[column sep=-5em]
+& \mathsf{colim}\Big(\mathcal{A}^{X\sqcup^{S} Y}\Big) \arrow[rr] \arrow[dl] &[-2em] &[-2em] A_\infty^{X\sqcup^S Y} \arrow[dr] \\
+\mathsf{colim}\Big(\mathcal{A}^X\times_{\mathcal{A}^S}\mathcal{A}^Y\Big) \arrow[drr] & & & & A_\infty^X \times_{A_\infty^S} A_\infty^Y \\
+& & \mathsf{colim}(\mathcal{A}^X)\times_{\mathsf{colim}(\mathcal{A}^S)}\mathsf{colim}(\mathcal{A}^Y) \arrow[urr] & \phantom{\mathsf{colim}\Big(\mathcal{A}^{X\sqcup^{S} Y}\Big)} & \phantom{\mathsf{colim}\Big(\mathcal{A}^X\times_{\mathcal{A}^S}\mathcal{A}^Y\Big)}
 \end{tikzcd}
 \end{equation*}
-Then we hvar $i:Y\to X$ and $r:X\to Y$ such that $r\circ i=\catid{Y}$. 
-So we also have $\lam{f}f\circ r:(Y\to A_\infty)\to(X\to A_\infty)$ and
-$\lam{g}g\circ i:(X\to A_\infty)\to (Y\to A_\infty)$, and since
-$f\circ r\circ i= f$ for any $f:Y\to A_\infty$, we see that $Y\to A_\infty$ is
-a retract of $X\to A_\infty$. Similarly, $\tfcolim_n(Y\to A_n)$ is a retract of
-$\tfcolim_n(X\to A_n)$.
-Now we have the following diagram
-\begin{equation*}
-\begin{tikzcd}
-\tfcolim_n(Y\to A_n) \arrow[r] \arrow[d] & \tfcolim_n(X\to A_n) \arrow[r] & \tfcolim_n(Y\to A_n) \arrow[d]\\
-(Y\to A_\infty) \arrow[r] & (X\to A_\infty) \arrow[u,equals] \arrow[r] & (Y\to A_\infty)
-\end{tikzcd}
-\end{equation*}
-and the two squares commute. Thus, we see that the canonical map 
-$\tfcolim_n(Y\to A_n)\to (Y\to A_\infty)$ is a retract of an equivalence, hence
-it is an equivalence. 
+In this diagram, the downwards maps from the top left and from the top right are equivalences by the universal property of pushouts. The downwards map to the left side to the bottom is an equivalence since sequential colimits preserve pullbacks by \cref{thm:seq_colim_pb}. The map from the bottom to the right side is an equivalence by the assumption that $X$, $Y$, and $S$ are all compact types. Therefore we conclude that the top map is an equivalence, which proves the claim.
 \end{proof}
 
-\begin{conj}
-Consider a function $f:X\to Y$ in which the domain $X$ is sequentially compact. If
-each $\id{f(x)}{f(x')}$ is sequentially compact, then $\im{f}$ is sequentially compact.
-\end{conj}
-
-\begin{conj}
-Is it the case that $\trunc{n}{X}$ is sequentially compact for any sequentially compact
-type $X$? Does any modality preserve sequentially compactness?
-\end{conj}
-
-\begin{conj}
-Let $\sequence{A}{a}$ be a type sequence. If each $A_n$ is sequentially compact, and
-each $a_n$ is surjective, is it the case that $A_\infty$ is sequentially compact? And
-if just $A_0$ is sequentially compact and each $a_n$ is surjective?
-\end{conj}
-
-\begin{comment}
-\begin{conj}
-Suppose $X$ and $Y$ are sequentially compact. Then $X=Y$ is sequentially compact.
-\end{conj}
-
-\begin{proof}[Non-proof]
-Consider the infinite sequence
-\begin{equation*}
-\begin{tikzcd}
-A_0 \arrow[r] & A_1 \arrow[r] & A_2 \arrow[r] & \cdots
-\end{tikzcd}
-\end{equation*}
-Since $\isequiv(f)$ is a mere proposition (and hence sequentially compact) for
-any $f:X\to Y$, we have
-\begin{align*}
-(X=Y)\to A_\infty 
-& \eqvsym
-(\eqv{X}{Y})\to A_\infty \\
-& \eqvsym 
-(\sm{f:X\to Y}\isequiv(f))\to A_\infty \\
-& \eqvsym
-\prd{f:X\to Y} \isequiv(f)\to A_\infty \\
-& \eqvsym
-\prd{f:X\to Y} \tfcolim_n(\isequiv(f)\to A_n)
-\end{align*}
-This reduction is not going to help, because $X\to Y$ does not need to be
-sequentially compact.
-\end{proof}
-
-\begin{conj}
-If $X$ is sequentially compact, then so is $\mathrm{Aut}(X)$.
-\end{conj}
-
-\begin{proof}
-
-\end{proof}
-\end{comment}
-
-\section{Construction of localizations}
-In this section, we assume to have $P,Q:A\to\type$ and $F:\prd{a:A} P(a)\to Q(a)$.
-We will mostly suppress reference to $F$.
+\begin{cor}
+Compact types are closed under joins, suspensions, and wedges. Furthermore, the cofiber of a map between compact types is again compact. In particular, all the spheres and the finite dimensional real and complex projective spaces are compact, and the smash product of compact pointed types is again compact.
+\end{cor}
 
 \begin{defn}
-A type $X$ is said to
-be $F$-local, if for all $a:A$, the map $\psi_{X}(a):\lam{g} g\circ F(a):(Q(a)\to X)\to (P(a)\to X)$
-is a an equivalence. 
+A reflexive graph $\mathcal{A}$ is said to be compact its types of vertices and (the total space of) edges are compact.
 \end{defn}
 
-The idea is to approximate the $F$-localization of $X$ by iterated `quasi $F$-local extensions' of $X$. Those will be maps $l:X\to Y$ with certain extra structure, so when we have iterated extensions, we will be working with type sequences. Thus, we need the following technical lemma.
+\begin{cor}
+The reflexive coequalizer of a compact reflexive graph is again compact.
+\end{cor}
 
-\begin{lem}\label{lem}
-Suppose that $F$ is a family of maps between sequentially compact types. Consider a type sequence
+\begin{proof}
+This follows immediately from \cref{prp:pushout_compact,thm:rcoeq_is_pushout}.
+\end{proof}
+
+\begin{prp}
+Compact types are closed under retracts.
+\end{prp}
+
+\begin{proof}
+Suppose that $Y$ is a retract of a compact type $X$, i.e.~we have $i:Y\to X$ and $r:X\to Y$ such that $r\circ i=\catid{Y}$. 
+Note that for any type $Z$, the type $Z^Y$ is a retract of $Z^X$, since we have the section-retraction pair
 \begin{equation*}
 \begin{tikzcd}
-X_0 \arrow[r,"\alpha_0"] & X_1 \arrow[r,"\alpha_1"] & X_2 \arrow[r,"\alpha_2"] & \cdots
+Z^Y \arrow[r,"\blank\circ r"] & Z^X \arrow[r,"\blank\circ i"] & Z^Y.
 \end{tikzcd}
 \end{equation*}
-and let $f:P(a)\to X_0$. Then we have an equivalence
+It follows that for any type sequence $\mathcal{A}$ we have a section-retraction pair
 \begin{equation*}
-\eqv{\hfib{\psi_{X_\infty}}{\iota_0\circ f}}{\tfcolim_n(\hfib{\psi_{X_n}}{\alpha^n\circ f})}.
+\begin{tikzcd}
+\tfcolim(\mathcal{A}^Y) \arrow[r] \arrow[d] & \tfcolim(\mathcal{A}^X) \arrow[r] \arrow[d] & \tfcolim(\mathcal{A}^Y) \arrow[d]\\
+A_\infty^Y \arrow[r] & A_\infty^X \arrow[r] & A_\infty^Y
+\end{tikzcd}
 \end{equation*}
+of morphisms. Note that the downward morphism in the middle is an equivalence by the assumption that $X$ is compact. Recall from Theorem 4.7.4 of \cite{hottbook} that a retract of an equivalence is again an equivalence, so the claim follows.
+\end{proof}
+
+\section{Localizing at maps between compact types}\label{sec:localization_compact}
+In this section, we assume to have $P,Q:I\to\UU$ and a family of maps $F:\prd{i:I} P(i)\to Q(i)$.
+
+Recall type of diagonal fillers for a commuting square
+\begin{equation*}
+\begin{tikzcd}
+A \arrow[d,swap,"f"] \arrow[r,"i"] & B \arrow[d,"g"] \\
+X \arrow[r,swap,"j"] & Y
+\end{tikzcd}
+\end{equation*}
+with $H:j\circ f\htpy g\circ i$ is defined to be the fiber of the gap map
+\begin{equation*}
+\mathsf{gap}:B^X \to B^A\times_{Y^A} Y^X
+\end{equation*}
+at the point $(i,j,\mathsf{eq\usc{}htpy}(H))$.
+
+\begin{defn}
+A \define{quasi $F$-local extension} of $X$ consists of a map $l:X\to Y$ equipped with a diagonal filler for the commuting square
+\begin{equation*}
+\begin{tikzcd}
+X^{Q_i} \arrow[r,"l\circ\blank"] \arrow[d,swap,"\blank\circ F_i"] & Y^{Q_i} \arrow[d,"\blank\circ F_i"] \\
+X^{P_i} \arrow[r,swap,"l\circ \blank"] & Y^{P_i},
+\end{tikzcd}
+\end{equation*}
+for each $i:I$.
+\end{defn}
+
+\begin{lem}
+Suppose $h:\mathsf{Seq}(\mathcal{A},\mathcal{B})$ is a natural transformation of type sequences equipped with the structure of a diagonal filler for each naturality square
+\begin{equation*}
+\begin{tikzcd}
+A_n \arrow[r,"f_n"] \arrow[d,swap,"h_n"] & A_{n+1} \arrow[d,"h_{n+1}"] \\
+B_n \arrow[r,swap,"g_n"] \arrow[ur,densely dotted] & B_{n+1}.
+\end{tikzcd}
+\end{equation*}
+Then the map $h_\infty : A_\infty\to B_\infty$ is an equivalence. 
 \end{lem}
 
 \begin{proof}
-This follows from a simple calculation using the facts about sequentially compact
-types of the previous section:
+Let us write $j_n:B_n\to A_{n+1}$ for the diagonal fillers, which come equipped with homotopies
 \begin{align*}
-\hfib{\psi_{X_\infty}}{\iota_0\circ f}
-  & \jdeq
-\sm{g:Q(a)\to X_\infty} \id{g\circ F(a)}{\iota_0\circ f} \\
-& \eqvsym \sm{g:\tfcolim_n(Q(a)\to X_n} \id{\xi_{Q(a)}(g)\circ F(a)}{\iota_0\circ f}) \\
-& \eqvsym \tfcolim_n(\sm{g:Q(a)\to X_n} \id{\iota_n\circ g\circ F(a)}{\iota_0\circ f}) \\
-& \eqvsym \tfcolim_n(\sm{g:Q(a)\to X_n} \prd{u:P(a)}\id{\iota_n(g(F(a,u)))}{\iota_0(f(u))} \\
-& \eqvsym \tfcolim_n(\sm{g:Q(a)\to X_n} \prd{u:P(a)}\tfcolim_m(\id{\iota_{n+m}(g(F(a,u)))}{\iota_{n+m}(\alpha^{n+m}(f(u)))}) \\
-& \eqvsym \tfcolim_n(\sm{g:Q(a)\to X_n} \tfcolim_m(\prd{u:P(a)}\id{\iota_{n+m}(g(F(a,u)))}{\iota_{n+m}(\alpha^{n+m}(f(u)))}) \\
-& \eqvsym \tfcolim_n(\sm{g:Q(a)\to X_n} \id{g\circ F(a)}{\alpha^n\circ f}) \\
-& \jdeq \tfcolim_n(\hfib{\psi_{X_n}}{\alpha^n\circ f}).\qedhere
+J_n & : f_n\htpy j_n\circ h_n \\
+K_n & : h_{n+1}\circ j_n \htpy g_n \\
+L_n & : \ct{(h_{n+1}\cdot J_n)}{(K_n\cdot h_n)} \htpy H_n
 \end{align*}
-\end{proof}
+Note that $j$ is a natural transformation from $\mathcal{B}$ to the shifted sequence $\mathsf{shift}(\mathcal{A})$, with the homotopies $\ct{(f_{n+1}\cdot K_n)}{(J_{n+1}\cdot g_n)}: f_{n+1}\circ j_n \htpy j_{n+1}\circ g_n$ filling the naturality squares.
 
-\begin{comment}
-\begin{rmk}
-We have an equivalence
+We claim that the composite $j\circ h$ is just the natural transformation $f:\mathcal{A}\to \mathsf{shift}(\mathcal{A})$. Indeed, we have the homotopy $J_n : j_n\circ h_n\htpy f_n$. Moreover, the type of $j_{n+1}\cdot L_n$
+\begin{equation*}
+\ct{(j_{n+1}\cdot h_{n+1}\cdot J_n)}{(j_{n+1}\cdot K_n\cdot h_n)} \htpy j_{n+1}\cdot H_n
+\end{equation*}
+is equivalent to the type of homotopies
 \begin{align*}
-\hfib{\psi_{X}(a)}{f}
-& = \sm{g:Q(a)\to X} g\circ F(a) = f
+& \ct{(J_{n+1}\cdot f_n)}{(j_{n+1}\cdot h_{n+1} \cdot J_n)}{(j_{n+1}\cdot K_n\cdot h_n)}{(j_{n+1}\cdot H_n)} \\
+& \qquad\qquad \htpy \ct{\mathsf{htpy\usc{}refl}_{(f_{n+1}\circ f_n)}}{(J_{n+1}\cdot f_n)},
 \end{align*}
-This is contractible if and only if there is a term
-\begin{align*}
-j(f) & : Q(a)\to X \\
-J(f) & : j(f)\circ F(a) = f \\
-k(f) & : \prd{g:Q(a)\to X}{H:g\circ F(a)=f} g = j(f) \\
-K(f) & : \prd{g:Q(a)\to X}{H:g\circ F(a)=f} \trans{k(f)}{H} = J(f).
-\end{align*}
-\end{rmk}
-\end{comment}
-
-\begin{defn}
-A \define{quasi $F$-local extension} of $X$ consists of a map $l:X\to Y$ and terms
-\begin{align*}
-\alpha & : \prd{a:A}{f:P(a)\to X}\hfib{\psi_Y}{l\circ f} \\
-\beta & : \prd{a:A}{f:P(a)\to X}{(j,H):\hfib{\psi_X}{f}}\pairr{l\circ j,\apfunc{l}\circ H}=\alpha(f).
-\end{align*}
-\end{defn}
-
-\begin{rmk}
-A quasi-local extension $l:X\to Y$ is therefore a map for which the map defined by the universal property
+filling the diagram
 \begin{equation*}
 \begin{tikzcd}
-\hfib{\psi_X}{f} \arrow[drr,bend left=15] \arrow[ddr, bend right=15,swap,"\proj1(\blank)\circ l"] \arrow[dr,densely dotted,"u"] \\
-& \hfib{\psi_Y}{l\circ f} \arrow[r] \arrow[d] & \unit \arrow[d,"l\circ f"] \\
-& (Q(a)\to Y) \arrow[r,swap,"\psi_Y"] & (P(a)\to Y)
+A_n \arrow[rr,"f_n"] \arrow[dr,"h_n"] \arrow[dd,swap,"f_n"] &[-1em] & A_{n+1} \arrow[dd,swap,"f_{n+1}" very near start] \arrow[dr,"h_{n+1}"] &[-1em] \\
+& B_n \arrow[dl,swap,"j_n"] \arrow[rr,crossing over,"g_n" near start] & & B_{n+1} \arrow[dl,"j_{n+1}"] \\[1em]
+A_{n+1} \arrow[urrr,crossing over,"h_{n+1}"] \arrow[rr,swap,"f_{n+1}"] & \phantom{A_{n+2}} & A_{n+2} & \phantom{A_{n+2}}
 \end{tikzcd}
 \end{equation*}
-factors through the unit type.
-\end{rmk}
+Therefore we obtain the coherence of the naturality squares needed to conclude that $f=j\circ h$ as natural transformations.
 
-\begin{thm}
-Suppose $F$ is a family of maps between sequentially compact types, and let
+Likewise, the composite $\mathsf{shift}(h) \circ j$ is just the natural transformation $g:\mathcal{B}\to \mathsf{shift}(\mathcal{B})$. Therefore we obtain a commuting diagram
+\begin{equation*}
+\begin{tikzcd}[column sep=huge,row sep=large]
+\mathsf{colim}(\mathcal{A}) \arrow[d,swap,"\mathsf{colim}(h)"] \arrow[r,"\mathsf{colim}(f)"] & \mathsf{colim}(\mathsf{shift}(\mathcal{A})) \arrow[d,"\mathsf{colim}(\mathsf{shift}(h))"] \\
+\mathsf{colim}(\mathcal{B}) \arrow[r,swap,"\mathsf{colim}(g)"] \arrow[ur,"\mathsf{colim}(j)"] & \mathsf{colim}(\mathsf{shift}(\mathcal{B}))
+\end{tikzcd}
+\end{equation*}
+Since both $\tfcolim(f)$ and $\tfcolim(g)$ are equivalences by \cref{lem:colim_shift}, it follows by the 6-for-2 property of equivalences (see Exercise 4.5 of \cite{hottbook}), that the remaining maps are equivalences. In particular $\tfcolim(h)$ is an equivalence. 
+\end{proof}
+
+\begin{prp}\label{prp:colim_local}
+Suppose $F$ is a family of maps between compact types, and let
 \begin{equation*}
 \begin{tikzcd}
 X_0 \arrow[r,"l"] & X_1 \arrow[r,"l"] & X_2 \arrow[r,"l"] & \cdots
 \end{tikzcd}
 \end{equation*}
 be a sequence of types in which each $X_{n+1}$ is a quasi $F$-local extension of $X_n$. Then the sequential colimit $X_\infty$ is $F$-local.
-\end{thm}
+\end{prp}
 
 \begin{proof}
-We have already seen that there is an equivalence of type
+We have a natural transformation $F_i^\ast : \mathsf{Seq}(\mathcal{X}^{Q_i},\mathcal{X}^{P_i})$ for which each naturality square comes equipped with a diagonal filler
 \begin{equation*}
-\eqv{\hfib{\psi_{X_\infty}}{\iota_0\circ f}}{\tfcolim_n(\hfib{\psi_{X_n}}{l^n\circ f})}.
+\begin{tikzcd}
+X_0^{Q_i} \arrow[d,swap,"F_i^\ast"] \arrow[r] & X_1^{Q_i} \arrow[d,swap,"F_i^\ast"] \arrow[r] & X_2^{Q_i} \arrow[d,swap,"F_i^\ast"] \arrow[r] & \cdots \\
+X_0^{P_i} \arrow[r] \arrow[ur,densely dotted] & X_1^{P_i} \arrow[r] \arrow[ur,densely dotted] & X_2^{P_i} \arrow[r] \arrow[ur,densely dotted] & \cdots
+\end{tikzcd}
 \end{equation*}
-for any $f:P(a)\to X_0$. Since the maps
+by the assumption that each $l_n:X_n\to X_{n+1}$ is a quasi $F$-local extension. Therefore $\mathsf{colim}(F_i^\ast)$ is an equivalence. Note that we have the commuting square
 \begin{equation*}
-\hfib{\psi_{X_n}}{l^n\circ f}\to \hfib{\psi_{X_{n+1}}}{l^{n+1}\circ f}
+\begin{tikzcd}
+\mathsf{colim}(X_n^{Q_i}) \arrow[r] \arrow[d,swap,"\mathsf{colim}(F_i^\ast)"] & X_{\infty}^{Q_i} \arrow[d,"F_i^\ast"] \\
+\mathsf{colim}(X_n^{P_i}) \arrow[r] & X_\infty^{P_i}
+\end{tikzcd}
 \end{equation*}
-all factor through the unit type, the colimit is contractible. It follows (by generalization), that
-\begin{equation*}
-\hfib{\psi_{X_\infty}}{\iota_n\circ f}
-\end{equation*}
-is contractible for any $f:P(a)\to X_n$. Now, by sequentially compactness of $P(a)$, it follows that $X_\infty$ is $F$-local.
+in which the top and bottom maps are equivalences by the assumption that $P_i$ and $Q_i$ are compact. Therefore we conclude that $F_i^\ast : X_\infty^{Q_i}\to X_\infty^{P_i}$ is an equivalence. It follows that $X_\infty$ is $F$-local.
 \end{proof}
 
-Note that the initial quasi $F$-local extension of $X$ can be specified as a higher inductive type (with a $2$-path constructor).
-
-\begin{defn}
-For any type $X$, we define the \emph{initial quasi $F$-local extension of $X$} as
-the higher inductive type $L(X)$ with constructors
+Our goal is now to construct the initial quasi $F$-local extension of a type $X$, and use it to show that the subuniverse of $F$-local types is reflective. For any $i:I$, we have the maps
 \begin{align*}
-l & : X\to L(X) \\
-j & : (P(a)\to X) \to (Q(a)\to L(X)) \\
-J & : \prd{f:P(a)\to X} j(f)\circ F(a) = l\circ f \\
-k & : \prd{f:P(a)\to X}{g:Q(a)\to X}{H:g\circ F(a)=f} l\circ g = j(f) \\
-K & : \prd{f:P(a)\to X}{g:Q(a)\to X}{H:g\circ F(a)=f} \trans{k(f,g,H)}{l\circ H} = J(f).
+F_i : P_i \to Q_i \\
+F_i^\ast : X^{Q_i} \to X^{P_i}.
 \end{align*}
-\end{defn}
+In the following characterization of quasi $F$-local extensions we use the pushout-product $F_i^\ast\square F_i$, which is defined as follows
+\begin{equation*}
+\begin{tikzcd}
+X^{Q_i}\times P_i \arrow[r] \arrow[d] & X^{Q_i}\times Q_i \arrow[ddr,bend left=15] \arrow[d] \\
+X^{P_i}\times P_i \arrow[drr,bend right=15] \arrow[r] & \big(X^{P_i} \times P_i\big)\sqcup^{\big(X^{Q_i}\times P_i\big)}\big(X^{Q_i}\times Q_i\big) \arrow[dr,densely dotted,swap,"F_i^\ast\square F_i"] \\
+& & X^{P_i}\times Q_i
+\end{tikzcd}
+\end{equation*}
+by the universal property of pushouts. Also note that the outer square in the diagram
+\begin{equation*}
+\begin{tikzcd}
+X^{Q_i}\times P_i \arrow[r] \arrow[d] & X^{Q_i}\times Q_i \arrow[ddr,bend left=15,"\mathsf{ev}"] \arrow[d] &[2em] \\
+X^{P_i}\times P_i \arrow[drr,bend right=15,swap,"\mathsf{ev}"] \arrow[r] & \big(X^{P_i} \times P_i\big)\sqcup^{\big(X^{Q_i}\times P_i\big)}\big(X^{Q_i}\times Q_i\big) \arrow[dr,densely dotted,swap,"\varepsilon_i"] \\
+& & X
+\end{tikzcd}
+\end{equation*}
+commutes, so we get a map $\varepsilon_i$ as indicated.
 
-\begin{comment}
-\begin{lem}
-Let $X$ be a type. For any $f:P(a)\to X$, the homotopy fiber 
-$\hfib{\psi_{L(X)}(a)}{l\circ f}$ is equivalent to the higher inductive type 
-with type constructors
-\begin{align*}
-i & : \hfib{\psi_X(a)}{f}\to\hfib{\psi_{L(X)}(a)}{l\circ f} \\
-c & : \hfib{\psi_{L(X)}(a)}{l\circ f} \\
-p & : \prd{h:\hfib{\psi_X(a)}{f}}\id{i(h)}{c}.
-\end{align*}
+\begin{lem}\label{lem:qflocal_characterize}
+For any type $l:X\to Y$, the type of $I$-indexed families of diagonal fillers for the squares
+\begin{equation*}
+\begin{tikzcd}
+X^{Q_i} \arrow[r,"l\circ\blank"] \arrow[d,swap,"\blank\circ F_i"] & Y^{Q_i} \arrow[d,"\blank\circ F_i"] \\
+X^{P_i} \arrow[r,swap,"l\circ \blank"] & Y^{P_i}
+\end{tikzcd}
+\end{equation*}
+is equivalent to the type of morphisms $j:X^{P_i}\times Q_i\to Y$ equipped with a homotopy witnessing that the square
+\begin{equation*}
+\begin{tikzcd}[column sep=large]
+\sm{i:I}\Big(\big(X^{P_i} \times P_i\big)\sqcup^{\big(X^{Q_i}\times P_i\big)}\big(X^{Q_i}\times Q_i\big)\Big) \arrow[r,"F_i^\ast\square F_i"] \arrow[d,swap,"\lam{(i,t)}\varepsilon_i(t)"] & \sm{i:I} X^{P_i}\times Q_i \arrow[d] \\
+X \arrow[r] & Y
+\end{tikzcd}
+\end{equation*}
+commutes.
 \end{lem}
 
-\begin{proof}
-We define $c\defeq\pairr{j(f),J(f)}$ and $p\defeq\pairr{k(f),K(f)}$.
-\end{proof}
-
-\begin{cor}\label{cor}
-For any type $X$ and $f:P(a)\to X$, we have
-\begin{equation*}
-\iscontr(\hfib{\psi_{L(X)}(a)}{l\circ f}).
-\end{equation*}
-\end{cor}
-
-\begin{proof}
-Let $X$ be a type and let $f:P(a)\to X$. Then $\hfib{\psi_{L(X)}(a)}{l\circ f}$
-fits in the pushout diagram
-\begin{equation*}
-\begin{tikzcd}
-\hfib{\psi_X(a)}{f} \arrow[r] \arrow[d,equals] & \unit \arrow[d] \\
-\hfib{\psi_X(a)}{f} \arrow[r] & \hfib{\psi_{L(X)}(a)}{l\circ f}
-\end{tikzcd}
-\end{equation*}
-so the arrow going down on the right is an equivalence.
-\end{proof}
-\end{comment}
-
-\begin{comment}
 \begin{defn}
-For any type $X$, we define the \emph{one-step localization of $X$ at $F$} as
-the higher inductive type $L(X)$ with constructors
-\begin{align*}
-l & : X\to L(X) \\
-i,j & : (P(a)\to X) \to (Q(a)\to L(X)) \\
-p & : \prd{g:Q(a)\to X}{q:Q(a)} \id{i(g\circ F(a),q)}{l(g(q))} \\
-q & : \prd{f:P(a)\to X}{p:P(a)} \id{j(f,F(a,p))}{l(f(p))}
-\end{align*} 
-\end{defn}
-
-\begin{lem}
-Let $X$ be a type and consider the short sequence
+For any type $X$, we define the initial quasi $F$-local extension $l:X\to QL_FX$ of $X$ to be the pushout
 \begin{equation*}
-\begin{tikzcd}
-X \arrow[r] & L(X) \arrow[r] & L^2(X).
+\begin{tikzcd}[column sep=large]
+\sm{i:I}\Big(\big(X^{P_i} \times P_i\big)\sqcup^{\big(X^{Q_i}\times P_i\big)}\big(X^{Q_i}\times Q_i\big)\Big) \arrow[r,"F_i^\ast\square F_i"] \arrow[d,swap,"\lam{(i,t)}\varepsilon_i(t)"] & \sm{i:I} X^{P_i}\times Q_i \arrow[d] \\
+X \arrow[r,swap,"l"] & QL_FX
 \end{tikzcd}
 \end{equation*}
-There is a term of type
-\begin{equation*}
-\prd{f:P(a)\to X}{q:Q(a)} \id[L^2(X)]{l(k(f,q))}{k(l\circ f,q)}
-\end{equation*}
-for both $k\jdeq i$ and $k\jdeq j$.
-\end{lem}
-
-\begin{proof}
-We first prove the assertion for $k\jdeq i$. Let $f:P(a)\to X$ and $q:Q(a)$.
-Then we have to find an identification $l(i(f,q)) = i(l\circ f,q)$.
-\begin{align*}
-l\circ i(f) & = i(i(f)\circ F(a)) \\
-& = \cdots \\
-& = l\circ j(f) \\
-& = i(j(f)\circ F(a))\\
-& = i( l\circ f)
-\end{align*}
-\end{proof}
-\end{comment}
-
-\begin{defn}
-Consider the diagram
-\begin{equation*}
-\begin{tikzcd}
-X \arrow[r] & L(X) \arrow[r] & L^2(X) \arrow[r] & \cdots
-\end{tikzcd}
-\end{equation*}
-When the situation demands it, we annotate the constructors of $L^n(X)$ with
-the number $n$. We define the colimit of the above diagram to be $L^\infty(X)$. 
 \end{defn}
 
 \begin{rmk}
-Since by definition, $l:X\to L(X)$ is a quasi $F$-local extension of $X$, it follows that $L^\infty(X)$ is $F$-local.
+The initial quasi $F$-local extension of a type $X$ is initial by the universal property of the pushout and the characterization of \cref{lem:qflocal_characterize}.
 \end{rmk}
 
-\begin{comment}
-\begin{lem}
-Let $X$ be a type and let $f:P(a)\to X$. Then we have an equivalence
-\begin{equation*}
-\eqv{\hfib{\psi_{L^\infty(X)}}{\iota_0\circ f}}{\tfcolim_n(\hfib{\psi_{L^n(X)}}{l^n\circ f})}.
-\end{equation*}
-\end{lem}
-
-\begin{proof}
-This follows from a simple calculation using the facts about sequentially compact
-types of the previous section:
-\begin{align*}
-\hfib{\psi_{L^\infty(X)}}{\iota_0\circ f}
-  & \jdeq
-\sm{g:Q(a)\to L^\infty(X)} \id{g\circ F(a)}{\iota_0\circ f} \\
-& \eqvsym \sm{g:\tfcolim_n(Q(a)\to L^n(X)} \id{\xi_{Q(a)}(g)\circ F(a)}{\iota_0\circ f}) \\
-& \eqvsym \tfcolim_n(\sm{g:Q(a)\to L^n(X)} \id{\iota_n\circ g\circ F(a)}{\iota_0\circ f}) \\
-& \eqvsym \tfcolim_n(\sm{g:Q(a)\to L^n(X)} \prd{u:P(a)}\id{\iota_n(g(F(a,u)))}{\iota_0(f(u))} \\
-& \eqvsym \tfcolim_n(\sm{g:Q(a)\to L^n(X)} \prd{u:P(a)}\tfcolim_m(\id{\iota_{n+m}(g(F(a,u)))}{\iota_{n+m}(l^{n+m}(f(u)))}) \\
-& \eqvsym \tfcolim_n(\sm{g:Q(a)\to L^n(X)} \tfcolim_m(\prd{u:P(a)}\id{\iota_{n+m}(g(F(a,u)))}{\iota_{n+m}(l^{n+m}(f(u)))}) \\
-& \eqvsym \tfcolim_n(\sm{g:Q(a)\to L^n(X)} \id{g\circ F(a)}{l^n\circ f}) \\
-& \jdeq \tfcolim_n(\hfib{\psi_{L^n(X)}}{l^n\circ f}).\qedhere
-\end{align*}
-\end{proof}
-\end{comment}
-
-\begin{comment}
 \begin{cor}
-For any $m:\nat$ and $f:P(a)\to L^m(X)$, we have an equivalence
-\begin{equation*}
-\eqv{\hfib{\psi_{L^\infty(X)}}{\iota_n\circ f}}{\tfcolim_{n\geq m}(\hfib{\psi_{L^n(X)}}{l^{n-m}\circ f})}.
-\end{equation*}
+If $X$ is $F$-local, then $l:X\to QL_F X$ is an equivalence.
 \end{cor}
-\end{comment}
-
-\begin{comment}
-\begin{lem}
-For any type $X$, and any $F:\prd{a:A}P(a)\to Q(a)$ where each $P(a)$ and $Q(a)$
-is sequentially compact, the type $L^\infty(X)$ is $F$-local.
-\end{lem}
 
 \begin{proof}
-We have to show that
-\begin{equation*}
-\prd{a:A}{f:P(a)\to L^\infty(X)}\iscontr(\hfib{\psi_{L^\infty(X)}(a)}{f})
-\end{equation*}
-By our assumption of sequentially compactness, this type is equivalent to
-\begin{equation*}
-\prd{a:A}{f:\tfcolim(P(a)\to L^n(X))}\iscontr(\hfib{\psi_{L^\infty(X)}(a)}{\xi_A(f)})
-\end{equation*}
-We prove this by induction on $\tfcolim(P(a)\to L^n(X))$. Since we are proving
-a mere proposition, it suffices to perform the induction argument on the point
-constructors of $\tfcolim(P(a)\to L^n(X))$ only. So, we need to find a term of
-type
-\begin{equation*}
-\prd{a:A}{f:P(a)\to L^n(X)}\iscontr(\hfib{\psi_{L^\infty(X)}(a)}{\iota_n\circ f})
-\end{equation*}
-for all $n:\nat$. Since we show this fact for all types $X$, it suffices to
-show that
-\begin{equation*}
-\prd{a:A}{f:P(a)\to X}\iscontr(\hfib{\psi_{L^\infty(X)}(a)}{\iota_0\circ f})
-\end{equation*}
-By \autoref{lem}, this type is equivalent to
-\begin{equation*}
-\prd{a:A}{f:P(a)\to X}\iscontr(\tfcolim_{n}(\hfib{\psi_{L^n(X)}(a)}{l^{n}\circ f}))
-\end{equation*}
-The result now follows from \autoref{cor}.
+If $X$ is $F$-local, then each $F_i^\ast$ is an equivalence. It follows that the pushout-product $F_i^\ast\square F_i$ is an equivalence. Since pushouts of equivalences are equivalences, the claim follows.
 \end{proof}
-\end{comment}
-
-\begin{comment}
-\begin{proof}
-To show that the function $\varphi\defeq \lam{g} g\circ F(a) : (Q(a)\to L^\infty(X))\to
-(P(a)\to L^\infty(X))$ is an equivalence, we show that it has both a left 
-inverse $\psi_l$ and a right inverse $\psi_r$. Note that we have the equivalence
-\begin{align*}
-(P(a)\to L^\infty(X))\to (Q(a)\to L^\infty(X))
-  & \eqvsym
-\tfcolim_n(P(a)\to L^n(X)) \to (Q(a)\to L^\infty(X))
-\end{align*}
-so we may construct $\psi_l$ and $\psi_r$ by induction on $n$. 
-To define the functions $\psi_l$ and $\psi_r$, note that it suffices
-to construct functions of type
-\begin{equation*}
-\psi_k^n: (P(a)\to L^n(X))\to (Q(a)\to L^{n+1}(X))
-\end{equation*}
-for each $n:\nat$ and $k\jdeq l,r$, and a term of type
-\begin{equation*}
-\prd{f:P(a)\to L^n(X)}{q:Q(a)} \iota_{n+1}(\psi_{k}^n(f,q))=\iota_{n+2}(\psi_{k}^{n+1}(l\circ f,q))
-\end{equation*}
-
-and a term of type
-\begin{equation*}
-\prd{f:P(a)\to L^n(X)}{q:Q(a)} l(\psi_{k}^n(f,q))=\psi_{k}^{n+1}(l\circ f,q)
-\end{equation*}
-We first define the left inverse $\psi_l$.  
-\end{proof}
-\end{comment}
-
-\begin{comment}
-\begin{proof}
-We have to show that
-\begin{equation*}
-\prd{a:A}{f:P(a)\to L^\infty(X)}\iscontr(\sm{g:Q(a)\to L^\infty(X)} \id{g\circ F(a)}{f})
-\end{equation*}
-By our assumption of sequentially compactness, this type is equivalent to
-\begin{equation*}
-\prd{a:A}{f:\tfcolim(P(a)\to L^n(X))}\iscontr(\sm{g:Q(a)\to L^\infty(X)} \id{g\circ F(a)}{\xi_A(f)})
-\end{equation*}
-We prove this by induction on $\tfcolim(P(a)\to L^n(X))$. Since we are proving
-a mere proposition, it suffices to perform the induction argument on the point
-constructors of $\tfcolim(P(a)\to L^n(X))$ only. So, we need to find a term of
-type
-\begin{equation*}
-\prd{a:A}{f:P(a)\to L^n(X)}\iscontr(\sm{g:Q(a)\to L^\infty(X)} \id{g\circ F(a)}{i_n\circ f})
-\end{equation*}
-Let $a:A$ and $f:P(a)\to L^n(X)$. Then we have the equivalences
-\begin{align*}
-& \sm{g:Q(a)\to L^\infty(X)} \id{g\circ F(a)}{\iota_n\circ f} \\
-& \quad \eqvsym \sm{g:\tfcolim_{m\geq n}(Q(a)\to L^m(X)} \id{\xi_{Q(a)}(g)\circ F(a)}{\iota_n\circ f}) \\
-& \quad \eqvsym \tfcolim_{m\geq n}(\sm{g:Q(a)\to L^m(X)} \id{i_m\circ g\circ F(a)}{\iota_n\circ f}) \\
-& \quad \eqvsym \tfcolim_{m\geq n}(\sm{g:Q(a)\to L^m(X)} \prd{u:P(a)}\id{i_m(g(F(a,u)))}{\iota_n(f(u))} \\
-& \quad \eqvsym \tfcolim_{m\geq n}(\sm{g:Q(a)\to L^m(X)} \prd{u:P(a)}\tfcolim_k(\id{i_{m+k}(g(F(a,u)))}{\iota_{m+k}(l^{k+m-n}(f(u)))}) \\
-& \quad \eqvsym \tfcolim_{m\geq n}(\sm{g:Q(a)\to L^m(X)} \tfcolim_k(\prd{u:P(a)}\id{i_{m+k}(g(F(a,u)))}{\iota_{m+k}(l^{k+m-n}(f(u)))}) \\
-& \quad \eqvsym \tfcolim_{m\geq n}(\sm{g:Q(a)\to L^m(X)} \id{g\circ F(a)}{l^{m-n}\circ f}) \\
-& \quad \eqvsym \tfcolim_{m\geq n+1}(\sm{g:Q(a)\to L^m(X)} \id{g\circ F(a)}{l^{m-n}\circ f}) %\\
-%& \quad \eqvsym \tfcolim_{m\geq n+1}(\sm{g:Q(a)\to L^m(X)} \id{l\circ g\circ F(a)}{l\circ l^{m-n}\circ f}) \\
-%& \quad \eqvsym \tfcolim_{m\geq n+1}(\sm{g:Q(a)\to L^m(X)} \id{i(l\circ g)}{l\circ l^{m-n}\circ f}) \\
-\end{align*}
-Therefore, it suffices to show that
-\begin{equation*}
-\iscontr\big(\tfcolim_{m\geq n}(\sm{g:Q(a)\to L^m(X)} \id{g\circ F(a)}{l^{m-n}\circ f})\big).
-\end{equation*}
-We define the center of contraction to be
-\begin{equation*}
-c\defeq \iota_{n+1}(j(f),q).
-\end{equation*}
-It remains to show that every $d:\tfcolim_{m\geq n+1}(\sm{g:Q(a)\to L^m(X)} \id{g\circ F(a)}{l^{m-n}\circ f})$ is
-equal to $c$. Denote the graph $\{\sm{g:Q(a)\to L^m(X)} \id{g\circ F(a)}{l^{m-n}\circ f}\}_{m\geq n+1}$ by
-$\Gamma$. Then our goal is equivalent to finding a $\Gamma$-structure of the type
-family $\id{d}{c}$ over $\tfcolim(\Gamma)$. 
-\begin{align*}
-\Gamma\mathrm{-struct}(\lam{d}\id{d}{c}) 
-& \jdeq \sm{\pts{d}:\prd{i:\pts{\Gamma}} \iota(i)=c}\prd{i,j:\pts{\Gamma}}{e:\edg{\Gamma}(i,j)}\dpath{}{\kappa(e)}{\pts{d}(i)}{\pts{d}(j)}
-\end{align*}
-For $m\geq n+1$, let $g:Q(a)\to L^m(X)$ and $h:\id{g\circ F(a)}{l^{m-n}\circ f}$.
-
-This is done by induction on $d$. So we first have to find a term of type
-\begin{equation*}
-\prd{m\geq n+1}{g:Q(a)\to L^m(X)}{h:\id{g\circ F(a)}{l^{m-n}\circ f}} \id{\iota_m(g,h)}{c}.
-\end{equation*}
-for $m\geq n+1$, let $g:Q(a)\to L^m(X)$ and $h:\id{g\circ F(a)}{l^{m-n}\circ f}$. Then we have
-\begin{align*}
-\iota_m(g,h) & = \iota_{m+1}(l\circ g,\apfunc{l}\circ h) \\
-& = \iota_{m+1}(i(l\circ g\circ F(a)),\trans{\opp{p}}{(\apfunc{l}\circ h)}) \\
-& = \iota_{m+1}(i(l\circ l^{m-n}\circ f),\trans{\apfunc{i}(\apfunc{l}(h))}{\trans{\opp{p}}{(\apfunc{l}\circ h)}}) \\
-& \jdeq \iota_{m+1}(i(l^{m-n}\circ l\circ f),\blank) \\
-& = \iota_{m+1}(i(l^{m-n}\circ j(f)\circ F(a)),\blank) \\
-& = \iota_{m+1}(l^{m-n}\circ j(f),\blank) \\
-& = \iota_{n+1}(j(f),q).
-\end{align*}
-This gives a term $\pts{d}(g,h):\pairr{g,h}=c$.
-It remains to show that
-\begin{equation*}
-\prd{m\geq n+1}{g:Q(a)\to L^m(X)}{h:\id{g\circ F(a)}{l^{m-n}\circ f}} \dpath{}{\kappa}{\pts{d}(g,h)}{\pts{d}(l\circ g,\apfunc{l}\circ h)}.
-\end{equation*}
-This is done by recognizing that the diagram commutes.
-\begin{equation*}
-\begin{tikzcd}
-\iota_m(g,h) \arrow[rr,equals] \arrow[d,equals] & & \iota_{m+1}(l\circ g,\apfunc{l}\circ h) \arrow[d,equals] \\
-\iota_{m+1}(l\circ g,\apfunc{l}\circ h) \arrow[rr,equals] \arrow[d,equals] & & \iota_{m+2}(l^2\circ g,\apfunc{l^2}\circ h) \arrow[d,equals] \\
-\iota_{m+1}(i(l^{1+m-n}\circ f),\nameless) \arrow[rr,equals] \arrow[d,equals] & & \iota_{m+1}(i(l^{2+m-n}\circ f),\nameless) \arrow[d,equals] \\
-\iota_{m+1}(i(l^{m-n}\circ j(f)\circ F(a)),\nameless) \arrow[rr,equals] \arrow[d,equals] & & \iota_{m+1}(i(l^{1+m-n}\circ j(f)\circ F(a)),\nameless) \arrow[d,equals] \\
-\iota_{m+1}(l^{m-n}\circ j(f),\nameless) \arrow[rr,equals] \arrow[dr,equals] & & \iota_{m+1}(l^{m-n}\circ j(f),\nameless) \arrow[dl,equals] \\
-& \iota_{n+1}(j(f),q)
-\end{tikzcd}
-\end{equation*}
-\end{proof}
-\end{comment}
 
 \begin{thm}
 For any type $X$ and any family $F:\prd{a:A}P(a)\to Q(a)$ of maps between
-sequentially compact types, $L_F^\infty(X)$ is the localization of $X$ at $F$.
+compact types, the subuniverse of $F$-local types is reflective.
 \end{thm}
 
 \begin{proof}
+We define the localization $\eta:X\to LX$ as the sequential colimit
+\begin{equation*}
+\begin{tikzcd}
+X \arrow[r] & QL_F X \arrow[r] & QL_F^2 X \arrow[r] & \cdots
+\end{tikzcd}
+\end{equation*}
+Since each $l:QL_F^n X\to QL_F^{n+1}X$ has the structure of a quasi $F$-local extension, it follows by \cref{prp:colim_local} that $LX$ is $F$-local. It remains to show that for any $F$-local type $Y$, the precomposition map
+\begin{equation*}
+\eta^\ast : (LX\to Y)\to (X\to Y)
+\end{equation*}
+is an equivalence.
+
 We have to show that for any function $h:X\to Y$ into an
 $F$-local type $Y$, there is a unique function $\tilde{h}: L^\infty(X)\to
 Y$ such that the triangle
@@ -663,4 +425,8 @@ The above universal property and the fact that $L^\infty(X)$ is $F$-local
 together give that $L^\infty(X)$ is the localization of $X$ at $F$.
 \end{proof}
 
-\section{Inductive types specified by families of sequentially compact types}
+\begin{cor}
+For any family $N:I\to \UU$ of compact types, the subuniverse of $N$-null types is a modality.
+\end{cor}
+
+\section{Inductive types specified by families of compact types}
