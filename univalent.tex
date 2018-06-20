@@ -20,6 +20,7 @@ is a fiberwise equivalence. Our main reference \cite{hottbook} does not present 
 
 \section{Notation and preliminary results}
 
+\marginpar{Make sure $\mathsf{ev\usc{}pair}$ is introduced, and shown to be an equivalence}
 We work in Martin-L\"of dependent type theory with $\Pi$-types, $\Sigma$-types and cartesian products, coproducts $A+B$ equipped with $\inl:A\to A+B$ and $\inr:B\to A+B$ for any two types $A$ and $B$, an empty type $\emptyt$, a unit type $\unit$ equipped with $\ttt:\unit$, a type $\bool$ of booleans equipped with $\btrue,\bfalse:\bool$, a type $\N$ of natural numbers equipped with $0:\N$ and $\mathsf{succ}:\N\to\N$, and identity types. 
 
 \begin{rmk}
@@ -612,11 +613,11 @@ given by $\lam{(f,g)}{x}(f(x),g(x))$ is an equivalence.
 
 \subsection{Composing with equivalences}
 
-We show in this section that a map $f:A\to B$ is an equivalence if and only if for any type family $P$ over $B$, the precomposition map\marginpar{I do not find this\\ result in \cite{hottbook}}
+We show in this section that a map $f:A\to B$ is an equivalence if and only if for any type family $P$ over $B$, the precomposition map\marginpar{I do not find this result in \cite{hottbook}}
 \begin{equation*}
 \blank\circ f: \Big(\prd{y:B}P(y)\Big)\to\Big(\prd{x:A}P(f(x))\Big)
 \end{equation*}
-is an equivalence. In the proof we use the notion of \emph{path-split} maps, which were introduced by Rijke, Shulman, and Spitters in \cite{RSS}.
+is an equivalence. In the proof we use the notion of \emph{path-split} maps, which were introduced by Rijke, Shulman, and Spitters in \cite{RijkeShulmanSpitters}.
 
 \begin{defn}
 We say that a map $f:A\to B$ is \define{path-split}\index{path-split|textbf} if $f$ has a section, and for each $x,y:A$ the map
@@ -1285,7 +1286,7 @@ is a pullback square, is equivalent to the type of fiberwise equivalences
 
 The following theorem is also called the \define{pasting property} of pullbacks.\index{pasting property!of pullbacks|textit}
 
-\begin{thm}\label{thm:pb_pasting}
+\begin{prp}\label{thm:pb_pasting}
 Consider a commuting diagram of the form
 \begin{equation*}
 \begin{tikzcd}
@@ -1304,7 +1305,7 @@ witnessing that the outer rectangle commutes. Furthermore, suppose that the squa
 \item The outer rectangle is a pullback square.
 \end{enumerate}%
 \end{samepage}%
-\end{thm}
+\end{prp}
 
 \begin{proof}
 The commutativity of the two squares induces fiberwise transformations
@@ -1326,6 +1327,63 @@ is a fiberwise equivalence if and only if the fiberwise transformation
 \end{equation*}
 is a fiberwise equivalence. Now the claim follows from one more application of \cref{cor:pb_fibequiv}.
 \end{proof}
+
+We will often apply the pasting property of pullbacks when we have a commuting cube under consideration. The data of a commuting cube is specified as follows.
+
+\begin{defn}\label{defn:cube}
+A \define{commuting cube}\label{defn:cube}\index{commuting cube|textbf}
+\begin{equation*}
+\begin{tikzcd}
+& A_{111} \arrow[dl] \arrow[dr] \arrow[d] \\
+A_{110} \arrow[d] & A_{101} \arrow[dl] \arrow[dr] & A_{011} \arrow[dl,crossing over] \arrow[d] \\
+A_{100} \arrow[dr] & A_{010} \arrow[d] \arrow[from=ul,crossing over] & A_{001} \arrow[dl] \\
+& A_{000},
+\end{tikzcd}
+\end{equation*}
+consists of 
+\begin{enumerate}
+\item types
+\begin{equation*}
+A_{111},A_{110},A_{101},A_{011},A_{100},A_{010},A_{001},A_{000},
+\end{equation*}
+\item \begin{samepage}%
+maps
+\begin{align*}
+f_{11\check{1}} & : A_{111}\to A_{110} & f_{\check{1}01} & : A_{101}\to A_{001} \\
+f_{1\check{1}1} & : A_{111}\to A_{101} & f_{01\check{1}} & : A_{011}\to A_{010} \\
+f_{\check{1}11} & : A_{111}\to A_{011} & f_{0\check{1}1} & : A_{011}\to A_{001} \\
+f_{1\check{1}0} & : A_{110}\to A_{100} & f_{\check{1}00} & : A_{100}\to A_{000} \\
+f_{\check{1}10} & : A_{110}\to A_{010} & f_{0\check{1}0} & : A_{010}\to A_{000} \\
+f_{10\check{1}} & : A_{101}\to A_{100} & f_{00\check{1}} & : A_{001}\to A_{000},
+\end{align*}
+\end{samepage}%
+\item homotopies
+\begin{align*}
+H_{1\check{1}\check{1}} & : f_{1\check{1}0}\circ f_{11\check{1}} \htpy f_{10\check{1}}\circ f_{1\check{1}1} & H_{0\check{1}\check{1}} & : f_{0\check{1}0}\circ f_{01\check{1}} \htpy f_{00\check{1}}\circ f_{0\check{1}1} \\
+H_{\check{1}1\check{1}} & : f_{\check{1}10}\circ f_{11\check{1}} \htpy f_{01\check{1}}\circ f_{\check{1}11} & H_{\check{1}0\check{1}} & : f_{\check{1}00}\circ f_{10\check{1}} \htpy f_{00\check{1}}\circ f_{\check{1}01} \\
+H_{\check{1}\check{1}1} & : f_{\check{1}01}\circ f_{1\check{1}1} \htpy f_{0\check{1}1}\circ f_{\check{1}11} & H_{\check{1}\check{1}0} & : f_{\check{1}00}\circ f_{1\check{1}0} \htpy f_{0\check{1}0}\circ f_{\check{1}10},
+\end{align*}
+\item and a homotopy 
+\begin{align*}
+C & : \ct{(f_{\check{1}00}\cdot H_{1\check{1}\check{1}})}{(\ct{(H_{\check{1}0\check{1}}\cdot f_{1\check{1}1})}{(f_{00\check{1}}\cdot H_{\check{1}\check{1}1})})} \\
+& \qquad \htpy \ct{(H_{\check{1}\check{1}0}\cdot f_{11\check{1}})}{(\ct{(f_{0\check{1}0}\cdot H_{\check{1}1\check{1}})}{(H_{0\check{1}\check{1}}\cdot f_{\check{1}11})})}
+\end{align*}
+filling the cube.
+\end{enumerate}
+\end{defn}
+
+\begin{cor}
+Consider a commuting cube
+\begin{equation*}
+\begin{tikzcd}
+& S' \arrow[dl] \arrow[dr] \arrow[d] \\
+A' \arrow[d] & S \arrow[dl] \arrow[dr] & B' \arrow[dl,crossing over] \arrow[d] \\
+A \arrow[dr] & X' \arrow[d] \arrow[from=ul,crossing over] & B \arrow[dl] \\
+& X,
+\end{tikzcd}
+\end{equation*}
+of which the two front squares are pullback squares. Then the back left square is a pullback square if and only if the back right square is a pullback square.
+\end{cor}
 
 \subsection{Fibers of squares}
 

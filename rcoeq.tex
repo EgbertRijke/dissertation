@@ -84,13 +84,13 @@ given by $\lam{f} f(a,\refl{a})$ is an equivalence.
 \end{lem}
 
 \begin{proof}
-The inverse $\varphi$ is defined by path induction, taking $b:B(a)$ to the function $f$ satisfying $f(a,\refl{a})\jdeq b$. It is immediate that $\mathsf{ev\usc{}refl}\circ\varphi\htpy \idfunc$.
+The inverse of $\mathsf{ev\usc{}refl}$ is $\ind{a=}:B(a)\to \prd{x:A}(a=x)\to B(x)$. We have the homotopy $\lam{b}\refl{b}:\mathsf{ev\usc{}refl}\circ\ind{a=}\htpy \idfunc[B(a)]$ by the computation rule for identity types, so it is indeed the case that $\ind{a=}$ is a section of $\mathsf{ev\usc{}refl}$.
 
-To see that $\varphi\circ \mathsf{ev\usc{}refl}\htpy\idfunc$, let $f:\prd{x:A}(a=x)\to B(x)$. To show that $\varphi(f(a,\refl{a}))=f$ we use function extensionality (twice), so it suffices to show that
+To see that $\ind{a=}\circ \mathsf{ev\usc{}refl}\htpy\idfunc$, let $f:\prd{x:A}(a=x)\to B(x)$. To show that $\ind{a=}(f(a,\refl{a}))=f$ we use function extensionality (twice), so it suffices to show that
 \begin{equation*}
 \prd{x:A}{p:a=x} \varphi(f(a,\refl{a}),x,p)=f(x,p).
 \end{equation*}
-This follows by path induction on $p$, since $\varphi(f(a,\refl{a}),a,\refl{a})\jdeq f(a,\refl{a})$.
+This follows by path induction on $p$, since $\ind{a=}(f(a,\refl{a}),a,\refl{a})\jdeq f(a,\refl{a})$.
 \end{proof}
 
 \begin{cor}
@@ -600,6 +600,14 @@ is a pullback square.
 Analogous to the proof of \cref{lem:leftfib_Inull}.
 \end{proof}
 
+\begin{lem}
+Consider $f:\mathsf{rGph}(\mathcal{B},\mathcal{A})$ and $g:\mathsf{rGph}(\mathcal{C},\mathcal{B})$, and suppose that $f$ is (left/right) cartesian. Then $g$ is (left/right) cartesian if and only if $f\circ g$ is (left/right) cartesian, respectively.
+\end{lem}
+
+\begin{proof}
+Immediate by \cref{thm:pb_pasting}.
+\end{proof}
+
 \begin{prp}\label{prp:fib_cart}
 Let $f:\mathsf{rGph}(\mathcal{B},\mathcal{A})$ be a morphism of reflexive graphs. The following are equivalent:
 \begin{enumerate}
@@ -617,7 +625,7 @@ For any morphism $f:\mathsf{rGph}(\mathcal{B},\mathcal{A})$ we have the commutin
 & \mathsf{rGph}(\mathcal{I},\mathcal{B}) \arrow[dl] \arrow[d] \arrow[dr] \\
 \mathsf{rGph}(\unit,\mathcal{B}) \arrow[d] & \sm{i,j:\pts{B}}\edg{B}(i,j) \arrow[dl] \arrow[dr] & \mathsf{rGph}(\mathcal{I},\mathcal{A}) \arrow[dl,crossing over] \arrow[d] \\
 \pts{B} \arrow[dr] & \mathsf{rGph}(\unit,\mathcal{A}) \arrow[d] \arrow[from=ul,crossing over] & \sm{i,j:\pts{A}}\edg{A}(i,j) \arrow[dl] \\
-& \pts{A}
+\phantom{\sm{i,j:\pts{A}}\edg{A}(i,j)} & \pts{A}
 \end{tikzcd}
 \end{equation*}
 in which all vertical maps are equivalences. Therefore the top square is a pullback if and only if the bottom square is a pullback, which proves that (ii) holds if and only if (iii) holds.
@@ -667,7 +675,7 @@ Consider the commuting cube
 & \mathsf{rGph}(\mathcal{Y},\mathcal{B}') \arrow[dl] \arrow[d] \arrow[dr] \\
 \mathsf{rGph}(\mathcal{Y},\mathcal{A}') \arrow[d] & \mathsf{rGph}(\mathcal{X},\mathcal{B}') \arrow[dl] \arrow[dr] & \mathsf{rGph}(\mathcal{Y},\mathcal{B}) \arrow[dl,crossing over] \arrow[d] \\
 \mathsf{rGph}(\mathcal{X},\mathcal{A}') \arrow[dr] & \mathsf{rGph}(\mathcal{Y},\mathcal{A}) \arrow[from=ul,crossing over] \arrow[d] & \mathsf{rGph}(\mathcal{X},\mathcal{B}) \arrow[dl] \\
-& \mathsf{rGph}(\mathcal{X},\mathcal{A}).
+& \mathsf{rGph}(\mathcal{X},\mathcal{A}). & \phantom{\mathsf{rGph}(\mathcal{X},\mathcal{A}')}
 \end{tikzcd}
 \end{equation*}
 Note $\mathsf{rGph}(\mathcal{X},\blank)$ preserves pullbacks for any reflexive graph $\mathcal{X}$. Therefore it follows that the top and bottom squares are pullback squares. Moreover, the square on the front right is a pullback square by the assumption that $f$ is right orthogonal to $h:\mathsf{rGph}(\mathcal{Y},\mathcal{X})$. Now it follows by the pasting property of pullbacks that the square on the back left is a pullback square. In other words, $f'$ is right orthogonal to $h$. 
@@ -1036,31 +1044,36 @@ Let $\mathcal{B}$ be a family of reflexive graphs over $\mathcal{A}$. The follow
 \end{thm}
 \end{comment}
 
-\section{Sequential colimits}
-\subsection{Colimits of diagrams over reflexive graphs}
+\section{Colimits of diagrams over graphs}
 
+\marginnote{Boil this down to the most essential theorems\\Revise notation\\State theorems in intro\\Fix crefs}
 \begin{defn}
-Let $\mathcal{A}$ be a reflexive graph. A diagram $D$ over $\mathcal{A}$ is a triple $(\pts{D},\edg{D},\rfx{D})$ consisting of
+Let $\mathcal{A}$ be a reflexive graph. A diagram $\mathcal{D}$ over $\mathcal{A}$ is a triple $(\pts{D},\edg{D},\rfx{\mathcal{D}})$ consisting of
 \begin{align*}
-\pts{D} & \pts{A}\to \UU \\
-\edg{D} & \prd{i,j:\pts{A}} \edg{A}(i,j)\to (\pts{D}(i)\to \pts{D}(j)) \\
-\rfx{D} & \prd{i:\pts{A}} \edg{D}(\rfx{\mathcal{A}}(i))\htpy \idfunc[\pts{D}(i)].
+\pts{D} & : \pts{A}\to \UU \\
+\edg{D} & : \prd{i,j:\pts{A}} \edg{A}(i,j)\to (\pts{D}(i)\to \pts{D}(j)) \\
+\rfx{\mathcal{D}} & : \prd{i:\pts{A}} \edg{D}(\rfx{\mathcal{A}}(i))\htpy \idfunc[\pts{D}(i)].
 \end{align*}
 \end{defn}
 
 \begin{defn}
-Let $D$ be a diagram over $\mathcal{A}$. We form the total reflexive graph $\msm{\mathcal{A}}{D}$ of $D$ by
+Let $\mathcal{D}$ be a diagram over $\mathcal{A}$. We form the \define{total graph} $\msm{\mathcal{A}}{\mathcal{D}}$ of $\mathcal{D}$ by
 \begin{align*}
-\pts{\msm{\mathcal{A}}{D}} & \defeq \sm{i:\pts{A}}\pts{D}(i) \\
-\edg{\msm{\mathcal{A}}{D}}((i,x),(j,y)) & \defeq \sm{e:\edg{A}(i,j)} \edg{D}(e,x)=y \\
-\rfx{\msm{\mathcal{A}}{D}}((i,x)) & \defeq (\rfx{\mathcal{A}}(i),\rfx{D}(i,x)).
+\pts{\msm{\mathcal{A}}{\mathcal{D}}} & \defeq \sm{i:\pts{A}}\pts{D}(i) \\
+\edg{\msm{\mathcal{A}}{\mathcal{D}}}((i,x),(j,y)) & \defeq \sm{e:\edg{A}(i,j)} \edg{D}(e,x)=y \\
+\rfx{\msm{\mathcal{A}}{\mathcal{D}}}((i,x)) & \defeq (\rfx{\mathcal{A}}(i),\rfx{\mathcal{D}}(i,x)).
 \end{align*}
+There is an obvious projection $\proj 1 : \mathsf{rGph}(\msm{\mathcal{A}}{\mathcal{D}},\mathcal{A})$.
 \end{defn}
 
+\begin{lem}
+For any diagram $\mathcal{D}$ over $\mathcal{A}$, the projection $\proj 1 : \mathsf{rGph}(\msm{\mathcal{A}}{\mathcal{D}},\mathcal{A})$ is a left fibration.
+\end{lem}
+
 \begin{defn}
-Let $D$ be a diagram over $\mathcal{A}$, and let $X$ be a type. A $D$-cocone on $X$ is a morphism $f:\mathsf{rGph}(\msm{\mathcal{A}}{D},\Delta X)$ of reflexive graphs. A $D$-cocone $f$ on $X$ is colimiting if the map
+Let $D$ be a diagram over $\mathcal{A}$, and let $X$ be a type. A $D$-cocone on $X$ is a morphism $f:\mathsf{rGph}(\msm{\mathcal{A}}{\mathcal{D}},\Delta X)$ of reflexive graphs. A $D$-cocone $f$ on $X$ is colimiting if the map
 \begin{equation*}
-\Delta(\blank)\circ f : (X\to Y)\to \mathsf{rGph}(\msm{\mathcal{A}}{D},\Delta Y)
+\Delta(\blank)\circ f : (X\to Y)\to \mathsf{rGph}(\msm{\mathcal{A}}{\mathcal{D}},\Delta Y)
 \end{equation*}
 is an equivalence for every type $Y$. 
 \end{defn}
@@ -1069,8 +1082,85 @@ is an equivalence for every type $Y$.
 By \cref{thm:rcoeq_is_pushout} it follows that every diagram $D$ over any reflexive graph $\mathcal{A}$ has a colimit. 
 \end{rmk}
 
-\subsection{Sequential colimits}
+\begin{defn}
+Let $\mathcal{D}$ and $\mathcal{D}'$ be diagrams over $\mathcal{A}$. A \define{natural transformation} $\tau : \mathcal{D}'\to \mathcal{D}$ of diagrams consists of
+\begin{align*}
+\pts{\tau} & : \prd{i:\pts{A}}\pts{D'}(i)\to\pts{D}(i) \\
+\edg{\tau} & : \prd*{i,j:\pts{A}}{e:\edg{A}(i,j)}\prd{x:\pts{D}(i)}\pts{\tau}(\edg{D'}(e,x))=\edg{D}(e,\pts{\tau}(x)) \\
+\rfx{\tau} & : \prd{i:\pts{A}}{x:\pts{D}(i)} \dpath{}{}{\edg{\tau}(\rfx{A}(i),x)}{\refl{\pts{\tau}(x)}}
+\end{align*}
+\end{defn}
 
+\begin{defn}\label{defn:cartesian}
+A natural transformation $\tau:\mathcal{D}'\to \mathcal{D}$ of diagrams over $\mathcal{A}$ is said to be \define{cartesian} if the commutative squares
+\begin{equation*}
+\begin{tikzcd}[column sep=large]
+\pts{D'}(i) \arrow[r,"{\edg{D'}(e)}"] \arrow[d,swap,"\pts{\tau}(i)"] & \pts{D'}(j) \arrow[d,"\pts{\tau}(j)"] \\
+\pts{D}(i) \arrow[r,swap,"{\edg{D}(e)}"] & \pts{D}(i)
+\end{tikzcd}
+\end{equation*}
+are all pullback squares. 
+%We will write $D'\mathbin{\to_\times}D$ for the type of cartesian natural transformations from $D'$ to $D$.
+\end{defn}
+
+\begin{lem}\label{lem:pb_total}
+Let $I$ be a type, and consider for each $i:I$ a commuting square
+\begin{equation*}
+\begin{tikzcd}
+C_i \arrow[r] \arrow[d] & B_i \arrow[d] \\
+A_i \arrow[r] & X_i.
+\end{tikzcd}
+\end{equation*}
+Then the following are equivalent:
+\begin{enumerate}
+\item For each $i:I$, the square is a pullback square.
+\item The induced square on total spaces
+\begin{equation*}
+\begin{tikzcd}
+\sm{i:I}C_i \arrow[r] \arrow[d] & \sm{i:I}B_i \arrow[d] \\
+\sm{i:I}A_i \arrow[r] & \sm{i:I}X_i.
+\end{tikzcd}
+\end{equation*}
+\end{enumerate}
+\end{lem}
+
+\begin{lem}
+Let $\tau:\mathsf{nat}(\mathcal{D}',\mathcal{D})$ be a natural transformation of diagrams over $\mathcal{A}$. Then $\tau$ is cartesian if and only if the induced morphism of reflexive graphs
+\begin{equation*}
+\total{\tau} : \mathsf{rGph}(\msm{\mathcal{A}}{\mathcal{D}'},\msm{\mathcal{A}}{\mathcal{D}})
+\end{equation*}
+is cartesian.
+\end{lem}
+
+\begin{proof}
+Straightforward consequence of \cref{lem:pb_total}.
+\end{proof}
+
+\begin{thm}
+Let $\tau:\mathsf{cart}(\mathcal{E},\mathcal{D})$ be a cartesian morphisms of diagrams over $\mathcal{A}$, and consider a commuting square of reflexive graphs of the following form
+\begin{equation*}
+\begin{tikzcd}
+\msm{\mathcal{A}}{\mathcal{E}} \arrow[d,swap,"\tau"] \arrow[r] & \Delta Y \arrow[d] \\
+\msm{\mathcal{A}}{\mathcal{D}} \arrow[r] & \Delta X.
+\end{tikzcd}
+\end{equation*}
+Then the following are equivalent:
+\begin{enumerate}
+\item The square is a pullback square.
+\item The square
+\begin{equation*}
+\begin{tikzcd}
+\mathsf{colim}(\mathcal{E}) \arrow[r] \arrow[d,swap,"\mathsf{colim}(\tau)"] & Y \arrow[d] \\
+\mathsf{colim}(\mathcal{D}) \arrow[r] & X
+\end{tikzcd}
+\end{equation*}
+is a pullback square.
+\end{enumerate}
+\end{thm}
+
+\section{Sequential colimits}
+
+\marginnote{Boil this down to the most essential theorems}
 \begin{defn}
 We define the non-reflexive graph $\N^{\prec}$ by 
 \begin{align*}
@@ -1135,109 +1225,6 @@ has a section.
 \item The map in (ii) is an equivalence.
 \end{enumerate}
 \end{thm}
-
-\subsection{Cartesian natural transformations of diagrams}
-
-In this section we study cartesian natural transformations of diagrams over graphs, i.e.~natural transformations of diagrams of which the naturality squares are pullback squares.
-In particular, will show that for any diagram $D$ over a graph $\mathcal{A}$, the type of cartesian natural transformations into $D$ is equivalent to the type of equifibered families over the graph of elements $\int_\mathcal{A} D$, which is just the context extension of the left fibration corresponding to $D$.
-This can be seen as a justification of our choice of terminology for equifibered families of graphs in \cref{defn:diag}, because in \cite[page 9]{rezk2010toposes} Rezk uses the terminology \emph{equifibered transformation} for cartasian natural transformations.
-
-Cartesian natural transformations are useful in practice, so we will provide some classes of examples.
-
-\begin{defn}
-Let $D$ and $D'$ be diagrams over $\mathcal{A}$. A \define{natural transformation} $\tau : D'\to D$ of diagrams consists of
-\begin{align*}
-\pts{\tau} & : \prd{i:\pts{A}}\pts{D'}(i)\to\pts{D}(i) \\
-\edg{\tau} & : \prd*{i,j:\pts{A}}{e:\edg{A}(i,j)}\prd{x:\pts{D}(i)}\pts{\tau}(\edg{D'}(e,x))=\edg{D}(e,\pts{\tau}(x)) \\
-\rfx{\tau} & : \prd{i:\pts{A}}{x:\pts{D}(i)} \dpath{}{}{\refl{\pts{\tau}(x)}}{\edg{\tau}(\rfx{A}(i),x)}
-\end{align*}
-\end{defn}
-
-\begin{defn}\label{defn:cartesian}
-A natural transformation $\tau:D'\to D$ of diagrams over $\mathcal{A}$ is said to be \define{cartesian} if the commutative squares
-\begin{equation*}
-\begin{tikzcd}[column sep=large]
-\pts{D'}(i) \arrow[r,"{\edg{D'}(e)}"] \arrow[d,swap,"\pts{\tau}(i)"] & \pts{D'}(j) \arrow[d,"\pts{\tau}(j)"] \\
-\pts{D}(i) \arrow[r,swap,"{\edg{D}(e)}"] & \pts{D}(i)
-\end{tikzcd}
-\end{equation*}
-are all pullback squares. 
-%We will write $D'\mathbin{\to_\times}D$ for the type of cartesian natural transformations from $D'$ to $D$.
-\end{defn}
-
-\begin{rmk}
-Let $D$ be a diagram over a graph $\mathcal{A}$. By considering $D$ as a left fibration over $\mathcal{A}$ via the equivalence of \cref{thm:lfib_diag}, we may form the context extension $\ctxext{\mathcal{A}}{D}$. Explicitly, the graph $\ctxext{\mathcal{A}}{D}$ consists of
-\begin{align*}
-\pts{\ctxext{\mathcal{A}}{D}} & \defeq \sm{i:\pts{A}}\pts{D}(i) \\
-\edg{\ctxext{\mathcal{A}}{D}}(\pairr{i,x},\pairr{j,q}) & \defeq \sm{q:\edg{A}(i,j)} \edg{D}(q,x)=y \\
-\rfx{\ctxext{\mathcal{A}}{D}}(i,x) & \defeq \pairr{\rfx{A}(i),\rfx{D}(x)}.
-\end{align*}
-Note that the graph $\ctxext{\mathcal{A}}{D}$ compares to the category of elements of a presheaf, at least intuitively.
-
-Now let $D'$ be a diagram over $\ctxext{\mathcal{A}}{D}$. When $D'$ is considered as left fibrations, the family $\msm{D}{D'}$ of graphs over $\mathcal{A}$ is by \cref{thm:diag_sigma} a left fibration, corresponding to the diagram consisting of
-\begin{align*}
-\pts{\msm{D}{D'}}(i) & \defeq \sm{x:\pts{D}(i)}\pts{D'}(i,x) \\
-\edg{\msm{D}{D'}}(q,\pairr{x,y}) & \defeq \pairr{\edg{D}(q,x),\edg{D'}(\pairr{q,\refl{\edg{D}(q,x)}},y} \\
-\rfx{\msm{D}{D'}}(i,\pairr{x,y}) & \defeq \pairr{\rfx{D}(i,x),\rfx{D'}(\pairr{i,x},y)}.
-\end{align*}
-\end{rmk}
-
-By considering diagrams $D$ and $D'$ over $\mathcal{A}$ as left fibrations, we see that a natural transformation $\tau$ from $D'$ to $D$ is just a graph morphism of type $\ctxext[\mathcal{A}]{D'}{D}$. 
-
-When $D'$ is a diagram over $\ctxext{\mathcal{A}}{D}$, one may easily verify that the projection morphism $\pi_1:\ctxhom[\mathcal{A}]{\msm{D}{D'}}{D}$ is a natural transformation of diagrams. Thus, we obtain a map
-\begin{equation*}
-\mathsf{diagToNat}_\mathcal{A} : \mathsf{Diag}(\ctxext{\mathcal{A}}{D})\to \sm{D':\mathsf{Diag}(\ctxext{\mathcal{A}}{D})}\ctxhom[\mathcal{A}]{D'}{D}.
-\end{equation*}
-
-\begin{thm}
-Let $D$ be a diagram over a graph $\mathcal{A}$. Assuming the univalence axiom, the map $\mathsf{diagToNat}_\mathcal{A}$ is an equivalence. Moreover, $\mathsf{diagToNat}$ restricts to an equivalence $\mathsf{equiFibToCart}_\mathcal{A}$, as indicated in the diagram
-\begin{equation*}
-\begin{tikzcd}[column sep=huge]
-\equifib(\ctxext{\mathcal{A}}{D}) \arrow[r,densely dotted] \arrow[d,swap,"\subseteq"] & \mathsf{Cart}(D) \arrow[d,"\subseteq"] \\
-\mathsf{Diag}(\ctxext{\mathcal{A}}{D}) \arrow[r,swap,"\mathsf{diagToNat}_\mathcal{A}"] & \mathsf{Nat}(D)
-\end{tikzcd}
-\end{equation*}
-\end{thm}
-
-\begin{cor}\label{lem:equifibered_basic}
-Let $D$ be a diagram over a graph $\mathcal{A}$, and let $E$ be a family of graphs over $\ctxext{\mathcal{A}}{D}$.
-Then the following are equivalent:
-\begin{enumerate}
-\item The family $E$ is equifibered.
-\item For each edge $q:\edg{\mathcal{A}}(i,j)$ in $\mathcal{A}$, the square
-\begin{equation*}
-\begin{tikzcd}[column sep=huge]
-\sm{u:\pts{D}(i)}\pts{E}(u) \arrow[r,"\edg{\msm{D}{E}}(q)"] \ar{d}[swap]{\proj1} & \sm{v:\pts{D}(j)}\pts{E}(v) \ar{d}{\proj1}\\ 
-\pts{D}(i) \ar{r}[swap]{\edg{D}(q)} & \pts{D}(j)
-\end{tikzcd}
-\end{equation*}
-is a pullback square.
-\end{enumerate}
-\end{cor}
-
-\begin{proof}
-This is a direct consequence of \cref{thm:fiberequiv_pullback}.
-\end{proof}
-
-\begin{thm}\label{thm:cartesian-equifibered}
-For a natural transformation $\tau:D'\to D$ of diagrams over $\mathcal{A}$, the following three properties are equivalent:
-\begin{enumerate}
-\item it is cartesian.
-\item each $\edg{D'}(e)$ is fiberwise an equivalence, i.e. for each $e:\edg{\mathcal{A}}(i,j)$ and each $y:\pts{D}(i)$, the unique map $\pts{\tau}(i)_y$ such that the diagram
-\begin{equation*}
-\begin{tikzcd}
-& \hfib{\pts{\tau}(i)}{y} \arrow[dl] \arrow[d,densely dotted,"\pts{\tau}(i)_y"] \arrow[dr,"\edg{D'}(e)\circ\proj1"] \\
-\unit & \hfib{\pts{\tau}(j)}{\edg{D}(e,y)} \arrow[l] \arrow[r,swap,"\proj1"] & \pts{D'}(j)
-\end{tikzcd}
-\end{equation*}
-commutes, is an equivalence.
-\item the graph family over $D$ determined by $\tau$ is an equifibered family.
-\end{enumerate}
-\end{thm}
-
-\begin{proof}
-The equivalence of the first two statements is a corollary of \cref{lem:pullback}. Statements (ii) and (iii) are equivalent by the way the object classifier works.
-\end{proof}
 
 \subsection{Type families over type sequences}
 

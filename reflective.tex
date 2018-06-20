@@ -227,4 +227,1162 @@ However, we will see in~\autoref{modaln-truncated} that lex modalities do preser
   That is, if $A$ and $B$ are modal and $f:A\to B$, then the propositions ``$A$ is contractible'', ``$A$ is an $n$-type'', ``$f$ is an equivalence'', and so on, are all modal as well.
 \end{rmk}
 
+\section{Accessible reflective subuniverses}
+A general localization is only a reflective subuniverse, but there is a convenient sufficient condition for it to be a modality: if each $C(a)=\unit$.
+A localization modality of this sort is called \emph{nullification}.
+
+\begin{thm}\label{thm:nullification_modality}
+  If $F:\prd{a:A} B(a) \to C(a)$ is such that each $C(a)=\unit$, then localization at $F$ is a modality, called \define{nullification at $B$}.
+\end{thm}
+\begin{proof}
+  It suffices to show that for any $B:A\to\UU$, the $B$-null types are $\Sigma$-closed.
+  Thus, let $X:\UU$ and $Y:X\to \UU$ be such that $X$ and each $Y(x)$ are $B$-null.
+  Then
+  \begin{align*}
+    (B\to \sm{x:X} Y(x))
+    &\eqvsym \sm{g:B\to X} \prd{b:B} Y(g(b)) \\
+    &\eqvsym \sm{x:X} B \to Y(x) \\
+    &\eqvsym \sm{x:X} Y(x)
+  \end{align*}
+  with the inverse equivalence being given by constant maps.
+  Thus, $\sm{x:X} Y(x)$ is $B$-null.
+\end{proof}
+
+Of course, it might happen that $\localization{F}$ is a modality even if $F$ doesn't satisfy the condition of \cref{thm:nullification_modality}.
+For instance, if $B:A\to \UU$ has a section $s:\prd{a:A} B(a)$, then localizing at the family $s' : \prd{a:A} \unit \to B(a)$ is equivalent to nullifying at $B$, since in a section-retraction pair the section is an equivalence if and only if the retraction is.
+However, we can say the following.
+
+\begin{lem}\label{thm:acc-modal}
+  If $F:\prd{a:A} B(a)\to C(a)$ is such that $\localization{F}$ is a modality, then there exists a family $E:D\to \UU$ such that $\localization{F}$ coincides with nullification at $E$.
+\end{lem}
+\begin{proof}
+  Write $\modal\defeq\localization{F}$ and $\modalunit$ for its modal unit.
+  Define $D = \sm{a:A} (\modal (B(a)) + \modal(C(a)))$, and $E:D\to \UU$ by
+  \begin{align*}
+    E(a,\inl(b)) &\defeq \hfib{\modalunit[B(a)]}{b}\\
+    E(a,\inr(c)) &\defeq \hfib{\modalunit[C(a)]}{c}.
+  \end{align*}
+  Then since $\modalunit$ is $\modal$-connected, each $E(d)$ is $\modal$-connected, and hence every $F$-local type is $E$-null.
+
+  On the other hand, suppose $X$ is an $E$-null type.
+  Each $\modalunit[B(a)]$ and $\modalunit[C(a)]$ is $\localization{E}$-connected, since their fibers are $\localization{E}$-connected (by definition); thus $X$ is also $\modalunit[B(a)]$-local and $\modalunit[C(a)]$-local.
+  But we have the following commutative square:
+  \[
+  \begin{tikzcd}[column sep=large]
+    B(a) \ar[r,"{\modalunit[B(a)]}"] \ar[d,"F(a)"'] & \modal(B(a)) \ar[d,"{\modal(F(a))}"]\\
+    C(a) \ar[r,"{\modalunit[C(a)]}"'] & \modal(C(a))
+  \end{tikzcd}
+  \]
+  and ${\modal(F(a))}$ is an equivalence; thus $X$ is also $F(a)$-local.
+  So the $F$-local types coincide with the $E$-null types.
+\end{proof}
+
+This shows that the following pair of definitions are consistent.
+
+\begin{defn}\label{defn:accessible}
+A reflective subuniverse on $\UU$ is said to be \define{accessible} if it is the localization at a family of maps in $\UU$, indexed by a type in $\UU$.
+Similarly, a modality $\modal$ on $\UU$ is said to be \define{accessible} if it is the nullification at a family of types in $\UU$, indexed by a type in $\UU$.
+
+Explicitly, a \define{presentation} of a reflective subuniverse $\modal$ of $\UU$ consists of a family of maps $F : \prd{a:A} B(a) \to C(a)$, where $A:\UU$ and $B,C:A\to\UU$, such that $\modal = \localization{F}$.
+Similarly, a \define{presentation} of a modality $\modal$ consists of a family of types $B: A\to\UU$, where $A:\UU$, such that $\modal = \localization{B}$.
+\end{defn}
+
+\begin{rmk}
+Note that being accessible is structure; different families can present the same reflective subuniverse or modality.
+As a trivial example, note that localizing at the empty
+type, and localizing at the type family on $\bool$ defined by
+$\bfalse\mapsto \emptyt$ and $\btrue\mapsto \unit$ both map all types to contractible types.
+
+However, we are usually only interested in properties of presentations insofar as they determine properties of subuniverses.
+For instance, by \cref{thm:acc-modal}, a reflective subuniverse is a modality exactly when it has a presentation in which each $C(a)=\unit$.
+Similarly, in \cref{sec:lex-top-cotop} we will define a modality to be ``topological'' if it has a presentation in which each $C(a)=\unit$ and each $B(a)$ is a mere proposition.
+\end{rmk}
+
+\begin{eg}\label{thm:trunc-acc}
+The trivial modality $\truncf{(-2)}$ is presented by $\emptyt$, while the propositional truncation modality $\truncf{(-1)}$ is presented by $\bool$.  More generally, the
+$n$-truncation modality $\truncf{n}$ is presented by the $(n+1)$-sphere $\Sn^{n+1}$.
+\end{eg}
+
+\begin{eg}\label{thm:open-acc}
+For every mere proposition $P$, the open modality $\open P (X) \defeq (P\to X)$ from \cref{eg:open} is 
+presented by the singleton type family $P$.
+To see this, note that $\modalunit[X] : X \to (P\to X)$ is the same as the map in the definition of locality, so that $X$ is modal for the open modality on $P$ if and only if it is $P$-local.
+(If $P$ is not a mere proposition, however, then $X\mapsto (P\to X)$ is not a modality, and in particular does not coincide with localization at $P$.)
+\end{eg}
+
+\begin{eg}\label{thm:closed-acc}
+  The closed modality $\closed P$ from \cref{eg:closed} associated to a mere proposition $P$ is presented by the type family $\lam{x} \emptyt : P \to \UU$.
+  For by definition, $A$ is null for this family if and only if for any $p:P$ the map $A \to (\emptyt \to A)$ is an equivalence.
+  But $\emptyt \to P$ is contractible, so this says that $P\to\iscontr(A)$, which was the definition of $\closed P$-modal types from \cref{eg:closed}.
+\end{eg}
+
+One of the main uses of accessibility is when passing between universes.
+Our definitions of reflective subuniverses and modalities are relative to a \emph{particular} universe $\UU$, but most examples are ``uniform'' or ``polymorphic'' and apply to types in all universes (or all sufficiently large universes) simultaneously.
+Accessibility is one technical condition which ensures that this holds and that moreover these modal operators on different universes ``fit together'' in a convenient way.
+For instance, we have:
+
+\begin{lem}\label{thm:acc-extend}
+  If $\modal$ is an accessible reflective subuniverse on a universe $\UU$, and $\UU'$ is a larger universe containing $\UU$, then there is a reflective subuniverse $\modal'$ on $\UU'$ such that:
+  \begin{enumerate}
+  \item If $\modal$ is a modality, so is $\modal'$.\label{item:ae5}
+  \item A type $X:\UU$ is $\modal'$-modal if and only if it is $\modal$-modal.\label{item:ae1}
+  \item For $X:\UU$, the induced map $\modal' X \to \modal X$ is an equivalence.\label{item:ae2}
+  \item A type $X:\UU'$ is $\modal'$-modal if and only if $(\blank\circ f) : (B\to X) \to (A\to X)$ is an equivalence for any map $f:A\to B$ in $\UU$ such that $\modal(f)$ is an equivalence.\label{item:ae3}
+  \item $\modal'$ depends only on $\modal$, not on a choice of presentation for it.\label{item:ae4}
+  \end{enumerate}
+\end{lem}
+\begin{proof}
+  Since $\modal$ is accessible, it is generated by some family $F:\prd{a:A} B(a) \to C(a)$.
+  Define $\modal':\UU'\to\UU'$ to be the higher inductive localization at the same family $F$, which lives in $\UU'$ as well since $\UU'$ is larger than $\UU$.
+  If $\modal$ is a modality, we can take each $C(a)=\unit$ so that $\modal'$ is also a modality, giving~\ref{item:ae5}.
+
+  The notion of $F$-locality for a type $X$ is independent of what universe $X$ lives in, giving~\ref{item:ae1}.
+  Moreover, because the induction principle for a higher inductive localization allows us to eliminate into any type in any universe, \cref{thm:local-ump} applies no matter what universe the target lives in.
+  Thus, if $X:\UU$ then $\modal X$ and $\modal' X$ have the same universal property, hence are canonically equivalent, giving~\ref{item:ae2}.
+
+  To prove~\ref{item:ae3}, note first that certainly each $\modal (F(a))$ is an equivalence, so any type with the stated property is $F$-local.
+  Conversely, if $X$ is $F$-local, hence $\modal'$-modal, then $(B\to X) \to (A\to X)$ is certainly an equivalence for any map $f$ such that $\modal'(f)$ is an equivalence; but $\modal'$ and $\modal$ coincide on $\UU$.
+  Thus~\ref{item:ae3} holds; and this implies~\ref{item:ae4} since a reflective subuniverse is determined by its modal types.
+\end{proof}
+
+We refer to the $\modal'$ constructed in \cref{thm:acc-extend} as the \textbf{canonical accessible extension} of $\modal$ to $\UU'$.
+
+\begin{egs}
+  Our characterizations of the truncation and open and closed modalities in \cref{thm:trunc-acc,thm:open-acc,thm:closed-acc} made no reference to the ambient universe.
+  Thus, when these modalities are defined in the standard ways on $\UU$ and $\UU'$ respectively, their $\UU'$-version is the canonical accessible extension of their $\UU$-version.
+\end{egs}
+
+\begin{eg}
+  By contrast, the double-negation modality $\neg\neg$ \emph{is} defined in a polymorphic way on all universes, but in general there seems no reason for it to be accessible on any of them.
+  However, if propositional resizing holds, then it is the nullification at $\bool$ together with all propositions $P$ such that $\neg\neg P$ holds, and hence accessible.
+
+  Whether or not any inaccessible modalities remain after imposing propositional resizing may depend on large-cardinal principles.
+  It is shown in~\cite{css:large-cardinal} that this is the case for the analogous question about reflective sub-$(\infty,1)$-categories of the $(\infty,1)$-category of $\infty$-groupoids.
+\end{eg}
+
+\begin{eg}
+  Suppose that all types in $\UU$ are 0-types.
+  We have tacitly assumed that all universes are closed under all higher inductive types, so (assuming univalence) this is not actually possible, but to get a feeling for what else could in principle go wrong suppose we drop that assumption.
+  Then if $F$ is a family such that the higher inductive type $\localization{F}$ does not preserve 0-types, we might (depending on what we assume about closure under higher inductive types) still be able to define a modality on $\UU$ by $\modal X = \trunc0{\localization{F}X}$.
+  But if $\UU'$ is a larger universe containing non-0-types, then this $\modal$ would not eliminate into types in $\UU'$, and if we define $\modal'$ by localizing at $F$ in $\UU'$ then the canonical map $\modal' X \to \modal X$ would be the 0-truncation rather than an equivalence.
+  So \cref{thm:acc-extend} is not as trivial as it may seem.
+\end{eg}
+
+\begin{rmk}\label{rmk:extend-oops}
+  It is tempting to think that \emph{any} reflective subuniverse $\modal$ on $\UU$ could be extended to an accessible one on $\UU'$ by localizing at the family of \emph{all} functions in $\UU$ that are inverted by $\modal$ (or nullifying at the family of all $\modal$-connected types in $\UU$, in the case of modalities), which is a $\UU'$-small family though not a $\UU$-small one.
+  This does produce an accessible reflective subuniverse $\modal'$ of $\UU'$ such that the $\modal'$-modal types in $\UU$ coincide with the $\modal$-modal ones, but there seems no reason why the modal \emph{operators} $\modal'$ and $\modal$ should agree on types in $\UU$.
+\end{rmk}
+
+\begin{rmk}
+  Reflective subuniverses and modalities defined by localization have another convenient property: their eliminators have a strict judgmental computation rule (assuming that our higher inductive localization type has a judgmental computation rule on point-constructors, which is usually assumed).
+  This will be useful in \cref{thm:subtopos-model}.
+\end{rmk}
+
+
+\section{Non-stable factorization systems}
+\label{sec:nonstable-factsys}
+
+We have seen in \cref{sec:modal-refl-subun} that $\Sigma$-closed reflective subuniverses are equivalent to stable orthogonal factorization systems.
+Without $\Sigma$-closedness and stability, this equivalence fails.
+However, we can still say:
+
+\begin{lem}
+  Any orthogonal factorization system has an underlying reflective subuniverse, consisting of those types $X$ such that $X\to\unit$ is in $\cR$.
+\end{lem}
+\begin{proof}
+  If $Y$ is modal in this sense, then by orthogonality for squares
+  \[
+  \begin{tikzcd}
+    A \ar[d,"f"'] \ar[r] & Y \ar[d] \\ B \ar[r] & \unit
+  \end{tikzcd}
+  \]
+  we see that if $f:A\to B$ lies in $\cL$, then precomposition
+  \[ (-\circ f) : (B\to Y) \to (A\to Y) \]
+  is an equivalence.
+  Thus, it suffices to show that for every $X$ there is an $\cL$-map $X\to \modal X$ where $\modal X\to \unit$ is in $\cR$; but this is just an $(\cL,\cR)$-factorization of the map $X\to\unit$.
+\end{proof}
+
+Conversely, in classical category theory there are various ways of extending a reflective subcategory to a factorization system.
+One canonical one is considered in~\cite{chk:reflocfact}, but this is harder to reproduce homotopy-theoretically.
+Instead, if we have an \emph{accessible} reflective subuniverse presented by localization at a family of maps, we can generalize the construction of localization to produce a factorization system (though in general the result will depend on the choice of presentation, not just on the reflective subuniverse we started with).
+
+To avoid too much wrangling with witnesses of commutative squares, we will factorize dependent types rather than functions.
+In this case, right orthogonality (\cref{defn:orthogonal}) can be expressed as follows:
+
+\begin{lem}\label{thm:orth-dep}
+  For $l:A\to B$ and $X:Y\to\UU$, the map $\proj1 : (\sm{y:Y}X(y)) \to Y$ is right orthogonal to $l$ if and only if for every $g:B\to Y$ and $f:\prd{a:A} X(gla)$, the type
+  \begin{equation}
+    \sm{j:\prd{b:B} X(gb)} \prd{a:A} jla = fa\label{eq:dep-fillers}
+  \end{equation}
+  is contractible.
+\end{lem}
+\begin{proof}
+  First note that given $g,f$ as above, the square
+  \[
+  \begin{tikzcd}
+    A \ar[d,"l"'] \ar[r,"{(g\circ l,f)}"] & \sm{y:Y}X \ar[d,"\proj1"] \\ B \ar[r,"g"] & X
+  \end{tikzcd}
+  \]
+  commutes judgmentally.
+  Moreover, if we have any commutative square
+  \[
+  \begin{tikzcd}
+    A \ar[d,"l"'] \ar[r,"f'"] \ar[dr,phantom,"S"] & \sm{y:Y}X \ar[d,"\proj1"] \\ B \ar[r,"g"] & X
+  \end{tikzcd}
+  \]
+  witnessed by $S:\proj1 \circ f'=g\circ l$, we can define $f(a) \defeq \trans{S(a)}{\proj2(f'(a))}$ to get a judgmentally commutative square as above.
+  Thus, it suffices to consider such squares.
+  Now given such a square, the type of diagonal fillers is equivalent to
+  \[ \sm{j:B\to \sm{y:Y} X(y)}{H_f : j\circ l = (g\circ l,f)}{H_g : \proj1 \circ j = g} \proj1 \circ H_f = H_g \circ l \]
+  and thereby to
+  \[ \sm{j_1:B\to Y}{j_2 : \prd{b:B} X(j_1(b))}{H_{f1} : j_1 \circ l = g\circ l}{H_{f2} : \dpath{X}{H_{f1}}{j_2\circ l}{f}}{H_g : j_1 = g} H_{f1} = H_g \circ l. \]
+  But now we can contract two based path spaces to get the type shown in the lemma statement.
+\end{proof}
+
+Let $F:\prd{a:A} B(a) \to C(a)$ and let $X:Y\to\UU$ be a type family.
+We define an indexed higher inductive type $\mathcal{J}_F X : Y\to \UU$ by the following constructors:
+\begin{align*}
+\beta^F_X &: \prd{y:Y} X(y) \to \mathcal{J}_F X(y)\\
+\mathsf{lift} &: \prd{a:A}{y:Y}{g:C(a) \to Y}{f:\prd{b:B(a)} \mathcal{J}_F X(g(F(a,b)))}{c:C(a)} \mathcal{J}_F X(g(c))\\
+\mathsf{islift} &
+: \prd{a:A}{y:Y}{g:C(a) \to Y}{f:\prd{b:B(a)} \mathcal{J}_F X(g(F(a,b)))}{b:B(a)}
+\mathsf{lift}(g,f,F(a,b)) = f(b)
+\end{align*}
+The induction principle of $\mathcal{J}_F X$ says that for any $P:\prd{y:Y} \mathcal{J}_F X(y) \to \UU$ with
+\begin{align*}
+N &: \prd{y:Y}{x:X(y)} P(y,\beta^F_X(y,x))\\
+R &: \prd{a:A}{g:C(a) \to Y}{f:\prd{b:B(a)} \mathcal{J}_F X(g(F(a,b)))}
+  \prd{f':\prd{b:B(a)} P(g(F(a,b)),f(b))}{c:C(a)} P(g(c),\mathsf{lift}(g,f,c))\\
+S &
+: \prd{a:A}{g:C(a) \to Y}{f:\prd{b:B(a)} \mathcal{J}_F X(g(F(a,b)))}
+  \prd{f':\prd{b:B(a)} P(g(F(a,b)),f(b))}{b:B(a)} \dpath{P}{\mathsf{islift}(g,f,b)}{R(g,f,f',F(a,b))}{f'(b)}
+\end{align*}
+there is a section $s:\prd{y:Y}{z:\mathcal{J}_F X(y)} P(y,z)$ such that $s \circ \beta^F_X = N$ (plus two more computation rules we ignore).
+
+\begin{lem}\label{thm:appx-factsys}
+  If $\proj1 : (\sm{y:Y} Z(y)) \to Y$ is right orthogonal to $F$, then
+  \[(-\circ \beta^F_X) : \Big(\prd{y:Y} (\mathcal{J}_F X(y) \to Z(y))\Big) \to \Big(\prd{y:Y} (X(y) \to Z(y))\Big) \]
+  is an equivalence.
+\end{lem}
+\begin{proof}
+  As in \cref{thm:appx-loc}, we will show that it is path-split using the induction principle of $\mathcal{J}_F X$.
+
+  First, given $h:\prd{y:Y} (X(y) \to Z(y))$, we take $P(y,x) \defeq Z(y)$ and $N\defeq h$.
+  To give the remaining data $R,S$, suppose given $a:A$, $g:C(a) \to Y$, $f:\prd{b:B(a)} \mathcal{J}_F X(g(F(a,b)))$, and $f':\prd{b:B(a)} Z(g(F(a,b)))$.
+  Now we can apply \cref{thm:orth-dep} with $l\defeq F(a)$ and $f\defeq f'$: an inhabitant of~\eqref{eq:dep-fillers} consists exactly of the desired $R$ and $S$.
+
+  Second, given $h,k:\prd{y:Y} (\mathcal{J}_F X(y) \to Z(y))$ and $p:h\circ \beta^F_X = k\circ \beta^F_X$, we take $P(y,x) \defeq (h(y,x)=k(y,x))$ and $N\defeq p$.
+  To give $R,S$, suppose given $a:A$, $g:C(a) \to Y$, $f:\prd{b:B(a)} \mathcal{J}_F X(g(F(a,b)))$, and
+  \[f':\prd{b:B(a)} h(g(F(a,b)),f(b))=k(g(F(a,b)),f(b)).\]
+  Define
+  \begin{align*}
+    j(c) &\defeq h(g(c),\mathsf{lift}(g,f,c))\\
+    j'(c) &\defeq k(g(c),\mathsf{lift}(g,f,c))\\
+    q(b) &\defeq k(g(F(a,b),f(b)).
+  \end{align*}
+  Then we can apply \cref{thm:orth-dep} to the square
+  \[
+  \begin{tikzcd}
+    B(a) \ar[d,"F(a)"'] \ar[r,"q"] & \sm{y:Y} Z(y) \ar[d,"\proj1"] \\
+    C(a) \ar[r,"g"'] & Y.
+  \end{tikzcd}
+  \]
+  We have
+  \[ j'(F(a,b)) \jdeq k(g(F(a,b)),\mathsf{lift}(g,f,F(a,b))) = k(g(F(a,b)),f(b)) \jdeq q(b) \]
+  and
+  \begin{multline*}
+    j(F(a,b)) \jdeq h(g(F(a,b)),\mathsf{lift}(g,f,F(a,b))) = h(g(F(a,b)),f(b))\\ \overset p= k(g(F(a,b)),f(b)) \jdeq q(b),
+  \end{multline*}
+  giving two inhabitants $(j,\nameless)$ and $(j',\nameless)$ of~\eqref{eq:dep-fillers}, which are therefore equal.
+  This equality consists of an equality $j=j'$, which gives precisely $R$, and an equality between the above two paths, which gives precisely $S$.
+\end{proof}
+
+\begin{thm}
+  Given $F:\prd{a:A} B(a) \to C(a)$, define $\cR = F^{\perp}$ and $\cL = {}^{\perp}\cR$, and let $\hat F$ be as in \cref{sec:localizing} and $\mathcal{J}_{\hat F}$ constructed as above for $\hat F$.
+  Then for any $X:Y\to\UU$, the composite
+  \[ \Big(\sm{y:Y} X(y)\Big) \to \Big(\sm{y:Y} \mathcal{J}_{\hat F} X(y)\Big) \to Y \]
+  is an $(\cL,\cR)$-factorization.
+  Therefore, $(\cL,\cR)$ is an orthogonal factorization system.
+\end{thm}
+\begin{proof}
+  First we note that~\eqref{eq:dep-fillers} for the codiagonal $\nabla_l$ is essentially a path-space of~\eqref{eq:dep-fillers} for $l$, and hence also contractible under the same hypotheses.
+  Thus, \cref{thm:appx-factsys} applied to $\hat F$ implies that the first factor of this factorization is in $\cL$.
+  It remains to show the second factor is in $\cR$, which is to say that~\eqref{eq:dep-fillers} is contractible for $l\defeq F(a)$ and $X\defeq \mathcal{J}_{\hat F} X$.
+
+  Using the $F(a)$s appearing in $\hat F$, we get an inhabitant
+  \[(\mathsf{lift}(\inl(a),g,f),\mathsf{islift}(\inl(a),g,f))\]
+  of this type.
+  It remains to show this type is a mere proposition, so let $(j,h)$ and $(j',h')$ be elements of it.
+  Then $j$ and $j'$ together with $\ct{h}{(h')^{-1}}$ give a map $f':\prd{d:C(a) +_{B(a)} C(a)} \mathcal{J}_{\hat F} X(g(\nabla_{F(a)}(d)))$, so we have $\mathsf{lift}(\inr(a),g,f') :\prd{c:C(a)} \mathcal{J}_{\hat F} X(g(c))$, and a path $\mathsf{islift}(\inr(a),g,f')$ that can be decomposed into
+  \begin{align*}
+    k &: \mathsf{lift}(\inr(a),g,f') = j\\
+    k' &: \mathsf{lift}(\inr(a),g,f') = j'\\
+    k'' &: (\ct{k^{-1}}{k'}) \circ F(a) = \ct{h}{(h')^{-1}}.
+  \end{align*}
+  Thus, $j=j'$ by a path $\ct{k^{-1}}{k'}$ that identifies $h$ with $h'$, as desired.
+
+  Finally, in \cref{sec:modal-refl-subun} we defined orthogonal factorization systems by the uniqueness of factorizations and proved from this the orthogonality of the two classes of maps; but it is easy to show that, as in classical category theory, orthogonality implies the uniqueness of factorizations when they exist, since any two factorizations must lift uniquely against each other.
+\end{proof}
+
 \section{The reflective subuniverse of separated types}
+
+In this section, we develop the general theory of reflective subuniverses, drawing on~\cite{RijkeShulmanSpitters} and emphasizing those properties that are necessary in what follows. 
+
+We begin in \cref{subsection:reflectivesubuniverses} with definitions and preliminary observations. While we later specialize to $\degg(k)$-localization, working in greater generality clarifies the structure of many of the arguments. For example, other reflective subuniverses, such as the subuniverse of $n$-truncated types, naturally arise as we investigate $\degg(k)$-local types. The key to understanding the relationship between $\degg(k)$-local types and truncated types can be phrased as a general comparison result about reflective subuniverses, which we record in \cref{lemma:commutelocalization}.
+
+In \cref{ss:separated-types}, we focus on the separated types of a given reflective subuniverse $L$. These are the types whose identity types are in the subuniverse. In the case of localization with respect to a map $f$, the separated types are precisely the $\Sigma f$-local types. Many of the results that we will need for $\Sigma f$-localization can be phrased as more general results on $L$-separated types, and we prove them as such. 
+
+Write $L'$ for the subuniverse of $L$-separated types.
+\cref{ss:constructionofseparated} contains a proof that $L$-separated types form a reflective subuniverse. This is not necessary for our later results since, in the case of localization with respect to a map $f$, $L_f'$-local types and $L_{\Sigma f}$-local types coincide. However, this result may be of use to the reader interested in more general localizations.
+
+In \cref{ss:lex}, we show that $L$ and $L'$ together behave similarly to a lex modality.
+In particular, we characterize the identity types of $L'$-localizations and
+give results about the preservation of pullbacks and fiber sequences.
+
+\subsection{Reflective subuniverses}\label{subsection:reflectivesubuniverses}
+
+In this section, we develop background on reflective subuniverses, building on~\cite{RijkeShulmanSpitters}. Our investigation of localization with respect to families of maps, carried out in \cref{section:localization}, fits into this general framework.
+
+\begin{defn}
+    A \define{subuniverse} $L$ is a family $\mathsf{isLocal_L}:\UU \to\prop$.
+    Given $X : \UU$, if the type $\mathsf{isLocal_L}(X)$ is inhabited 
+    we say that $X$ is \define{$L$-local}.
+    We write $\UU_L \defeq \sm{X:\UU} \mathsf{isLocal_L}(X)$ for the subuniverse of
+    $L$-local types.
+\end{defn}
+
+\begin{eg}\label{example:localizationatmaps}
+    For any $n\geq -2$, being $n$-connected is a mere proposition, so the class of $n$-connected types
+    forms a subuniverse.
+\end{eg}
+
+\begin{defn}
+Given a subuniverse $L$ and a type $X$, an \define{$L$-localization} of $X$ consists of an $L$-local type
+$X'$ and a map $g : X \to X'$ such that for every $L$-local type $Y$ the map
+\[
+  \precomp{g} : (X'\to Y) \lra (X\to Y)
+\]
+is an equivalence. We call this last fact \define{the universal property of $L$-localization}.
+\end{defn}
+
+A straightforward application of the universal property and the univalence axiom
+shows that localizations are unique when they exist:
+
+\begin{lem}[{\cite[Lemma 1.17]{RijkeShulmanSpitters}}]
+Given a subuniverse $L$, the type of $L$-localizations of $X$ is a mere proposition.\qed
+\end{lem}
+
+\begin{defn}
+A \define{reflective subuniverse} $L$ consists of a subuniverse $\mathsf{isLocal_L}:\UU\to\prop$,
+a \define{reflector} $L:\UU\to\UU_L$
+and a \define{unit}
+\[
+  \eta : \prd{X:\UU}X \to LX
+\]
+such that for every $X : \UU$, the
+map $\eta_X : X \to LX$ is an $L$-localization of $X$.
+\end{defn}
+
+\begin{eg}\label{example:subuniversemaps}
+Many examples of reflective subuniverses are obtained by \emph{localizing} at a family of maps $f:\prd{i:I}A_i\to B_i$.
+In this context, a type $X$ is $f$-local if the map $\precomp{f_i} : (B_i \to X) \to (A_i \to X)$ is an equivalence
+for all $i : I$.
+By~\cite[Theorem 2.16]{RijkeShulmanSpitters}, the $f$-local types form a reflective subuniverse which we denote by $L_f$.
+Examples of this include $n$-truncation for any $n \geq -2$ and $\degg(k)$-localization.
+We specialize to $L_f$ in \cref{section:localization} and specialize further
+to inverting natural numbers in \cref{section:localizationaway}.
+\end{eg}
+
+In the rest of this section, $L$ will denote an arbitrary reflective subuniverse.
+We recall the basic properties of reflective subuniverses from~\cite{RijkeShulmanSpitters} and~\cite[Section~7.7]{hottbook}.
+First, two reflective subuniverses with the same local types necessarily have the same reflector and the same unit.
+This means that being reflective is a mere property of a subuniverse.
+Moreover, a type $X$ is local if and only if the unit $\eta_X : X \to LX$ is an equivalence.
+% and for the unit to be an equivalence it suffices that it has a left inverse.
+The reflector $L$ is automatically functorial in the sense that for any
+$g : X \to Y$, there is a unique map, denoted $Lg : LX \to LY$, together with a homotopy making the following square commute
+\[
+        \begin{tikzpicture}
+          \matrix (m) [matrix of math nodes,row sep=2em,column sep=3em,minimum width=2em]
+          { X & L X \\
+            Y & L Y . \\};
+          \path[->]
+            (m-1-1) edge node [above] {$\eta$} (m-1-2)
+                    edge node [left] {$g$} (m-2-1)
+            (m-2-1) edge node [above] {$\eta$} (m-2-2)
+            (m-1-2) edge [dashed] node [right]{$L g$} (m-2-2)
+            ;
+        \end{tikzpicture}
+\]
+
+Any reflective subuniverse contains the unit type and is closed under
+pullbacks, products, identity types, dependent products over any type,
+sequential limits and other
+limits that can be defined in homotopy type theory~\cite{AKL}.
+Note, however, that reflective subuniverses are not closed under dependent sums in general,
+even if the indexing type is in the reflective subuniverse.
+(See \cref{example:nonlocalfib2,example:nonlocalfib}.)
+
+The universal property of $L$-localization can be regarded as a recursion principle.
+From this point of view, it turns out that a reflective subuniverse has an induction principle (dependent elimination)
+precisely when it is closed under dependent sums:
+
+\begin{thm}[{\cite[Theorem 1.32]{RijkeShulmanSpitters}}]\label{modality}
+The following are equivalent:
+\begin{enumerate}
+\item For any local type $X$ and any family $P:X \to \UU_L$ of local types, the dependent pair type $\sm{x:X} P(x)$ is again local.
+\item For any type $X$ and any family $P:LX\to\UU_L$, the precomposition map
+\[
+  \precomp{\eta_X}: \Big( \prd{l:LX} P(l) \Big) \lra \Big( \prd{x:X} P(\eta(x)) \Big)
+\]
+is an equivalence.  % Equivalently, has a section.
+\item For any type $X$, the unit $\eta_X: X \to LX$ is \define{$L$-connected}, i.e., for any $l:LX$, the localization $L(\fib{\eta_X}{l})$ is contractible.
+\end{enumerate}
+% The above aren't equivalent unless each one is quantified over X.
+% Moreover, the next definition doesn't make sense for a fixed X.
+If any of these equivalent conditions hold, we say that $L$ is a \define{modality}.\qed
+\end{thm}
+
+Although an arbitrary reflective subuniverse need not have dependent elimination into
+families of local types (property (2), above), we observe that if property (1) holds for a particular type family over $LX$,
+then property (2) holds for that type family. This gives a restricted version of the dependent elimination principle,
+which we will use several times in what follows to circumvent the fact that $\degg(k)$-localization is not a modality.
+
+\begin{prop}\label{theorem:generalized-induction}
+Consider a type $X$ and a type family $P:LX \to \UU$ such that the total space $\sm{l:LX} P(l)$ is local.
+Then the precomposition map
+\[
+  \precomp{\eta_X} : \Big(\prd{l:LX}P(l)\Big) \lra \Big(\prd{x:X}P(\eta_X(x))\Big)
+\]
+is an equivalence.
+\end{prop}
+
+This follows from the proof that (1) implies (2) in~\cite[Theorem~1.32]{RijkeShulmanSpitters}, but we include
+a proof here for completeness.
+
+\begin{proof}
+Since $LX$ is local and $\sm{l:LX}P(l)$ is local, the precomposition maps $\precomp{\eta_X}$ in the commuting square
+\[
+  \begin{tikzcd}
+    (LX\to \sm{l:LX}P(l)) \arrow[r,"\precomp{\eta_X}"] \arrow[d,swap,"\proj 1\circ\blank"] & (X\to \sm{l:LX}P(l)) \arrow[d,"\proj 1\circ\blank"] \\
+    (LX\to LX) \arrow[r,swap,"\precomp{\eta_X}"] & (X\to LX)
+  \end{tikzcd}
+\]
+are equivalences. It follows that they induce an equivalence from the fiber of the left-hand map $\proj 1\circ\blank$ at $\idfunc[LX]$ to the fiber of the right-hand map $\proj 1\circ\blank$ at $\eta_X$. In other words, we have an equivalence
+\[
+  \precomp{\eta_X} : \Big(\prd{l:LX}P(l)\Big) \lra \Big(\prd{x:X}P(\eta_X(x))\Big).\qedhere
+\]
+\end{proof}
+
+\medskip
+As one might expect, maps that become equivalences after $L$-localization
+will become relevant later.
+We call such a map an \define{$L$-equivalence}.
+
+\begin{lem}\label{lemma:characterizationorthogonal}
+For a map $g : X \to Y$, the following are equivalent:
+\begin{enumerate}
+\item $g$ is an $L$-equivalence.
+\item For any local type $Z$, the precomposition map
+\[
+  \precomp{g} : (Y \to Z) \lra (X \to Z)
+\]
+is an equivalence.
+\end{enumerate}
+\end{lem}
+
+This implies in particular that the unit $\eta : X \to L X$ is an $L$-equivalence for any type $X$.
+
+\begin{proof} First we show that (1) implies (2).
+    Let $Z$ be $L$-local. From the square used to define $Lg$,
+    we can factor the map $\precomp{g} : (Y \to Z) \to (X \to Z)$ as
+    \[
+        (Y \to Z) \simeq (L Y \to Z) \stackrel{\precomp{(L g)}}{\longrightarrow} (L X \to  Z) \simeq (X \to Z).
+    \]
+ Hence if $L g$ is an equivalence, then $\precomp{g} : (Y \to Z) \to (X \to Z)$ is an equivalence.
+ 
+    Conversely, assume that $\precomp{g} : (Y \to Z) \to (X \to Z)$ is an equivalence for every $L$-local type $Z$.
+    Then, using the same factorization and choosing $Z$ to be $L X$ and $L Y$, we deduce that $L g$ must be an equivalence.
+\end{proof}
+
+\cref{lemma:characterizationorthogonal} also implies that $L$-equivalences are closed under transfinite composition.
+We make use of the notion of sequential colimit from \cite[Section 3.1]{Brunerie}.
+
+\begin{lem}\label{lemma:orthogonalcomposition}
+    If the maps in a type sequence
+\begin{equation*}
+\begin{tikzcd}
+X_0 \arrow[r,"h_0"] & X_1 \arrow[r,"h_1"] & X_2 \arrow[r,"h_2"] & \cdots
+\end{tikzcd}
+\end{equation*}
+    are $L$-equivalences, then the transfinite composite $\overline{h} : X_0 \to \colim_n X_n$ is an $L$-equiva\-lence.
+\end{lem}
+
+\begin{proof}
+    By \cref{lemma:characterizationorthogonal}, it is enough to check that
+    $\precomp{\overline{h}} : (\colim_n X_n \to Z) \to (X_0 \to Z)$
+    is an equivalence for every $L$-local type $Z$.
+    By the induction principle of the sequential colimit,
+    we can factor $\precomp{\overline{h}}$ as
+\begin{equation*}
+\begin{tikzcd}
+(\colim_n X_n \to Z) \arrow[r,"\eqvsym"] & \mathsf{lim}_n (X_n\to Z) \arrow[r] & X_0\to Z.
+\end{tikzcd}
+\end{equation*}
+    and by hypothesis the transition maps $(X_{n+1} \to Z) \to (X_n \to Z)$ in the limit diagram are equivalences,
+    so the second map is an equivalence as was to be shown.
+\end{proof}
+
+In \cref{section:localizationaway}, we will be interested in the effect of localization on the homotopy groups of a type.
+For this, we need to understand the relationship between localization and truncation.
+Since truncations are also examples of reflections onto reflective subuniverses,
+the following two general lemmas will be useful.
+
+\begin{lem}[{\cite[Lemma 3.29]{RijkeShulmanSpitters}}]\label{lemma:commutelocalization}
+    Let $K$ and $L$ be reflective subuniverses such that $L$ preserves $K$-local types in the sense that $LX$ is $K$-local whenever $X$ is $K$-local.
+    Then the types that are both $K$-local and $L$-local form a reflective subuniverse,
+    and $LK = LKL$ is the reflector.
+    If in addition $K$ preserves $L$-local types, then $KL = LK$.
+\end{lem}
+
+We include the proof since it is straightforward.
+
+\begin{proof}
+  For each $X$, there is a natural composite $X \to KX \to LKX$.  The codomain
+  $LKX$ is both $K$-local and $L$-local, and this map has the desired universal
+  property.
+  The same argument applies to the composite $X \to LX \to KLX \to LKLX$.
+  Therefore, by the uniqueness of reflectors, we have $LK = LKL$.
+
+  If $K$ preserves $L$-local types, then $KL$ is also a reflector, and therefore $KL=LK$.
+\end{proof}
+
+\begin{lem}\label{lemma:comparelocalization}
+    Let $K$ and $L$ be reflective subuniverses with $K$ contained in $L$.
+    Write $\eta^K$ and $\eta^L$ for the units.
+    \begin{enumerate}
+    \item If $f$ is an $L$-equivalence, then it is a $K$-equivalence.
+          In particular, for any $X$, $K\eta^L_X : KX \to KLX$ is an equivalence.
+    \item If $X$ is $K$-local, then $\eta^L_X : X \to LX$ is an equivalence.
+          In particular, for any $X$, $\eta^L_{KX} : KX \to LKX$ is an equivalence.
+    \item If $X$ is a type such that $LX$ is $K$-local, then the 
+          natural map $LX \to KX$ is an equivalence.
+    \end{enumerate}
+\end{lem}
+
+\begin{proof}
+(1) follows from \cref{lemma:characterizationorthogonal}, and (2) is clear.
+For (3), one checks that the unit $\eta^L_X : X \to LX$ has the universal
+property of $K$-localization.
+\end{proof}
+
+\subsection{The subuniverse of separated types}\label{ss:separated-types}
+
+We next investigate the types whose identity types are $L$-local.
+We call these the $L$-separated types and denote the subuniverse by $L'$.
+We show that the universe of $L$-local types is $L$-separated, up to size
+issues, and this is sufficient to extend families of $L$-local types over
+$L'$-localizations, an important tool in our work.
+We finish with a constrained dependent elimination rule.
+
+\begin{defn}
+Let $L$ be a reflective subuniverse and let $X : \UU$ be a type. 
+We say that $X$ is \define{$L$-separated} if its identity types are $L$-local types.
+We write $L'$ for the subuniverse of $L$-separated types.
+\end{defn}
+
+In other words, a type $X$ is $L$-separated if its diagonal $\Delta:X\to X\times X$ is classified by $\UU_L$.
+
+\begin{eg}\label{example:truncationisseparated}
+Given $n \geq -2$, the subuniverse of $(n+1)$-truncated types is precisely the subuniverse of separated types for the reflective subuniverse of $n$-truncated types.
+\end{eg}
+
+More generally, for any family of maps $f$,
+the separated types for the subuniverse of $f$-local types
+are also characterized in a simple way: 
+% While this logically fits in Section 4, we have it here for two reasons.
+% First, to make the concept of L' more concrete.
+% Second, to motivate the more general fact that separated types
+% always form a reflective subuniverse.
+% Note that the previous example is a special case of this lemma.
+
+\begin{lem}\label{lemma:characterizationsigmaflocal}
+    Let $f:\prd{i:I}A_i\to B_i$ be a family of maps. Denote the family consisting of the suspensions
+    of the functions by $\susp{f} : \prd{i:I} \susp{A_i} \to \susp{B_i}$.
+    A type $X$ is $\suspsym f$-local if and only if for every $x,y : X$, the type
+    $x =_X y$ is $f$-local.
+    In other words, $L_{\susp{f}} = (L_{\!f})'$.
+\end{lem}
+
+\begin{proof}
+    By the induction principle for suspension and naturality, we obtain for each $i : I$ a commutative square
+\[
+  \begin{tikzcd}
+    (\susp{B_i} \to X) \arrow[r,"\simeq"] \arrow[d] & \left( \sm{x,y:X} (B_i \to x = y) \right) \arrow[d] \\
+    (\susp{A_i} \to X) \arrow[r,"\simeq"] & \left( \sm{x,y:X} (A_i \to x = y) \right)
+  \end{tikzcd}
+\]
+in which the horizontal maps are equivalences.
+So $X$ is $\suspsym f$-local if and only if the right vertical map is an equivalence
+for every $i : I$, if and only if for each $x,y : X$, the type $x = y$ is $f_i$-local
+for every $i : I$.
+\end{proof}
+
+Notice that in this case the subuniverse of separated types is reflective
+since it is again localization with respect to a family of maps~\cite[Theorem~2.16]{RijkeShulmanSpitters}.
+This holds more generally: we will prove in \cref{ss:constructionofseparated} that the subuniverse
+of separated types is always reflective.
+In the remainder of this section, we give results that will be used for that proof
+as well as in later parts of the paper.
+
+\begin{rmk}
+The following are true for any reflective subuniverse $L$.
+\begin{enumerate}
+\item Since $L$-local types are closed under pullback, it follows that all $L$-local types are $L$-separated.
+\item Since pullbacks commute with identity types, it follows that $L$-separated types are closed under pullbacks. Similarly, $L$-separated types are closed under retracts, subtypes, and dependent products of families of $L$-separated types indexed by an arbitrary type.
+\item Since the unit type is $L$-local, it follows that every mere proposition is $L$-separated.
+\item If $L$ is closed under dependent sums, then $L'$ is also closed under dependent sums,
+    by the characterization of identity types of dependent sums~\cite[Theorem~2.7.2]{hottbook}.
+    So, given that separated types form a reflective subuniverse, it will follow that if $L$ is a modality,
+    then so is $L'$.
+\end{enumerate}
+\end{rmk}
+
+\begin{lem}\label{lemma:etasurjective}
+    The unit of an $L'$-localization $\eta' : X \to L'X$ is surjective.
+\end{lem}
+\begin{proof}
+By definition, a type is $L$-separated if and only if its identity types are $L$-local.
+So any subtype of an $L$-separated type is again $L$-separated.
+It follows that the image of $\eta'$ is $L$-separated, and thus we have an extension
+\[
+  \begin{tikzcd}
+    X \arrow[r,"\tilde{\eta'}"] \arrow[d,swap,"\eta'"] & \im(\eta') \\
+    L'X \arrow[ur,dashed]
+  \end{tikzcd}
+\]
+which is easily seen to be a section of the inclusion $\im(\eta')\hookrightarrow X'$.
+Therefore, $\eta'$ is surjective.
+\end{proof}
+
+\begin{prop}\label{prop:UU_L-is-L-separated}
+The identity types of the subuniverse $\UU_L$ are equivalent to $L$-local types.
+\end{prop}
+
+%In particular, the type $\mathsf{isContr}(A)$ is local for any local type $A$,
+%since it is equivalent to the type $A = \unit$.
+
+\begin{proof}
+    Note that for any two $L$-local types $A$ and $B$ we have $\eqv{(A=B)}{(\eqv{A}{B})}$ by univalence and the
+    fact that being $L$-local is a mere proposition.
+    Now, notice that the type $\eqv{A}{B}$ is equivalent to the pullback
+  \[
+    \begin{tikzcd}[column sep=huge]
+      (\eqv{A}{B}) \arrow[r] \arrow[d] & \unit \arrow[d,"{(\idfunc[A],\idfunc[B])}"] \\
+      (A \sto B) \times (B \sto A) \times (B \sto A)
+         \arrow[r,swap,"{(f,g,h) \longmapsto (hf,fg)}" yshift=-1ex] & (A \sto A) \times (B \sto B).
+    \end{tikzcd}
+  \]
+  of $L$-local types, so it is $L$-local.
+\end{proof}
+
+The only thing that prevents $\UU_L$ from actually being $L$-separated is the fact that
+$\UU_L$ is not small.
+But we can still treat it as an $L$-separated type in the following sense.
+
+\begin{lem}\label{lemma:extendtoUL}
+Every type family $P : X \to \UU_L$ extends uniquely along any $L'$-localization $X \to L'X$.
+That is, every map $Y \to X$ with $L$-local fibers is the pullback along $X \to L'X$ of
+a unique map $Y' \to L'X$ with $L$-local fibers.
+\end{lem}
+
+\begin{proof}
+    We prove the first form of the statement.
+    By \cref{prop:UU_L-is-L-separated}, the identity types of $\UU_L$ are
+    equivalent to small types, i.e., $\UU_L$ is a locally small type.
+    By the join construction~\cite{joinconstruction}, the image of $P$
+    can be taken to be a small type $I$ in $\UU$, so there is a factorization
+    of $P$ into a surjection $\hat{P} : X \to I$ followed by
+    an embedding $i : I \to \UU_L$:
+    \[
+        \begin{tikzpicture}
+          \matrix (m) [matrix of math nodes,row sep=2em,column sep=3em,minimum width=2em]
+          { X & \UU_L \\
+            L' X & I. \\};
+          \path[->]
+            (m-1-1) edge node [above] {$P$} (m-1-2)
+                    edge node [left] {} (m-2-1)
+                    edge node [above] {$\hat{P}$} (m-2-2)
+            (m-2-2) edge node [right] {$i$} (m-1-2)
+            ;
+        \end{tikzpicture}
+    \]
+    Since the identity types of $I$ are equivalent to identity types
+    of $\UU_L$, and $I$ is small, it follows that the identity types of $I$ are actually $L$-local.
+    This means that $I$ is an $L$-separated type, so we can extend $\hat{P}$ to $L' X$ 
+    giving us the desired extension of $P$ by composing with $i$.
+
+    Since $X \to L'X$ is surjective (\cref{lemma:etasurjective}),
+    any such extension must factor through the image $I$.
+    So uniqueness follows from the universal property of $L'$-localization.
+\end{proof}
+
+\begin{rmk} 
+    In the special case in which $L$ is localization with respect to a
+    family of maps $f$ (see \cref{section:localization}),
+    which is enough for our purposes, \cref{lemma:extendtoUL} has a simpler proof.
+    As \cref{lemma:characterizationsigmaflocal} shows,
+    $L'$ corresponds to localization with respect to the family $\susp{f}$
+    of suspended maps.
+    In this case, the localization $L'$ can be constructed using a higher inductive type
+    that can eliminate into any $f$-local type, not only small ones, as \cite[Lemma 2.15]{RijkeShulmanSpitters} shows, so the result follows.
+\end{rmk}
+
+\begin{lem}\label{lemma:separatedpluslocalisseparated}
+If $X$ is an $L$-separated type and $P:X\to \UU_L$ is a family of $L$-local types, then the type
+$\sm{x:X}P(x)$ is $L$-separated.
+\end{lem}
+
+\begin{proof}
+For any $(x,p)$ and $(y,q)$ in $\sm{x:X}P(x)$, the type $(x,p)=(y,q)$ is equivalent to the pullback
+\[
+  \begin{tikzcd}[column sep=huge]
+    (x,p)=(y,q) \arrow[r] \arrow[d] & \unit \arrow[d,"q"] \\
+    (x=y) \arrow[r,swap,"\transfib{P}{-}{p}"] & P(y)
+  \end{tikzcd}
+\]
+of $L$-local types, so it is $L$-local. 
+\end{proof}
+
+\cref{lemma:separatedpluslocalisseparated} and \cref{theorem:generalized-induction}
+imply that $L'$-localizations have a dependent elimination principle.
+
+\begin{prop}\label{proposition:inductionLseparated}
+Let $P:L'X \to \UU$ be a type family with $L$-local fibers.
+Then precomposition with an $L'$-localization $\eta' : X \to L'X$ induces an equivalence
+\[
+    \prd{x : L'X} P(x) \simeq \prd{x : X} P(\eta' x). \tag*{\qed}
+\]
+\end{prop}
+
+%\note{Can we include this somewhere? It also follows that the total space $\sm{A:\UU_L}A$ of the universal family of $L$-local types is $L$-separated.}
+
+\subsection{Construction of $L'$-localization}\label{ss:constructionofseparated}
+
+We next show that for any reflective subuniverse $L$, the subuniverse
+$L'$ of $L$-separated types is reflective.
+The material in this section is not needed in the rest of the paper,
+since we later specialize to the case where $L$ is localization with respect
+to a family $f$ of maps. In this case $L' = L_{\suspsym f}$,
+which is known to be reflective.
+Nevertheless, the more general existence we prove in this section
+is likely to be of use in other situations.
+
+To show that $L'$ is reflective, we use a `local version' of the type
+theoretic Yoneda Lemma.
+
+% Variable names chosen to match the place where we use this.
+\begin{lem}\label{lemma:local_yoneda}
+For each $y:X$ and each $P:X\to \UU_L$, the map
+\[
+  \Big(\prd{z:X}L(y=z)\to P(z)\Big) \lra P(y)
+\]
+given by $f\mapsto f(y,\eta(\refl{y}))$ is an equivalence.
+The inverse sends $p$ in $P(y)$ to the unique map $f : \prd{z:X}L(y=z)\to P(z)$
+sending $\eta(\refl{y})$ to $p$.
+\end{lem}
+
+\begin{proof}
+By the universal property of $L(y=z)$ and identity elimination,
+the map in the statement can be factored as follows:
+\begin{align*}
+\Big(\prd{z:X}L(y=z)\to P(z)\Big) & \simeq \Big(\prd{z:X}(y=z)\to P(z)\Big) \\
+& \simeq P(y).
+\end{align*}
+The description of the inverse follows immediately.
+\end{proof}
+
+We will need a general lemma that allows us to construct extensions along maps.
+
+\begin{lem}\label{lem:unique_extension}
+Let $g:A\to B$ and $f:A\to C$ be maps for which we have a unique extension
+\[
+  \begin{tikzcd}
+    \fib{g}{b} \arrow[r,"f\circ\proj 1"] \arrow[d] & C \\
+    \unit \arrow[ur,dashed]
+  \end{tikzcd}
+\]
+for every $b:B$.
+Then $f$ extends uniquely along $g$.
+\end{lem}
+
+\begin{proof}
+By assumption we have
+\[
+  \prd{b:B}\mathsf{isContr}\Big(\sm{c:C}\prd{a:A}{p:g(a)=b} f(a)=c\Big).
+\]
+The center of contraction gives us an extension
+\[
+  \begin{tikzcd}
+    A \arrow[r,"f"] \arrow[d,swap,"g"] & C \\
+    B \arrow[ur,dashed,swap,"\tilde{f}"]
+  \end{tikzcd}
+\]
+and its uniqueness follows from the contraction.
+\end{proof}
+
+Next we give a sufficient condition for a map to be an $L'$-localization.
+
+\begin{prop}\label{lemma:sufficientforlocalization}
+Let $X$ be a type.
+If $\eta': X \to X'$ is a surjective map such that for any $x,y:X$,
+\[
+  \mathsf{ap}_{\eta'}:(x=y) \lra (\eta'(x)=\eta'(y))
+\]
+is an $L$-localization, then $\eta'$ is an $L'$-localization.
+\end{prop}
+
+\begin{proof}
+By assumption, the types $\eta'(x) = \eta'(y)$ are $L$-local for every $x, y : X$.
+Since $\eta'$ is surjective, it follows that $x' = y'$ is $L$-local
+for every $x', y' : X'$.
+That is, $X'$ is $L$-separated.
+
+It remains to show that $\eta'$ is universal, so assume given $f : X \to Y$
+with $Y$ $L$-separated.
+By \cref{lem:unique_extension}, it is enough to show that $f$ restricts to a unique constant map
+on the fibers of $\eta'$. This means that we must show that
+\[
+  \sm{y:Y}\prd{x:X} (\eta'(x)=x') \lra (f(x)=y)
+\]
+is contractible for every $x':X'$.
+Since this is a mere proposition, and $\eta'$ is surjective, we can assume that
+$x' = \eta'(z)$.  So it is enough to show that
+\[
+  \sm{y:Y}\prd{x:X} (\eta'(x)=\eta'(z)) \lra (f(x)=y)
+\]
+is contractible for every $z:X$.
+Since $Y$ is assumed to be $L$-separated and $\mathsf{ap}_{\eta'}$ is assumed to be an $L$-localization,
+this type is equivalent to
+\[
+  \sm{y:Y}\prd{x:X} (x=z) \lra (f(x)=y)
+\]
+and it is easy to see that this is a contractible type by applying the contractibility of
+the total space of the path fibration twice.
+\end{proof}
+
+Now we can prove the main result of this section.
+
+\begin{thm}\label{thm:Lsep}
+For any reflective subuniverse $L$, the subuniverse of $L$-separated types is again reflective.
+\end{thm}
+
+\begin{proof}
+Fix a type $X : \UU$. Let $\mathcal{Y}_L:X\to (X\to\UU)$ be given by
+\[
+\mathcal{Y}_L(x,y)\defeq L(x=y).
+\]
+We would like to define $L' X$ to be $\im(\mathcal{Y}_L)$, but this is a subtype of
+$X \to \UU$, so it is not small (i.e., it does not live in $\UU$).
+However, since $\UU$ is locally small, so is $X \to \UU$.
+Thus the join construction~\cite{joinconstruction} implies that the image
+is equivalent to a small type which we denote $L' X$.
+This comes equipped with a surjective map
+\[
+\eta':X \lra L'X,
+\]
+which we take to be the unit of the reflective subuniverse.
+
+To show that $\eta'$ is a localization, we apply \cref{lemma:sufficientforlocalization}.
+First we show that $L' X$ is $L$-separated.  Since $\eta'$ is surjective
+and being $L$-local is a proposition, it is enough to show that
+$\eta'(x) = \eta'(y)$ is $L$-local for $x$ and $y$ in $X$.
+Since $L' X$ embeds in $X \to \UU$, we have an equivalence between
+$\eta'(x) = \eta'(y)$ and $(\lambda z . L(x = z)) = (\lambda z . L(y = z))$.
+The latter is equivalent to $\prd{z:X} L(x = z) = L(y = z)$, which
+is $L$-local by \cref{prop:UU_L-is-L-separated}.
+
+It remains to show that the canonical map $L(x=y)\to (\eta'(x)=\eta'(y))$ is an equivalence.
+By the above argument, combined with univalence,
+the problem reduces to showing that the canonical map
+\[
+    L(x=y) \lra \left(\prd{z:X} L(x=z) \simeq L(y=z)\right)\]
+is an equivalence.
+Using symmetry of equivalences, it suffices to show that the map
+\[
+    L(x=y) \lra \left(\prd{z:X} L(y=z) \simeq L(x=z)\right)
+\]
+is an equivalence.
+Moreover, since the forgetful map from equivalences to maps is an embedding,
+it is enough to show that the composite map
+\[
+    \alpha_{x,y} : L(x=y) \lra \left(\prd{z:X} L(y=z) \to L(x=z)\right)
+\]
+is an equivalence.
+Indeed, if $i$ is an embedding and $i \circ g$ is an equivalence,
+then $i$ is surjective.  Therefore $i$ is an equivalence and hence so is $g$.
+
+By the local Yoneda Lemma~\ref{lemma:local_yoneda}, with $P(z) \defeq L(x = z)$, there is an equivalence
+\[
+\beta_{x,y}: L(x=y) \lra \Big(\prd{z:X} L(y=z) \to L(x=z)\Big)
+\]
+which sends $p : L(x = y)$ to the unique function $f$ such that
+$f(x, \eta(\refl{x})) = p$.
+So it suffices to show that $\alpha_{x,y} = \beta_{x,y}$.
+By the universal property of $L(x=y)$, it is enough to show that
+$\alpha_{x,y} \circ \eta = \beta_{x,y} \circ \eta$ as maps
+$(x=y) \to \big(\prd{z:X} L(y=z) \to L(x=z)\big)$.
+Letting $x$ and $y$ vary and using path induction, we reduce the
+problem to showing that $\alpha_{x,x}(\eta(\refl{x})) = \beta_{x,x}(\eta(\refl{x}))$.
+
+Since $\alpha_{x,y}$ is defined by path induction, it is easy to see
+that $\alpha_{x,x}(\eta(\refl{x}))$ is equal to $\lam{z}\idfunc[L(x=z)]$.
+On the other hand, $\beta_{x,x}(\eta(\refl{x}))$ is the unique function $f$ such that
+$f(x, \eta(\refl{x})) = \eta(\refl{x})$.
+Therefore, this $f$ must also equal $\lam{z}\idfunc[L(x=z)]$,
+showing that $\alpha_{x,x}(\eta(\refl{x})) = \beta_{x,x}(\eta(\refl{x}))$.
+\end{proof}
+
+\subsection{$L'$-localization and finite limits}\label{ss:lex}
+
+We now explain how $L$ and $L'$ together behave similarly to a \define{lex modality},
+i.e., a modality that preserves pullbacks.
+Theorem~3.1 of \cite{RijkeShulmanSpitters} gives 13 equivalent characterizations of a lex modality,
+and it turns out that these hold for any reflective subuniverse
+if the modal operator is replaced by $L$ and $L'$ in the appropriate way.
+The propositions in this section show this for parts (ix), (x), (xii) and (xi)
+of Theorem~3.1, respectively.
+The proofs use the dependent elimination of $L'$ in a crucial way,
+but do not use the specific construction of $L'$-localization, just the existence.
+
+We start with a characterization of the identity types of an $L'$-localization.
+This is a generalization of~\cite[Lemma~7.3.12]{hottbook}.
+
+\begin{prop}\label{Lseparatedloopspace} % like RSS Thm 3.1 (ix)
+    Given a type $X$ and points $x,y : X$, the unique map $L(x = y) \to (\eta' x = \eta' y)$ making the triangle
+    \[
+    \begin{tikzpicture}
+      \matrix (m) [matrix of math nodes,row sep=2em,column sep=3em,minimum width=2em]
+      { (x=y) & \\
+        L(x = y)& (\eta' x = \eta' y) \\};
+      \path[->]
+        (m-1-1) edge node [left] {$\eta$} (m-2-1)
+                edge node [above] {$\mathsf{ap}_{\eta'}$} (m-2-2)
+        (m-2-1) edge node [above] {$\sim$} (m-2-2)
+        ;
+    \end{tikzpicture}
+    \]
+    commute is an equivalence.
+In particular, when $X$ is pointed,
+$\loopspacesym L' X \simeq L \loopspacesym X$.
+\end{prop}
+
+\begin{proof}
+    Fix $x : X$.
+    By \cref{lemma:extendtoUL}, the type family $X \to \UU_L$ sending
+    $y$ to $L(x = y)$ extends to $L'X$
+    as follows:
+\begin{equation*}
+\begin{tikzcd}[column sep=huge]
+X \arrow[r,"y\mapsto L(x=y)"] \arrow[d,swap,"{\eta'}"] & \UU_L \\
+L'X . \arrow[ur,dashed,swap,"P"]
+\end{tikzcd}
+\end{equation*}
+
+We claim that it is enough to prove that the total space of $P$ is contractible.
+To see this, notice that if $\sm{y:L'X}P(y)$ is contractible then we would have a
+commutative triangle
+    \[
+    \begin{tikzpicture}
+      \matrix (m) [matrix of math nodes,row sep=2em,column sep=3em,minimum width=2em]
+        { \left(\sm{y:X} x=y\right) & \\
+        \left(\sm{y:L'X} P(y)\right) & \left(\sm{y:L'X}\eta'x = y\right) \\};
+      \path[->]
+        (m-1-1) edge node [left] {} (m-2-1)
+                edge node [above] {} (m-2-2)
+        (m-2-1) edge node [above] {$\sim$} (m-2-2)
+        ;
+    \end{tikzpicture}
+    \]
+that restricts to the triangle in the statement for each $y : Y$.
+
+For the center of contraction of $\sm{y:L'X}P(y)$ we take $(\eta'(x),\eta(\refl{x}))$.
+It remains to construct a contraction
+\begin{equation*}
+\prd{y:L'X}{p:P(y)}(\eta'(x),\eta(\refl{x}))=(y,p).
+\end{equation*}
+By \cref{lemma:separatedpluslocalisseparated}, the total space of $P$ is $L$-separated, 
+so it follows that 
+\[
+  \prd{p:P(y)} (\eta'(x),\eta(\refl{x}))=(y,p)
+\]
+is $L$-local for every $y:L'X$. 
+Thus \cref{proposition:inductionLseparated} reduces the problem to
+constructing a term of type
+\begin{equation*}
+\prd{y:X}{p:L(x=y)}(\eta'(x),\eta(\refl{x}))=(\eta'(y),p).
+\end{equation*}
+
+On the other hand, for $y : X$ we have equivalences
+\begin{align*}
+    \left(\sm{p:L(x=y)}(\eta'(x),\eta(\refl{x}))=(\eta'(y),p)\right)
+ & \eqvsym \left(\sm{p:L(x=y)}{\alpha:\eta'(x)=\eta'(y)} \trans{\alpha}{\eta(\refl{x})} = p \right) \\
+ & \eqvsym \sm{\alpha:\eta'(x) = \eta'(y)} \unit \\
+ & \eqvsym \left( \eta'(x) = \eta'(y) \right),
+\end{align*}
+where the last type is clearly $L$-local.
+So we can apply \cref{theorem:generalized-induction} to reduce the problem to
+constructing a term of type
+\begin{equation*}
+    \prd{y:X}{p:x=y}(\eta'(x),\eta(\refl{x}))=(\eta'(y),\eta(p)) ,
+\end{equation*}
+which we can do using path induction.
+\end{proof}
+
+Before proving the next result,
+we need a lemma, which follows directly from the dependent elimination of $L'$.
+
+\begin{lem}\label{lemma:Lequivalencetotalspaces}
+Let $P:L'X\to \UU$ be a type family over $L'X$. 
+Then the map
+\begin{equation*}
+f:\Big(\sm{x:X} P(\eta'(x))\Big)\to \Big(\sm{y:L'X}P(y)\Big)
+\end{equation*}
+given by $(x,p)\mapsto (\eta'(x),p)$ is an $L$-equivalence. 
+\end{lem}
+
+\begin{proof}
+Assume given an $L$-local type $Z$ and notice that we have the following factorization of $\precomp{f}$:
+    \begin{align*}
+        \left(\sm{y : L'X} P(y)\right) \to Z &\simeq \prd{y : L'X} P(y) \to Z\\
+                                         &\simeq \prd{x : X} P(\eta' x) \to Z \\
+                                         &\simeq \left(\sm{x:X} P(\eta' x)\right) \to Z .
+    \end{align*}
+In the second equivalence, we use \cref{proposition:inductionLseparated} together with the fact
+that $Z$ and $P(y) \to Z$ are $L$-local.
+\end{proof}
+
+\begin{prop}\label{remark:preservationpullbacks} % like RSS Thm 3.1 (x)
+    Given a cospan $Y \stackrel{g}{\longrightarrow} Z \stackrel{f}{\longleftarrow} X$, let $P$ denote its pullback.
+    Let $Q$ denote the pullback of the $L'$-localized cospan $L'Y \rightarrow L'Z \leftarrow L'X$.
+    Then the map $P \to Q$ induced by the naturality of $L'$-localization is an $L$-equivalence.
+\end{prop}
+\begin{proof}
+    The result follows by observing that the $L$-localization of the map $P \to Q$
+    can be factored as the following chain of equivalences:
+    \begin{align*}
+         LP &\simeq L \left( \sm{x:X}\sm{y:Y} \, f(x) = g(y)\right)\\
+            &\simeq L \left( \sm{x:X}\sm{y:Y} \, L (f(x) = g(y))\right)\\
+            &\simeq L \left( \sm{x:X}\sm{y:Y} \, \eta'(f(x)) = \eta'(g(y))\right)\\
+            &\simeq L \left( \sm{x:X}\sm{y:Y} \, L'f(\eta'(x)) = L'g(\eta'(y))\right)\\
+            &\simeq L \left( \sm{x':L'X}\sm{y':L'Y} \, L'f(x') = L'g(y')\right) \simeq LQ .
+    \end{align*}
+    Here we used~\cite[Theorem~1.24]{RijkeShulmanSpitters} in the second equivalence and \cref{Lseparatedloopspace} in the third one.
+    For the fourth equivalence we use the naturality squares of $L'$, while the fifth equivalence
+    follows from \cref{lemma:Lequivalencetotalspaces}.
+\end{proof}
+
+As a consequence we get a result about the preservation of certain fiber sequences.
+
+\begin{cor}\label{corollary:preservationfibersequences2}
+    Given a fiber sequence $F \to Y \stackrel{f}{\rightarrow} X$, there is a map of fiber sequences
+    \[
+        \begin{tikzpicture}
+          \matrix (m) [matrix of math nodes,row sep=2em,column sep=3em,minimum width=2em]
+            { F & Y & X \\
+              F' & L'Y & L'X \\};
+          \path[->]
+            (m-1-1) edge [right hook->] node [right] {} (m-1-2)
+                    edge node [right] {} (m-2-1)
+            (m-1-2) edge node [above] {$f$} (m-1-3)
+                    edge node [right] {$\eta'$} (m-2-2)
+            (m-2-2) edge node [above] {$L'f$} (m-2-3)
+            (m-2-1) edge [right hook->] node [right] {} (m-2-2)
+            (m-1-3) edge node [right] {$\eta'$} (m-2-3)
+            ;
+        \end{tikzpicture}
+    \]
+    in which the left vertical map is an $L$-equivalence.
+    Here $F$ is the fiber over some $x_0 : X$, and $F'$ is the fiber over $\eta'(x_0)$.\qed
+\end{cor}
+
+\begin{prop}\label{cor:L'equivalenceisLconnected} % like RSS Thm 3.1 (xii)
+    Then every $L'$-equivalence $f : Y \to X$ is $L$-connected.
+    In particular, $\eta' : X \to L'X$ is $L$-connected.
+\end{prop}
+
+\begin{proof}
+    Let $x : X$.  We must show that the $L$-localization of $F$, the fiber of $f$ over $x : X$, is contractible.
+    To prove this we use \cref{corollary:preservationfibersequences2},
+    which gives us an $L$-equivalence between $F$ and $F'$, the fiber of $L'f$ at $\eta' x$.
+    But $L' f$ is an equivalence by hypothesis, so $F' \simeq 1$, and thus $F$ is $L$-connected.
+\end{proof}
+
+While the converse of \cref{cor:L'equivalenceisLconnected} does not hold,
+it is shown in~\cite[Lemma~1.35]{RijkeShulmanSpitters} that every $L$-connected map is an $L$-equivalence.
+
+\begin{prop}\label{proposition:2outof3} % like RSS Thm 3.1 (xi)
+    Given maps $f : Y \to X$ and $g : X \to Z$ such that $g \circ f$ is $L'$-connected,
+    then $f$ is $L$-connected if and only if $g$ is $L'$-connected.
+\end{prop}
+
+\begin{proof}
+    If $g$ is $L'$-connected, then both $g\circ f$ and $g$ are $L'$-equivalences,
+    and thus $f$ is an $L'$-equivalence. Then \cref{cor:L'equivalenceisLconnected}
+    implies that $f$ is $L$-connected.
+
+    For the converse, notice that taking fibers over each $z:Z$ reduces the problem
+    to showing that given an $L$-connected map $f : Y \to X$
+    such that $Y$ is $L'$-connected, it follows that $X$ is $L'$-connected.
+
+    Since $L'Y$ is contractible, it is enough to show that $L'f$ is an equivalence.
+    To do this, we prove that the fibers of $L'f$ are contractible.
+    Since this a proposition, and $\eta' : X \to L'X$ is surjective (\cref{lemma:etasurjective}), it is enough
+    to show that, for each $x : X$, the fiber $F'$ of $L'f$ at $\eta'(x)$ is contractible.
+    Notice that $F'$ is $L$-local, since $L' Y$ being contractible implies that $F'$ is
+    equivalent to an identity type of $L' X$.
+    Now, using \cref{corollary:preservationfibersequences2},
+    we get an $L$-equivalence between the fiber of $f$ at $x$, and $F'$.
+    But since $F'$ is also $L$-local, this is in fact an $L$-localization.
+    Using the fact that $f$ is $L$-connected, we deduce that $F'$ is contractible.
+\end{proof}
+
+\begin{rmk}
+The above proposition almost gives us a $2$-out-of-$3$ property that combines $L$ and $L'$.
+However the map $\emptyt \to \unit$ is $(-2)$-connected, and $\unit$ is $(-1)$-connected,
+whereas $\emptyt$ is not $(-1)$-connected. So the remaining implication of the $2$-out-of-$3$ property
+does not hold. One can show the weaker result that the composite of an $L$-connected map followed by
+an $L'$-connected map is $L$-connected.
+\end{rmk}
+
+\begin{rmk}
+\cref{Lseparatedloopspace} allows us to give a concrete description of
+the extension defined in \cref{lemma:extendtoUL}.
+Using an argument similar to the one used in the proof of \cref{remark:preservationpullbacks},
+one can show that given an $L'$-localization $\eta' : X \to L' X$
+and a map $f: Y \to X$ with $L$-local fibers, $f$ is the pullback of
+the fiberwise $L$-localization of $\eta' \circ f$.
+\end{rmk}
+
+We conclude this section with a characterization of $L'$-localizations.
+
+\begin{thm}\label{theorem:commutativityloopreflectivesubuniv}
+Consider a reflective subuniverse $L$, and let $X$ be a type.
+For a map $\eta':X\to X'$, the following are equivalent:
+\begin{enumerate}
+\item $\eta':X\to X'$ is an $L'$-localization.
+\item The map $\eta':X\to X'$ is surjective and for any $x,y:X$,
+\[
+  \mathsf{ap}_{\eta'}:(x=y) \lra (\eta'(x)=\eta'(y))
+\]
+is an $L$-localization.
+\end{enumerate}
+\end{thm}
+
+\begin{proof}
+Assume that (1) holds.
+The map $\eta'$ is surjective by \cref{lemma:etasurjective}.
+The other claim follows from \cref{Lseparatedloopspace}.
+
+The other implication is \cref{lemma:sufficientforlocalization}.
+\end{proof}

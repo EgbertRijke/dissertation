@@ -1017,3 +1017,32 @@ Then the canonical map
 \end{equation*}
 is a group isomorphism, for any $k\geq 1$.
 \end{thm}
+
+\section{Find a place for this}
+
+State for $n$-connected maps.
+\begin{lem}
+Consider a type sequence
+\begin{equation*}
+\begin{tikzcd}
+A_0 \arrow[r,"f_0"] & A_1 \arrow[r,"f_1"] & A_2 \arrow[r,"f_2"] & \cdots
+\end{tikzcd}
+\end{equation*}
+in which each $f_n:A_n\to A_{n+1}$ is surjective. Then the map $\mathsf{in}_0:A_0\to A_\infty$ is surjective.
+\end{lem}
+
+\begin{proof}
+We have to prove that
+\begin{equation*}
+\prd{x:A_\infty} \brck{\fib{\mathsf{in}_0}{x}}.
+\end{equation*}
+We do this by the universal property of $A_\infty$. Since $\brck{\fib{\mathsf{in}_0}{x}}$ is a mere proposition, there is nothing to show for the path constructors. Thus, it remains to show that
+\begin{equation*}
+\prd{n:\N}{x:A_n} \brck{\fib{\mathsf{in}_0}{\mathsf{in}_n(x)}}
+\end{equation*}
+The base case is trivial. For the inductive step, observe that since $f_n$ is assumed to be surjective, we have
+\begin{equation*}
+\Big(\prd{x:A_{n}} \brck{\fib{\mathsf{in}_0}{\mathsf{in}_{n+1}(f_n(x))}}\Big)\to\Big(\prd{x:A_{n+1}} \brck{\fib{\mathsf{in}_0}{\mathsf{in}_{n+1}(x)}}\Big)
+\end{equation*}
+Now note that $\mathsf{in}_{n}(x)=\mathsf{in}_{n+1}(f_n(x))$ to complete the proof.
+\end{proof}

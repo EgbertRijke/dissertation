@@ -27,6 +27,8 @@ A_2 \arrow[r,yshift=2ex] \arrow[r] \arrow[r,yshift=-2ex] & A_1 \arrow[l,yshift=1
 \end{equation*}
 Of course, we do so in homotopy type theory, so the task is to write down the correct \emph{homotopy type} of all such diagrams. Then we introduce their homotopy colimits, and show that in the case of the join construction this colimit coincides with the triple join.
 
+Set-quotients have been first constructed in \cite{UniMath2015,UniMath} using propositional resizing, and as higher inductive types in \cite{UFP} in the case where $A$ is assumed to be a set.
+
 \section{The join construction}
 
 \begin{defn}\label{defn:image_up}
@@ -218,7 +220,7 @@ For any type $A$ there is a type $\brck{A}$ that comes equipped with a map $\eta
 Let $A$ be a type. Then we define $\brck{A}\defeq A^{\ast\infty}$, and we define $\eta\defeq \seqin_0:A\to A^{\ast\infty}$. Then $\brck{A}$ is a proposition by \cref{lem:isprop_infjp}, and $\eta:A\to \brck{A}$ satisfies the universal property of propositional truncation by \cref{lem:infjp_up}.
 \end{proof}
 
-\subsection{Stage two: constructing the image of a map}
+\subsection{Stage two: constructing the image of a map}\label{sec:join_stage2}
 The image of a map $f:A\to X$ can be defined using the propositional truncation:
 \begin{defn}
 For any map $f:A\to X$ we define the \define{image}\index{image|textbf} of $f$ to be the type
@@ -597,7 +599,7 @@ and the unit of the set truncation is defined to be the quotient map.
 For each type $A$, the set truncation satisfies the universal property of the set truncation.
 \end{thm}
 
-\section{Elementary construction of the $n$-truncations}
+\section{Elementary construction of the $k$-truncations}
 
 \subsection{Truncated types}
 \begin{defn}
@@ -723,7 +725,7 @@ is $k$-truncated.
 This follows directly from \cref{lem:fib_total,thm:ktype_eqv}.
 \end{proof}
 
-\subsection{The universal property of the $n$-truncations}
+\subsection{The universal property of the $k$-truncations}
 
 \subsection{The join extension and connectivity theorems}
 
@@ -739,9 +741,9 @@ In this sense, our approximating sequence of the image is very nice:
 after $n$ steps of the approximation, only stuff of homotopy level higher than
 $n$ is added.
 
-Lemma 8.6.1 of \cite{hottbook} states that if $f:A\to B$ is an $m$-connected map,
-and if $P:B\to\UU$ is a family of $(m+n+2)$-truncated types,
-then precomposing by $f$ gives an $n$-truncated map of type
+Lemma 8.6.1 of \cite{hottbook} states that if $f:A\to B$ is an $l$-connected map,
+and if $P:B\to\UU$ is a family of $(k+l+2)$-truncated types,
+then precomposing by $f$ gives an $k$-truncated map of type
 \begin{equation*}
 \Big(\prd{b:B}P(b)\Big)\to\Big(\prd{a:A}P(f(a))\Big).
 \end{equation*}
@@ -749,7 +751,7 @@ The general join extension theorem states that if $f:A\to B$ is an $M$-connected
 map for some type $M$, and $P:B\to\UU$ is a family of $(\join{M}{N})$-local 
 types, then the mentioned precomposition is an $N$-local map 
 (we recall the terminology shortly). 
-Note that, if one takes spheres $\Sn^m$ and $\Sn^n$ for $M$ and $N$, 
+Note that, if one takes spheres $\Sn^l$ and $\Sn^k$ for $M$ and $N$, 
 one retrieves Lemma 8.6.1 of \cite{hottbook} as a simple corollary.
 
 We conclude this section with \autoref{thm:joinconstruction-connectivity},
@@ -786,8 +788,8 @@ is a reflective subuniverse, but \emph{not generally} a modality.
 The survey article \cite{RijkeShulmanSpitters} contains much
 more information about local types and the operation of localization.%
 }. 
-Recall that a type is $\sphere{n+1}$-local precisely when it is $n$-truncated,
-for each $n\geq -2$ (taking the $(-1)$-sphere to be the empty type).
+Recall that a type is $\sphere{n+1}$-local precisely when it is $k$-truncated,
+for each $k\geq -2$ (taking the $(-1)$-sphere to be the empty type).
 
 Dually, a type $A$ is said to be \define{$M$-connected} if every $M$-local
 type is $A$-local. That is, if for every $M$-local type $B$, the map
@@ -952,132 +954,132 @@ Now recall that the $n$-th join power of $\bool$ is the $(n-1)$-sphere $\Sn^{n-1
 a type is $(\Sn^{n-1})$-connected if and only if it is $(n-2)$-connected.
 \end{proof}
 
-\subsection{The construction of the $n$-truncation}\label{sec:truncation}
+\subsection{The construction of the $k$-truncation}\label{sec:truncation}
 
-In this section we will construct for any $n:\N$, the $n$-truncation on any univalent universe that contains
+In this section we will construct for any $k:\N$, the $k$-truncation on any univalent universe that contains
 a natural numbers object and is closed under graph quotients.
 We will do this via the modified join construction of \autoref{thm:modified-join}.
 Recall that a $(-2)$-truncated type is simply a contractible type, and that
-for $n\geq -2$ an $(n+1)$-truncated type is a type of which the identity types
-are $n$-truncated. The $(-2)$-truncation is easy to construct: it sends
+for $k\geq -2$ an $(n+1)$-truncated type is a type of which the identity types
+are $k$-truncated. The $(-2)$-truncation is easy to construct: it sends
 every type to the unit type $\unit$. Thus, we shall proceed by induction
 on the integers greater or equal to $-2$, and assume that the universe admits
-an $n$-truncation operation $\trunc{n}{\blank}:\UU\to\UU$ for a given $n$.
+an $k$-truncation operation $\trunc{k}{\blank}:\UU\to\UU$ for a given $n$.
 
-A suggestive way to think of the type $\trunc{n+1}{A}$ is as the quotient of $A$ modulo the
-`$(n+1)$-equivalence relation' given by $\trunc{n}{a=b}$. 
+A suggestive way to think of the type $\trunc{k+1}{A}$ is as the quotient of $A$ modulo the
+`$(n+1)$-equivalence relation' given by $\trunc{k}{a=b}$. 
 Indeed, by Theorem 7.3.12 of \cite{hottbook} we have that the canonical map
 \begin{equation*}
-\trunc{n}{a=b}\to(\tproj{n+1}{a}=\tproj{n+1}{b})
+\trunc{k}{a=b}\to(\tproj{n+1}{a}=\tproj{n+1}{b})
 \end{equation*}
-is an equivalence, and the unit $\tproj{n+1}{\blank}:A\to \trunc{n+1}{A}$ is
-a surjective map (it is in fact $(n+1)$-connected). 
+is an equivalence, and the unit $\tproj{k+1}{\blank}:A\to \trunc{k+1}{A}$ is
+a surjective map (it is in fact $(k+1)$-connected). 
 
 \begin{thm}\label{thm:truncation}
 In Martin-L\"of type theory with a univalent universe $\UU$ that is closed under
-graph quotients we can define, for every $n\geq -2$, an $n$-truncation operation
+graph quotients we can define, for every $k\geq -2$, an $k$-truncation operation
 \begin{equation*}
-\trunc{n}{\blank} : \UU\to\UU
+\trunc{k}{\blank} : \UU\to\UU
 \end{equation*}
 and for every $A:\UU$ a map
 \begin{equation*}
-\tproj{n}{\blank}:A\to\trunc{n}{A},
+\tproj{k}{\blank}:A\to\trunc{k}{A},
 \end{equation*}
-such that for each $A:\UU$ the type $\trunc{n}{A}$ is an $n$-truncated type satisfying the (dependent) universal property of $n$-truncation, that for every $P:\trunc{n}{A}\to\UU$ such that every $P(x)$ is $n$-truncated,
+such that for each $A:\UU$ the type $\trunc{k}{A}$ is an $k$-truncated type satisfying the (dependent) universal property of $k$-truncation, that for every $P:\trunc{k}{A}\to\UU$ such that every $P(x)$ is $k$-truncated,
 the canonical map
 \begin{equation*}
-\blank\circ\tproj{n}{\blank} : \Big(\prd{x:\trunc{n}{A}}P(x)\Big)\to\Big(\prd{a:A}P(\tproj{n}{a})\Big)
+\blank\circ\tproj{k}{\blank} : \Big(\prd{x:\trunc{k}{A}}P(x)\Big)\to\Big(\prd{a:A}P(\tproj{k}{a})\Big)
 \end{equation*}
 is an equivalence.
 \end{thm}
 
 \begin{proof}[Construction]
-As announced, we define the $n$-truncation operation by induction on $n\geq-2$,
-with the trivial operation as the base case. Let $n:\N$ and suppose we have
-an $n$-truncation operation as described in the statement of the theorem.
+As announced, we define the $k$-truncation operation by induction on $k\geq-2$,
+with the trivial operation as the base case. Let $k:\N$ and suppose we have
+a $k$-truncation operation as described in the statement of the theorem.
 
-We first define the reflexive relation $\mathscr{Y}_n(A) : A \to A \to \UU$ by
+We first define the reflexive relation $\mathscr{Y}_k(A) : A \to A \to \UU$ by
 \begin{equation*}
-\mathscr{Y}_n(A)(a,b) \defeq \trunc{n}{a=b}.
+\mathscr{Y}_k(A)(a,b) \defeq \trunc{k}{a=b}.
 \end{equation*}
-Note that the codomain $(A\to\UU)$ of $\mathscr{Y}_n(A)$ is locally small since it is the exponent of
+Note that the codomain $(A\to\UU)$ of $\mathscr{Y}_k(A)$ is locally small since it is the exponent of
 the locally small type $\UU$ by a small type $A$. Hence we we obtain the image
-of $\mathscr{Y}_n(A)$ from the modified join construction of \autoref{thm:modified-join}.
+of $\mathscr{Y}_k(A)$ from the modified join construction of \autoref{thm:modified-join}.
 This allows us to define
 \begin{align*}
-\trunc{n+1}{A} & \defeq \im'(\mathscr{Y}_n(A)) \\
-\tproj{n+1}{\blank} & \defeq q'_{\mathscr{Y}_n(A)}
+\trunc{k+1}{A} & \defeq \im'(\mathscr{Y}_k(A)) \\
+\tproj{k+1}{\blank} & \defeq q'_{\mathscr{Y}_k(A)}
 \end{align*}
-For notational reasons, we shall just write $\im(\mathscr{Y}_n(A))$ for $\im'(\mathscr{Y}_n(A))$. 
+For notational reasons, we shall just write $\im(\mathscr{Y}_k(A))$ for $\im'(\mathscr{Y}_k(A))$. 
 
-We will show that $\trunc{n+1}{A}$ is indeed $(n+1)$-truncated in \autoref{cor:truncated} of \autoref{lem:modal_contr} below. Once this fact is established, it remains to verify the dependent universal property of $(n+1)$-truncation.
-By the join extension theorem \autoref{thm:join-extension} (using $N\defeq \emptyt$), it suffices to show that the map $\tproj{n+1}{\blank}:A\to\trunc{n+1}{A}$ is $\sphere{n+2}$-connected. Note that $\tproj{n+1}{\blank}$ is surjective, so the claim that $\tproj{n+1}{\blank}$ is $\sphere{n+2}$-connected follows from \autoref{lem:ap_connectivity}, where we show that for any surjective map $f:A\to X$, if the action on paths is $M$-connected for any two points in $A$, then $f$ is $\susp(M)$-connected. To apply this lemma, we also need to know that $\tproj{n}{\blank}:A\to\trunc{n}{A}$ is $\sphere{n+1}$-connected. This is shown in Corollary 7.5.8 of \cite{hottbook}.
+We will show that $\trunc{k+1}{A}$ is indeed $(k+1)$-truncated in \autoref{cor:truncated} of \autoref{lem:modal_contr} below. Once this fact is established, it remains to verify the dependent universal property of $(k+1)$-truncation.
+By the join extension theorem \autoref{thm:join-extension} (using $N\defeq \emptyt$), it suffices to show that the map $\tproj{k+1}{\blank}:A\to\trunc{k+1}{A}$ is $\sphere{k+2}$-connected. Note that $\tproj{k+1}{\blank}$ is surjective, so the claim that $\tproj{k+1}{\blank}$ is $\sphere{k+2}$-connected follows from \autoref{lem:ap_connectivity}, where we show that for any surjective map $f:A\to X$, if the action on paths is $M$-connected for any two points in $A$, then $f$ is $\susp(M)$-connected. To apply this lemma, we also need to know that $\tproj{k}{\blank}:A\to\trunc{k}{A}$ is $\sphere{k+1}$-connected. This is shown in Corollary 7.5.8 of \cite{hottbook}.
 \end{proof}
 
-Before we prove that $\im(\mathscr{Y}_n(A))$ is $(n+1)$-truncated, we prove the stronger claim that $\im(\mathscr{Y}_n(A))$ has the desired identity types:
+Before we prove that $\im(\mathscr{Y}_k(A))$ is $(k+1)$-truncated, we prove the stronger claim that $\im(\mathscr{Y}_k(A))$ has the desired identity types:
 
 \begin{lem}\label{lem:modal_contr}
 For every $a,b:A$, we have an equivalence
 \begin{equation*}
-\eqv{\trunc{n}{a=b}}{(\mathscr{Y}_n(A)(a)=\mathscr{Y}_n(A)(b))}.
+\eqv{\trunc{k}{a=b}}{(\mathscr{Y}_k(A)(a)=\mathscr{Y}_k(A)(b))}.
 \end{equation*}
 \end{lem}
 
 \begin{proof}
-To characterize the identity type of $\im(\mathscr{Y}_n(A))$ we will apply
+To characterize the identity type of $\im(\mathscr{Y}_k(A))$ we will apply
 the encode-decode method of \cite{LicataShulman}. Thus, we need to provide for every $b:A$ a type 
-family $Q_b:\im(\mathscr{Y}_n(A))\to\UU$ with a point $q_b:Q_b(\mathscr{Y}_n(A)(b))$,
+family $Q_b:\im(\mathscr{Y}_k(A))\to\UU$ with a point $q_b:Q_b(\mathscr{Y}_k(A)(b))$,
 such that the total space
 \begin{equation*}
-\sm{P:\im(\mathscr{Y}_n(A))} Q_b(P)
+\sm{P:\im(\mathscr{Y}_k(A))} Q_b(P)
 \end{equation*}
-is contractible. Moreover, it must be the case that $\eqv{Q_b(\mathscr{Y}_n(A)(a))}{\trunc{n}{a=b}}$ for any $a:A$. 
+is contractible. Moreover, it must be the case that $\eqv{Q_b(\mathscr{Y}_k(A)(a))}{\trunc{k}{a=b}}$ for any $a:A$. 
 
-To construct $Q_b$, note that for any $b:A$, the image inclusion $i:\im(\mathscr{Y}_n(A))\to (A\to\UU)$ defines 
-a type family $Q_b:\im(\mathscr{Y}_n(A))\to\UU$ by $Q_b(P)\defeq P(b)$. With this definition for $Q_b$ it follows that $Q_b(\mathscr{Y}_n(A)(a))\jdeq\mathscr{Y}_n(A)(a,b)\jdeq\trunc{n}{a=b}$, as desired. Moreover, we have a reflexivity term $\tproj{n}{\refl{b}}$ in $\trunc{n}{b=b}$, so it remains to prove that the total space 
+To construct $Q_b$, note that for any $b:A$, the image inclusion $i:\im(\mathscr{Y}_k(A))\to (A\to\UU)$ defines 
+a type family $Q_b:\im(\mathscr{Y}_k(A))\to\UU$ by $Q_b(P)\defeq P(b)$. With this definition for $Q_b$ it follows that $Q_b(\mathscr{Y}_k(A)(a))\jdeq\mathscr{Y}_k(A)(a,b)\jdeq\trunc{k}{a=b}$, as desired. Moreover, we have a reflexivity term $\tproj{n}{\refl{b}}$ in $\trunc{k}{b=b}$, so it remains to prove that the total space 
 \begin{equation*}
-\sm{P:\im(\mathscr{Y}_n(A))}P(b)
+\sm{P:\im(\mathscr{Y}_k(A))}P(b)
 \end{equation*}
 of $Q_b$ is contractible. For the center of contraction we take the pair
-$\pairr{\mathscr{Y}_n(A)(b),\tproj{n}{\refl{b}}}$.
+$\pairr{\mathscr{Y}_k(A)(b),\tproj{k}{\refl{b}}}$.
 Now we need to construct a term of type
 \begin{equation*}
-\prd{P:\im(\mathscr{Y}_n(A))}{y:P(b)} \pairr{\mathscr{Y}_n(A)(b),\tproj{n}{\refl{b}}}=\pairr{P,y}.
+\prd{P:\im(\mathscr{Y}_k(A))}{y:P(b)} \pairr{\mathscr{Y}_k(A)(b),\tproj{k}{\refl{b}}}=\pairr{P,y}.
 \end{equation*}
-Since $\mathscr{Y}_n(A)(b,a)\jdeq\trunc{n}{b=a}$, it is equivalent to construct a term of type
+Since $\mathscr{Y}_k(A)(b,a)\jdeq\trunc{k}{b=a}$, it is equivalent to construct a term of type
 \begin{equation*}
-\prd{P:\im(\mathscr{Y}_n(A))}{y:P(b)}\sm{\alpha:\prd{a:A} \eqv{\trunc{n}{b=a}}{P(a)}} \alpha_b(\tproj{n}{\refl{b}})=y.
+\prd{P:\im(\mathscr{Y}_k(A))}{y:P(b)}\sm{\alpha:\prd{a:A} \eqv{\trunc{k}{b=a}}{P(a)}} \alpha_b(\tproj{k}{\refl{b}})=y.
 \end{equation*}
-Let $P:\im(\mathscr{Y}_n(A))$ and $y:P(b)$. Then $P(a)$ is $n$-truncated for any $a:A$. Therefore, to construct a map
-$\alpha(P,y)_a:\trunc{n}{b=a}\to P(a)$, it suffices to construct a map of type $(b=a)\to P(a)$. This may be done by
-path induction, using $y:P(b)$. Since it follows that $\alpha(P,y)_b(\tproj{n}{\refl{b}})=y$, it only remains to show that each $\alpha(P,y)_a$ is an equivalence.  
+Let $P:\im(\mathscr{Y}_k(A))$ and $y:P(b)$. Then $P(a)$ is $k$-truncated for any $a:A$. Therefore, to construct a map
+$\alpha(P,y)_a:\trunc{k}{b=a}\to P(a)$, it suffices to construct a map of type $(b=a)\to P(a)$. This may be done by
+path induction, using $y:P(b)$. Since it follows that $\alpha(P,y)_b(\tproj{k}{\refl{b}})=y$, it only remains to show that each $\alpha(P,y)_a$ is an equivalence.  
 
-Note that the type of those $P:\im(\mathscr{Y}_n(A))$ such that for all $y:P(b)$ and all $a:A$ the map $\alpha(P,y)_a$ is an equivalence, is a subtype of $\im(\mathscr{Y}_n(A))$, we may use the universal property of the image of $\mathscr{Y}_n(A)$: it suffices to lift
+Note that the type of those $P:\im(\mathscr{Y}_k(A))$ such that for all $y:P(b)$ and all $a:A$ the map $\alpha(P,y)_a$ is an equivalence, is a subtype of $\im(\mathscr{Y}_k(A))$, we may use the universal property of the image of $\mathscr{Y}_k(A)$: it suffices to lift
 \begin{equation*}
 \begin{tikzcd}
-& \sm{P:\im(\mathscr{Y}_n(A))}\prd{y:P(b)}{a:A}\isequiv(\alpha(P,y)_a) \arrow[d] \\
-A \arrow[ur,densely dotted] \arrow[r,swap,"\mathscr{Y}_n(A)"] & \im(\mathscr{Y}_n(A)).
+& \sm{P:\im(\mathscr{Y}_k(A))}\prd{y:P(b)}{a:A}\isequiv(\alpha(P,y)_a) \arrow[d] \\
+A \arrow[ur,densely dotted] \arrow[r,swap,"\mathscr{Y}_k(A)"] & \im(\mathscr{Y}_k(A)).
 \end{tikzcd}
 \end{equation*}
 In other words, it suffices to show that 
 \begin{equation*}
-\prd{x:A}{y:\mathscr{Y}_n(A)(x,b)}{a:A}\isequiv(\alpha(\mathscr{Y}_n(A)(x),y)_a).
+\prd{x:A}{y:\mathscr{Y}_k(A)(x,b)}{a:A}\isequiv(\alpha(\mathscr{Y}_k(A)(x),y)_a).
 \end{equation*}
-Thus, we want to show that for any $y:\trunc{n}{x=b}$, the map $\trunc{n}{a=b}\to\trunc{n}{x=b}$ constructed above is an equivalence.
-Since the fibers of this map are $n$-truncated, and $\iscontr(X)$ of an $n$-truncated type $X$ is always $n$-truncated, we may assume that $y$ is of the form $\tproj{n}{p}$ for $p:x=b$. 
-Now it is easy to see that our map of type $\trunc{n}{b=a}\to\trunc{n}{x=a}$ is the unique map which
+Thus, we want to show that for any $y:\trunc{k}{x=b}$, the map $\trunc{k}{a=b}\to\trunc{k}{x=b}$ constructed above is an equivalence.
+Since the fibers of this map are $k$-truncated, and $\iscontr(X)$ of an $k$-truncated type $X$ is always $k$-truncated, we may assume that $y$ is of the form $\tproj{k}{p}$ for $p:x=b$. 
+Now it is easy to see that our map of type $\trunc{k}{b=a}\to\trunc{k}{x=a}$ is the unique map which
 extends the path concatenation $\ct{p}{\blank}$, as indicated in the diagram
 \begin{equation*}
 \begin{tikzcd}[column sep=8em]
 (b=a) \arrow[r,"\ct{p}{\blank}"] \arrow[d] & (x=a) \arrow[d] \\
-\trunc{n}{b=a} \arrow[r,densely dotted,swap,"{\alpha(\mathscr{Y}_n(A)(x),y)_a}"] & \trunc{n}{x=a}.
+\trunc{k}{b=a} \arrow[r,densely dotted,swap,"{\alpha(\mathscr{Y}_k(A)(x),y)_a}"] & \trunc{k}{x=a}.
 \end{tikzcd}
 \end{equation*}
-Since the top map is an equivalence, it follows that the map $\alpha(\mathscr{Y}_n(A)(x),y)_a$ is an equivalence.
+Since the top map is an equivalence, it follows that the map $\alpha(\mathscr{Y}_k(A)(x),y)_a$ is an equivalence.
 \end{proof}
 
 \begin{cor}\label{cor:truncated}
-The image $\im(\mathscr{Y}_n(A))$ is an $(n+1)$-truncated type. 
+The image $\im(\mathscr{Y}_k(A))$ is an $(k+1)$-truncated type. 
 \end{cor}
 
 Before we are able to show that for any surjective map $f:A\to X$, if the action on paths is $M$-connected for any two points in $A$, then $f$ is $\susp(M)$-connected, we show that a type is $\susp(M)$-connected precisely when its identity types are $M$-connected.

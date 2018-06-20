@@ -19,7 +19,7 @@ X_0 \arrow[r,"l_0"] & X_1 \arrow[r,"l_1"] & X_2 \arrow[r,"l_2"] & \cdots
 \end{equation*}
 is $F$-local if each $l_n$ has the structure of a quasi $F$-local extension. In \cref{lem:qflocal_initial} we show that there is an initial quasi $F$-local extension $l:X\to QL_F X$, for every type $X$, and in \cref{thm:localization} we show that the sequential colimit $X\to QL_F^\infty$ is an $F$-localization. Thus we establish that if $F$ is a family of maps between compact types, then the subuniverse of $F$-local types is a reflective subuniverse. Furthermore, if $A$ is a family of compact types, then the subuniverse of $A$-null types is a modality.
 
-Dan Christensen pointed out that this construction of $F$-localization already appears in section 1.B of \cite{DrorFarjoun}, where arbitrary localizations are constructed by iterating the initial quasi $F$-local extension transfinitely many times. We stick to the case $\omega$ since larger ordinals are not yet as well understood in homotopy type theory. A minor note is that in Theorem B.5 Dror Farjoun only establishes that the transfinite colimit $QL_F^\kappa X$ localizes the homotopy groups.
+Dan Christensen pointed out that this construction of $F$-localization already appears in section 1.B of \cite{DrorFarjoun}, where arbitrary localizations are constructed by iterating the initial quasi $F$-local extension transfinitely many times. We stick to the case $\omega$ since larger ordinals are not yet as well understood in homotopy type theory. A minor note is that in Theorem B.5 Dror Farjoun only establishes that the transfinite colimit $QL_F^\kappa X$ localizes the homotopy groups. Our proofs are therefore different than Dror Farjoun's.
 
 \section{Compact types}
 
@@ -244,6 +244,21 @@ X^{P_i} \arrow[r,swap,"l\circ \blank"] & Y^{P_i},
 for each $i:I$.
 \end{defn}
 
+\begin{lem}\label{lem:qflocal_local}
+For any map $l:X\to Y$ into an $F$-local type $Y$, the type of diagonal fillers for the commuting square
+\begin{equation*}
+\begin{tikzcd}
+X^{Q_i} \arrow[r,"l\circ\blank"] \arrow[d,swap,"\blank\circ F_i"] & Y^{Q_i} \arrow[d,"\blank\circ F_i"] \\
+X^{P_i} \arrow[r,swap,"l\circ \blank"] & Y^{P_i},
+\end{tikzcd}
+\end{equation*}
+is contractible. In particular, any such map is a quasi $F$-local extension.
+\end{lem}
+
+\begin{proof}
+If $Y$ is $F$-local, then the map $F_i^\ast : Y^{Q_i}\to Y^{P_i}$ is an equivalence, for any $i:I$. Since equivalences are right orthogonal to any map, the claim follows.
+\end{proof}
+
 \begin{lem}
 Suppose $h:\mathsf{Seq}(\mathcal{A},\mathcal{B})$ is a natural transformation of type sequences equipped with the structure of a diagonal filler for each naturality square
 \begin{equation*}
@@ -352,15 +367,38 @@ X^{Q_i} \arrow[r,"l\circ\blank"] \arrow[d,swap,"\blank\circ F_i"] & Y^{Q_i} \arr
 X^{P_i} \arrow[r,swap,"l\circ \blank"] & Y^{P_i}
 \end{tikzcd}
 \end{equation*}
-is equivalent to the type of morphisms $j:X^{P_i}\times Q_i\to Y$ equipped with a homotopy witnessing that the square
+is equivalent to the type of morphisms $j: \Big(\sm{i:I}X^{P_i}\times Q_i\Big)\to Y$ equipped with a homotopy witnessing that the square
 \begin{equation*}
-\begin{tikzcd}[column sep=large]
-\sm{i:I}\Big(\big(X^{P_i} \times P_i\big)\sqcup^{\big(X^{Q_i}\times P_i\big)}\big(X^{Q_i}\times Q_i\big)\Big) \arrow[r,"F_i^\ast\square F_i"] \arrow[d,swap,"\lam{(i,t)}\varepsilon_i(t)"] & \sm{i:I} X^{P_i}\times Q_i \arrow[d] \\
+\begin{tikzcd}[column sep=6em]
+\sm{i:I}\Big(\big(X^{P_i} \times P_i\big)\sqcup^{\big(X^{Q_i}\times P_i\big)}\big(X^{Q_i}\times Q_i\big)\Big) \arrow[r,"\total{\lam{i}F_i^\ast\square F_i}"] \arrow[d,swap,"\lam{(i,t)}\varepsilon_i(t)"] & \sm{i:I} X^{P_i}\times Q_i \arrow[d] \\
 X \arrow[r] & Y
 \end{tikzcd}
 \end{equation*}
 commutes.
 \end{lem}
+
+\begin{proof}
+It suffices to show that for each $i:I$, the type of diagonal fillers in the first description is equivalent to the type of maps $j:X^{P_i}\times Q_i\to Y$ equipped with a homotopy witnessing that the square
+\begin{equation*}
+\begin{tikzcd}[column sep=huge]
+\Big(\big(X^{P_i} \times P_i\big)\sqcup^{\big(X^{Q_i}\times P_i\big)}\big(X^{Q_i}\times Q_i\big)\Big) \arrow[r,"F_i^\ast\square F_i"] \arrow[d,swap,"\varepsilon_i"] & X^{P_i}\times Q_i \arrow[d] \\
+X \arrow[r] & Y
+\end{tikzcd}
+\end{equation*}
+commutes. The type $X^{P_i}\to Y^{Q_i}$ is equivalent to the type $X^{P_i}\times Q_i\to Y$ by adjointness. 
+
+By the dependent universal property of pushouts established in \cref{thm:pushout_dup}, the type $l\circ \varepsilon_i \htpy j\circ (F_i^\ast\square F_i)$ is equivalent to the type of triples $(K,L,M)$ consisting of
+\begin{align*}
+K & : \prd{f:P_i\to X}{p:P_i} l(f(p))=j(f,F_i(p)) \\ 
+L & : \prd{g:Q_i\to X}{q:Q_i} l(g(q))=j(g\circ F_i,q) \\
+M & : \prd{g:Q_i\to X}{p:P_i} K(g\circ F_i,p)=L(g,F_i(p)).
+\end{align*}
+The type of such quadruples $(j,K,L,M)$ is also equivalent to the fiber of the gap map
+\begin{equation*}
+(X^{P_i}\to Y^{Q_i})\to \Big(X^{Q_i}\to Y^{Q_i}\Big)\times_{\big(X^{Q_i}\to Y^{P_i}\big)}\Big(X^{P_i}\to Y^{P_i}\Big)
+\end{equation*}
+at $(l^{Q_i},l^{P_i},\mathsf{htpy\usc{}refl})$. 
+\end{proof}
 
 \begin{defn}
 For any type $X$, we define the initial quasi $F$-local extension $l:X\to QL_FX$ of $X$ to be the pushout
@@ -376,9 +414,56 @@ X \arrow[r,swap,"l"] & QL_FX
 The initial quasi $F$-local extension of a type $X$ is initial by the universal property of the pushout and the characterization of \cref{lem:qflocal_characterize}.
 \end{rmk}
 
-\begin{cor}
+\begin{eg}
+Consider the family of maps consisting just of the terminal projection $\bool\to\unit$. We claim that the quasi $\bool$-local extension of $X$ is equivalent to $\join{X}{X}$, i.e.~that we have a pushout square
+\begin{equation*}
+\begin{tikzcd}
+(X^2\times \bool)\sqcup^{X\times \bool} X \arrow[r] \arrow[d] & X^2 \arrow[d] \\
+X \arrow[r] & \join{X}{X}
+\end{tikzcd}
+\end{equation*}
+To see this, we note first that the pushouts
+\begin{equation*}
+\begin{tikzcd}
+S \arrow[d] \arrow[r] & B \arrow[d] & S+S \arrow[d] \arrow[r] & S \arrow[d] \\
+A \arrow[r] & A \sqcup^S B & A+B \arrow[r] & (A+B)\sqcup^{(S+S)} S
+\end{tikzcd}
+\end{equation*}
+are equivalent, for any span $A \leftarrow S \rightarrow B$. Therefore it follows that the pushouts
+\begin{equation*}
+\begin{tikzcd}
+X \arrow[d] \arrow[r] & X^2 \arrow[d] & X\times \bool \arrow[d] \arrow[r] & X \arrow[d] \\
+X^2 \arrow[r] & X^2 \sqcup^X X^2 & X^2\times \bool \arrow[r] & (X^2\times\bool)\sqcup^{(X\times\bool)} X
+\end{tikzcd}
+\end{equation*}
+are equivalent. Therefore it suffices to compute the pushout
+\begin{equation*}
+\begin{tikzcd}
+X^2 \sqcup^X X^2 \arrow[r,"\nabla_{\delta_X}"] \arrow[d,swap,"{[\pi_1,\pi_2,\mathsf{htpy\usc{}refl}_{\idfunc[X]}]}"] & X^2 \arrow[d] \\
+X \arrow[r] & X\sqcup^{(X^2 \sqcup^X X^2)}X^2.
+\end{tikzcd}
+\end{equation*}
+Now we note that by \cref{thm:2pushout_iterated} the pushout of the span in the square above is the 2-pushout of the 2-span
+\begin{equation*}
+\begin{tikzcd}
+& X \arrow[dl] \arrow[d] \arrow[dr] \\
+X \arrow[d] & X^2 \arrow[dl,swap,"\pi_1" very near start] \arrow[dr] & X^2 \arrow[dl,crossing over,swap,"\pi_2" very near start] \arrow[d] \\
+X & X \arrow[from=ul,crossing over] & X^2
+\end{tikzcd}
+\end{equation*}
+Another way of computing this 2-pushout as an iterated pushout is as the following pushout
+\begin{equation*}
+\begin{tikzcd}
+X^2 \arrow[r,"\pi_2"] \arrow[d,swap,"\pi_1"] & X \arrow[d] \\
+X \arrow[r] & X\sqcup^{X^2} X,
+\end{tikzcd}
+\end{equation*}
+which is the join $\join{X}{X}$.
+\end{eg}
+
+\begin{prp}
 If $X$ is $F$-local, then $l:X\to QL_F X$ is an equivalence.
-\end{cor}
+\end{prp}
 
 \begin{proof}
 If $X$ is $F$-local, then each $F_i^\ast$ is an equivalence. It follows that the pushout-product $F_i^\ast\square F_i$ is an equivalence. Since pushouts of equivalences are equivalences, the claim follows.
@@ -402,27 +487,37 @@ Since each $l:QL_F^n X\to QL_F^{n+1}X$ has the structure of a quasi $F$-local ex
 \end{equation*}
 is an equivalence.
 
-We have to show that for any function $h:X\to Y$ into an
-$F$-local type $Y$, there is a unique function $\tilde{h}: L^\infty(X)\to
-Y$ such that the triangle
+We first show that the map
 \begin{equation*}
-\begin{tikzcd}
-X \arrow[dr,"h"] \arrow[d,swap,"\iota_0"] \\ 
-L^\infty(X) \arrow[r,swap,"\tilde{h}"] & Y
+l^\ast : (QL_F X\to Y)\to (X\to Y)
+\end{equation*}
+is an equivalence. To see this, note that we have a commuting triangle
+\begin{equation*}
+\begin{tikzcd}[column sep=tiny]
+& \mathsf{cocone}(Y) \arrow[dr,"\pi_1"] & \phantom{(QL_F X\to Y)} \\
+(QL_F X\to Y) \arrow[rr] \arrow[ur,"\mathsf{cocone\usc{}map}"] & & (X\to Y)
 \end{tikzcd}
 \end{equation*}
-commutes. To define $\tilde{h}$ for any $h:X\to Y$ into an $F$-local type, 
-it suffices to define $h^1:L(X)\to Y$. To define $h^1$, we need to construct
-\begin{align*}
-d & : \prd{f:P(a)\to X} \hfib{\psi_Y(a)}{h\circ f}\\
-D & : \prd{f:P(a)\to X}{w:\hfib{\psi_{X}(a)}{f}}\id{i(w)}{d}
-\end{align*}
-We get these terms immediately from the assumption that $Y$ is $F$-local.
-Note also that the type of the pair $\pairr{d,D}$ is contractible, so uniqueness
-follows immediately.
+We note that by \cref{lem:qflocal_characterize}, the fiber of $\pi_1:\mathsf{cocone}(Y)\to (X\to Y)$ is equivalent to the type of diagonal fillers of the square
+\begin{equation*}
+\begin{tikzcd}
+X^{Q_i} \arrow[r,"l\circ\blank"] \arrow[d,swap,"\blank\circ F_i"] & Y^{Q_i} \arrow[d,"\blank\circ F_i"] \\
+X^{P_i} \arrow[r,swap,"l\circ \blank"] & Y^{P_i},
+\end{tikzcd}
+\end{equation*}
+This type of diagonal fillers is contractible by \cref{lem:qflocal_local}, since $Y$ is assumed to be $F$-local. In other words, the map $\pi_1:\mathsf{cocone}(Y)\to (X\to Y)$ is an equivalence. Since $\mathsf{cocone\usc{}map}:(QL_F X\to Y)\to \mathsf{cocone}(Y)$ is an equivalence by the universal property of $QL_F X$, we conclude by the 3-for-2 property that the map
+\begin{equation*}
+l^\ast : (QL_F X\to Y)\to (X\to Y)
+\end{equation*}
+is an equivalence.
 
-The above universal property and the fact that $L^\infty(X)$ is $F$-local
-together give that $L^\infty(X)$ is the localization of $X$ at $F$.
+We conclude that any map $g:X\to Y$ extends uniquely to a cocone on the type sequence
+\begin{equation*}
+\begin{tikzcd}
+X \arrow[r] & QL_F X \arrow[r] & QL_F^2 X \arrow[r] & \cdots,
+\end{tikzcd}
+\end{equation*}
+and therefore it follows that $\eta^\ast:(LX\to Y)\to (X\to Y)$ is an equivalence.
 \end{proof}
 
 \begin{cor}

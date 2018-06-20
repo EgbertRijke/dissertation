@@ -1,8 +1,96 @@
 \chapter{Type-valued equivalence relations}
 
+We discussed in \cref{sec:eq_rel_set} the notion of an ordinary equivalence relation on a type $A$, which is specified as a reflexive, symmetric, and transitive $\prop$-valued binary relation on $A$. In \cref{thm:set_quotient} we established that for an equivalence relation $\mathcal{R}$ in this sense, the quotient $A/\mathcal{R}$ can be specified as the image of $\mathcal{R}:A\to (A\to \prop)$. Since $A\to \prop$ is a set, it follows that the set quotient $A/\mathcal{R}$ is also a set. 
+
+Proposition-valued equivalence relations as described above are just one level in a hierarchy of equivalence relations. The next level up consists of `$1$-equivalence relations', or `pre-groupoid structures' on a type $A$, the data of which endows $A$ with the structure of a pre-groupoid in the sense of Ahrens, Kapulkin, Shulman \cite{AKS}. In the case of pre-groupoid structures one also needs to account for associativity, unit laws, and inverse laws. Groupoid quotients have been defined as higher inductive types in homotopy type theory by Sojakova \cite{SojakovaPhD}.
+
+\begin{table}\label{tab:hierarchy}
+\caption{The truncation hierarchy of equivalence relations}
+\begin{tabular}{cll}
+\toprule
+\emph{level} & \emph{equivalence structure} & \emph{quotient operation} \\
+\midrule
+$-1$ & trivial relation & propositional truncation \\
+$0$ & $\prop$-valued equivalence relation & set-quotient \\
+$1$ & pre-$1$-groupoid structure & Rezk completion \\
+$\vdots$ & \qquad$\vdots$ & \qquad$\vdots$ \\
+$\infty$ & `pre-$\infty$-groupoid structure' & $\infty$-quotient \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+In order to formulate a notion of $2$-equivalence relations, one requires higher-dimensional structure analogous to that found in the notion of a bi-groupoid. As one goes higher up the hierarchy of general `$n$-equivalence relations we get a combinatorial explosion of data to be specified to account for all the higher coherences. In this work, we propose a way to bypass the problem of having to specify an infinite amount of coherence data by using a coinductive definition of $\infty$-equivalence relations involving involving homotopy pushouts.
+
+\section{Systems of equivalence relations}
+
+The identity type of any type is the initial reflexive type-valued binary relation on types.
+By virtue of their (homotopy) initiality, they obtain the structure
+of a higher groupoid. This can be made precise externally, as is done in the
+work of Van den Berg and Garner \cite{VanDenBergGarner}, and LeFanu Lumsdaine 
+\cite{Lumsdaine10}, but so far it has been an open problem to give in type theory
+a satisfactory, sufficiently explicit description for a reflexive relation
+to be an $\infty$-equivalence relation.
+
+A more general class of examples that possess higher groupoid structure consist of kernels of maps.
+Given a map $f:A\to B$ we have a reflexive relation $\prekersym_A(f)$ given by
+\begin{equation*}
+x,y\mapsto f(x)=f(y).
+\end{equation*}
+The proof of reflexivity is given by $\lam{x}\refl{f(x)}$.
+We call $\prekersym_A(f)$ the \define{pre-kernel} of $f$, since it is only the underlying reflexive relation of the kernel but it lacks an explicit structure of an equivalence relation. Note that the image of $f$ is a model for the $\infty$-quotient $A/\prekersym_A(f)$, because the identification type of $\im(f)$ coincides with that of $X$.
+
+We turn to the question of specifying what it means to define a notion of homotopy coherent equivalence relations in homotopy type theory, and thus the formal specification of the problem we set out to solve. In the following, we write 
+$(A\mathbin{\downarrow_s}\UU)$ for the type of \emph{surjective} maps out of $A$, that is:
+\begin{equation*}
+(A\mathbin{\downarrow_s}\UU)\defeq \sm{B:\UU}{f:A\to B}\mathsf{isSurj}(f).
+\end{equation*}
+Recall that a \emph{(type-valued) reflexive relation} $\mathcal{R}$ on a type $A$ consists of a binary relation $R:A\to A\to \UU$ and a proof of reflexivity $\rho:\prd{x:A}R(x,x)$. The type of all reflexive relations on $A$ is denoted by $\mathsf{rRel}_A$. Using this notation we see that the operation that associates to a surjective map $f:A\to B$ the pre-kernel of $f$, is an operation of type
+\begin{equation*}
+\prekersym_A(f):(A\mathbin{\downarrow_s}\UU)\to \mathsf{rRel}_A.
+\end{equation*}
+Our goal in this chapter is to define \emph{systems of equivalence relations}, which we are now able to define.
+
+\begin{defn}\label{defn:system}
+A \define{system of equivalence relations} consists of a structure
+\begin{equation*}
+\mathsf{isEqRel}_A:\mathsf{rRel}_A\to\UU
+\end{equation*}
+for each type $A:\UU$, equipped with the following additional structure:
+\begin{enumerate}
+\item A lift $\prekersym_A$ to an operation $\kersym_A$ as indicated in the diagram
+\begin{equation*}
+\begin{tikzcd}[column sep=large]
+& \sm{\mathcal{R}:\mathsf{rRel}(A)}\mathsf{isEqRel}_A(\mathcal{R}) \arrow[d,->>] \\
+(A \mathbin{{\downarrow}_s} U) \arrow[r,swap,"\prekersym_A"] \arrow[ur,densely dotted,"\kersym_A"] & \mathsf{rRel}(A)
+\end{tikzcd}
+\end{equation*}
+In other words, every pre-kernel needs to be given the structure of an equivalence relation so that it becomes a kernel.
+\item A term witnessing that the function $\kersym_A$ is an equivalence.
+\end{enumerate}
+\end{defn}
+
+The first requirement just means that any pre-kernel must possess (in a canonical way) the structure of a homotopy coherent equivalence relation. The second requirement involves finding for every equivalence relation $\mathcal{R}$ on $A$, the quotient $A/\mathcal{R}$ and a surjective map $q_{\mathcal{R}} : A\to A/\mathcal{R}$. This gives the inverse $\qsym_A$ of $\kersym_A$. Then, to show that $\qsym_A\circ \kersym_A=1$, you need to show that there is a commuting triangle
+\begin{equation*}
+\begin{tikzcd}[column sep=tiny]
+& A \arrow[dl,swap,"q_{\kersym_A(f)}"] \arrow[dr,"f"] & \phantom{A/\kersym_A(f)} \\
+A/\kersym_A(f) \arrow[rr] & & B
+\end{tikzcd}
+\end{equation*}
+in which the bottom map is an equivalence. Finally, the quotenting operation $\qsym_A$ needs to be shown effective, i.e. it needs to be shown that \[\kersym_A\circ \qsym_A =1.\]
+This involves first showing that, for any equivalence relation $\mathcal{R}:=(R,\rho,H)$ there is a fiberwise equivalence
+\begin{equation*}
+\prd{x,y:A} (q_{\mathcal{R}}(x)=q_{\mathcal{R}}(y)) \to{} R(x,y)
+\end{equation*}
+preserving reflexivity. This determines a path $p : \prekersym_A(q_{\mathcal{R}})=(R,\rho)$. To complete the proof of effectiveness, it needs to be shown that \[\trans{p}{\mathsf{pr}_2(\kersym_A(\qsym_A(\mathcal{R})))}= H.\] 
+In other words, that the canonical structure of being an equivalence relation that the pre-kernel $\prekersym_A(\qsym_A(\mathcal{R}))$ possesses, agrees with the assumed structure $H$, that $(R,\rho)$ is an equivalence relation.
+
+The problem of finding a structure $\mathsf{isEqRel}$ satisfying the described conditions, is in fact trivial when we drop the requirement that $\mathsf{isEqRel}_A$ is a family of \emph{small} types. The type of all such structures is contractible, with $\mathsf{fib}_{\prekersym_A}$ at the center of contraction. However, it should be noted that this is a completely uninformative solution, and our goal is to describe a \emph{small} structure equivalent to $\mathsf{fib}_{\prekersym_A}$.
+
+As a final remark on \autoref{defn:system} we note that in the special case where the base type $A$ is taken to be the unit type $\unit$, the problem reduces to specifying what it means for a pointed type to possess in a homotopy coherent way the structure of a \emph{loop space}. Indeed, a reflexive relation on the unit type is nothing more than a pointed type, and the type of surjective maps out of the unit type is nothing more than the type of \emph{pointed connected types}.
+
 \section{Principal equivalence relations}
 
-Let $R: X\to (X\to\UU)$ be a binary relation on $X$, with a proof $\rho:\prd{x:X}R(x,x)$ of reflexivity. We seek to define a quotient type $Y$, with a map $q : X\to Y$ such that for any $x,x':X$ we have an equivalence $\eqv{R(x,x')}{(q(x)=q(x'))}$. 
+Let $R: A\to (A\to\UU)$ be a binary relation on $A$, with a proof $\rho:\prd{x:X}R(x,x)$ of reflexivity. We seek to define a quotient type $Y$, with a map $q : X\to Y$ such that for any $x,x':X$ we have an equivalence $\eqv{R(x,x')}{(q(x)=q(x'))}$. 
 
 This would certainly be the case if we can find a map $P:Y\to\im(R)$ such that $P\circ q=R$ and such that for every $x:X$ and $y:Y$ we have an equivalence $\eqv{P(y)}{(q(x)=y)}$. Hence it suffices to require that there exist $P:Y\to\im(R)$ such that $\sm{y:Y}P(y)$ is contractible. 
 
@@ -400,208 +488,113 @@ For any $P:X\to\UU$, the type $\im(P)$ is equivalent to a small type.
 The relation $P^\star\idtypevar{\UU}$ is equivalent to a small relation, so each of the higher inductive types $(X/\mathcal{K}_X(P))_n$ is equivalent to a small higher inductive type. It follows that the sequential colimit $(X/\mathcal{K}_X(P))_\infty$ is equivalent to a small type, and hence also $X/\mathcal{K}_X(P)$ itself. Since $X/\mathcal{K}_X(P)$ is equivalent to $\im(P)$, the claim follows.
 \end{proof}
 
-\subsection{The modality $\modal^+$ of types with $\modal$-modal identity types}
-
-It has already been known for a while that for any map $f:A\to B$, a type $X$ is $\nabla_f$-local if and only if the identity types of $X$ are $f$-local. Using the ideas of the previous sections, we construct, given any modality $\modal$ of which the modal units are all surjective, a new modality $\modal^+$ for which the modal types are precisely those which have $\modal$-modal identity types. Since modalities are completely determined by their modal types, it follows that for any map $f:A\to B$, if $\modal$ is given by localizing at $f$, then $\modal^+$ is given by localizing at $\nabla_f$. 
-
-\begin{comment}
-\begin{defn}
-Let $R:X\to X\to\UU$ be a reflexive binary relation on $X$. A \define{quotient approximation system} on $R$ consists of a \define{mediating type} $M$ fitting in a commuting triangle
-\begin{equation*}
-\begin{tikzcd}
-X \arrow[rr,"R"] \arrow[dr,swap,"f"] & & \im(R) \\
-& M \arrow[ur,swap,"g"]
-\end{tikzcd}
-\end{equation*}
-and for every $S:Y\to M$ a homotopy
-\begin{equation*}
-H : \prd{x:X}{y:Y}{p:g(S(y),x)} f(x)= S(y).
-\end{equation*}
-\end{defn}
-
-\begin{rmk}
-The idea behind the definition of quotient approximation system is that any $S:Y\to M$ extends to the pushout as indicated in the diagram
-\begin{equation*}
-\begin{tikzcd}
-\sm{x:X}{y:Y}g(S(y),x) \arrow[d,swap,"\pi_2"] \arrow[r,"\pi_1"] & X \arrow[d,swap,"\inl"] \arrow[ddr,bend left=15,"f"] \\ 
-Y \arrow[r,swap,"\inr"] \arrow[drr,bend right=15,swap,"S"] & Y' \arrow[dr,swap,near start,densely dotted,"{S'}"] \\
-& & M
-\end{tikzcd}
-\end{equation*}
-The type $Y'$ is a slightly better approximation of the quotient $X/R$ than $Y$, and iterating this process shall lead us to the quotient.
-\end{rmk}
-
-\begin{eg}
-If $R$ is a principal equivalence relation, then a quotient approximation system on $R$ can be defined with mediating type $X/R$. In \autoref{eg:idmodal} we will see a class of quotient approximation systems with mediating type $\im(R)$. 
-\end{eg}
-\end{comment}
-
-\begin{defn}\label{eg:idmodal}
-Let $\modal$ be any modality for which the modal unit $\modalunit[X]:X\to\modal(X)$ is always surjective. Then the reflexive relation 
-\begin{equation*}
-I_\modal \defeq x,y\mapsto\modal(x=y)
-\end{equation*}
-can be given the structure of a principal equivalence relation. 
-\end{defn}
-
-\begin{proof}[Construction]
-We first show that for any $R:Y\to\im(I_\modal)$, we can extend $R$ to the pushout $Y'$, as indicated in the diagram
-\begin{equation*}
-\begin{tikzcd}
-\sm{x:X}{y:Y}R(y,x) \arrow[r,"\pi_1"] \arrow[d,swap,"\pi_2"] & X \arrow[d,"\inl"] \arrow[ddr,bend left=15,"I_\modal"] \\
-Y \arrow[drr,swap,bend right=15,"R"] \arrow[r,"\inr"] & Y' \arrow[dr,densely dotted] \\
-& & \im(I_\modal)
-\end{tikzcd}
-\end{equation*}
-Since $R(y):\im(I_\modal)$ for any $y:Y$, it follows that $R(y,x)$ is modal for any $x:X$. Hence for any $p:R(y,b)$, a function $\alpha_p:\prd{x:X}\modal(b=x)\to R(y,x)$ is obtained from the function of type $(b=x)\to R(y,x)$ which maps $\refl{b}$ to $p$.
-
-We need to show that $\alpha_p$ is a fiberwise equivalence, for any $p:R(y,b)$. This is a mere porposition, so we can use the property of $R(y)$ that 
-\begin{equation*}
-\brck{\hfib{I_\modal}{R(y)}}.
-\end{equation*}
-Let $a:X$ be such that $R(y)=I_\modal(a)$. Then we have $q:\modal(a=b)$ corresponding to $p:R(y,b)$. The composite $\modal(b=x)\to R(y,x)\to \modal(a,x)$ is the unique map which sends $\refl{b}$ to $q$. Since the modal unit is surjective we may assume that $q$ is of the form $\modalunit(s)$ for some $s:a=b$. Now it follows by uniqueness that the map $\modal(b=x)\to\modal(a=x)$ is induced by precomposition with $s$. Hence it is an equivalence. This finishes the construction of the extension.
-
-Since we have this extension property, we can perform the quotient approximation construction without already having a notion of orientations. The argument of \autoref{thm:iteratedjoin} can be adjusted so that it applies to the current situation, so we obtain the universal type $\modal^+(X)$ with a map $\eta:X\to \modal^+(X)$ so that the identity types of $\modal^+(X)$ are $\modal$-modal.
-\end{proof}
-
-\begin{rmk}
-I'm not really sure whether the assumption that the modal units are surjective is really necessary.
-\end{rmk}
-
-\begin{eg}
-For any type $X$ and any $n:\N_{-1}$, the reflexive relation $x,y\mapsto\trunc{n}{x=y}$ can be given the structure of a principal equivalence relation, and we obtain that $\trunc{n+1}{X}$ is the sequential colimit of a type sequence involving only $n$-truncation.
-\end{eg}
-
 \section{Saturated relations}
-\subsection{Motivating observations}
-Recall that a \emph{reflexive graph} consists of a type $A$ and a reflexive relation on it. Given a reflexive graph $\pairr{A,R,\rho}$ we can form the \emph{reflexive graph quotient} as the pushout
-\begin{equation*}
-\begin{tikzcd}
-\sm{x,y:A}R(x,y) \arrow[r,"\pi_2"] \arrow[d,swap,"\pi_1"] & A \arrow[d,"\inr"] \\
-A \arrow[r,swap,"\inl"] & \mathsf{rcoeq}(A,R,\rho).
-\end{tikzcd}
-\end{equation*}
-Using the reflexivity of $R$ one can show that $\inl\htpy \inr$. Thus, we simply define the \emph{quotient map} $\eta_{\mathcal{R}}\defeq \inl : A\to A/\mathcal{R}$. We use the notation $\mathsf{rcoeq}(A,R,\rho)$ since a reflexive graph quotient can also be seen as the \emph{(homotopy) reflexive coequalizer}\footnote{Note that to formulate the reflexive coequalizer one has to be careful to take the homotopies $s\circ r\htpy \idfunc$ and $t\circ r\htpy \idfunc$ into account.}
-\begin{equation*}
-\begin{tikzcd}
-\sm{x,y:A}R(x,y) \arrow[r,yshift=.7em,"s"] \arrow[r,yshift=-.7em,swap,"t"] & A \arrow[l,"r" description] \arrow[r] & \mathsf{rcoeq}(A,R,\rho).
-\end{tikzcd}
-\end{equation*}
-Reflexive graph quotients are studied in greater detail in \cite{graphquotients}.
 
-By the previous observations we can form, given a function $f : A \to X$ and its pre-kernel $\prekersym_A(f)$, the reflexive graph quotient of $\pairr{A,k(f)}$ by forming the pushout
-\begin{equation*}
-\begin{tikzcd}[column sep=small]
-\sm{x,y:A} f(x)=f(y) \arrow[r,"\pi_2"] \arrow[d,swap,"\pi_1"] & A \arrow[d,"\inr"] \arrow[ddr,bend left=15,"f"] \\
-A \arrow[r,"\inl"] \arrow[drr,bend right=15,swap,"f"] & A \ast_X A \arrow[dr,densely dotted,swap,"f\ast f" near start] \\
-& & X
-\end{tikzcd}
-\end{equation*}
-Now we observe that the canonical square
-\begin{equation*}
-\begin{tikzcd}
-\sm{x,y:A}f(x)=f(y) \arrow[d,->>] \arrow[r,densely dotted] & \sm{x,y:A \ast_X A} (f\ast f)(x)=(f\ast f)(y) \arrow[d,->>] \\
-A\times A \arrow[r,swap,"\inl\times\inl"] & (A\ast_X A)\times (A\ast_X A)
-\end{tikzcd}
-\end{equation*}
-is a pullback, since we have a homotopy $f\htpy (\join{f}{f})\circ\inl$. 
-In this sense, the pre-kernel of $f$ is compatible with the prekernel of $\join{f}{f}$.
+\subsection{Saturatedness of pre-kernels}
+In this subsection we introduce the concept of saturated relations by using the join construction (\cref{sec:join_stage2}) to analyze the pre-kernel of a map.
 
-We therefore found ourselves in the situation that the pre-kernel of a map is a reflexive relation on the domain, which extends to a new reflexive relation on the reflexive graph quotient of the prekernel, which is again a pre-kernel. Note this observation hides a process that repeats itself indefinitely: given a map, we obtain a reflexive relation (its prekernel), and a new map of which the pre-kernel is compatible with the original pre-kernel. This is precisely the kind of process we also find in \emph{coinductive types}, or more precisely \emph{final coalgebras} for \emph{polynomial endofunctors}. Thus we arrive at the idea to define an $\infty$-equivalence relation on $A$ to be a reflexive relation which extends coinductively to a new $\infty$-equivalence relation on its own reflexive graph quotient.
-
-A similar observation can be made in the situation where we are given two maps $f:A\to X$ and $g:B\to X$ with a common codomain $X$. We have the join
-\begin{equation*}
-\begin{tikzcd}
-\sm{a:A}{b:B} f(a)=g(b) \arrow[r,"\pi_2"] \arrow[d,swap,"\pi_1"] & B \arrow[d,swap,"\inr"] \arrow[ddr,bend left=15,"g"] \\
-A \arrow[r,"\inl"] \arrow[drr,bend right=15,swap,"f"] & \join[X]{A}{B} \arrow[dr,densely dotted,swap,"f\ast g" near start] \\
-& & X
-\end{tikzcd}
-\end{equation*}
-of $f$ with $g$, formed as the pushout of the pullback as in \cite{joinconstruction}. The join operation can be used to define an operation
+Suppose we are given a map $f:A\to X$. The fiberwise join operation $g\mapsto \join{f}{g}$  can be used to define an operation
 \begin{equation*}
 \Big(\sm{B:\UU}{g:B\to X}\mathrm{hom}_X(f,g)\Big)\to\Big(\sm{B:\UU}{g:B\to X}\mathrm{hom}_X(f,g)\Big),
 \end{equation*}
-where $\mathrm{hom}_X(f,g)$ is defined to be the type of pairs $\pairr{h,H}$ consisting of $h:A \to B$ and $H:f\htpy g\circ h$.
-Explicitly, this operation is defined by
+taking a commuting triangle of the form
+\begin{equation}\label{eq:triangle}
+\begin{tikzcd}[column sep=tiny]
+A \arrow[dr,swap,"f"] \arrow[rr,"h"] & & B \arrow[dl,"g"] \\
+\phantom{B} & X & \phantom{A}
+\end{tikzcd}
+\end{equation}
+to the commuting triangle
 \begin{equation*}
-\pairr{B,g,h,H} \mapsto \pairr{\join[X]{A}{B},\join{f}{g},\inl,\mathsf{comp\underline{\ }left}},
-\end{equation*}
-where the homotopy $\mathsf{comp\underline{\ }left}:f\htpy (\join{f}{g})\circ\inl$ is given by the computation rule for pushouts.
-Again, the canonical square
-\begin{equation*}
-\begin{tikzcd}
-\sm{b:B} f(a)=g(b) \arrow[d,->>] \arrow[r,densely dotted] & \sm{x:\join[X]{A}{B}}(f(a)=(f\ast g)(x)) \arrow[d,->>] \\
-B \arrow[r,"\inr"] & \join[X]{A}{B}
+\begin{tikzcd}[column sep=0]
+A \arrow[dr,swap,"f"] \arrow[rr,"\inl"] & & \join[X]{A}{B} \arrow[dl,"\join{f}{g}"] \\
+\phantom{\join[X]{A}{B}} & X.
 \end{tikzcd}
 \end{equation*}
-is a pullback, because we have a homotopy $g\htpy (f\ast g)\circ \inr$.
-
-Thus, we find ourselves in the situation where we have the relation
+Given a commuting triangle as in \cref{eq:triangle}, with a homotopy $H:f\htpy g\circ h$, we define the \define{pullback relation} $E_{f,g}:A\to B\to \UU$ of $f$ and $g$ by
 \begin{equation*}
-R:A\to B\to\UU
+E_{f,g}(a,b)\defeq f(a)=g(b).
 \end{equation*}
-that comes equipped with a term $\prd{a:A}R(a,h(a))$, given by $R(a,b)\defeq f(a)=g(b)$, which extends to the relation
+Since we have a homotopy $H:f\htpy g\circ h$, we see that the pullback relation $E_{f,g}$ comes equipped with a term
 \begin{equation*}
-\tilde{R}:A\to (\join[X]{A}{B})\to\UU
+\prd{a:A}E_{f,g}(a,h(a)).
 \end{equation*}
-that comes equipped with a term $\prd{a:A}\tilde{R}(a,\inl(a))$, given by $\tilde{R}(a,x)\defeq f(a)=(\join{f}{g})(x)$.
-
-
-We call relations $R:A\to B\to \UU$ that come equipped with a term $\rho:\prd{a:A}R(a,h(a))$ \define{graph extensions} of $h$.
-Recall that the \textbf{graph} of $h:A\to B$ is the type-valued relation
-\begin{equation*}
-\mathrm{graph}_h:A\to B\to\UU
-\end{equation*}
-given by $\mathrm{graph}_h(a,b)\defeq (h(a)=b)$. Given a graph extension $\pairr{R,\rho}$ of $h$, the term $\rho$ induces a family of maps
-\begin{equation*}
-\prd{a:A}{b:B}\mathrm{graph}_h(a,b)\to R(a,b).
-\end{equation*}
-In this sense the graph of $h$ is contained in any graph extension $R$ of $h$. Note that an ordinary reflexive relation is a graph extension of the identity function.
-
-Given a commuting triangle 
-\begin{equation*}
-\begin{tikzcd}[column sep=small]
-A \arrow[rr,"h"] \arrow[dr,swap,"f"] & & B \arrow[dl,"g"] \\
-& X
-\end{tikzcd}
-\end{equation*}
-with a homotopy $H:f\htpy g\circ h$, the \define{pullback relation} $E_{f,g}$ given by
-\begin{equation*}
-E_{f,g}(a,b) \defeq (f(a)=g(b))
-\end{equation*}
-is a graph extension of $h$ (by the homotopy $H$). 
-
-Therefore we find ourselves in the situation where the pullback relation $E_{f,g}$ extends along $\inr:B\to \join[X]{A}{B}$ to the pullback relation $E_{f,\join{f}{g}}$. The observation that a pullback relation extends to another pullback relation suggests a second coinductive approach to higher equivalence relations. We make this idea precise in the following section.
-
-\section{The relational Hopf construction}
-
-For every graph extension $\mathcal{R}\jdeq\pairr{R,\rho}$ of $h:A\to B$ we can form the pushout
-\begin{equation*}
-\begin{tikzcd}
-\sm{x:A}{y:B}R(x,y) \arrow[r,"\pi_2"] \arrow[d,swap,"\pi_1"] & B \arrow[d,"\inr_{\mathcal{R}}"] \\
-A \arrow[r,swap,"\inl_{\mathcal{R}}"] & A \sqcup^R B
-\end{tikzcd}
-\end{equation*}
-which comes equipped with a homotopy
-\begin{equation*}
-\glue:\prd{x:A}{y:B} R(x,y)\to (\inl_{\mathcal{R}}(x)=\inr_{\mathcal{R}}(y)).
-\end{equation*} 
-Now consider a graph extension $\mathcal{S}\jdeq\pairr{S,\sigma}$ of $\inl:A\to A\sqcup^{\mathcal{R}}B$.
-Then we can consider the map
-\begin{equation*}
-\epsilon_{\mathcal{R},\mathcal{S}} : \prd{a:A}{b:B} R(a,b)\to S(a,\inr(b))
-\end{equation*}
-given by $(r:R(a,b))\mapsto \trans{\glue(r)}{\sigma(a)}$.
-We are interested in the case where $\epsilon_{\mathcal{R},\mathcal{S}}$ is a fiberwise equivalence.
+The pullback relation $E_{f,g}$ is therefore a \emph{graph extension} of $h$, in the following sense:
 
 \begin{defn}
-Let $\mathcal{R}$ be a graph extension of $h:A\to B$. We say that $\mathcal{R}$ is \define{pre-saturated} if it comes equipped with for every $a:A$ a \define{right extension} $(S,\sigma,p)$ of $\mathcal{R}(a)$, consisting of
+For any map $h:A\to (B\to \UU)$, the \define{graph} of $h$ is defined to be the relation
+\begin{equation*}
+\mathsf{graph}_h:A\to (B\to \UU)
+\end{equation*}
+given by $\mathsf{graph}_h(a,b)\defeq h(a)=b$, equipped with the term
+\begin{equation*}
+\lam{a}\refl{h(a)} : \prd{a:A}\mathsf{graph}_h(a,h(a)).
+\end{equation*}
+A \define{graph extension} of $h$ is a pair $\mathcal{R}\jdeq (R,\rho)$ consisting of
 \begin{align*}
-S & :A\sqcup^{\mathcal{R}}B\to\UU, \\
-\sigma & :S(\inl(a)),
+R & : A \to (B\to \UU) \\
+\rho & : \prd{a:A} R(a,h(a)).
 \end{align*}
-and a proof $p$ witnessing that $\epsilon_{\mathcal{R},\mathcal{S},b}:R(a,b)\to S(b)$ is an equivalence for each $b:B$. We write $\mathsf{presat}(\mathcal{R})$ for the type of right extensions of $\mathcal{R}$
+We will write $\mathsf{gphExt}(h)$ for the type of all (small) graph extensions of $h$.
 \end{defn}
+
+\begin{rmk}
+For any graph extension $\mathcal{R}$ of $h$, the map
+\begin{equation*}
+\mathsf{ev\usc{}refl}:\Big(\prd{b:B} \mathsf{graph}_h(a,b)\to R(a,b)\Big)\to R(a,h(a))
+\end{equation*}
+is an equivalence by the Yoneda lemma (\cref{lem:yoneda}), for any $a:A$. Therefore, the `reflexivity' term $\rho$ of a graph extension uniquely determines a map from the graph of $h$ to $\mathcal{R}$. In this sense the graph of $h$ is contained in any graph extension $R$ of $h$. 
+
+Note that an ordinary reflexive relation is a graph extension of the identity function. In particular, the pullback relation $E_{f,f}$ is the pre-kernel of $f$. 
+\end{rmk}
+
+By the action on commuting triangles induced by the fiberwise join operation, we also obtain the pullback relation $E_{f,\join{f}{g}}$, which is a graph extension of the map $\inl:A\to \join[X]{A}{B}$. Note that we have a fiberwise transformation
+\begin{equation*}
+\prd{b:B}E_{f,g}(a,b)\to E_{f,\join{f}{g}}(a,\inr(b))
+\end{equation*}
+taking a path $p:f(a)=g(b)$ to the concatenation
+\begin{equation*}
+\begin{tikzcd}
+f(a) \arrow[r,equals] & g(b) \arrow[r,equals,"\mathsf{right\usc{}comp}(b)"] &[3em] (\join{f}{g})(\inr(b)),
+\end{tikzcd}
+\end{equation*}
+where the identification $\mathsf{right\usc{}comp}(b)$ comes from the (typal) computation rule of the pushout.
+The trivial but important observation now is that path concatenation $\ct{\blank}{\mathsf{right\usc{}comp}(b)}$ is an equivalence for every $b:B$.
+
+\begin{defn}
+Let $\mathcal{R}$ be a graph extension of $h:A\to B$. We say that $\mathcal{R}$ is \define{pre-saturated} if it comes equipped with for every $a:A$ a \define{right extension} $(S,\sigma,p)$ of $\mathcal{R}$, consisting of
+\begin{align*}
+S & : A \to A\sqcup^{\mathcal{R}}B\to\UU, \\
+\sigma & : \prd{a:A} S(a,\inl(a)),
+\end{align*}
+and a proof $p$ witnessing that the fiberwise transformation
+\begin{equation*}
+\epsilon_{\mathcal{R},\mathcal{S}}:\prd{b:B} R(a,b)\to S(a,\inr(b))
+\end{equation*}
+given by 
+\begin{equation*}
+\epsilon_{\mathcal{R},\mathcal{S}}(r)\defeq \mathsf{tr}_{S(a)}(\glue(r),\sigma(a))
+\end{equation*}
+is a fiberwise equivalence, for every $a:A$. We write $\mathsf{presat}(\mathcal{R})$ for the type of right extensions $(S,\sigma,p)$ of $\mathcal{R}$.
+\end{defn}
+
+\begin{rmk}
+Another way of phrasing that $(S,\sigma)$ is a right extension of $(R,\rho)$ is that the canonical transformation $\varepsilon_{\mathcal{R},\mathcal{S}}$ from $R(a)$ to $S(a)$ induces a pullback square
+\begin{equation*}
+\begin{tikzcd}[column sep=huge]
+\sm{b:B}R(a,b) \arrow[d,swap,"\proj 1"] \arrow[r,"\total{\varepsilon_{\mathcal{R},\mathcal{S}}}"] & \sm{x:A\sqcup^{\mathcal{R}} B}S(a,x) \arrow[d,"\proj 1"] \\
+B \arrow[r,swap,"\inr"] & A\sqcup^{\mathcal{R}} B.
+\end{tikzcd}
+\end{equation*}
+From yet another point of view, we see that $S(a)$ is an extension of $R(a)$ along $\inr$, in the sense that the triangle
+\begin{equation*}
+\begin{tikzcd}
+B \arrow[d,swap,"\inr"] \arrow[r,"R(a)"] & \UU \\
+A\sqcup^{\mathcal{R}}B \arrow[ur,swap,"S(a)"]
+\end{tikzcd}
+\end{equation*}
+commutes. Note, however, that this triangle commutes in a canonical way, because it is a particular fiberwise transformation that is required to be a fiberwise equivalence.
+\end{rmk}
 
 \begin{lem}\label{thm:pb_presat}
 Consider a commuting triangle
@@ -615,80 +608,396 @@ with a homotopy $H:f\htpy g\circ h$. Then the graph extension $E_{f,g}$ of $h$ i
 \end{lem}
 
 \begin{proof}
-We show that the pullback relation $E_{f,\join{f}{g}}:A\to \join[X]{A}{B}\to\UU$ is a right extension of $E_{f,g}$. The relation $E_{f,\join{f}{g}}$ comes equipped with the term
+We will show that the pullback relation $E_{f,\join{f}{g}}:A\to \join[X]{A}{B}\to\UU$ is a right extension of $E_{f,g}$. 
+To see this, we need to show that the map
 \begin{equation*}
-\lam{a}\refl{f(a)}:\prd{a:A} f= (\join{f}{g})(\inl(a)),
-\end{equation*}
-which witnesses that $E_{f,\join{f}{g}}$ is indeed a graph extension of $\inl:A\to \join[X]{A}{B}$. 
-
-It remains to show that the canonical map
-\begin{equation*}
-\epsilon : \prd{a:A}{b:B} (f(a)=g(b))\to (f(a)=(\join{f}{g})(\inr(b)))
+\epsilon_{E_{f,g},E_{f,\join{f}{g}}} : \prd{b:B} E_{f,g}(a,b)\to E_{f,\join{f}{g}}(a,\inr(b))
 \end{equation*}
 given by
 \begin{equation*}
-\epsilon(a,b,p)\defeq \trans{\glue(p)}{\refl{f(a)}}
+(p:f(a)=g(b))\mapsto \mathsf{tr}_{E_{f,\join{f}{g}}(a)}(\glue(p),\mathsf{left\usc{}comp}(a))
 \end{equation*}
-is a fiberwise equivalence. However, $\epsilon$ factors as follows [TODO]
+is an equivalence. Note that for any $p:f(a)=x$ we have a commuting triangle
+\begin{equation*}
+\begin{tikzcd}[column sep=tiny]
+f(a) \arrow[rr,equals,"\mathsf{left\usc{}comp}(a)"] \arrow[dr,equals,swap,"{\mathsf{tr}(p,\mathsf{left\usc{}comp}(a))}"] & & (\join{f}{g})(\inl(a)) \arrow[dl,equals,"\ap{\join{f}{g}}{p}"] \\
+\phantom{(\join{f}{g})(\inl(a))} & (\join{f}{g})(x),
+\end{tikzcd}
+\end{equation*}
+by identification elimination. Therefore it follows that
+\begin{equation*}
+\epsilon(p)= \ct{\mathsf{left\usc{}comp}(a)}{\ap{\join{f}{g}}{p}}
+\end{equation*}
+for any $p:f(a)=g(b)$. Now observe that also the square
+\begin{equation*}
+\begin{tikzcd}[column sep=huge]
+f(a) \arrow[r,equals,"\mathsf{left\usc{}comp}(a)"] \arrow[d,equals,swap,"p"] & (\join{f}{g})(\inl(a)) \arrow[d,equals,"\ap{\join{f}{g}}{p}"] \\
+g(b) \arrow[r,equals,swap,"\mathsf{right\usc{}comp}(b)"] & (\join{f}{g})(\inr(b))
+\end{tikzcd}
+\end{equation*}
+commutes. This shows that the function $\epsilon:E_{f,g}(a,b)\to E_{f,\join{f}{g}}(a,\inr(b))$ is homotopic to the concatenation function $\ct{\blank}{\mathsf{right\usc{}comp}(b)}$, which is an equivalence, for any $b:B$.
 \end{proof}
 
-In the following theorem we reformulate the type of right extensions of $\mathcal{R}$ entirely in terms of operations on $\mathcal{R}$, thereby showing that the type of right extensions of $\mathcal{R}$ is essentially small.
+Now we observe that not only $E_{f,g}$ is presaturated, its right extension is again a pullback relation so it is again presaturated. Moreover, the right extension of its right extension is again a pullback relation, so it is again presaturated, and so on. This leads to the concepts of $n$-saturatedness and ($\infty$-)saturatedness.
 
-\begin{thm}\label{thm:hrel}
-Consider a graph extension $\mathcal{R}$ of $h:A\to B$. The type of right extensions of $\mathcal{R}$ is equivalent to the type of \define{H-relation structure} $\mathsf{H{-}Rel}(\mathcal{R})$ on $\mathcal{R}$, which we define to consist of
-\begin{align*}
-\mu & :\prd{a,x:A}{y:B} R(x,y)\to (\eqv{R(a,h(x))}{R(a,y)}) \\
-\mathsf{unit\underline{~}l} & : \prd{a:A}{x:A}{r:R(a,h(x))} \mu(\rho(x),r)=r \\
-\mathsf{unit\underline{~}r} & : \prd{a:A}{y:B}{r:R(a,y)} \mu(r,\rho(a))=r \\
-\mathsf{unit\underline{~}coh} & : \prd{a:A}\mathsf{unit\underline{~}l}(\rho(a))=\mathsf{unit\underline{~}r}(\rho(a)).
-\end{align*}
+In the following definition we will write 
+\begin{equation*}
+\xi_{\mathcal{R}}: \mathsf{presat}(\mathcal{R})\to \mathsf{gphExt}(\inl)
+\end{equation*}
+for the forgetful map, i.e.~the map given by $(S,\sigma,p)\mapsto (S,\sigma)$.
+
+\begin{defn}
+We define a family
+\begin{equation*}
+\mathsf{sat} : \N\to \prd{A:\UU}{B:\UU}{h:A\to B} \mathsf{gphExt}(h)\to \UU
+\end{equation*}
+by $\mathsf{sat}_0(\mathcal{R})\defeq \unit$, and 
+\begin{equation*}
+\mathsf{sat}_{n+1}(\mathcal{R})\defeq \sm{t:\mathsf{presat}(\mathcal{R})} \mathsf{sat}_n(\xi_{\mathcal{R}}(t)).
+\end{equation*}
+\end{defn}
+
+\begin{defn}
+We will define for every $n:\N$ the furgetful map
+\begin{equation*}
+u_n:\mathsf{sat}_{n+1}(\mathcal{R})\to \mathsf{sat}_{n}(\mathcal{R}).
+\end{equation*}
+\end{defn}
+
+\begin{proof}[Construction]
+In the case $n\jdeq 0$ we take the unique map into $\unit$.
+For the inductive step, assume that $\mathsf{sat}_{n+1}(\mathcal{R})\to \mathsf{sat}_{n}(\mathcal{R})$ for any graph extension $\mathcal{R}$ of $h$, for any $h:A\to B$. 
+Then it suffices to show
+\begin{equation*}
+\prd{t:\mathsf{presat}(\mathcal{R})} \mathsf{sat}_{n+1}(\xi_{\mathcal{R}}(t))\to \mathsf{sat}_{n}(\xi_{\mathcal{R}}(t))
+\end{equation*}
+which we get immediately from the inductive hypothesis.
+\end{proof}
+
+Thus, we get for each graph extension $\mathcal{R}$ of $h:A\to B$ a type sequence
+\begin{equation}\label{eq:sat}
+\begin{tikzcd}
+\cdots \arrow[r] & \mathsf{sat}_{2}(\mathcal{R}) \arrow[r] & \mathsf{sat}_1(\mathcal{R}) \arrow[r] & \unit.
+\end{tikzcd}
+\end{equation}
+
+\begin{defn}
+Let $\mathcal{R}$ be a graph extension of a map $h:A\to B$. We write $\mathsf{sat}(\mathcal{R})$ for the limit of the sequence displayed in \cref{eq:sat}, and we say that $\mathcal{R}$ is \define{saturated} if it comes equipped with a term of type $\mathsf{sat}(\mathcal{R})$. 
+
+Moreover, a reflexive relation $\mathcal{R}$ on a type $A$ is said to be \define{saturated} if it is saturated in the previous sense as a graph extension of the identity function $\idfunc:A\to A$.
+\end{defn}
+
+\begin{thm}\label{thm:pb_sat}
+Consider a commuting triangle
+\begin{equation}\label{eq:pb_sat}
+\begin{tikzcd}[column sep=small]
+A \arrow[rr,"h"] \arrow[dr,swap,"f"] & & B \arrow[dl,"g"] \\
+& X
+\end{tikzcd}
+\end{equation}
+with a homotopy $H:f\htpy g\circ h$. Then the pullback relation $E_{f,g}$ is saturated. In particular, the pre-kernel of any map $f:A\to X$ is saturated.
 \end{thm}
 
-\begin{proof}[Proof of \autoref{thm:hrel}]
-By the universal property of pushouts, the type of right extensions of $\mathcal{R}$ is equivalent to the type of
+\begin{proof}
+We have to construct
 \begin{align*}
-P & : A\to A \to \UU \\
-Q & : A \to B \to \UU \\
-\mu & : \prd{a:A}{x:A}{y:B} R(x,y)\to (P(a,x)\eqvsym Q(a,y)) \\
-1 & : \prd{a:A} P(a,a)
+s(f,g) & : \prd{n:\N} \mathsf{sat}_n(E_{f,g}) \\
+t(f,g) & : \prd{n:\N} u_n(s(f,g)_{n+1})=s(f,g)_n. 
 \end{align*}
-such that the map
+for every commuting triangle as \cref{eq:pb_sat}. We will first show by induction on $n:\N$ that for every commuting triangle as in \cref{eq:pb_sat}, the relation $E_{f,g}$ is $n$-saturated. Since $\mathsf{sat}_0(\mathcal{R})$ is contractible for any $\mathcal{R}$, the base case is trivial.
+Now suppose that every $E_{f,g}$ is $n$-saturated. We have seen in \cref{thm:pb_presat} that $E_{f,\join{f}{g}}$ is a right extension of $E_{f,g}$. By the induction hypothesis we have that $E_{f,\join{f}{g}}$ is $n$-saturated. Therefore we conclude that $E_{f,g}$ is $(n+1)$-saturated. This finishes the construction of $s$.
+
+We will construct $t$ similarly by induction on $n:\N$, showing that 
 \begin{equation*}
-\epsilon : \prd{a:A}{b:B} R(a,b)\to Q(a,b)
+u_n(s(f,g)_{n+1})=s(f,g)_n
 \end{equation*}
-given by $r\mapsto \mu(r,1_a)$ is a fiberwise equivalence. By \autoref{lem:coh_red} this type is equivalent to the type of
+for every pullback relation $E_{f,g}$. Again, by the contractibility of $\mathsf{sat}_0(\mathcal{R})$, the base case is trivial. For the inductive step we assume that $u_n(s(f,g)_{n+1})=s(f,g)_n$ for every pullback relation $E_{f,g}$. Then we have
 \begin{align*}
-P & : A\to A \to \UU \\
-\mu & : \prd{a:A}{x:A}{y:B} R(x,y)\to (P(a,x)\eqvsym R(a,y)) \\
-1 & : \prd{a:A} P(a,a) \\
-\mathsf{unit\underline{~}r} & : \prd{a:A}{b:B}{r:R(a,b)} \mu(r,1_a)=r.
+u_{n+1}(s(f,g)_{n+2}) & \jdeq u_n(s(f,\join{f}{g})_{n+1}) \\
+& = s(f,\join{f}{g})_n \\
+& \jdeq s(f,g)_{n+1},
 \end{align*}
-Since we have $\mu(\rho(x)) : P(a,x) \eqvsym R(a,h(x))$ for any $a,x:A$, we see that by a second application of \autoref{lem:coh_red}, the type of right extensions of $\mathcal{R}$ is equivalent to the type
-\begin{align*}
-\mu & : \prd{a:A}{x:A}{y:B} R(x,y)\to (R(a,h(x))\eqvsym R(a,y)) \\
-1 & : \prd{a:A} R(a,h(a)) \\
-\mathsf{unit\underline{~}r} & : \prd{a:A}{b:B}{r:R(a,b)} \mu(r,1_a)=r \\
-\mathsf{unit\underline{~}l} & : \prd{a,x:A}{r:R(a,h(x))} \mu(\rho(x),r)=r.
-\end{align*}
-Finally, we observe that $\ct{\beta_r(\rho(a))^{-1}}{\beta_l(1_a)}:\rho(a)=1_a$. Thus, by a last application of \autoref{lem:coh_red} we see that the type of right extensions of $\mathcal{R}$ is equivalent to the type
-\begin{align*}
-\mu & : \prd{a:A}{x:A}{y:B} R(x,y)\to (R(a,h(x))\eqvsym R(a,y)) \\
-\mathsf{unit\underline{~}r} & : \prd{a:A}{b:B}{r:R(a,b)} \mu(r,\rho(a))=r \\
-\mathsf{unit\underline{~}l} & : \prd{a,x:A}{r:R(a,h(x))} \mu(\rho(x),r)=r \\
-\mathsf{unit\underline{~}coh} & : \prd{a:A} \mathsf{unit\underline{~}l}(\rho(a))=\mathsf{unit\underline{~}r}(\rho(a)).\qedhere
-\end{align*}
+completing the construction of $t$. 
 \end{proof}
 
+For any function $h:A\to B$, write 
+\begin{equation*}
+E: (B\,{\downarrow}\,\UU) \to \mathsf{gphExt}(h)
+\end{equation*}
+for the operation $(g:B\to X)\mapsto E_{g\circ h,g}$.
+
+\begin{cor}
+For any function $h:A\to B$, the operation $E$ taking $g:B\to X$ to the pullback relation $E_{g\circ h,g}$ has a lift
+\begin{equation*}
+\begin{tikzcd}
+& \sm{\mathcal{R}:\mathsf{gphExt}(h)}\mathsf{sat}(\mathcal{R}) \arrow[d,"\proj 1"] \\
+(B\,{\downarrow}\,\UU) \arrow[r,swap,"E"] \arrow[ur,densely dotted,"\mathcal{E}"] & \mathsf{gphExt}(h).
+\end{tikzcd}
+\end{equation*}
+\end{cor}
+
+\begin{cor}
+For any function $h:A\to B$, the operation $k$ taking $f:A\to X$ to its pre-kernel has a lift
+\begin{equation*}
+\begin{tikzcd}
+& \sm{\mathcal{R}:\mathsf{rRel}}\mathsf{sat}(\mathcal{R}) \arrow[d,"\proj 1"] \\
+(A\,{\downarrow}\,\UU) \arrow[r,swap,"k"] \arrow[ur,densely dotted,"\mathcal{K}"] & \mathsf{rRel}.
+\end{tikzcd}
+\end{equation*}
+\end{cor}
+
+\subsection{Quotients by saturated relations}
+
+In order to construct the quotient operation, it is useful to consider the type of abstract graph extensions and their morphisms, as displayed in \autoref{table:gphext}
+
+\begin{defn}\label{defn:seq_sat}
+We define the category of graph extensions to consist of objects and morphisms as follows:
+\begin{center}
+\begin{tabular}{rlcrl}
+\toprule
+\multicolumn{2}{l}{\emph{Objects}} & & \multicolumn{2}{l}{\emph{Morphisms}} \\
+\multicolumn{2}{l}{$(B,h,R,\rho)$} & & \multicolumn{2}{l}{$(i,H,\epsilon,\epsilon_\rho):(B,h,R,\rho)\to(B',h',R',\rho')$} \\
+\midrule
+$B$ & $:\UU$ & & $i$ & $:B\to B'$\\
+$h$ & $:A\to B$ & & $I$ & $:i\circ h\htpy h'$ \\
+$R$ & $:A\to B\to\UU$ & & $\epsilon$ & $: \prd{a:A}{b:B}R(a,b)\eqvsym R'(a,i(b))$ \\
+$\rho$ & $: \prd{a:A}R(a,h(a))$ & & $\epsilon_\rho$ & $: \prd{a:A} \mathsf{tr}_{R'(a)}(H(a),\epsilon(\rho(a)))=\rho'(a)$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+\end{defn}
+
 \begin{eg}
-Note that we may consider any reflexive relation $R:A\to A\to\UU$ to be a graph extension of $\idfunc[A]$.
+Given a commuting triangle 
+\begin{equation*}
+\begin{tikzcd}[column sep=tiny]
+A \arrow[dr,swap,"f"] \arrow[rr,"h"] & & B \arrow[dl,"g"] \\
+& X
+\end{tikzcd}
+\end{equation*}
+with $H:f\htpy g\circ h$, we have the morphism
+\begin{equation*}
+\begin{tikzcd}
+(B,h,E_{f,g},H) \arrow[r,"{(i,H,\epsilon,\epsilon_\rho)}"] & (\join[X]{A}{B},\inl,E_{f,\join{f}{g}},\mathsf{left\usc{}comp})
+\end{tikzcd}
+\end{equation*}
+consisting of
+\begin{align*}
+i & \defeq \inr \\
+I & \defeq \lam{a}\glue(H(a)) \\
+\epsilon & \defeq \epsilon_{E_{f,g},E_{f,\join{f}{g}}} \\
+\epsilon_\rho & \defeq
+\end{align*}
+\end{eg}
 
-A $\prop$-valued reflexive relation $\mathcal{R}$ on $A$ is pre-saturated if and only if it is symmetric and transitive, i.e.~ it is an equivalence relation.
-To see this, note that in the case of $\prop$-valued reflexive relations, the coherence laws automatically hold.
-If $\mathcal{R}$ is a right H-relation, then we have in particular $R(x,a)\to (\eqv{R(a,x)}{R(a,a)})$, showing that $R(a,x)\leftrightarrow R(x,a)$ for any $x,a:A$. This proves that $\mathcal{R}$ is symmetric. Transitivity of $\mathcal{R}$ is immediate.
+\begin{defn}\label{defn:seq_sat}
+Given a saturated graph extension $\mathcal{R}$ of $h:A\to B$, we define a sequence of graph extensions
+\begin{equation*}
+\begin{tikzcd}
+(B_0,h_0,\mathcal{R}_0) \arrow[r] & (B_1,h_1,\mathcal{R}_1) \arrow[r] & (B_2,h_2,\mathcal{R}_2) \arrow[r] & \cdots
+\end{tikzcd}
+\end{equation*}
+such that each $\mathcal{R}_n\jdeq(R_n,\rho_n)$ is a saturated graph extension of $h_n:A\to B_n$. 
+\end{defn}
 
-Conversely, if $\mathcal{R}$ is symmetric and transitive, then it is straightforward to see that $R(a,x)\leftrightarrow R(a,y)$ for any $p:R(x,y)$, so $\mathcal{R}$ is pre-saturated.
+\begin{proof}[Construction]
+We take $(B_0,h_0,R_0,\rho_0)\defeq (B,h,R,\rho)$.
+For the inductive step, we define 
+\begin{align*}
+B_{n+1} & \defeq A \sqcup^{\mathcal{R}_n} B_n \\
+h_{n+1} & \defeq \inl \\
+\mathcal{R}_{n+1} & \defeq \xi(t_n)
+\end{align*}
+where $t_n$ witnesses that $\mathcal{R}_n$ is saturated. Next, we define a morphism from $(B_n,h_n,R_n,\rho_n)$ to $(B_{n+1},h_{n+1},R_{n+1},\rho_{n+1})$ by
+\begin{align*}
+i_n & \defeq \inr \\
+H_n & \defeq \lam{a}\glue(\rho_n(a)) \\
+\epsilon_n & \defeq \epsilon_{\mathcal{R}_n,\mathcal{R}_{n+1}},
+\end{align*}
+which preserves $\rho_n$ by construction.
+\end{proof}
 
-From the above observations it follows that if $\mathcal{R}$ is a pre-saturated graph extension of $\idfunc:A\to A$, then the relation $x \sim_{\mathcal{R}} y \defeq \brck{R(x,y)}$ is an equivalence relation in the usual sense.
+\begin{defn}
+Let $\mathcal{R}$ be a saturated graph extension of $h:A\to B$. Then we define
+\begin{equation*}
+B/\mathcal{R}\defeq \mathsf{colim}_n(B_n)
+\end{equation*}
+and $q_\mathcal{R}:B\to B/\mathcal{R}$ is given by the cocone structure of $B/\mathcal{R}$.
+\end{defn}
+
+\begin{lem}
+Let $\mathcal{R}$ be a graph extension of $h:A\to B$. Then the map
+\begin{equation*}
+\inr : B\to A\sqcup^{\mathcal{R}} B
+\end{equation*}
+is surjective.
+\end{lem}
+
+\begin{proof}
+We have to show that 
+\begin{equation*}
+\prd{t:A\sqcup^{\mathcal{R}} B} \brck{\fib{\inr}{t}}.
+\end{equation*}
+We do this using the dependent elimination of $A\sqcup^{\mathcal{R}} B$.
+Note that since we are eliminating into a family of mere propositions, there is nothing to show for the path constructors.
+Moreover, the fibers of $\inr$ at points of the form $\inr(b)$ are clearly inhabited too.
+Thus we only need to show that
+\begin{equation*}
+\prd{a:A}\brck{\fib{\inr}{\inl(a)}}.
+\end{equation*}
+However, we have $\glue(\rho(a)):\inl(a)=\inr(h(a))$. Thus we have $\fib{\inr}{\inl(a)}\eqvsym \fib{\inr}{\inr(h(a))}$, and the fiber on the right is inhabited for all $a:A$.
+\end{proof}
+
+\begin{defn}
+We define an operation
+\begin{equation*}
+\mathcal{Q}_h : \Big(\sm{\mathcal{R}:\mathsf{gphExt}(h)}\mathsf{sat}(\mathcal{R})\Big)\to \sm{Q:\UU}{q:B\to Q}\mathsf{isSurj}(q).
+\end{equation*}
+by taking $\mathcal{Q}_h(\mathcal{R},\mathcal{H})\defeq\pairr{B/\mathcal{R},q_\mathcal{R},\usc{}}$.
+\end{defn}
+
+\begin{proof}[Construction]
+We define
+\begin{equation*}
+B/\mathcal{R}\defeq \mathsf{colim}_n(B_n)
+\end{equation*}
+and $q_\mathcal{R}:B\to B/\mathcal{R}$ is given by the cocone structure of $B/\mathcal{R}$. Then $q_{\mathcal{R}}$ is surjective since each $i_n:B_n\to B_{n+1}$ is surjective.
+\end{proof}
+
+\begin{lem}\label{lem:join_fixed}
+For any type $A$ the map
+\begin{equation*}
+\inl : \brck{A}\to \join{\brck{A}}{A}
+\end{equation*}
+is an equivalence.
+\end{lem}
+
+\begin{proof}
+By the universal property of the join we also have a map $\join{\brck{A}}{A}\to \brck{A}$, so it suffices to show that $\join{\brck{A}}{A}$ is a proposition, i.e.~that $\join{\brck{A}}{A}\to\iscontr(\join{\brck{A}}{A})$. It is equivalent to show that
+\begin{equation*}
+A\to\iscontr(\join{\brck{A}}{A}),
+\end{equation*}
+which follows at once since $A\to\iscontr \brck{A}$, and joining with a contractible type results in a contractible type.
+\end{proof}
+
+\begin{cor}
+Consider a commuting triangle
+\begin{equation*}
+\begin{tikzcd}[column sep=tiny]
+A \arrow[rr,"h"] \arrow[dr,swap,"f"] & & B \arrow[dl,"g"] \\
+& X
+\end{tikzcd}
+\end{equation*}
+with $H:f\htpy g\circ h$, in which $h:A\to B$ is assumed to be surjective. Then the top map in the commuting triangle
+\begin{equation*}
+\begin{tikzcd}[column sep=tiny]
+\im(f) \arrow[rr,"\inl"] \arrow[dr,swap,"f^{\ast\infty}"] & & \join[X]{\im(f)}{B} \arrow[dl,"\join{f^{\ast\infty}}{g}"] \\
+\phantom{\join[X]{\im(f)}{B}} & X
+\end{tikzcd}
+\end{equation*}
+is an equivalence.
+\end{cor}
+
+\begin{proof}
+It suffices to show that
+\begin{equation*}
+\inl:\brck{\fib{f}{x}}\to \join{\brck{\fib{f}{x}}}{\fib{g}{x}}.
+\end{equation*}
+To see this, we observe that $\brck{\fib{f}{x}}\eqvsym \brck{\fib{g}{x}}$, since we have
+\begin{align*}
+\brck{\fib{f}{x}} & \eqvsym \brck{\fib{g\circ h}{x}}\phantom{\Brck{~}} \\
+& \eqvsym \Brck{\sm{(b,p):\fib{g}{x}}\fib{h}{b}} \\
+& \eqvsym \Brck{\sm{(b,p):\fib{g}{x}}\brck{\fib{h}{b}}} \\
+& \eqvsym \brck{\fib{g}{x}},\phantom{\Brck{~}}
+\end{align*}
+so the claim follows from \cref{lem:join_fixed}
+\end{proof}
+
+\begin{thm}
+Consider a commuting triangle
+\begin{equation*}
+\begin{tikzcd}[column sep=tiny]
+A \arrow[rr,"h"] \arrow[dr,swap,"f"] & & B \arrow[dl,"g"] \\
+& X
+\end{tikzcd}
+\end{equation*}
+with $H:f\htpy g\circ h$, in which $h:A\to B$ is assumed to be surjective. Then the map
+\begin{equation*}
+B/\mathcal{E}_{f,g} \to X
+\end{equation*}
+is an embedding. It follows that his embedding satisfies the universal property of the image inclusion of $f$. 
+\end{thm}
+
+\begin{proof}
+Note that there is a natural equivalence of type sequences
+\begin{equation*}
+\begin{tikzcd}
+B \arrow[d] \arrow[r] & \join[X]{A}{B} \arrow[d] \arrow[r] & \join[X]{A}{(\join[X]{A}{B})} \arrow[d] \arrow[r] & \join[X]{A}{(\join[X]{A}{(\join[X]{A}{B})})} \arrow[r] \arrow[d] & \cdots \\
+B \arrow[r] & \join[X]{A}{B} \arrow[r] & \join[X]{(\join[X]{A}{A})}{B} \arrow[r] & \join[X]{(\join[X]{A}{(\join[X]{A}{A})})}{B} \arrow[r] & \cdots
+\end{tikzcd}
+\end{equation*}
+Therefore we obtain commuting triangles
+\begin{equation*}
+\begin{tikzcd}
+B/\mathcal{E}_{f,g} \arrow[r] \arrow[dr] & \join[X]{\im(f)}{B} \arrow[d] & \im(f) \arrow[dl] \arrow[l] \\
+& X & \phantom{B/\mathcal{E}_{f,g}}
+\end{tikzcd}
+\end{equation*}
+in which the top maps are equivalences, from which the claim follows.
+\end{proof}
+
+\begin{prp}
+For any surjective map $h:A\to B$, the lift
+\begin{equation*}
+\begin{tikzcd}
+& \sm{\mathcal{R}:\mathsf{gphExt}(h)}\mathsf{sat}(\mathcal{R}) \arrow[d,"\proj 1"] \\
+(B\,{\downarrow_s}\,\UU) \arrow[r,swap,"E"] \arrow[ur,densely dotted,"\mathcal{E}"] & \mathsf{gphExt}(h)
+\end{tikzcd}
+\end{equation*}
+is a section of the quotient operation
+\begin{equation*}
+\mathcal{Q} : \Big(\sm{\mathcal{R}:\mathsf{gphExt}(h)}\mathsf{sat}(\mathcal{R})\Big)\to (B\,{\downarrow_s}\,\UU).
+\end{equation*}
+\end{prp}
+
+\begin{cor}
+The lift
+\begin{equation*}
+\begin{tikzcd}
+& \sm{\mathcal{R}:\mathsf{rRel}(A)}\mathsf{sat}(\mathcal{R}) \arrow[d,"\proj 1"] \\
+(A\,{\downarrow_s}\,\UU) \arrow[r,swap,"k"] \arrow[ur,densely dotted,"\mathcal{K}"] & \mathsf{rRel}(A)
+\end{tikzcd}
+\end{equation*}
+is a section of the quotient operation
+\begin{equation*}
+\mathcal{Q} : \Big(\sm{\mathcal{R}:\mathsf{rRel}(A)}\mathsf{sat}(\mathcal{R})\Big)\to (A\,{\downarrow_s}\,\UU).
+\end{equation*}
+\end{cor}
+
+\subsection{The relational Hopf construction}
+
+\begin{defn}
+A \define{right H-structure} on a graph extension $\mathcal{R}$ of $h:A\to B$ consists of quadruples
+\begin{align*}
+\mu & :\prd{a,x:A}{y:B} R(x,y)\to (\eqv{R(a,h(x))}{R(a,y)}) \\
+\mathsf{left\usc{}unit} & : \prd{a:A}{x:A}{r:R(a,h(x))} \mu(\rho(x),r)=r \\
+\mathsf{right\usc{}unit} & : \prd{a:A}{y:B}{r:R(a,y)} \mu(r,\rho(a))=r \\
+\mathsf{coh\usc{}unit} & : \prd{a:A}\mathsf{left\usc{}unit}(\rho(a))=\mathsf{right\usc{}unit}(\rho(a)).
+\end{align*}
+We will write $\mathsf{H\hyph Rel}(\mathcal{R})$ for the type of such quadruples, and $\mu$ is called the \define{composition} operation. If $\mathcal{R}$ comes equipped with a right H-structure, we also say that $\mathcal{R}$ is a \define{right H-relation}. An \define{H-relation} is a right H-relation for which $\mu(\blank,r)$ is an equivalence, for each $r:R(a,h(x))$. 
+\end{defn}
+
+\begin{eg}
+We claim that a $\prop$-valued reflexive relation $\mathcal{R}$ on $A$ possesses a (right) H-structure if and only if it is symmetric and transitive, i.e.~it is an equivalence relation.
+
+If $\mathcal{R}$ is a right H-relation, then we have in particular 
+\begin{equation*}
+R(x,a)\to (\eqv{R(a,x)}{R(a,a)}),
+\end{equation*}
+showing that $R(a,x)\leftrightarrow R(x,a)$ for any $x,a:A$. This proves that $\mathcal{R}$ is symmetric. Transitivity of $\mathcal{R}$ is immediate.
+Conversely, if $\mathcal{R}$ is symmetric and transitive, then it is straightforward to see that $R(a,x)\leftrightarrow R(a,y)$ for any $p:R(x,y)$. Furthermore, the unit laws hold since $\mathcal{R}$ is $\prop$-valued, so $\mathcal{R}$ is pre-saturated. 
+
+From the above observations it follows that if a reflexive relation $\mathcal{R}$ is a right H-relation, then the relation $x \sim_{\mathcal{R}} y \defeq \brck{R(x,y)}$ is a $\prop$-valued equivalence relation in the usual sense.
 \end{eg}
 
 \begin{eg}
@@ -708,15 +1017,113 @@ It is immediate that this operation satisfies the left and right unit laws, with
 
 \begin{eg}
 A reflexive relation on the unit type is just a pointed type. 
-Thus, we can specialize the notion of H-relation to the case of a type $X$ with base point $1:X$, we obtain the following structure:
+Thus, we can specialize the notion of right H-relation to the case of a type $X$ with base point $1:X$, we obtain the following structure:
 \begin{align*}
 \mu & : X \to (\eqv{X}{X}) \\
-\mathsf{unit\underline{~}r} & : \prd{x:X} \mu(x,1)=x \\
-\mathsf{unit\underline{~}l} & : \prd{x:X} \mu(1,x)=x \\
-\mathsf{unit\underline{~}coh} & : \mathsf{unit\underline{~}r}(1)=\mathsf{unit\underline{~}l}(1).
+\mathsf{right\usc{}unit} & : \prd{x:X} \mu(x,1)=x \\
+\mathsf{left\usc{}unit} & : \prd{x:X} \mu(1,x)=x \\
+\mathsf{coh\usc{}unit} & : \mathsf{right\usc{}unit}(1)=\mathsf{left\usc{}unit}(1).
 \end{align*}
-Note that the H-structure on a pointed type is closely related to the H-space structure on a pointed type. 
+Thus we see that an H-structure on a pointed type is the structure of a coherent H-space.
 \end{eg}
+
+\begin{defn}
+Let $\mathcal{R}$ be a graph extension of $h:A\to B$. We will define a map
+\begin{equation*}
+\mathsf{presat\usc{}hrel}:\mathsf{H\hyph Rel}(\mathcal{R})\to \mathsf{presat}(\mathcal{R}).
+\end{equation*}
+\end{defn}
+
+\begin{proof}[Construction]
+Given the structure of a right H-relation on $\mathcal{R}$ with composition operation $\mu$, we note that the outer square square in the diagram
+\begin{equation*}
+\begin{tikzcd}
+\sm{x:A}{y:B}R(x,y) \arrow[r,"\pi_2"] \arrow[d,swap,"\pi_1"] & B \arrow[ddr,bend left=15,"R(a)"] \arrow[d,"\inr"] \\
+A \arrow[r,"\inl"] \arrow[drr,bend right=15,swap,"{R(a,h(\blank))}"] & A\sqcup^{\mathcal{R}} B \arrow[dr,densely dotted,swap,"S(a)" near start] \\
+& & \UU
+\end{tikzcd}
+\end{equation*}
+commutes by the homotopy
+\begin{equation*}
+H\defeq \lam{(x,y,r)}\mathsf{eq\usc{}equiv}(\mu(r)),
+\end{equation*}
+so we obtain a family $S(a):A\sqcup^{\mathcal{R}} B\to \UU$ by the universal property of pushouts, equipped with homotopies
+\begin{align*}
+K & : R(a)\circ h \htpy S(a)\circ \inl \\
+L & : R(a) \htpy S(a)\circ \inr \\
+M & : \ct{(K\cdot \pi_1)}{(S(a)\cdot\glue)}\htpy \ct{H}{(R(a)\cdot\pi)}
+\end{align*}
+Now we see that $S$ is a graph extension of $\inl$, since we have
+\begin{equation*}
+\lam{a}\mathsf{equiv\usc{}eq}(K(a))(\rho(a)):\prd{a:A} S(a,\inl(a)).
+\end{equation*}
+It remains to show that
+\begin{equation*}
+\epsilon_{\mathcal{R},\mathcal{S}}:\prd{y:B}R(a,b)\to S(a,\inr(b))
+\end{equation*}
+which is given as
+\begin{equation*}
+(r:R(a,b))\mapsto \mathsf{tr}_{S(a)}(\glue(r),\mathsf{equiv\usc{}eq}(K(a))(\rho(a))),
+\end{equation*}
+is a fiberwise equivalence. To see this, it suffices to show that $\epsilon_{\mathcal{R},\mathcal{S}}$ is homotopic to $\mathsf{equi\usc{}eq}(L)$, which is clearly an equivalence. We note that we have a commuting square
+\begin{equation*}
+\begin{tikzcd}[column sep=6em]
+R(a,h(a)) \arrow[r,"\mu(r)"] \arrow[d,swap,"\mathsf{equiv\usc{}eq}(K)(a)"] & R(a,b) \arrow[d,"\mathsf{equiv\usc{}eq}(L)(a)"] \\
+S(a,\inl(a)) \arrow[r,swap,"\mathsf{tr}_{S(a)}(\glue(r))"] & S(a,\inr(b))
+\end{tikzcd}
+\end{equation*}
+by the homotopy $M$. Thus we see that
+\begin{align*}
+\epsilon(r) & = \mathsf{equiv\usc{}eq}(L)(\mu(r,\rho(a))) \\
+& = \mathsf{equiv\usc{}eq}(L)(r),
+\end{align*}
+where the second equality holds by the right unit law for $\mu$. This completes the proof that $\epsilon$ is a fiberwise equivalence.
+\end{proof}
+
+In the construction of the map $\mathsf{presat\usc{}hrel}$ we have not used the left unit law or the coherence between the left and right unit laws. However, as we will show below, the map $\mathsf{presat\usc{}hrel}$ is an equivalence when they are included in the definition of right H-relations. In the following theorem we show that the type of right extensions of $\mathcal{R}$ is equivalently described as the right H-relation structure on $\mathcal{R}$.
+
+\begin{thm}\label{thm:hrel}
+For any graph extension $\mathcal{R}$ of $h:A\to B$, the map
+\begin{equation*}
+\mathsf{presat\usc{}hrel}:\mathsf{H\hyph Rel}(\mathcal{R})\to \mathsf{presat}(\mathcal{R})
+\end{equation*}
+is an equivalence. In particular, the type $\mathsf{presat}(\mathcal{R})$ is essentially small.
+\end{thm}
+
+\begin{proof}
+By the universal property of pushouts, the type of right extensions of $\mathcal{R}$ is equivalent to the type of
+\begin{align*}
+P & : A\to A \to \UU \\
+Q & : A \to B \to \UU \\
+\mu & : \prd{a:A}{x:A}{y:B} R(x,y)\to (P(a,x)\eqvsym Q(a,y)) \\
+1 & : \prd{a:A} P(a,a)
+\end{align*}
+such that the map
+\begin{equation*}
+\epsilon : \prd{a:A}{b:B} R(a,b)\to Q(a,b)
+\end{equation*}
+given by $r\mapsto \mu(r,1_a)$ is a fiberwise equivalence. By \autoref{lem:coh_red} this type is equivalent to the type of
+\begin{align*}
+P & : A\to A \to \UU \\
+\mu & : \prd{a:A}{x:A}{y:B} R(x,y)\to (P(a,x)\eqvsym R(a,y)) \\
+1 & : \prd{a:A} P(a,a) \\
+\mathsf{right\usc{}unit} & : \prd{a:A}{b:B}{r:R(a,b)} \mu(r,1_a)=r.
+\end{align*}
+Since we have $\mu(\rho(x)) : P(a,x) \eqvsym R(a,h(x))$ for any $a,x:A$, we see that by a second application of \autoref{lem:coh_red}, the type of right extensions of $\mathcal{R}$ is equivalent to the type
+\begin{align*}
+\mu & : \prd{a:A}{x:A}{y:B} R(x,y)\to (R(a,h(x))\eqvsym R(a,y)) \\
+1 & : \prd{a:A} R(a,h(a)) \\
+\mathsf{right\usc{}unit} & : \prd{a:A}{b:B}{r:R(a,b)} \mu(r,1_a)=r \\
+\mathsf{left\usc{}unit} & : \prd{a,x:A}{r:R(a,h(x))} \mu(\rho(x),r)=r.
+\end{align*}
+Finally, we observe that $\ct{\beta_r(\rho(a))^{-1}}{\beta_l(1_a)}:\rho(a)=1_a$. Thus, by a last application of \autoref{lem:coh_red} we see that the type of right extensions of $\mathcal{R}$ is equivalent to the type
+\begin{align*}
+\mu & : \prd{a:A}{x:A}{y:B} R(x,y)\to (R(a,h(x))\eqvsym R(a,y)) \\
+\mathsf{right\usc{}unit} & : \prd{a:A}{b:B}{r:R(a,b)} \mu(r,\rho(a))=r \\
+\mathsf{left\usc{}unit} & : \prd{a,x:A}{r:R(a,h(x))} \mu(\rho(x),r)=r \\
+\mathsf{coh\usc{}unit} & : \prd{a:A} \mathsf{left\usc{}unit}(\rho(a))=\mathsf{right\usc{}unit}(\rho(a)).\qedhere
+\end{align*}
+\end{proof}
 
 We call the construction in the following theorem the \define{relational Hopf construction}. Note that we add the extra assumption of associativity, which automatically holds for $2$-pre-saturated graph extensions (\autoref{lem:2presat_coh})
 
@@ -788,343 +1195,7 @@ Now we can show that $\mu(\blank,p)$ is an equivalence. Observe that $\mu(\blank
 \end{align*}
 \end{proof}
 
-\section{Saturated graph extensions}
-
-We will write 
-\begin{equation*}
-\xi_{\mathcal{R}}: \mathsf{presat}(\mathcal{R})\to \mathsf{gphExt}(\inl_\mathcal{R})
-\end{equation*}
-for the forgetful map, where $\inl_\mathcal{R}$ is the inclusion map $A\to A\sqcup^{\mathcal{R}} B$. 
-
-\begin{defn}
-Let $\mathcal{R}$ be a graph extension of $h:A\to B$. 
-We define
-\begin{equation*}
-(\blank)\mathsf{{-}sat}(\mathcal{R}) : \N\to\UU
-\end{equation*}
-by $0\mathsf{{-}sat}(\mathcal{R})\defeq \unit$, and 
-\begin{equation*}
-(n+1)\mathsf{{-}sat}(\mathcal{R})\defeq \sm{t:\mathsf{presat}(\mathcal{R})} n\mathsf{{-}sat}(\xi_{\mathcal{R}}(t)).
-\end{equation*}
-\end{defn}
-
-Informally, the following definition states that a graph extension $\mathcal{R}$ of $h:A\to B$ is said to be saturated if it is pre-saturated as witnessed by a term $t:\mathsf{presat}(\mathcal{R})$ and $\xi_{\mathcal{R}}(t)$ is again saturated.
-
-\begin{defn}\label{defn:saturated}
-We define
-\begin{equation*}
-\mathsf{sat} : \prd{B:\UU}{h:A \to B} \mathsf{gphExt}(h)\to\UU
-\end{equation*}
-as the final coalgebra for the indexed polynomial endofunctor given by
-\begin{equation*}
-P(X,B,h,\mathcal{R}) \defeq \sm{t:\mathsf{presat}(\mathcal{R})} X(A\sqcup^{\mathcal{R}} B,\inl_{\mathcal{R}},\xi_{\mathcal{R}}(t)),
-\end{equation*}
-acting on $X:\prd{B:\UU}{h:A \to B} \mathsf{gphExt}(h)\to\UU$.
-\end{defn}
-
-\begin{rmk}
-There is a canonical forgetful map
-\begin{equation*}
-(n+1)\mathsf{{-}sat}(\mathcal{R})\to n\mathsf{{-}sat}(\mathcal{R})
-\end{equation*}
-defined by induction on $n:\N$. In the case $n\jdeq 0$ we take the unique map into $\unit$.
-For the inductive step, assume that $(n+1)\mathsf{{-}sat}(\mathcal{R})\to n\mathsf{{-}sat}(\mathcal{R})$ for any graph extension $\mathcal{R}$ of $h$, for any $h:A\to B$. 
-Then it suffices to show
-\begin{equation*}
-\prd{t:\mathsf{presat}(\mathcal{R})} (n+1)\mathsf{{-}sat}(\xi_{\mathcal{R}}(t))\to n\mathsf{{-}sat}(\xi_{\mathcal{R}}(t))
-\end{equation*}
-which we get immediately from the inductive hypothesis. Thus, we get a type sequence
-\begin{equation*}
-\begin{tikzcd}
-\cdots \arrow[r] & n\mathsf{{-}sat}(\mathcal{R}) \arrow[r] & \cdots \arrow[r] & \unit.
-\end{tikzcd}
-\end{equation*}
-We observe that this type sequence is naturally equivalent to the sequence
-\begin{equation*}
-\begin{tikzcd}
-\cdots \arrow[r] & P^n(\lam{B}{h}{\mathcal{R}}\unit)(\mathcal{R}) \arrow[r] & \cdots \arrow[r] & \unit.
-\end{tikzcd}
-\end{equation*}
-where $P$ is the polynomial endofunctor described in \autoref{defn:saturated}. 
-The limit of the latter sequence is the final coalgebra for $P$.
-Thus we see that $\mathsf{sat}(\mathcal{R})$ is the limit of $n\mathsf{{-}sat}(\mathcal{R})$.
-\end{rmk}
-
-\begin{thm}\label{thm:pb_sat}
-Consider a commuting triangle
-\begin{equation*}
-\begin{tikzcd}[column sep=small]
-A \arrow[rr,"h"] \arrow[dr,swap,"f"] & & B \arrow[dl,"g"] \\
-& X
-\end{tikzcd}
-\end{equation*}
-with a homotopy $H:f\htpy g\circ h$. Then the pullback relation $E_{f,g}$ is saturated.
-\end{thm}
-
-\begin{proof}
-By the coinductive nature of $\mathsf{sat}(E_{f,g})$, it suffices to show that $E_{f,g}$ has a right extension that is again of the form $E_{f,g'}$, for some $g'$. This follows from \autoref{thm:pb_presat}, taking $g'\defeq \join{f}{g}$.
-\end{proof}
-
-In order to construct the quotient operation, it is useful to consider the type of abstract graph extensions and their morphisms, as displayed in \autoref{table:gphext}
-
-\begin{table}[!htbp]\label{table:gphext}
-\caption{Graph extensions and their morphisms}
-\begin{tabular}{rlcrl}
-\toprule
-\multicolumn{2}{l}{\emph{Objects}} & & \multicolumn{2}{l}{\emph{Morphisms}} \\
-\multicolumn{2}{l}{$(B,h,R,\rho)$} & & \multicolumn{2}{l}{$(i,H,\epsilon,\epsilon_\rho):(B,h,R,\rho)\to(B',h',R',\rho')$} \\
-\midrule
-$B$ & $:\UU$ & & $i$ & $:B\to B'$\\
-$h$ & $:A\to B$ & & $H$ & $:i\circ h\htpy h'$ \\
-$R$ & $:A\to B\to\UU$ & & $\epsilon$ & $: \prd{a:A}{b:B}R(a,b)\eqvsym R'(a,i(b))$ \\
-$\rho$ & $: \prd{a:A}R(a,h(a))$ & & $\epsilon_\rho$ & $: \prd{a:A} \mathsf{tr}^{R'(a)}(H(a),\epsilon(\rho(a)))=\rho'(a)$ \\
-\bottomrule
-\end{tabular}
-\end{table}
-
-\begin{defn}\label{defn:seq_sat}
-Given a saturated graph extension $\mathcal{R}$ of $h:A\to B$, we define a sequence of graph extensions
-\begin{equation*}
-\begin{tikzcd}
-(B_0,h_0,\mathcal{R}_0) \arrow[r] & (B_1,h_1,\mathcal{R}_1) \arrow[r] & (B_2,h_2,\mathcal{R}_2) \arrow[r] & \cdots
-\end{tikzcd}
-\end{equation*}
-such that each $\mathcal{R}_n\jdeq(R_n,\rho_n)$ is a saturated graph extension of $h_n:A\to B_n$. 
-\end{defn}
-
-\begin{proof}[Construction]
-We take $(B_0,h_0,R_0,\rho_0)\defeq (B,h,R,\rho)$.
-For the inductive step, we define 
-\begin{align*}
-B_{n+1} & \defeq A \sqcup^{\mathcal{R}_n} B_n \\
-h_{n+1} & \defeq \inl_{\mathcal{R}} \\
-\mathcal{R}_{n+1} & \defeq \xi(t_n)
-\end{align*}
-where $t_n$ witnesses that $\mathcal{R}_n$ is saturated. Next, we define
-\begin{align*}
-i_n & \defeq \inr_{\mathcal{R}} \\
-H_n & \defeq \lam{a}\glue(\rho_n(a)) \\
-\epsilon_n & \defeq \epsilon_{\mathcal{R}_n,\mathcal{R}_{n+1}},
-\end{align*}
-which preserves $\rho_n$ by construction.
-\end{proof}
-
-\begin{defn}
-Let $\mathcal{R}$ be a saturated graph extension of $h:A\to B$. Then we define
-\begin{equation*}
-B/\mathcal{R}\defeq \mathsf{colim}_n(B_n)
-\end{equation*}
-and $q_\mathcal{R}:B\to B/\mathcal{R}$ is given by the cocone structure of $B/\mathcal{R}$.
-\end{defn}
-
-We use the following two lemmas to show that $q_{\mathcal{R}}$ is surjective.
-
-\begin{lem}
-Let $\mathcal{R}$ be a graph extension of $h:A\to B$. Then the map
-\begin{equation*}
-\inr : B\to A\sqcup^{\mathcal{R}} B
-\end{equation*}
-is surjective.
-\end{lem}
-
-\begin{proof}
-We have to show that 
-\begin{equation*}
-\prd{t:A\sqcup^{\mathcal{R}} B} \brck{\fib{\inr}{t}}.
-\end{equation*}
-We do this using the dependent elimination of $A\sqcup^{\mathcal{R}} B$.
-Note that since we are eliminating into a family of mere propositions, there is nothing to show for the path constructors.
-Moreover, the fibers of $\inr$ at points of the form $\inr(b)$ are clearly inhabited too.
-Thus we only need to show that
-\begin{equation*}
-\prd{a:A}\brck{\fib{\inr}{\inl(a)}}.
-\end{equation*}
-However, we have $\glue(\rho(a)):\inl(a)=\inr(h(a))$. Thus we have $\fib{\inr}{\inl(a)}\eqvsym \fib{\inr}{\inr(h(a))}$, and the fiber on the right is inhabited for all $a:A$.
-\end{proof}
-
-\begin{lem}
-Consider a type sequence
-\begin{equation*}
-\begin{tikzcd}
-A_0 \arrow[r,"f_0"] & A_1 \arrow[r,"f_1"] & A_2 \arrow[r,"f_2"] & \cdots
-\end{tikzcd}
-\end{equation*}
-in which each $f_n:A_n\to A_{n+1}$ is surjective. Then the map $\mathsf{in}_0:A_0\to A_\infty$ is surjective.
-\end{lem}
-
-\begin{proof}
-We have to prove that
-\begin{equation*}
-\prd{x:A_\infty} \brck{\fib{\mathsf{in}_0}{x}}.
-\end{equation*}
-We do this by the universal property of $A_\infty$. Since $\brck{\fib{\mathsf{in}_0}{x}}$ is a mere proposition, there is nothing to show for the path constructors. Thus, it remains to show that
-\begin{equation*}
-\prd{n:\N}{x:A_n} \brck{\fib{\mathsf{in}_0}{\mathsf{in}_n(x)}}
-\end{equation*}
-The base case is trivial. For the inductive step, observe that since $f_n$ is assumed to be surjective, we have
-\begin{equation*}
-\Big(\prd{x:A_{n}} \brck{\fib{\mathsf{in}_0}{\mathsf{in}_{n+1}(f_n(x))}}\Big)\to\Big(\prd{x:A_{n+1}} \brck{\fib{\mathsf{in}_0}{\mathsf{in}_{n+1}(x)}}\Big)
-\end{equation*}
-Now note that $\mathsf{in}_{n}(x)=\mathsf{in}_{n+1}(f_n(x))$ to complete the proof.
-\end{proof}
-
-\begin{defn}
-We define an operation
-\begin{equation*}
-\mathcal{Q}_h : \Big(\sm{\mathcal{R}:\mathsf{gphExt}(h)}\mathsf{sat}(\mathcal{R})\Big)\to \sm{Q:\UU}{q:B\to Q}\mathsf{isSurj}(q).
-\end{equation*}
-by taking $\mathcal{Q}_h(\mathcal{R},\mathcal{H})\defeq\pairr{B/\mathcal{R},q_\mathcal{R},\underline{~}}$.
-\end{defn}
-
-\begin{proof}[Construction]
-We define
-\begin{equation*}
-B/\mathcal{R}\defeq \mathsf{colim}_n(B_n)
-\end{equation*}
-and $q_\mathcal{R}:B\to B/\mathcal{R}$ is given by the cocone structure of $B/\mathcal{R}$. Then $q_{\mathcal{R}}$ is surjective since each $i_n:B_n\to B_{n+1}$ is surjective.
-\end{proof}
-
-\section{Effectiveness of saturated graph extensions}
-
-Since we are working with general graph extensions of a function $h:A\to B$, we will generalize \autoref{prob:main}, and our goal in this section is to solve it.
-
-\begin{prob}\label{prob:gphext}
-For a surjective function $h:A\to B$,
-\begin{enumerate}
-\item to construct a lift
-\begin{equation*}
-\begin{tikzcd}
-& \sm{\mathcal{R}:\mathsf{gphExt}(h)}\mathsf{sat}(\mathcal{R}) \arrow[d,->>] \\
-(B{\downarrow_s}\UU) \arrow[r,"E"] \arrow[ur,densely dotted,"\mathcal{E}"] & \mathsf{gphExt}(h)
-\end{tikzcd}
-\end{equation*}
-\item such that $\mathcal{E}$ is an equivalence.
-\end{enumerate}
-\end{prob}
-
-Note that a solution of \autoref{prob:gphext} implies a solution of \autoref{prob:main} by restricting to the (surjective) function $\idfunc:A\to A$, since graph extensions of the identity map on $A$ are just reflexive graphs on $A$.
-
-By \autoref{thm:pb_sat} we already know that for any $g:B\to X$ the pullback relation $E_{gh,g}$ is saturated. Therefore it remains to show that $\mathcal{E}$ is an equivalence.
-
-\begin{lem}
-Let $(A,B)$ and $(A',B')$ be two containers, and consider a (pullback) square
-\begin{equation*}
-\begin{tikzcd}
-\sm{a:A}B(a) \arrow[d,->>] \arrow[r,"g"] & \sm{a':A'}B'(a') \arrow[d,->>] \\
-A \arrow[r,swap,"f"] & A'
-\end{tikzcd}
-\end{equation*}
-Then the induced map $M(A,B)\to M(A',B')$ is an embedding if and only if $f:A\to A'$ is an embedding. 
-\end{lem}
-
-\begin{proof}
-This is intuitively true because it works on the defining type sequences, and limits of natural embeddings are embeddings. [TODO]
-\end{proof}
-
-The type of sequences of abstract graph extensions can be presented as the coinductive type
-\begin{equation*}
-\mathsf{seq}(B,h,\mathcal{R})\to\sm{(B',h',\mathcal{S}):\mathsf{gphExt}}{(i,H,\epsilon):(B,h,\mathcal{R})\to(B',h',\mathcal{S})}\mathsf{seq}(B',h',\mathcal{S}).
-\end{equation*}
-We use the following lemma to conclude that the map
-\begin{equation*}
-\mathsf{sat}(\mathcal{R})\to\mathsf{seq}(B,h,\mathcal{R})
-\end{equation*}
-is an embedding.
-
-\begin{lem}
-The map
-\begin{equation*}
-\varphi:\mathsf{presat}(\mathcal{R})\to \sm{(B',h',\mathcal{S}):\mathsf{gphExt}}(B,h,\mathcal{R})\to(B',h',\mathcal{S})
-\end{equation*}
-given by
-\begin{equation*}
-\cdots
-\end{equation*}
-is an embedding.
-\end{lem}
-
-\begin{proof}
-Let $(i,H,\alpha):(B,h,\mathcal{R})\to(B',h',\mathcal{R}')$, and suppose that the fiber of $\varphi$ at $(B',h',\mathcal{R}',i,H,\alpha)$ is merely inhabited. 
-\end{proof}
-
-\begin{cor}
-The map
-\begin{equation*}
-\mathsf{sat}(\mathcal{R})\to\mathsf{seq}(B,h,\mathcal{R})
-\end{equation*}
-defined in \autoref{defn:seq_sat} is an embedding.
-\end{cor}
-
-\section{Truncated saturated graph extensions}
-
-\begin{lem}
-Suppose $\mathcal{R}$ is a graph extension of $h:A\to B$, satisfying the following conditions:
-\begin{enumerate}
-\item The total space $\sm{y:B}R(a,b)$ is $(n+1)$-connected for each $a:A$.
-\item Each $R(x,y)$ is $n$-truncated.
-\end{enumerate}
-Then $\mathcal{R}$ is presaturated. 
-\end{lem}
-
-\begin{proof}
-Since the type $\sm{y:B}R(a,b)$ is $(n+1)$-connected for each $a:A$, it follows that the projection map
-\begin{equation*}
-\pi_1 : \Big(\sm{x:A}{y:B}R(x,y)\Big)\to A
-\end{equation*}
-is an $(n+1)$-connected map. Hence, the precomposition map
-\begin{equation*}
-\blank\circ\pi_1 : \Big(A\to \UU_{\leq n}\Big)\to \Big(\Big(\sm{x:A}{y:B}R(x,y)\Big)\to \UU_{\leq n}\Big)
-\end{equation*}
-is an equivalence, because the universe $\UU_{\leq n}$ of $n$-truncated types is $(n+1)$-truncated.
-In particular, we have a unique extension of $R(a)\circ \pi_2$, as indicated in the diagram
-\begin{equation*}
-\begin{tikzcd}
-\sm{x:A}{y:B}R(x,y) \arrow[r,"\pi_2"] \arrow[d,swap,"\pi_1"] & B \arrow[d,"R(a)"] \\
-A \arrow[r,densely dotted] & \UU_{\leq n}
-\end{tikzcd}
-\end{equation*}
-\end{proof}
-
-\begin{lem}
-Suppose $\mathcal{R}$ is a graph extension of $h:A\to B$ for which $\sm{y:B}R(a,b)$ is $n$-connected for each $a:A$. If $\mathcal{R}$ is presaturated with right extension $\mathcal{S}$, then $\sm{z:A\sqcup^{\mathcal{R}} B}S(a,z)$ is also $n$-connected.
-\end{lem}
-
-\begin{lem}
-If $\mathcal{R}$ is an $(n+2)$-saturated graph extension of $h:A\to B$, then the type
-\begin{equation*}
-\sm{z:B_{n+1}}R_{n+1}(a,z)
-\end{equation*}
-is $(n+1)$-connected for each $a:A$.
-\end{lem}
-
-\begin{thm}
-Suppose $\mathcal{R}$ is a graph extension of $h:A\to B$ for which $R(x,y)$ is $n$-truncated. If $\mathcal{R}$ is $(n+2)$-saturated, then $\mathcal{R}$ is saturated.
-\end{thm}
-
-\begin{proof}
-First, we observe that the type
-\begin{equation*}
-\sm{y:B_n}R_{n}(x,y)
-\end{equation*}
-is $(n+1)$-connected. This holds since we have an equivalence
-\begin{equation*}
-\eqv{\Big(\Big)}{\Big(\Big)}
-\end{equation*}
-
-Recall that for any span $A \leftarrow S \rightarrow B$, if the map $S\to A$ is $n$-connected, then the map $\inr:B\to A\sqcup^S B$ is also $n$-connected.
-
-Therefore, it follows that if $\mathcal{R}$ is a graph extension of $h:A\to B$, such that each $R(x,y)$ is $n$-truncated and $\sm{y:B}R(a,y)$ is $(n+1)$-connected, then $\mathcal{R}$ extends uniquely to a graph extension of $\inl:A\to A\sqcup^{\mathcal{R}} B$.
-\end{proof}
-
-\begin{conj}
-Suppose $\mathcal{R}$ is an $n$-truncated graph extension of $h:A\to B$. Then the map
-\begin{equation*}
-\mathsf{sat}(\mathcal{R})\to (n+2-k)\mathsf{{-}sat}(\mathcal{R})
-\end{equation*}
-is $(k-2)$-truncated.
-\end{conj}
-
-\section{The coherence laws for $2$-saturated graph extensions}
+\subsection{The coherence laws for $2$-saturated graph extensions}
 
 In the following theorem we establish that a $2$-saturated graph extension $\mathcal{R}$ of $h:A\to B$ is an associative right H-relation $\mathcal{R}$ satisfying further coherence laws that correspond to the cases where the associator (which has three edges as arguments) is applied to $\rho$. Thus the coherence laws organize themselves as follows:
 \begin{enumerate}
@@ -1144,16 +1215,16 @@ The interdependencies among these coherence laws can be displayed concisely in a
 \end{equation*}
 Following this scheme, we will also write
 \begin{align*}
-\mu_{01} & \defeq \mathsf{unit\underline{~}l} \\
-\mu_{10} & \defeq \mathsf{unit\underline{~}r} \\
-\mu_{00} & \defeq \mathsf{unit\underline{~}coh}
+\mu_{01} & \defeq \mathsf{left\usc{}unit} \\
+\mu_{10} & \defeq \mathsf{right\usc{}unit} \\
+\mu_{00} & \defeq \mathsf{coh\usc{}unit}
 \end{align*}
 for the coherences of \autoref{thm:hrel}.
 
 \begin{defn}
 For any endomorphism $f:X\to X$ with $H:f\htpy \idfunc$, one has
 \begin{equation*}
-\mathsf{htpy\underline{~}endo}(f,H,x):H(f(x))=\mathsf{ap}_f(H(x))
+\mathsf{htpy\usc{}endo}(f,H,x):H(f(x))=\mathsf{ap}_f(H(x))
 \end{equation*}
 for any $x:X$.
 \end{defn}
@@ -1164,7 +1235,7 @@ One can readily construct this identification by induction on $H$ (thus, using f
 First, recall that homotopies are automatically natural with respect to identifications: given any homotopy $H:f\htpy g$ between $f,g:A\to B$, and $p:x=y$ in $A$, the square
 \begin{equation*}
 \begin{tikzcd}[column sep=huge]
-f(x) \arrow[r,equals,"H(x)"] \arrow[d,equals,swap,"\mathsf{ap}_{f}(p)",""{name=A,right}] & g(x) \arrow[d,equals,"\ap{g}{p}",""{name=B,left}] \arrow[draw=none,from=A,to=B,"{\mathsf{htpy\underline{~}nat}(H,p)}" description] \\
+f(x) \arrow[r,equals,"H(x)"] \arrow[d,equals,swap,"\mathsf{ap}_{f}(p)",""{name=A,right}] & g(x) \arrow[d,equals,"\ap{g}{p}",""{name=B,left}] \arrow[draw=none,from=A,to=B,"{\mathsf{htpy\usc{}nat}(H,p)}" description] \\
 f(y) \arrow[r,equals,swap,"H(y)"] & g(y)
 \end{tikzcd}
 \end{equation*}
@@ -1216,7 +1287,7 @@ for every $t:R(y,z)$, $s:R(x,h(y))$, and $r:R(a,h(x))$ (of which we will usually
 \item Coherence laws
 \begin{equation*}
 \begin{tikzcd}
-\mu_{01}(\mu(\rho_x,r)) \arrow[r,equals,"{\alpha_{011}(\rho_x,r)}" yshift=1ex] \arrow[d,equals,"\mathsf{htpy\underline{~}endo}_{\mu_{01}}(r)"{left},""{name=A,right}] & \ct{\alpha(\rho_x,\rho_x,r)}{\mu((\mu_{01}(\rho_x))_{\mathsf{ap}},r)} \arrow[d,equals,"{\ct{\alpha(\rho_x,\rho_x,r)}{\mu(((\mu_{00}(x))_{\mathsf{ap}})_{\mathsf{ap}},r)}}",""{name=B,left}] \arrow[from=A,to=B,draw=none,"\alpha_{001}(r)" description] \\
+\mu_{01}(\mu(\rho_x,r)) \arrow[r,equals,"{\alpha_{011}(\rho_x,r)}" yshift=1ex] \arrow[d,equals,"\mathsf{htpy\usc{}endo}_{\mu_{01}}(r)"{left},""{name=A,right}] & \ct{\alpha(\rho_x,\rho_x,r)}{\mu((\mu_{01}(\rho_x))_{\mathsf{ap}},r)} \arrow[d,equals,"{\ct{\alpha(\rho_x,\rho_x,r)}{\mu(((\mu_{00}(x))_{\mathsf{ap}})_{\mathsf{ap}},r)}}",""{name=B,left}] \arrow[from=A,to=B,draw=none,"\alpha_{001}(r)" description] \\
 \mu({\rho_x},(\mu_{01}(r))_{\mathsf{ap}}) \arrow[r,equals,swap,"{\alpha_{101}(\rho_x,r)}" yshift=-1ex] & \ct{\alpha(\rho_x,\rho_x,r)}{\mu((\mu_{10}(\rho_x))_{\mathsf{ap}},r)}
 \end{tikzcd}
 \end{equation*}
@@ -1228,7 +1299,7 @@ for every $t:R(y,z)$, $s:R(x,h(y))$, and $r:R(a,h(x))$ (of which we will usually
 \end{equation*}
 \begin{equation*}
 \begin{tikzcd}
-\ct{\mu(\rho_a,(\mu_{10}(s))_{\mathsf{ap}})}{\mu_{01}(s)} \arrow[r,equals,"{\ct{(\alpha_{110}(\rho_x,s))_{\mathsf{ap}}}{\mu_{01(s)}}}" yshift=1ex] \arrow[d,equals,swap,"{\mathsf{htpy\underline{~}nat}(\mu_{01},\mu_{10}(s))^{-1}}",""{name=A,right}] & \ct{\alpha(\rho_x,s,\rho_a)}{\mu_{10}(\mu(\rho_x,s))}{\mu_{01}(s)} \arrow[d,equals,"{\ct{\alpha(\rho_x,s,\rho_a)}{(\mathsf{htpy\underline~nat}(\mu_{10},\mu_{01}(s)))_{\mathsf{ap}}}}",""{name=B,left}] \arrow[from=A,to=B,draw=none,"\alpha_{010}(s)" description] \\
+\ct{\mu(\rho_a,(\mu_{10}(s))_{\mathsf{ap}})}{\mu_{01}(s)} \arrow[r,equals,"{\ct{(\alpha_{110}(\rho_x,s))_{\mathsf{ap}}}{\mu_{01(s)}}}" yshift=1ex] \arrow[d,equals,swap,"{\mathsf{htpy\usc{}nat}(\mu_{01},\mu_{10}(s))^{-1}}",""{name=A,right}] & \ct{\alpha(\rho_x,s,\rho_a)}{\mu_{10}(\mu(\rho_x,s))}{\mu_{01}(s)} \arrow[d,equals,"{\ct{\alpha(\rho_x,s,\rho_a)}{(\mathsf{htpy\underline~nat}(\mu_{10},\mu_{01}(s)))_{\mathsf{ap}}}}",""{name=B,left}] \arrow[from=A,to=B,draw=none,"\alpha_{010}(s)" description] \\
 \ct{\mu_{01}(\mu(s,\rho_a))}{\mu_{10}(s)} \arrow[r,equals,swap,"\ct{(\alpha_{011}(s,\rho_a))_{\mathsf{ap}}}{\mu_{10}(s)}" yshift=-1ex] & \ct{\alpha(\rho_x,s,\rho_a)}{\mu((\mu_{01}(s))_{\mathsf{ap}},\rho_a)}{\mu_{10}(s)}
 \end{tikzcd}
 \end{equation*}
@@ -1314,7 +1385,7 @@ Now we can apply \autoref{lem:coh_red} once more to obtain the equivalent type
 \alpha & : \prd{a,x,y:A}{z:B}{t:R(y,z)}{s:R(x,h(y))}{r:R(a,h(x))} \mu(t,\mu(s,r)) = \mu(\mu(t,s),r) \\
 \alpha_{011} & : \prd{a,x,y:A}{s:R(x,h(y))}{r:R(a,h(x))} \mu_{01}(\mu(s,r))=\ct{\alpha(\rho_y,s,r)}{\mu((\mu_{01}(s))_{\mathsf{ap}},r)} \\
 \alpha_{101} & : \prd{a,x:A}{z:B}{t:R(x,z)}{r:R(a,h(x))} \mu(t,(\mu_{01}(r))_{\mathsf{ap}})=\ct{\alpha(t,\rho_x,r)}{\mu((\mu_{01}(t))_{\mathsf{ap}},r)} \\
-\alpha_{001} & : \prd{a:A}{x:A}{r:R(a,h(x))} \ct{\alpha_{011}(\rho_x,r)}{\ct{\alpha(\rho_x,\rho_x,r)}{\mu(((\mu_{00}(x))_{\mathsf{ap}})_{\mathsf{ap}},r)}}=\ct{\mathsf{htpy\underline{~}endo}_{\mu_{01}}(r)}{\alpha_{101}(\rho_x,r)}
+\alpha_{001} & : \prd{a:A}{x:A}{r:R(a,h(x))} \ct{\alpha_{011}(\rho_x,r)}{\ct{\alpha(\rho_x,\rho_x,r)}{\mu(((\mu_{00}(x))_{\mathsf{ap}})_{\mathsf{ap}},r)}}=\ct{\mathsf{htpy\usc{}endo}_{\mu_{01}}(r)}{\alpha_{101}(\rho_x,r)}
 \end{align*}
 This completes our first goal. Note that under the above transformations, the types of $\alpha_{\ast\ast 0}$ and $\alpha_{000}$ of the beginning of the proof, are now as follows:
 \begin{align*}
@@ -1360,7 +1431,255 @@ satisfying the following groupoidal laws:
 and thus the relation $x,y\mapsto \trunc{0}{R(x,y)}$ can be given the structure of a pre-groupoid on $A$
 \end{thm}
 
-\section{Coherence laws for presaturated reflexive relations}
+\subsection{Effectiveness of saturated graph extensions}
+
+\begin{comment}
+Since we are working with general graph extensions of a function $h:A\to B$, we will generalize \autoref{defn:system}, and our goal in this section is to solve it.
+
+\begin{prob}\label{prob:gphext}
+For a surjective function $h:A\to B$,
+\begin{enumerate}
+\item to construct a lift
+\begin{equation*}
+\begin{tikzcd}
+& \sm{\mathcal{R}:\mathsf{gphExt}(h)}\mathsf{sat}(\mathcal{R}) \arrow[d,->>] \\
+(B{\downarrow_s}\UU) \arrow[r,"E"] \arrow[ur,densely dotted,"\mathcal{E}"] & \mathsf{gphExt}(h)
+\end{tikzcd}
+\end{equation*}
+\item such that $\mathcal{E}$ is an equivalence.
+\end{enumerate}
+\end{prob}
+
+Note that a solution of \autoref{prob:gphext} implies a solution of \autoref{defn:system} by restricting to the (surjective) function $\idfunc:A\to A$, since graph extensions of the identity map on $A$ are just reflexive graphs on $A$.
+
+By \autoref{thm:pb_sat} we already know that for any $g:B\to X$ the pullback relation $E_{gh,g}$ is saturated. Therefore it remains to show that $\mathcal{E}$ is an equivalence.
+
+\begin{lem}
+Let $(A,B)$ and $(A',B')$ be two containers, and consider a (pullback) square
+\begin{equation*}
+\begin{tikzcd}
+\sm{a:A}B(a) \arrow[d,->>] \arrow[r,"g"] & \sm{a':A'}B'(a') \arrow[d,->>] \\
+A \arrow[r,swap,"f"] & A'
+\end{tikzcd}
+\end{equation*}
+Then the induced map $M(A,B)\to M(A',B')$ is an embedding if and only if $f:A\to A'$ is an embedding. 
+\end{lem}
+
+\begin{proof}
+This is intuitively true because it works on the defining type sequences, and limits of natural embeddings are embeddings. [TODO]
+\end{proof}
+
+The type of sequences of abstract graph extensions can be presented as the coinductive type
+\begin{equation*}
+\mathsf{seq}(B,h,\mathcal{R})\to\sm{(B',h',\mathcal{S}):\mathsf{gphExt}}{(i,H,\epsilon):(B,h,\mathcal{R})\to(B',h',\mathcal{S})}\mathsf{seq}(B',h',\mathcal{S}).
+\end{equation*}
+We use the following lemma to conclude that the map
+\begin{equation*}
+\mathsf{sat}(\mathcal{R})\to\mathsf{seq}(B,h,\mathcal{R})
+\end{equation*}
+is an embedding.
+
+\begin{lem}
+The map
+\begin{equation*}
+\varphi:\mathsf{presat}(\mathcal{R})\to \sm{(B',h',\mathcal{S}):\mathsf{gphExt}}(B,h,\mathcal{R})\to(B',h',\mathcal{S})
+\end{equation*}
+given by
+\begin{equation*}
+\cdots
+\end{equation*}
+is an embedding.
+\end{lem}
+
+\begin{proof}
+Let $(i,H,\alpha):(B,h,\mathcal{R})\to(B',h',\mathcal{R}')$, and suppose that the fiber of $\varphi$ at $(B',h',\mathcal{R}',i,H,\alpha)$ is merely inhabited. 
+\end{proof}
+
+\begin{cor}
+The map
+\begin{equation*}
+\mathsf{sat}(\mathcal{R})\to\mathsf{seq}(B,h,\mathcal{R})
+\end{equation*}
+defined in \autoref{defn:seq_sat} is an embedding.
+\end{cor}
+\end{comment}
+
+\begin{prp}
+Let $h:A\to B$ be a surjective function, and let $\mathcal{R}$ be a saturated graph extension of $h$, with quotient
+\begin{equation*}
+q_{\mathcal{R}}:B\to B/\mathcal{R}.
+\end{equation*}
+Then the total space
+\begin{equation*}
+\sm{y:B}R_\infty(a,y)
+\end{equation*}
+is contractible for any $a:A$.
+\end{prp}
+
+\begin{cor}
+Let $h:A\to B$ be a surjective function, and let $\mathcal{R}$ be a saturated graph extension of $h$, with quotient
+\begin{equation*}
+q_{\mathcal{R}}:B\to B/\mathcal{R}.
+\end{equation*}
+Then the square
+\begin{equation*}
+\begin{tikzcd}
+\sm{y:B}R(a,y) \arrow[r] \arrow[d,swap,"\proj 1"] & \unit \arrow[d,"\mathsf{const}_{h(a)}"] \\
+B \arrow[r,swap,"q_{\mathcal{R}}"] & B/\mathcal{R}
+\end{tikzcd}
+\end{equation*}
+is a pullback square, for any $a:A$. In particular, we obtain a fiberwise equivalence
+\begin{equation*}
+\varphi_{a} : \prd{y:B} R(a,y) \eqvsym q_{\mathcal{R}}(h(a))=q_{\mathcal{R}}(y)
+\end{equation*}
+equipped with an identification $\alpha_a:\varphi_a(\rho(a))=\refl{q_{\mathcal{R}}(h(a))}$.
+\end{cor}
+
+\begin{prp}
+Let $h:A\to B$ be a surjective function, and let $\mathcal{R}$ be a saturated graph extension of $h$, with quotient
+\begin{equation*}
+q_{\mathcal{R}}:B\to B/\mathcal{R}.
+\end{equation*}
+Then the right extension $\mathcal{S}$ of $\mathcal{R}$ is $E_{q\circ h,\join{(q\circ h)}{q}}$. 
+\end{prp}
+
+\begin{proof}
+Since $\mathcal{R}$ is saturated, it comes equipped with a right extension $\mathcal{S}$ which is again saturated. 
+By \cref{lem:colim_shift}, it follows that the canonical map
+\begin{equation*}
+\begin{tikzcd}
+B \arrow[d,swap,"q_{\mathcal{R}}"] \arrow[r,"\inr"] & A\sqcup^{\mathcal{R}} B \arrow[d,"q_{\mathcal{S}}"] \\
+B/\mathcal{R} \arrow[r,densely dotted] & (A\sqcup^{\mathcal{R}} B)/\mathcal{S}
+\end{tikzcd}
+\end{equation*}
+is an equivalence such that the square commutes. Therefore it follows that the square
+\begin{equation*}
+\begin{tikzcd}
+\sm{y:A\sqcup^{\mathcal{R}} B} S(a,y) \arrow[d] \arrow[r] & \unit \arrow[d,"\mathsf{const}_{q(a)}"] \\
+A\sqcup^{\mathcal{R}} B \arrow[r,"\mathsf{seq\usc{}in}_1"] & B/\mathcal{R}
+\end{tikzcd}
+\end{equation*}
+is again a pulback square.
+\end{proof}
+
+\begin{cor}
+Let $h:A\to B$ be a surjective function, and let $\mathcal{R}$ be a saturated graph extension of $h$, with quotient
+\begin{equation*}
+q_{\mathcal{R}}:B\to B/\mathcal{R}.
+\end{equation*}
+Then there is for any $r:R(x,y)$ a homotopy $\beta_r$ witnessing that the square
+\begin{equation*}
+\begin{tikzcd}
+R(a,h(x)) \arrow[d,swap,"\mu(r)"] \arrow[r,"\varphi_{h(x)}"] & q(h(a))=q(h(x)) \arrow[d,"\ct{\blank}{\varphi_y(r)}"] \\
+R(a,y) \arrow[r,swap,"\varphi_y"] & q(h(a))=q(y)
+\end{tikzcd}
+\end{equation*}
+commutes. Moreover, the family $\beta$ of homotopies comes equipped with
+\begin{align*}
+\mathsf{left\usc{}unit}_\beta & : \\
+\mathsf{right\usc{}unit}_\beta & : \\
+\mathsf{coh\usc{}unit}_\beta & : 
+\end{align*}
+\end{cor}
+
+\begin{thm}
+For any surjective map $h:A\to B$, the lift
+\begin{equation*}
+\begin{tikzcd}
+& \sm{\mathcal{R}:\mathsf{gphExt}(h)}\mathsf{sat}(\mathcal{R}) \arrow[d,"\proj 1"] \\
+(B\,{\downarrow_s}\,\UU) \arrow[r,swap,"E"] \arrow[ur,densely dotted,"\mathcal{E}"] & \mathsf{gphExt}(h)
+\end{tikzcd}
+\end{equation*}
+is an equivalence.
+\end{thm}
+
+\begin{proof}
+We have already established that $\mathcal{Q}\circ\mathcal{E}\htpy \idfunc$. Therefore it remains to show that $\mathcal{E}\circ \mathcal{Q}\htpy\idfunc$. In other words: if $\mathcal{R}$ is a saturated graph extension of a surjective map $h:A\to B$, then $\mathcal{R}=\mathcal{E}_{\mathcal{q}_{\mathcal{R}}\circ h,\mathcal{q}_{\mathcal{R}}}$. 
+
+We have seen that as presaturated relations, we have an identification
+\end{proof}
+
+\begin{cor}
+For any type $A$, the lift
+\begin{equation*}
+\begin{tikzcd}
+& \sm{\mathcal{R}:\mathsf{rRel}(A)}\mathsf{sat}(\mathcal{R}) \arrow[d,"\proj 1"] \\
+(A\,{\downarrow_s}\,\UU) \arrow[r,swap,"k"] \arrow[ur,densely dotted,"\mathcal{K}"] & \mathsf{rRel}(A)
+\end{tikzcd}
+\end{equation*}
+is an equivalence. In other words, the saturated reflexive relations form a system of equivalence relations, as defined in \cref{defn:system}.
+\end{cor}
+
+\subsection{Truncated saturated graph extensions}
+
+\begin{lem}
+Suppose $\mathcal{R}$ is a graph extension of $h:A\to B$, satisfying the following conditions:
+\begin{enumerate}
+\item The total space $\sm{y:B}R(a,b)$ is $(n+1)$-connected for each $a:A$.
+\item Each $R(x,y)$ is $n$-truncated.
+\end{enumerate}
+Then $\mathcal{R}$ is presaturated. 
+\end{lem}
+
+\begin{proof}
+Since the type $\sm{y:B}R(a,b)$ is $(n+1)$-connected for each $a:A$, it follows that the projection map
+\begin{equation*}
+\pi_1 : \Big(\sm{x:A}{y:B}R(x,y)\Big)\to A
+\end{equation*}
+is an $(n+1)$-connected map. Hence, the precomposition map
+\begin{equation*}
+\blank\circ\pi_1 : \Big(A\to \UU_{\leq n}\Big)\to \Big(\Big(\sm{x:A}{y:B}R(x,y)\Big)\to \UU_{\leq n}\Big)
+\end{equation*}
+is an equivalence, because the universe $\UU_{\leq n}$ of $n$-truncated types is $(n+1)$-truncated.
+In particular, we have a unique extension of $R(a)\circ \pi_2$, as indicated in the diagram
+\begin{equation*}
+\begin{tikzcd}
+\sm{x:A}{y:B}R(x,y) \arrow[r,"\pi_2"] \arrow[d,swap,"\pi_1"] & B \arrow[d,"R(a)"] \\
+A \arrow[r,densely dotted] & \UU_{\leq n}
+\end{tikzcd}
+\end{equation*}
+\end{proof}
+
+\begin{lem}
+Suppose $\mathcal{R}$ is a graph extension of $h:A\to B$ for which $\sm{y:B}R(a,b)$ is $n$-connected for each $a:A$. If $\mathcal{R}$ is presaturated with right extension $\mathcal{S}$, then $\sm{z:A\sqcup^{\mathcal{R}} B}S(a,z)$ is also $n$-connected.
+\end{lem}
+
+\begin{lem}
+If $\mathcal{R}$ is an $(n+2)$-saturated graph extension of $h:A\to B$, then the type
+\begin{equation*}
+\sm{z:B_{n+1}}R_{n+1}(a,z)
+\end{equation*}
+is $(n+1)$-connected for each $a:A$.
+\end{lem}
+
+\begin{thm}
+Suppose $\mathcal{R}$ is a graph extension of $h:A\to B$ for which $R(x,y)$ is $n$-truncated. If $\mathcal{R}$ is $(n+2)$-saturated, then $\mathcal{R}$ is saturated.
+\end{thm}
+
+\begin{proof}
+First, we observe that the type
+\begin{equation*}
+\sm{y:B_n}R_{n}(x,y)
+\end{equation*}
+is $(n+1)$-connected. This holds since we have an equivalence
+\begin{equation*}
+\eqv{\Big(\Big)}{\Big(\Big)}
+\end{equation*}
+
+Recall that for any span $A \leftarrow S \rightarrow B$, if the map $S\to A$ is $n$-connected, then the map $\inr:B\to A\sqcup^S B$ is also $n$-connected.
+
+Therefore, it follows that if $\mathcal{R}$ is a graph extension of $h:A\to B$, such that each $R(x,y)$ is $n$-truncated and $\sm{y:B}R(a,y)$ is $(n+1)$-connected, then $\mathcal{R}$ extends uniquely to a graph extension of $\inl:A\to A\sqcup^{\mathcal{R}} B$.
+\end{proof}
+
+\begin{conj}
+Suppose $\mathcal{R}$ is an $n$-truncated graph extension of $h:A\to B$. Then the map
+\begin{equation*}
+\mathsf{sat}(\mathcal{R})\to \mathsf{sat}_{n+2-k}(\mathcal{R})
+\end{equation*}
+is $(k-2)$-truncated.
+\end{conj}
+
+\subsection{Coherence laws for presaturated reflexive relations}
 Consider the type of \define{bi-extensions} of $\mathcal{R}$, consisting of
 \begin{align*}
 S & : A\sqcup^{\mathcal{R}}A \to A\sqcup^{\mathcal{R}} A \to \UU \\
@@ -1370,7 +1689,7 @@ such that the map
 \begin{equation*}
 \epsilon_{\mathcal{R},\mathcal{S}} : \prd{a,b:A}R(a,b)\to S(\inl(a),\inr(b))
 \end{equation*}
-given by $r\mapsto \mathsf{tr}^{S(\inl(a))}(\glue(r),\sigma(\inl(a)))$ is a fiberwise equivalence.
+given by $r\mapsto \mathsf{tr}_{S(\inl(a))}(\glue(r),\sigma(\inl(a)))$ is a fiberwise equivalence.
 
 By the universal property of reflexive coequalizers, the data of a bi-extension $\mathcal{S}$ of $\mathcal{R}$ is equivalent to
 \begin{align*}
