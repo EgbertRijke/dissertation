@@ -1,33 +1,28 @@
 \chapter{Homotopy images}
 
-We have observed in ???? that the reflexive coequalier of the pre-kernel of a map $f:A\to X$ is the fiberwise join $\join[X]{A}{A}$, i.e.~we have a reflexive coequalizer diagram
+We have observed in \cref{eg:rcoeq} that the reflexive coequalier of the pre-kernel of a map $f:A\to X$ is the fiberwise join $\join[X]{A}{A}$, i.e.~we have a reflexive coequalizer diagram
 \begin{equation*}
 \begin{tikzcd}
-A\times A \arrow[r,yshift=1ex] \arrow[r,yshift=-1ex] & A \arrow[l] \arrow[r] & \join{A}{A}.
+A\times_X A \arrow[r,yshift=1ex] \arrow[r,yshift=-1ex] & A \arrow[l] \arrow[r] & \join[X]{A}{A}.
 \end{tikzcd}
 \end{equation*}
-Furthermore, we have observed in ???? that the geometric realization of the 2-pre-kernel of a map $f:A\to X$ is the triple fiberwise join $\join[X]{A}{\join[X]{A}{A}}$, i.e.~we have a colimiting 
+Furthermore, we have observed in \cref{cor:2-pre-kernel} that the geometric realization of the 2-pre-kernel of a map $f:A\to X$ is the triple fiberwise join $\join[X]{A}{\join[X]{A}{A}}$, i.e.~we have a colimiting 
 \begin{equation*}
 \begin{tikzcd}
-A\times A \times A \arrow[r,yshift=2ex] \arrow[r] \arrow[r,yshift=-2ex] & A \times A \arrow[l,yshift=1ex] \arrow[l,yshift=-1ex] \arrow[r,yshift=1ex] \arrow[r,yshift=-1ex] & A \arrow[l] \arrow[r] & \join{A}{\join{A}{A}}.
+A\times_{X} A \times_{X} A \arrow[r,yshift=2ex] \arrow[r] \arrow[r,yshift=-2ex] & A \times_X A \arrow[l,yshift=1ex] \arrow[l,yshift=-1ex] \arrow[r,yshift=1ex] \arrow[r,yshift=-1ex] & A \arrow[l] \arrow[r] & \join[X]{A}{\join[X]{A}{A}}.
 \end{tikzcd}
 \end{equation*}
-The propositional truncation $\brck{A}$ of $A$ is approximated by the type sequence
+These results suggest that if we were to continue this process ad infinitum to construct the Czech nerve of a map, which requires one to solve the currently open problem of defining in homotopy type theory the type of simplicial types, then its geometric realization is the sequential colimit of the type sequence
 \begin{equation*}
 \begin{tikzcd}
-A \arrow[r] & \join{A}{A} \arrow[r] & \join{A}{\join{A}{A}} \arrow[r] & \cdots
+A \arrow[r] & \join[X]{A}{A} \arrow[r] & \join[X]{A}{(\join[X]{A}{A})} \arrow[r] & \cdots
 \end{tikzcd}
 \end{equation*}
+and its sequential colimit. However, we \emph{can} analyze this type sequence and its colimit in homotopy type theory, since it is constructed entirely in terms of known operations. We will show in \cref{thm:image} that for any map $f:A\to X$, the infinite fiberwise join-power $\join[X]{\cdots}{\join[X]{A}{\join[X]{A}{A}}}$ is the image of $f$. We conclude that the image of a map always exists in univalent type theory with homotopy pushouts. This construction of the image of $f$ is called the join construction, and first appeard in \cite{joinconstruction}. Moreover, we show in \cref{thm:image_small} that the image of an essentially small type mapping into a locally small type is again essentially small. In particular, the image of a map from a small type into the universe is essentially small. This corollary should be viewed as a type theoretic replacement axiom. This fact has the important consequence that any connected component of the universe is essentially small.
 
-The challenge here is to first give a specification of what we mean by a diagram of the form
-\begin{equation*}
-\begin{tikzcd}
-A_2 \arrow[r,yshift=2ex] \arrow[r] \arrow[r,yshift=-2ex] & A_1 \arrow[l,yshift=1ex] \arrow[l,yshift=-1ex] \arrow[r,yshift=1ex] \arrow[r,yshift=-1ex] & A_0. \arrow[l]
-\end{tikzcd}
-\end{equation*}
-Of course, we do so in homotopy type theory, so the task is to write down the correct \emph{homotopy type} of all such diagrams. Then we introduce their homotopy colimits, and show that in the case of the join construction this colimit coincides with the triple join.
+The join construction leads to new constructions of set quotients and of Rezk completions. Set-quotients have been first constructed in \cite{UniMath2015,UniMath} using propositional resizing, and as higher inductive types in \cite{hottbook} in the case where $A$ is assumed to be a set. The Rezk completion of a pre-category is due to \cite{AhrensKapulkinShulman}, and is also explained in section 9.9 of \cite{hottbook}. In \cref{sec:set-quotient} we elaborate on set quotients, with the aim of generalizing the construction in \cref{chap:giraud} to quotients of type-valued equivalence relations.
 
-Set-quotients have been first constructed in \cite{UniMath2015,UniMath} using propositional resizing, and as higher inductive types in \cite{UFP} in the case where $A$ is assumed to be a set.
+In the final section of this chapter we show that the $k$-truncation can be constructed, for any $k\geq -2$. This result is established in \cref{thm:truncation}. In our construction we use a generalization of the join extension and connectivity theorems, stated in \cref{thm:join-extension,thm:join-connectivity}.
 
 \section{The join construction}
 
@@ -306,7 +301,7 @@ Let $f:A\to X$ be a map, and let $m:U\to X$ be an embedding. Then the function
 is an equivalence. 
 \end{lem}
 
-\begin{thm}\label{lem:isprop_infjp}
+\begin{thm}\label{thm:image}
 For any map $f:A\to X$, the map $f^{\ast\infty}:A_X^{\ast\infty}\to X$ is an embedding that satisfies the universal property of the image inclusion of $f$.
 \end{thm}
 
@@ -339,7 +334,7 @@ A_0 \arrow[r,"f_0"] & A_1 \arrow[r,"f_1"] & A_2 \arrow[r,"f_2"] & \cdots
 where each $A_n$ is essentially small. Then its sequential colimit is again essentially small. 
 \end{lem}
 
-\begin{thm}
+\begin{thm}\label{thm:image_small}
 For any map $f:A\to X$ from a small type $A$ into a locally small type $X$, the image $\im(f)$ is an essentially small type.
 \end{thm}
 

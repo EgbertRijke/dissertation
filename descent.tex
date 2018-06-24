@@ -505,7 +505,7 @@ Given descent data $(P_A,P_B,P_S)$ on a span $\mathcal{S}$ from $A$ to $B$, we o
 A & S \arrow[l,"f"] \arrow[r,swap,"g"] & B
 \end{tikzcd}
 \end{equation*}
-with the canonical homotopies witnessing that the squares commute. Note that the commuting square on the left is a pullback by \cref{lem:pb_subst}, and the square on the right is a pullback by \cref{thm:pb_fibequiv}. Thus we obtain an operation
+with the canonical homotopies witnessing that the squares commute. Note that both the left and right commuting squares are pullback squares by \cref{thm:pb_fibequiv}. Thus we obtain an operation
 \begin{equation*}
 \mathsf{cart\usc{}desc}_{\mathcal{S}}:\mathsf{Desc}(\mathcal{S})\to \mathsf{Cart}(\mathcal{S}).
 \end{equation*}
@@ -621,7 +621,7 @@ takes a family $P:X\to \UU$ to the cartesian transformation of spans
 A & S \arrow[l] \arrow[r] & B
 \end{tikzcd}
 \end{equation*}
-These cartesian natural transformations are equal by \cref{lem:pb_subst}
+These cartesian natural transformations are equal by \cref{thm:pb_fibequiv}.
 \end{proof}
 
 Since $\mathsf{cart\usc{}map}_{\mathcal{S}}$ is an equivalence it follows that its fibers are contractible. 

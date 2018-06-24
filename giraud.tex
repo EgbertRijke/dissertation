@@ -1,4 +1,4 @@
-\chapter{Type-valued equivalence relations}
+\chapter{Type-valued equivalence relations}\label{chap:giraud}
 
 We discussed in \cref{sec:eq_rel_set} the notion of an ordinary equivalence relation on a type $A$, which is specified as a reflexive, symmetric, and transitive $\prop$-valued binary relation on $A$. In \cref{thm:set_quotient} we established that for an equivalence relation $\mathcal{R}$ in this sense, the quotient $A/\mathcal{R}$ can be specified as the image of $\mathcal{R}:A\to (A\to \prop)$. Since $A\to \prop$ is a set, it follows that the set quotient $A/\mathcal{R}$ is also a set. 
 
@@ -392,19 +392,19 @@ We first define the reflexive relation and the type of orientations.
 \im(f) \arrow[rr,swap,"c_f"] & & \im(R)
 \end{tikzcd}
 \end{equation}
-commutes. We take $c_f(b)\defeq x\mapsto f(x)=b$, so it is obvious that the mentioned triangle commutes. To see that $c_f(b)$ is in the image of $R$, we have to show that $\brck{\sm{y:X} c_f(b)=R(y)}$. Since we have $\brck{\hfib{f}{b}}$, it is equivalent to show that
+commutes. We take $c_f(b)\defeq x\mapsto f(x)=b$, so it is obvious that the mentioned triangle commutes. To see that $c_f(b)$ is in the image of $R$, we have to show that $\brck{\sm{y:X} c_f(b)=R(y)}$. Since we have $\brck{\fib{f}{b}}$, it is equivalent to show that
 \begin{equation*}
-\hfib{f}{b}\to\brck{\sm{y:X}c_f(b)=R(y)}.
+\fib{f}{b}\to\brck{\sm{y:X}c_f(b)=R(y)}.
 \end{equation*}
 For this, it suffices to show that
 \begin{equation*}
-\hfib{f}{b}\to\sm{y:X}c_f(b)=R(y).
+\fib{f}{b}\to\sm{y:X}c_f(b)=R(y).
 \end{equation*}
-Let $\pairr{y,p}:\hfib{f}{b}$. Then we have $c_f(b)=c_f(f(y))\defeq R(y)$, completing the definition of $c_f$. 
+Let $\pairr{y,p}:\fib{f}{b}$. Then we have $c_f(b)=c_f(f(y))\defeq R(y)$, completing the definition of $c_f$. 
 
 Now we can define 
 \begin{equation*}
-\mathcal{O}_R(P)\defeq \hfib{c_f}{P}
+\mathcal{O}_R(P)\defeq \fib{c_f}{P}
 \end{equation*}
 Then we have $o_R(x)\defeq \pairr{x,\refl{R(x)}}:\mathcal{O}_R(R(x))$. 
 \end{enumerate}
@@ -434,13 +434,13 @@ in which the bottom map is an equivalence.
 \end{defn}
 
 \begin{proof}[Construction]
-We already have the map $c_f:\im(f)\to\im(R)$, introduced in \autoref{eq:intro_cf}. Since $\mathcal{O}_R(P)\jdeq\hfib{c_f}{P}$, we immediately obtain the term
+We already have the map $c_f:\im(f)\to\im(R)$, introduced in \autoref{eq:intro_cf}. Since $\mathcal{O}_R(P)\jdeq\fib{c_f}{P}$, we immediately obtain the term
 \begin{equation*}
 \delta_f\defeq \lam{b}\pairr{b,\refl{c_f(b)}}:\prd{b:\im(f)}\mathcal{O}_R(c_f(b)).
 \end{equation*}
 This gives us $\alpha_f\defeq\pairr{c_f,\delta_f}$. The triangle of the specification of $\alpha_f$ commutes trivially.
 
-Now we need to show that $\alpha_f$ is an equivalence. We do this by showing that $\hfib{\alpha_f}{P,o}$ is contractible for any $P:\im(R)$ and $o:\mathcal{O}_R(P)$. Since contractibility is a mere proposition, we get to use $x:X$ and $e:P= R(x)$ from the fact that $P:\im(R)$. Moreover, by the fact that $\eqv{(\pairr{R(x),o}=\pairr{R(x),o_R(x)})}{R(x,x)}$ and that $R$ is reflexive, we see that we have $\pairr{P,o}=\pairr{R(x),o_R(x)}$. So it suffices to show that
+Now we need to show that $\alpha_f$ is an equivalence. We do this by showing that $\fib{\alpha_f}{P,o}$ is contractible for any $P:\im(R)$ and $o:\mathcal{O}_R(P)$. Since contractibility is a mere proposition, we get to use $x:X$ and $e:P= R(x)$ from the fact that $P:\im(R)$. Moreover, by the fact that $\eqv{(\pairr{R(x),o}=\pairr{R(x),o_R(x)})}{R(x,x)}$ and that $R$ is reflexive, we see that we have $\pairr{P,o}=\pairr{R(x),o_R(x)}$. So it suffices to show that
 \begin{equation*}
 \sm{b:\im(f)} \pairr{c_f(b),\delta_f(b)}=\pairr{R(x),o_R(x)}
 \end{equation*}
@@ -471,8 +471,8 @@ c_{q_R}(P,o)(x)\eqvsym P(x).
 Hence it must be the case that $c_{q_R}(P,o)=P$, as desired. Now note that 
 \begin{align*}
 \mathcal{O}_R(P)
-& \eqvsym \hfib{\proj1}{P} \\
-& \eqvsym \hfib{c_{q_R}}{P} \\
+& \eqvsym \fib{\proj1}{P} \\
+& \eqvsym \fib{c_{q_R}}{P} \\
 & \jdeq \mathcal{O}_{\mathcal{K}_X(q_R)}(P),
 \end{align*}
 and since the top triangle commutes this equivalence maps $o_R(x)$ to $o_{\mathcal{K}_X(q_R)}(x)$. 

@@ -20,15 +20,15 @@ is a fiberwise equivalence. Our main reference \cite{hottbook} does not present 
 
 \section{Notation and preliminary results}
 
-\marginpar{Make sure $\mathsf{ev\usc{}pair}$ is introduced, and shown to be an equivalence}
-We work in Martin-L\"of dependent type theory with $\Pi$-types, $\Sigma$-types and cartesian products, coproducts $A+B$ equipped with $\inl:A\to A+B$ and $\inr:B\to A+B$ for any two types $A$ and $B$, an empty type $\emptyt$, a unit type $\unit$ equipped with $\ttt:\unit$, a type $\bool$ of booleans equipped with $\btrue,\bfalse:\bool$, a type $\N$ of natural numbers equipped with $0:\N$ and $\mathsf{succ}:\N\to\N$, and identity types. 
+\marginpar{Make sure $\evpair$ is introduced, and shown to be an equivalence}
+We work in Martin-L\"of dependent type theory with $\Pi$-types, $\Sigma$-types and cartesian products, coproducts $A+B$ equipped with $\inl:A\to A+B$ and $\inr:B\to A+B$ for any two types $A$ and $B$, an empty type $\emptyt$, a unit type $\unit$ equipped with $\ttt:\unit$, a type $\bool$ of booleans equipped with $\btrue,\bfalse:\bool$, a type $\N$ of natural numbers equipped with $0:\N$ and $\suc:\N\to\N$, and identity types. 
 
 \begin{rmk}
-As usual, we write $\idfunc[A]:A\to A$ for the identity function $\lam{x}x$ on $A$, and we write $g\circ f:A\to C$ for the composite function $\lam{x}g(f(x))$ of $f:A\to B$ and $g:B\to C$. For any two types $A$ and $B$, and any $b:B$, we write
+As usual, we write $\idfunc[A]:A\to A$ for the \define{identity function} $\lam{x}x$ on $A$, and we write $g\circ f:A\to C$ for the \define{composite function} $\lam{x}g(f(x))$ of $f:A\to B$ and $g:B\to C$. For any two types $A$ and $B$, and any $b:B$, we write
 \begin{equation*}
-\mathsf{const}_b : A\to B
+\const_b : A\to B
 \end{equation*}
-for the \define{constant function} $\lam{x}b$.
+for the \define{constant function} $\lam{x}b$. Sometimes we also write $\lam{\nameless}b$ for the constant function.
 
 In the case of $\Sigma$-types, the empty type $\emptyt$, and the unit type, we use the following notation to define functions by pattern-matching:
 \begin{align*}
@@ -69,46 +69,46 @@ The induction principle for identity types is sometimes called \define{identific
 
 Moreover, we assume that there is a universe $\UU$ with a universal family $\mathrm{El}$ over $\UU$, that is closed under the type forming operations. For example, there is a map
 \begin{equation*}
-\check{\mathsf{Id}}:\prd{A:\UU}\mathrm{El}(A)\to\mathrm{El}(A)\to\UU
+\check{\idtypevar{}}:\prd{A:\UU}\mathrm{El}(A)\to\mathrm{El}(A)\to\UU
 \end{equation*}
 satisfying
 \begin{equation*}
-\mathrm{El}(\check{\mathsf{Id}}(A,x,y))\jdeq x=_{\mathrm{El}(A)} y,
+\mathrm{El}(\check{\idtypevar{}}(A,x,y))\jdeq x=_{\mathrm{El}(A)} y,
 \end{equation*}
 establishing that the universe is closed under identity types.
 
 Given a type $A$ the \define{concatenation} operation
 \begin{equation*}
-\mathsf{concat} : \prd{x,y,z:A} (\id{x}{y})\to(\id{y}{z})\to (\id{x}{z})
+\concat : \prd{x,y,z:A} (\id{x}{y})\to(\id{y}{z})\to (\id{x}{z})
 \end{equation*}
-is defined by $\mathsf{concat}(\refl{x},q)\defeq q$. We will usually write $\ct{p}{q}$ for $\mathsf{concat}(p,q)$. 
+is defined by $\concat(\refl{x},q)\defeq q$. We will usually write $\ct{p}{q}$ for $\concat(p,q)$. 
 The concatenation operation satisfies the unit laws
 \begin{align*}
-\mathsf{left\usc{}unit}(p) & : \ct{\refl{x}}{p}=p \\
-\mathsf{right\usc{}unit}(p) & : \ct{p}{\refl{y}}=p,
+\leftunit(p) & : \ct{\refl{x}}{p}=p \\
+\rightunit(p) & : \ct{p}{\refl{y}}=p,
 \intertext{with a cohererence}
-\mathsf{coh\usc{}unit}(x) & : \mathsf{left\usc{}unit}(\refl{x})=\mathsf{right\usc{}unit}(\refl{x})
+\cohunit(x) & : \leftunit(\refl{x})=\rightunit(\refl{x})
 \end{align*}
 that will come into play when we study type valued equivalence relations.
 
 The \define{inverse operation} 
 \begin{equation*}
-\mathsf{inv}:\prd{x,y:A} (x=y)\to (y=x)
+\invfunc:\prd{x,y:A} (x=y)\to (y=x)
 \end{equation*}
-is defined by $\mathsf{inv}(\refl{x})\defeq\refl{x}$. We will usually write $p^{-1}$ for $\mathsf{inv}(p)$.
+is defined by $\invfunc(\refl{x})\defeq\refl{x}$. We will usually write $p^{-1}$ for $\invfunc(p)$.
 The inverse operation satisfies the inverse laws
 \begin{align*}
-\mathsf{left\usc{}inv}(p) & : \ct{p^{-1}}{p} = \refl{y} \\
-\mathsf{right\usc{}inv}(p) & : \ct{p}{p^{-1}} = \refl{x},
+\leftinv(p) & : \ct{p^{-1}}{p} = \refl{y} \\
+\rightinv(p) & : \ct{p}{p^{-1}} = \refl{x},
 \intertext{with a coherence}
-\mathsf{coh\usc{}inv}(x) & \defeq \mathsf{left\usc{}inv}(\refl{x})=\mathsf{right\usc{}inv}(\refl{x}).
+\cohinv(x) & \defeq \leftinv(\refl{x})=\rightinv(\refl{x}).
 \end{align*}
 
 The \define{associativity operation}, which assigns to each $p:x=y$, $q:y=z$, and $r:z=w$ the \define{associator}
 \begin{equation*}
-\mathsf{assoc}(p,q,r) : \ct{(\ct{p}{q})}{r}=\ct{p}{(\ct{q}{r})}
+\assoc(p,q,r) : \ct{(\ct{p}{q})}{r}=\ct{p}{(\ct{q}{r})}
 \end{equation*}
-is defined by $\mathsf{assoc}(\refl{x},q,r)\defeq \refl{\ct{q}{r}}$. The associator again satisfies unit laws, which we will encounter when we study type-valued equivalence relations.
+is defined by $\assoc(\refl{x},q,r)\defeq \refl{\ct{q}{r}}$. The associator again satisfies unit laws, which we will encounter when we study type-valued equivalence relations.
 
 Given a map $f:A\to B$, the \define{action on paths} of $f$ is an operation
 \begin{equation*}
@@ -117,31 +117,31 @@ Given a map $f:A\to B$, the \define{action on paths} of $f$ is an operation
 defined by $\ap{f}{\refl{x}}\defeq\refl{f(x)}$. 
 Moreover, there are operations
 \begin{align*}
-\mathsf{ap\usc{}idfun}_A & : \prd{x,y:A}{p:\id{x}{y}} \id{p}{\ap{\idfunc[A]}{p}} \\
-\mathsf{ap\usc{}comp}(f,g) & : \prd{x,y:A}{p:\id{x}{y}} \id{\ap{g}{\ap{f}{p}}}{\ap{g\circ f}{p}}
+\apid_A & : \prd{x,y:A}{p:\id{x}{y}} \id{p}{\ap{\idfunc[A]}{p}} \\
+\apcomp(f,g) & : \prd{x,y:A}{p:\id{x}{y}} \id{\ap{g}{\ap{f}{p}}}{\ap{g\circ f}{p}}
 \end{align*}
-defined by $\mathsf{ap\usc{}idfun}_A(\refl{x})\defeq \refl{\refl{x}}$ and $\mathsf{ap\usc{}comp}(f,g,\refl{x})\jdeq \refl{\refl{g(f(x))}}$, respectively.
+defined by $\apid_A(\refl{x})\defeq \refl{\refl{x}}$ and $\apcomp(f,g,\refl{x})\jdeq \refl{\refl{g(f(x))}}$, respectively.
 
 The action on paths of a map preserves the groupoid operations, i.e.~we can construct
 \begin{align*}
-\mathsf{ap\usc{}refl}(f,x) & : \id{\ap{f}{\refl{x}}}{\refl{f}(x)} \\
-\mathsf{ap\usc{}inv}(f,p) & : \id{\ap{f}{p^{-1}}}{\ap{f}{p}^{-1}} \\
-\mathsf{ap\usc{}concat}(f,p,q) & : \id{\ap{f}{\ct{p}{q}}}{\ct{\ap{f}{p}}{\ap{f}{q}}}
+\aprefl(f,x) & : \id{\ap{f}{\refl{x}}}{\refl{f}(x)} \\
+\apinv(f,p) & : \id{\ap{f}{p^{-1}}}{\ap{f}{p}^{-1}} \\
+\apconcat(f,p,q) & : \id{\ap{f}{\ct{p}{q}}}{\ct{\ap{f}{p}}{\ap{f}{q}}}
 \end{align*}
 by identification elimination. The groupoid laws are also preserved.
 
 \begin{defn}
 Let $A$ be a type, and let $B$ be a type family over $A$. The \define{transport} operation
 \begin{equation*}
-\mathsf{tr}_B:\prd{x,y:A} (\id{x}{y})\to (B(x)\to B(y))
+\tr_B:\prd{x,y:A} (\id{x}{y})\to (B(x)\to B(y))
 \end{equation*}
-is defined by $\mathsf{tr}_B(\refl{x}) \defeq \idfunc[B(x)]$. 
+is defined by $\tr_B(\refl{x}) \defeq \idfunc[B(x)]$. 
 \end{defn}
 
 \begin{defn}\label{defn:apd}
 Given a dependent function $f:\prd{a:A}B(a)$ and a path $p:\id{x}{y}$ in $A$, the \define{dependent action on paths}
 \begin{equation*}
-\apdfunc{f} : \prd{x,y:A}{p:x=y}\id{\mathsf{tr}_B(p,f(x))}{f(y)}
+\apdfunc{f} : \prd{x,y:A}{p:x=y}\id{\tr_B(p,f(x))}{f(y)}
 \end{equation*}
 is defined by $\apd{f}{\refl{x}}\defeq \refl{f(x)}$.
 \end{defn}
@@ -184,18 +184,18 @@ f(x) \arrow[r,equals,"H(x)"] \arrow[d,equals,swap,"\ap{f}{p}"] & g(x) \arrow[d,e
 f(y) \arrow[r,equals,swap,"H(y)"] & g(y)
 \end{tikzcd}
 \end{equation*}
-commutes for every $p:x=y$, as $\lam{\,\refl{x}} \mathsf{right\usc{}unit}(H(x))$. This square is also called the \define{naturality square} of the homotopy $H$ at $p$.
+commutes for every $p:x=y$, as $\lam{\,\refl{x}} \rightunit(H(x))$. This square is also called the \define{naturality square} of the homotopy $H$ at $p$.
 \end{defn}
 \end{comment}
 
 \begin{defn}
-Let $f:A\to B$ be a function. We say that $f$ has a \define{section}\index{section!of a map|textbf} if there is a term of type\index{sec(f)@{$\mathsf{sec}(f)$}|textbf}
+Let $f:A\to B$ be a function. We say that $f$ has a \define{section}\index{section!of a map|textbf} if there is a term of type\index{sec(f)@{$\sections(f)$}|textbf}
 \begin{equation*}
-\mathsf{sec}(f) \defeq \sm{g:B\to A} f\circ g\htpy \idfunc[B].
+\sections(f) \defeq \sm{g:B\to A} f\circ g\htpy \idfunc[B].
 \end{equation*}
-Dually, we say that $f$ has a \define{retraction}\index{retraction} if there is a term of type\index{retr(f)@{$\mathsf{retr}(f)$}|textbf}
+Dually, we say that $f$ has a \define{retraction}\index{retraction} if there is a term of type\index{retr(f)@{$\retractions(f)$}|textbf}
 \begin{equation*}
-\mathsf{retr}(f) \defeq \sm{h:B\to A} h\circ f\htpy \idfunc[A].
+\retractions(f) \defeq \sm{h:B\to A} h\circ f\htpy \idfunc[A].
 \end{equation*}
 If $f$ has a retraction, we also say that $A$ is a \define{retract}\index{retract!of a type} of $B$.
 \end{defn}
@@ -203,24 +203,24 @@ If $f$ has a retraction, we also say that $A$ is a \define{retract}\index{retrac
 \begin{eg}
 The induction principles for $\Sigma$-types, $\emptyt$, $\unit$, and $\bool$ provide sections for the functions
 \begin{align*}
-\mathsf{ev\usc{}pair} & : \Big(\prd{t:\sm{x:A}B(x)}P(t)\Big)\to \prd{x:A}{y:B(x)}P((x,y)) \\
-\mathsf{const}_\ttt & : \Big(\prd{t:\emptyt}P(t)\Big)\to \unit \\
-\mathsf{ev\usc{}pt} & : \Big(\prd{t:\unit}P(t)\Big) \to P(\ttt) \\
-\mathsf{ev\usc{}f\usc{}t} & : \Big(\prd{t:\bool}P(t)\Big) \to P(\bfalse)\times P(\btrue) \\
+\evpair & : \Big(\prd{t:\sm{x:A}B(x)}P(t)\Big)\to \prd{x:A}{y:B(x)}P((x,y)) \\
+\const_\ttt & : \Big(\prd{t:\emptyt}P(t)\Big)\to \unit \\
+\evpt & : \Big(\prd{t:\unit}P(t)\Big) \to P(\ttt) \\
+\evtruefalse & : \Big(\prd{t:\bool}P(t)\Big) \to P(\btrue)\times P(\bfalse) \\
 \end{align*}
 \end{eg}
 
 \begin{defn}
 We say that a function $f:A\to B$ is an \define{equivalence}\index{equivalence|textbf}\index{bi-invertible map|see {equivalence}} if it has both a section and a retraction, i.e.~if it comes equipped with a term of type\index{is_equiv@{$\isequiv$}|textbf}
 \begin{equation*}
-\isequiv(f)\defeq\mathsf{sec}(f)\times\mathsf{retr}(f).
+\isequiv(f)\defeq\sections(f)\times\retractions(f).
 \end{equation*}
 We will write $\eqv{A}{B}$\index{equiv@{$\eqv{A}{B}$}|textbf} for the type $\sm{f:A\to B}\isequiv(f)$.
 \end{defn}
 
-Clearly, if $f$ is \define{invertible}\index{invertible map} in the sense that it comes equipped with a function $g:B\to A$ such that $f\circ g\htpy\idfunc[B]$ and $g\circ f\htpy\idfunc[A]$, then $f$ is an equivalence. We write\index{has_inverse@{$\mathsf{has\usc{}inverse}$}|textbf}
+Clearly, if $f$ is \define{invertible}\index{invertible map} in the sense that it comes equipped with a function $g:B\to A$ such that $f\circ g\htpy\idfunc[B]$ and $g\circ f\htpy\idfunc[A]$, then $f$ is an equivalence. We write\index{has_inverse@{$\hasinverse$}|textbf}
 \begin{equation*}
-\mathsf{has\usc{}inverse}(f)\defeq\sm{g:B\to A} (f\circ g\htpy \idfunc[B])\times (g\circ f\htpy\idfunc[A]).
+\hasinverse(f)\defeq\sm{g:B\to A} (f\circ g\htpy \idfunc[B])\times (g\circ f\htpy\idfunc[A]).
 \end{equation*}
 The section of an equivalence is also a retraction (and vice versa), so we define the \define{inverse} of an equivalence to be its section. It follows immediately that the inverse of any equivalence is again an equivalence.\index{equivalence!invertibility of} The identity function $\idfunc[A]$ on a type $A$ is an equivalence since it is its own section and its own retraction.
 
@@ -250,31 +250,31 @@ In the following theorem we characterize the identity type of a $\Sigma$-type as
 
 
 \begin{prp}[Theorem 2.7.2 of \cite{hottbook}]\label{thm:eq_sigma}
-Let $B$ be a type family over $A$, let $s:\sm{x:A}B(x)$, and consider the dependent function\index{pair_eq@{$\mathsf{pair\usc{}eq}$}|textbf}
+Let $B$ be a type family over $A$, let $s:\sm{x:A}B(x)$, and consider the dependent function\index{pair_eq@{$\paireq$}|textbf}
 \begin{equation*}
-\mathsf{pair\usc{}eq}_s:\prd{t:\sm{x:A}B(x)} (s=t)\to \sm{\alpha:\proj 1(s)=\proj 1(t)} \mathsf{tr}_B(\alpha,\proj 2(s))=\proj 2(t)
+\paireq_s:\prd{t:\sm{x:A}B(x)} (s=t)\to \sm{\alpha:\proj 1(s)=\proj 1(t)} \tr_B(\alpha,\proj 2(s))=\proj 2(t)
 \end{equation*}
-defined by $\mathsf{pair\usc{}eq}_s(\refl{s}) \defeq (\refl{\proj 1(s)},\refl{\proj 2(s)})$. Then $\mathsf{pair\usc{}eq}_{s,t}$ is an equivalence for every $t:\sm{x:A}B(x)$.\index{Sigma type@{$\Sigma$-type}!identity types of|textit}\index{identity type!of a Sigma-type@{of a $\Sigma$-type}|textit}
+defined by $\paireq_s(\refl{s}) \defeq (\refl{\proj 1(s)},\refl{\proj 2(s)})$. Then $\paireq_{s,t}$ is an equivalence for every $t:\sm{x:A}B(x)$.\index{Sigma type@{$\Sigma$-type}!identity types of|textit}\index{identity type!of a Sigma-type@{of a $\Sigma$-type}|textit}
 \end{prp}
 
 We include the proof mainly to introduce some more notation.
 
 \begin{proof}
-The maps in the converse direction\index{eq_pair@{$\mathsf{eq\usc{}pair}$}}
+The maps in the converse direction\index{eq_pair@{$\eqpair$}}
 \begin{equation*}
-\mathsf{eq\usc{}pair}_{s,t} : \Big(\sm{p:\proj 1(s)=\proj 1(t)}\id{\mathsf{tr}_B(p,\proj 2(s))}{\proj 2(t)}\Big)\to(\id{s}{t})
+\eqpair_{s,t} : \Big(\sm{p:\proj 1(s)=\proj 1(t)}\id{\tr_B(p,\proj 2(s))}{\proj 2(t)}\Big)\to(\id{s}{t})
 \end{equation*}
 is defined by
 \begin{equation*}
-\mathsf{eq\usc{}pair}_{(x,y),(x',y')}(\refl{x},\refl{y})\defeq \refl{(x,y)}.
+\eqpair_{(x,y),(x',y')}(\refl{x},\refl{y})\defeq \refl{(x,y)}.
 \end{equation*}
-The proofs that the function $\mathsf{eq\usc{}pair}_{s,t}$ is indeed an inverse of $\mathsf{pair\usc{}eq}_{s,t}$ are also by induction.
+The proofs that the function $\eqpair_{s,t}$ is indeed an inverse of $\paireq_{s,t}$ are also by induction.
 \end{proof}
 
 \begin{cor}
 Let $B$ be a type family over $A$, and let $\pairr{x,y},\pairr{x',y'}:\sm{x:A}B(x)$. Then the map
 \begin{equation*}
-\mathsf{pair\usc{}eq}_{(x,y),(x',y')} : (\id{\pairr{x,y}}{\pairr{x',y'}})\to \Big(\sm{p:x=x'}\id{\mathsf{tr}_B(p,y)}{y'}\Big)
+\paireq_{(x,y),(x',y')} : (\id{\pairr{x,y}}{\pairr{x',y'}})\to \Big(\sm{p:x=x'}\id{\tr_B(p,y)}{y'}\Big)
 \end{equation*}
 is an equivalence.
 \end{cor}
@@ -289,19 +289,19 @@ Given a term $(c,C):\iscontr(A)$, we call $c:A$ the \define{center of contractio
 
 Suppose $A$ is a contractible type with center of contraction $c$ and contraction $C$. Then the type of $C$ is (judgmentally) equal to the type
 \begin{equation*}
-\mathsf{const}_c\htpy\idfunc[A].
+\const_c\htpy\idfunc[A].
 \end{equation*}
 In other words, the contraction $C$ is a \emph{homotopy} from the constant function to the identity function.
 
 \begin{defn}
 Consider a type $A$ with a base point $a:A$. We say that $A$ satisfies \define{singleton induction}\index{singleton induction|textbf} if for every type family $B$ over $A$, the map
 \begin{equation*}
-\mathsf{ev\usc{}pt}:\Big(\prd{x:A}B(x)\Big)\to B(a)
+\evpt:\Big(\prd{x:A}B(x)\Big)\to B(a)
 \end{equation*}
 given by $f\mapsto f(a)$ has a section. In other words, we have a function and a homotopy
 \begin{align*}
-\mathsf{sing\usc{}ind}_{A,a} & : B(a)\to \prd{x:A}B(x) \\
-\mathsf{sing\usc{}comp}_{A,a} & : \prd{b:B(a)} \mathsf{sing\usc{}ind}_{A,a}(b,a)=b.
+\singind_{A,a} & : B(a)\to \prd{x:A}B(x) \\
+\singcomp_{A,a} & : \prd{b:B(a)} \singind_{A,a}(b,a)=b.
 \end{align*}
 \end{defn}
 
@@ -325,10 +325,10 @@ is contractible.\index{identity type!contractibility of total space|textit}
 We have the term $(x,\refl{x}):\sm{y:A}x=y$, and both maps in the composite
 \begin{equation*}
 \begin{tikzcd}[column sep=large]
-\prd{t:\sm{y:A}x=y}B(t) \arrow[r,"\mathsf{ev\usc{}pair}"] & \prd{y:A}{p:x=y}B((y,p)) \arrow[r,"\mathsf{ev\usc{}refl}"] & B((x,\refl{x}))
+\prd{t:\sm{y:A}x=y}B(t) \arrow[r,"\evpair"] & \prd{y:A}{p:x=y}B((y,p)) \arrow[r,"\evrefl"] & B((x,\refl{x}))
 \end{tikzcd}
 \end{equation*}
-have sections, so the composite has a section. The composite is $\mathsf{ev\usc{}pt}$, so we see that the asserted type satisfies singleton induction.
+have sections, so the composite has a section. The composite is $\evpt$, so we see that the asserted type satisfies singleton induction.
 \end{proof}
 
 \begin{defn}
@@ -403,9 +403,9 @@ There are equivalences
 \end{equation*}
 for any $q:f(x)=f(y)$, because the triangle
 \begin{equation*}
-\begin{tikzcd}
+\begin{tikzcd}[column sep=-1em]
 A \arrow[rr,"{\lam{x}(x,x,\refl{x})}"] \arrow[dr,swap,"\delta_f"] & & \sm{x,y:A}x=y \arrow[dl,"\total{\total{\apfunc{f}}}"] \\
-& \sm{x,y:A}f(x)=f(y)
+\phantom{\sm{x,y:A}x=y} & \sm{x,y:A}f(x)=f(y)
 \end{tikzcd}
 \end{equation*}
 commutes, and the top map is an equivalence.
@@ -447,7 +447,7 @@ on total spaces. We have that $\sm{x:A}a=x$ is contractible. Now it follows by t
 \begin{equation*}
 \begin{tikzcd}
 \sm{x:A}a=x \arrow[rr,"\total{\ind{a{=}}(b)}"] \arrow[dr,swap,"\eqvsym"] & & \sm{x:A}B(x) \arrow[dl] \\
-& \unit
+& \unit & \phantom{\sm{x:A}a=x}
 \end{tikzcd}
 \end{equation*}
 that $\total{\ind{a{=}}(b)}$ is an equivalence if and only if $\sm{x:A}B(x)$ is contractible.
@@ -472,7 +472,7 @@ An \define{embedding}\index{embedding|textbf} is a map $f:A\to B$ satisfying the
 \begin{equation*}
 \apfunc{f}:(\id{x}{y})\to(\id{f(x)}{f(y)})
 \end{equation*}
-is an equivalence for every $x,y:A$. We write $\mathsf{is\usc{}emb}(f)$ for the type of witnesses that $f$ is an embedding.
+is an equivalence for every $x,y:A$. We write $\isemb(f)$ for the type of witnesses that $f$ is an embedding.
 \end{defn}
 
 \begin{prp}[Theorem 2.11.1 in \cite{hottbook}]
@@ -570,14 +570,14 @@ The following are equivalent:
 %\end{equation*}
 %the map
 %\begin{equation*}
-%\Big(\prd{g:\prd{x:A}B(x)}{H:f\htpy g}P(g,H)\Big)\to P(f,\mathsf{htpy\usc{}refl}_f)
+%\Big(\prd{g:\prd{x:A}B(x)}{H:f\htpy g}P(g,H)\Big)\to P(f,\htpyrefl_f)
 %\end{equation*}
-%given by $s\mapsto s(f,\mathsf{htpy\usc{}refl}_f)$ has a section.
-\item The \define{function extensionality principle}\index{function extensionality}: For every type family $B$ over $A$, and any two dependent functions $f,g:\prd{x:A}B(x)$, the canonical map\index{htpy_eq@{$\mathsf{htpy\usc{}eq}$}|textbf}
+%given by $s\mapsto s(f,\htpyrefl_f)$ has a section.
+\item The \define{function extensionality principle}\index{function extensionality}: For every type family $B$ over $A$, and any two dependent functions $f,g:\prd{x:A}B(x)$, the canonical map\index{htpy_eq@{$\htpyeq$}|textbf}
 \begin{equation*}
-\mathsf{htpy\usc{}eq}(f,g) : (\id{f}{g})\to (f\htpy g)
+\htpyeq(f,g) : (\id{f}{g})\to (f\htpy g)
 \end{equation*}
-by path induction (sending $\refl{f}$ to $\lam{x}\refl{f(x)}$) is an equivalence. We will write $\mathsf{eq\usc{}htpy}$\index{eq_htpy@{$\mathsf{eq\usc{}htpy}$}} for its inverse.
+by path induction (sending $\refl{f}$ to $\lam{x}\refl{f(x)}$) is an equivalence. We will write $\eqhtpy$\index{eq_htpy@{$\eqhtpy$}} for its inverse.
 \item The \define{weak function extensionality principle}\index{weak function extensionality} holds: For every type family $B$ over $A$ one has\index{contractible!weak function extensionality}
 \begin{equation*}
 \Big(\prd{x:A}\iscontr(B(x))\Big)\to\iscontr\Big(\prd{x:A}B(x)\Big).
@@ -624,9 +624,9 @@ We say that a map $f:A\to B$ is \define{path-split}\index{path-split|textbf} if 
 \begin{equation*}
 \apfunc{f}(x,y):(x=y)\to (f(x)=f(y))
 \end{equation*}
-also has a section. We write $\mathsf{path\usc{}split}(f)$\index{path_split(f)@{$\mathsf{path\usc{}split}(f)$}|textbf} for the type
+also has a section. We write $\pathsplit(f)$\index{path_split(f)@{$\pathsplit(f)$}|textbf} for the type
 \begin{equation*}
-\mathsf{sec}(f)\times\prd{x,y:A}\mathsf{sec}(\apfunc{f}(x,y)).
+\sections(f)\times\prd{x,y:A}\sections(\apfunc{f}(x,y)).
 \end{equation*}
 \end{defn}
 
@@ -640,7 +640,7 @@ G & : f\circ g \htpy \idfunc[B] \\
 H & : g\circ f \htpy \idfunc[A] \\
 K & : G\cdot f \htpy f\cdot H.
 \end{align*}
-We write $\mathsf{half\usc{}adj}(f)$\index{half_adj(f)@{$\mathsf{half\usc{}adj}(f)$}|textbf} for the type of such quadruples $(g,G,H,K)$.
+We write $\halfadj(f)$\index{half_adj(f)@{$\halfadj(f)$}|textbf} for the type of such quadruples $(g,G,H,K)$.
 \end{defn}
 
 \begin{prp}\label{ex:equiv_precomp}
@@ -665,7 +665,7 @@ given by $g\mapsto g\circ f$ is an equivalence.
 \begin{proof}
 To see that (i) implies (ii) we note that any equivalence has a section, and its action on paths is an equivalence by \cref{cor:emb_equiv} so again it has a section.
 
-To show that (ii) implies (iii), assume that $f$ is path-split. Thus we have $(g,G):\mathsf{sec}(f)$, and the assumption that $\apfunc{f}:(x=y)\to (f(x)=f(y))$ has a section for every $x,y:A$ gives us a term of type
+To show that (ii) implies (iii), assume that $f$ is path-split. Thus we have $(g,G):\sections(f)$, and the assumption that $\apfunc{f}:(x=y)\to (f(x)=f(y))$ has a section for every $x,y:A$ gives us a term of type
 \begin{equation*}
 \prd{x:A}\fib{\apfunc{f}}{G(f(x))}.
 \end{equation*}
@@ -679,29 +679,29 @@ To show that (iii) implies (iv), suppose that $f$ comes equipped with $(g,G,H,K)
 \begin{equation*}
 \varphi:\Big(\prd{x:A}P(f(x))\Big)\to\Big(\prd{y:B}P(y)\Big)
 \end{equation*}
-given by $s\mapsto \lam{y}\mathsf{tr}_P(G(y),sg(y))$. 
+given by $s\mapsto \lam{y}\tr_P(G(y),sg(y))$. 
 
 To see that $\varphi$ is a section of $\blank\circ f$, let $s:\prd{x:A}P(f(x))$. By function extensionality it suffices to construct a homotopy $\varphi(s)\circ f\htpy s$. In other words, we have to show that
 \begin{equation*}
-\mathsf{tr}_P(G(f(x)),s(g(f(x)))=s(x)
+\tr_P(G(f(x)),s(g(f(x)))=s(x)
 \end{equation*}
 for any $x:A$. Now we use the additional homotopy $K$ from our assumption that $f$ is a half-adjoint equivalence. Since we have $K(x):G(f(x))=\ap{f}{H(x)}$ it suffices to show that
 \begin{equation*}
-\mathsf{tr}_P(\ap{f}{H(x)},sgf(x))=s(x).
+\tr_P(\ap{f}{H(x)},sgf(x))=s(x).
 \end{equation*}
 A simple path-induction argument yields that
 \begin{equation*}
-\mathsf{tr}_P(\ap{f}{p})\htpy \mathsf{tr}_{P\circ f}(p)
+\tr_P(\ap{f}{p})\htpy \tr_{P\circ f}(p)
 \end{equation*}
 for any path $p:x=y$ in $A$, so it suffices to construct an identification
 \begin{equation*}
-\mathsf{tr}_{P\circ f}(H(x),sgf(x))=s(x).
+\tr_{P\circ f}(H(x),sgf(x))=s(x).
 \end{equation*}
 We have such an identification by $\apd{H(x)}{s}$.
 
 To see that $\varphi$ is a retraction of $\blank\circ f$, let $s:\prd{y:B}P(y)$. By function extensionality it suffices to construct a homotopy $\varphi(s\circ f)\htpy s$. In other words, we have to show that
 \begin{equation*}
-\mathsf{tr}_P(G(y),sfg(y))=s(y)
+\tr_P(G(y),sfg(y))=s(y)
 \end{equation*}
 for any $y:B$. We have such an identification by $\apd{G(y)}{s}$. This completes the proof that (iii) implies (iv).
 
@@ -734,11 +734,11 @@ Now we conclude by the contractibility of the fiber that there is an identificat
 \begin{defn}
 Consider two functions $f:A\to X$ and $g:B\to X$. We define the type 
 \begin{equation*}
-\mathrm{hom}_X(f,g)\defeq \sm{h:A\to B} f\htpy g\circ h.
+\hom_X(f,g)\defeq \sm{h:A\to B} f\htpy g\circ h.
 \end{equation*}
 \end{defn}
 
-In other words, the type $\mathrm{hom}_X(f,g)$ is the type of functions $h:A\to B$ equipped with a homotopy witnessing that the triangle
+In other words, the type $\hom_X(f,g)$ is the type of functions $h:A\to B$ equipped with a homotopy witnessing that the triangle
 \begin{equation*}
 \begin{tikzcd}[column sep=tiny]
 A \arrow[dr,swap,"f"] \arrow[rr,"h"] & & B \arrow[dl,"g"] \\
@@ -749,15 +749,15 @@ A \arrow[dr,swap,"f"] \arrow[rr,"h"] & & B \arrow[dl,"g"] \\
 \begin{prp}
 Let $P$ and $Q$ be two type families over $X$, and write $\proj 1^P$ and $\proj 1^Q$ for their first projections, respectively. Then there is an equivalence
 \begin{equation*}
-\mathsf{tot\usc{}triangle}:\Big(\prd{x:X} P(x)\to Q(x)\Big)\to \mathrm{hom}_X(\proj 1^P,\proj 1^Q)
+\tottriangle:\Big(\prd{x:X} P(x)\to Q(x)\Big)\to \hom_X(\proj 1^P,\proj 1^Q)
 \end{equation*}
-given by $\mathsf{tot\usc{}triangle}(f)\defeq (\total{f},\lam{(x,y)}\refl{x})$, is an equivalence.
+given by $\tottriangle(f)\defeq (\total{f},\lam{(x,y)}\refl{x})$, is an equivalence.
 \end{prp}
 
 \begin{cor}\label{cor:fib_triangle}
 For any two maps $f:A\to X$ and $g:B\to X$, the map
 \begin{equation*}
-\mathsf{fib\usc{}triangle} : \mathrm{hom}_X(f,g) \to \prd{x:X}\fib{f}{x}\to \fib{g}{x}
+\fibtriangle : \hom_X(f,g) \to \prd{x:X}\fib{f}{x}\to \fib{g}{x}
 \end{equation*}
 given by $\lam{x}{(a,p)}(h(a),\ct{H(a)^{-1}}{p})$ is an equivalence.
 \end{cor}
@@ -803,9 +803,9 @@ A \arrow[r,swap,"f"] & X
 with $H:f\circ p\htpy g\circ q$ can be dissected into three parts, consisting of a \emph{cospan}, a type, and a \emph{cone}, where
 \begin{enumerate}
 \item A \define{cospan}\index{cospan|textbf} consists of three types $A$, $X$, and $B$, and maps $f:A\to X$ and $g:B\to X$.
-\item Given a type $C$, a \define{cone}\index{cone!on a cospan|textbf} on the cospan $A \stackrel{f}{\rightarrow} X \stackrel{g}{\leftarrow} B$ with \define{vertex} $C$\index{vertex!of a cone|textbf} consists of maps $p:C\to A$, $q:C\to B$ and a homotopy $H:f\circ p\htpy g\circ q$. We write\index{cone(C)@{$\mathsf{cone}(\blank)$}|textbf}
+\item Given a type $C$, a \define{cone}\index{cone!on a cospan|textbf} on the cospan $A \stackrel{f}{\rightarrow} X \stackrel{g}{\leftarrow} B$ with \define{vertex} $C$\index{vertex!of a cone|textbf} consists of maps $p:C\to A$, $q:C\to B$ and a homotopy $H:f\circ p\htpy g\circ q$. We write\index{cone(C)@{$\cone(\blank)$}|textbf}
 \begin{equation*}
-\mathsf{cone}(C)\defeq \sm{p:C\to A}{q:C\to B}f\circ p\htpy g\circ q
+\cone(C)\defeq \sm{p:C\to A}{q:C\to B}f\circ p\htpy g\circ q
 \end{equation*}
 for the type of cones with vertex $C$.
 \end{enumerate}
@@ -814,9 +814,9 @@ for the type of cones with vertex $C$.
 Given a cone with vertex $C$ on a span $A\stackrel{f}{\rightarrow} X \stackrel{g}{\leftarrow} B$ and a map $h:C'\to C$, we construct a new cone with vertex $C'$ in the following definition.
 
 \begin{defn}
-For any cone $(p,q,H)$ with vertex $C$ and any type $C'$, we define a map\index{cone map@{$\mathsf{cone\usc{}map}$}|textbf}
+For any cone $(p,q,H)$ with vertex $C$ and any type $C'$, we define a map\index{cone map@{$\conemap$}|textbf}
 \begin{equation*}
-\mathsf{cone\usc{}map}(p,q,H):(C'\to C)\to\mathsf{cone}(C')
+\conemap(p,q,H):(C'\to C)\to\cone(C')
 \end{equation*}
 by $h\mapsto (p\circ h,q\circ h,H\circ h)$. 
 \end{defn}
@@ -831,7 +831,7 @@ A \arrow[r,swap,"f"] & X
 \end{equation*}
 with $H:f\circ p\htpy g\circ q$ is a \define{pullback square}\index{pullback square|textbf}, or that it is \define{cartesian}\index{cartesian square|textbf}, if it satisfies the \define{universal property} of pullbacks\index{universal property!of pullbacks}, which asserts that the map
 \begin{equation*}
-\mathsf{cone\usc{}map}(p,q,H):(C'\to C)\to\mathsf{cone}(C')
+\conemap(p,q,H):(C'\to C)\to\cone(C')
 \end{equation*}
 is an equivalence for every type $C'$. 
 \end{defn}
@@ -844,12 +844,12 @@ C' \arrow[drr,bend left=15,"{q'}"] \arrow[dr,densely dotted,"h"] \arrow[ddr,bend
 & A \arrow[r,swap,"f"] & X
 \end{tikzcd}
 \end{equation*}
-since the universal property states that for every cone $(p',q',H')$ with vertex $C'$, the type of pairs $(h,\alpha)$ consisting of $h:C'\to C$ equipped with $\alpha:\mathsf{cone\usc{}map}((p,q,H),h)=(p',q',H')$ is contractible by \cref{thm:contr_equiv}.
+since the universal property states that for every cone $(p',q',H')$ with vertex $C'$, the type of pairs $(h,\alpha)$ consisting of $h:C'\to C$ equipped with $\alpha:\conemap((p,q,H),h)=(p',q',H')$ is contractible by \cref{thm:contr_equiv}.
 
-In order to see what goes on in the universal property of pullbacks, we need to first characterize the identity type of $\mathsf{cone}(C)$, for any type $C$.
+In order to see what goes on in the universal property of pullbacks, we need to first characterize the identity type of $\cone(C)$, for any type $C$.
 
 \begin{lem}\label{lem:id_cone}%
-\index{identity type!of cone@{of $\mathsf{cone}(C)$}|textit}%
+\index{identity type!of cone@{of $\cone(C)$}|textit}%
 Let $(p,q,H)$ and $(p',q',H')$ be cones on a cospan $f:A\rightarrow X \leftarrow B:g$, both with vertex $C$. Then the type $(p,q,H)=(p',q',H')$ is equivalent to the type of triples $(K,L,M)$ consisting of
 \begin{align*}
 K & : p \htpy p' \\
@@ -888,15 +888,15 @@ is contractible. Now we apply \cref{ex:sigma_swap} repeatedly to see that this t
 The types $\sm{p':C\to A} p\htpy p'$ and $\sm{q':C\to B} q\htpy q'$ are contractible by function extensionality, and  we have
 \begin{samepage}
 \begin{align*}
-(p,\mathsf{htpy\usc{}refl}_p) & : \sm{p':C'\to A} p\htpy p' \\
-(q,\mathsf{htpy\usc{}refl}_q) & : \sm{q':C'\to B} q\htpy q'.
+(p,\htpyrefl_p) & : \sm{p':C'\to A} p\htpy p' \\
+(q,\htpyrefl_q) & : \sm{q':C'\to B} q\htpy q'.
 \end{align*}%
 \end{samepage}%
 Thus we apply \cref{ex:contr_in_sigma} to see that the type of tuples $(p',K,q',L,H',M)$ is equivalent to the type
 \begin{equation*}
-\sm{H':f\circ p'\htpy g\circ q'} \ct{H}{\mathsf{htpy\usc{}refl}_{g\circ q}}\htpy \ct{\mathsf{htpy\usc{}refl}_{f\circ p}}{H'}.
+\sm{H':f\circ p'\htpy g\circ q'} \ct{H}{\htpyrefl_{g\circ q}}\htpy \ct{\htpyrefl_{f\circ p}}{H'}.
 \end{equation*}
-Of course, the type $\ct{H}{\mathsf{htpy\usc{}refl}_{g\circ q}}\htpy \ct{\mathsf{htpy\usc{}refl}_{f\circ p}}{H'}$ is equivalent to the type $H\htpy H'$, and $\sm{H':f\circ p\htpy g\circ q} H\htpy H'$ is contractible.
+Of course, the type $\ct{H}{\htpyrefl_{g\circ q}}\htpy \ct{\htpyrefl_{f\circ p}}{H'}$ is equivalent to the type $H\htpy H'$, and $\sm{H':f\circ p\htpy g\circ q} H\htpy H'$ is contractible.
 \end{proof}
 
 As a corollary we obtain the following characterization of the universal property of pullbacks.
@@ -964,7 +964,7 @@ is a pullback square.
 \begin{proof}
 Let $C$ be a type. Our goal is to show that the map
 \begin{equation*}
-\mathsf{cone\usc{}map}(\pi_1,\pi_2,\pi_3): (C\to A\times_X B)\to \mathsf{cone}(C)
+\conemap(\pi_1,\pi_2,\pi_3): (C\to A\times_X B)\to \cone(C)
 \end{equation*}
 is an equivalence. 
 By double application of \cref{thm:choice} we obtain equivalences
@@ -972,13 +972,13 @@ By double application of \cref{thm:choice} we obtain equivalences
 (C\to A\times_X B) & \jdeq C\to \sm{x:A}{y:B}f(x)=g(y) \\
 & \eqvsym \sm{p:C\to A}\prd{z:C}\sm{y:B} f(p(z))= y \\
 & \eqvsym \sm{p:C\to A}{q:C\to B}\prd{z:C} f(p(z))= g(q(z)) \\
-& \jdeq \mathsf{cone}(C)
+& \jdeq \cone(C)
 \end{align*}
 The composite of these equivalences is the map
 \begin{equation*}
 \lam{f}(\lam{z}\proj 1(f(z)),\lam{z} \proj 1(\proj 2(f(z))),\lam{z}\proj 2(\proj 2(f(z)))),
 \end{equation*}
-which is \emph{exactly} the map $\mathsf{cone\usc{}map}(\pi_1,\pi_2,\pi_3)$, and since it is a composite of equivalences it follows that it is itself an equivalence.
+which is \emph{exactly} the map $\conemap(\pi_1,\pi_2,\pi_3)$, and since it is a composite of equivalences it follows that it is itself an equivalence.
 \end{proof}
 
 In the following lemma we establish the uniqueness of pullbacks up to equivalence via a \emph{3-for-2 property} for pullbacks.
@@ -1009,29 +1009,29 @@ If any two of the following three properties hold, so does the third:
 \end{lem}
 
 \begin{proof}
-By the characterization of the identity type of $\mathsf{cone}(C')$ given in \cref{lem:id_cone} we obtain an identification
+By the characterization of the identity type of $\cone(C')$ given in \cref{lem:id_cone} we obtain an identification
 \begin{equation*}
-\mathsf{cone\usc{}map}((p,q,H),h)=(p',q',H')
+\conemap((p,q,H),h)=(p',q',H')
 \end{equation*}
 from the triple $(K,L,M)$. 
 Let $D$ be a type, and let $k:D\to C'$ be a map. We observe that
 \begin{align*}
-\mathsf{cone\usc{}map}((p,q,H),(h\circ k)) & \jdeq (p\circ (h\circ k),q\circ (h\circ k),H\circ (h\circ k)) \\
+\conemap((p,q,H),(h\circ k)) & \jdeq (p\circ (h\circ k),q\circ (h\circ k),H\circ (h\circ k)) \\
 & \jdeq ((p\circ h)\circ k,(q\circ h)\circ k, (H\circ h)\circ k) \\
-& \jdeq \mathsf{cone\usc{}map}(\mathsf{cone\usc{}map}((p,q,H),h),k) \\
-& = \mathsf{cone\usc{}map}((p',q',H'),k).
+& \jdeq \conemap(\conemap((p,q,H),h),k) \\
+& = \conemap((p',q',H'),k).
 \end{align*}
 Thus we see that the triangle 
 \begin{equation*}
 \begin{tikzcd}[column sep=-1em]
-(D\to C') \arrow[rr,"{h\circ \blank}"] \arrow[dr,swap,"{\mathsf{cone\usc{}map}(p',q',H')}"] & & (D\to C) \arrow[dl,"{\mathsf{cone\usc{}map}(p,q,H)}"] \\
-& \mathsf{cone}(D)
+(D\to C') \arrow[rr,"{h\circ \blank}"] \arrow[dr,swap,"{\conemap(p',q',H')}"] & & (D\to C) \arrow[dl,"{\conemap(p,q,H)}"] \\
+& \cone(D) & \phantom{(D\to C')}
 \end{tikzcd}
 \end{equation*}
 commutes. Therefore it follows from the 3-for-2 property of equivalences that if any two of the following properties hold, then so does the third:
 \begin{enumerate}
-\item The map $\mathsf{cone\usc{}map}(p,q,H):(D\to C)\to \mathsf{cone}(D)$ is an equivalence,
-\item The map $\mathsf{cone\usc{}map}(p',q',H'):(D\to C')\to \mathsf{cone}(D)$ is an equivalence,
+\item The map $\conemap(p,q,H):(D\to C)\to \cone(D)$ is an equivalence,
+\item The map $\conemap(p',q',H'):(D\to C')\to \cone(D)$ is an equivalence,
 \item The map $h\circ\blank : (D\to C')\to (D\to C)$ is an equivalence.
 \end{enumerate}
 Thus the 3-for-2 property for pullbacks follows from the fact that $h$ is an equivalence if and only if $h\circ\blank : (D\to C')\to (D\to C)$ is an equivalence for any type $D$, which was established in \cref{lem:postcomp_equiv}.
@@ -1058,7 +1058,7 @@ is contractible.
 \end{cor}
 
 \begin{proof}
-We have seen that the type of quadruples $(h,K,L,M)$ is equivalent to the fiber of $\mathsf{cone\usc{}map}(p,q,H)$ at $(p',q',H')$. By \cref{lem:pb_3for2} it follows that $h$ is an equivalence. Since $\isequiv(h)$ is a proposition (and hence contractible as soon as it is inhabited) it follows that the type of quadruples $(e,K,L,M)$ is contractible. 
+We have seen that the type of quadruples $(h,K,L,M)$ is equivalent to the fiber of $\conemap(p,q,H)$ at $(p',q',H')$. By \cref{lem:pb_3for2} it follows that $h$ is an equivalence. Since $\isequiv(h)$ is a proposition (and hence contractible as soon as it is inhabited) it follows that the type of quadruples $(e,K,L,M)$ is contractible. 
 \end{proof}
 
 \begin{defn}
@@ -1071,11 +1071,11 @@ A \arrow[r,swap,"f"] & X
 \end{equation*}
 with $H:f\circ p \htpy g \circ q$, we define the \define{gap map}\index{gap map|textbf}\index{pullback!gap map|textbf}
 \begin{equation*}
-\mathsf{gap}(p,q,H):C \to A\times_X B
+\gap(p,q,H):C \to A\times_X B
 \end{equation*}
-by $\lam{z}(p(z),q(z),H(z))$. Furthermore, we will write\index{is_pullback@{$\mathsf{is\usc{}pullback}$}|textbf}
+by $\lam{z}(p(z),q(z),H(z))$. Furthermore, we will write\index{is_pullback@{$\ispullback$}|textbf}
 \begin{equation*}
-\mathsf{is\usc{}pullback}(f,g,H)\defeq \isequiv(\mathsf{gap}(p,q,H)).
+\ispullback(f,g,H)\defeq \isequiv(\gap(p,q,H)).
 \end{equation*}
 \end{defn}
 
@@ -1092,7 +1092,7 @@ with $H:f\circ p \htpy g \circ q$. The following are equivalent:
 \item The square is a pullback square
 \item There is a term of type
 \begin{equation*}
-\mathsf{is\usc{}pullback}(p,q,H)\defeq \isequiv(\mathsf{gap}(p,q,H)).
+\ispullback(p,q,H)\defeq \isequiv(\gap(p,q,H)).
 \end{equation*}
 \end{enumerate}
 \end{thm}
@@ -1100,41 +1100,22 @@ with $H:f\circ p \htpy g \circ q$. The following are equivalent:
 \begin{proof}
 Note that there are homotopies
 \begin{align*}
-K & : \pi_1\circ \mathsf{gap}(p,q,H) \htpy p \\
-L & : \pi_2\circ \mathsf{gap}(p,q,H) \htpy q \\
-M & : \ct{(\pi_3\cdot \mathsf{gap}(p,q,H))}{(g\cdot L)} \htpy \ct{(f\cdot K)}{H}.
+K & : \pi_1\circ \gap(p,q,H) \htpy p \\
+L & : \pi_2\circ \gap(p,q,H) \htpy q \\
+M & : \ct{(\pi_3\cdot \gap(p,q,H))}{(g\cdot L)} \htpy \ct{(f\cdot K)}{H}.
 \end{align*}
 given by 
 \begin{align*}
 K & \defeq \lam{z}\refl{p(z)} \\
 L & \defeq \lam{z}\refl{q(z)} \\
-M & \defeq \lam{z}\ct{\mathsf{right\usc{}unit}(H(z))}{\mathsf{left\usc{}unit}(H(z))^{-1}}.
+M & \defeq \lam{z}\ct{\rightunit(H(z))}{\leftunit(H(z))^{-1}}.
 \end{align*}
 Therefore the claim follows by \cref{lem:pb_3for2}.
 \end{proof}
 
 \subsection{Fiberwise equivalences}
 
-\begin{lem}\label{lem:pb_subst}
-Let $f:A\to B$, and let $Q$ be a type family over $B$. Then the square
-\begin{equation*}
-\begin{tikzcd}[column sep=6em]
-\sm{x:A}Q(f(x)) \arrow[r,"{\lam{(x,q)}(f(x),q)}"] \arrow[d,swap,"\proj 1"] & \sm{y:B}Q(b) \arrow[d,"\proj 1"] \\
-A \arrow[r,swap,"f"] & B
-\end{tikzcd}
-\end{equation*}
-commutes by $H\defeq \lam{(x,q)}\refl{f(x)}$. This is a pullback square.\index{substitution!as pullback|textit}
-\end{lem}
-
-\begin{proof}
-By \cref{thm:is_pullback} it suffices to show that the gap map is an equivalence. The gap map is homotopic to the function
-\begin{equation*}
-\lam{(x,q)}(x,(f(x),q),\refl{f(x)}).
-\end{equation*}
-The inverse of this map is given by $\lam{(x,((y,q),p))}(x,\mathsf{tr}_Q(p^{-1},q))$, and it is straightforward to see that these maps are indeed mutual inverses.
-\end{proof}
-
-\begin{thm}\label{thm:pb_fibequiv}
+\begin{prp}\label{thm:pb_fibequiv}
 Let $f:A\to B$, and let $g:\prd{a:A}P(a)\to Q(f(a))$ be a fiberwise transformation\index{fiberwise transformation|textit}. The following are equivalent:
 \begin{enumerate}
 \item The commuting square
@@ -1147,16 +1128,17 @@ A \arrow[r,swap,"f"] & B
 is a pullback square.
 \item $g$ is a fiberwise equivalence.\index{fiberwise equivalence|textit}
 \end{enumerate}
-\end{thm}
+\end{prp}
 
 \begin{proof}
-The gap map is homotopic to the composite
+The gap map factors as follows
 \begin{equation*}
-\begin{tikzcd}[column sep=large]
-\sm{x:A}P(x) \arrow[r,"\total{g}"] & \sm{x:A}Q(f(x)) \arrow[r,"{\mathsf{gap}'}"] & A \times_B \Big(\sm{y:B}Q(y)\Big)
+\begin{tikzcd}[column sep=-2em]
+\sm{x:A}P(x) \arrow[dr,swap,"\total{g}"] \arrow[rr,"\gap"] & & A \times_B \Big(\sm{y:B}Q(y)\Big) \\
+\phantom{A \times_B \Big(\sm{y:B}Q(y)\Big)} & \sm{x:A}Q(f(x)) \arrow[ur,swap,"{\gap'\,\defeq\,\lam{(x,q)}(x,(f(x),q),\refl{f(x)})}"]
 \end{tikzcd}
 \end{equation*}
-where $\mathsf{gap}'$ is the gap map for the square in \cref{lem:pb_subst}. Since $\mathsf{gap}'$ is an equivalence, it follows by \cref{thm:fib_equiv} that the gap map is an equivalence if and only if $g$ is a fiberwise equivalence.
+Since $\gap'$ is an equivalence, it follows by \cref{thm:fib_equiv} that the gap map is an equivalence if and only if $g$ is a fiberwise equivalence.
 \end{proof}
 
 \begin{lem}
@@ -1173,7 +1155,7 @@ with $H:f\circ p\htpy g\circ q$, and consider the fiberwise transformation
 \end{equation*}
 given by $\lam{a}{(c,u)}(q(c),\ct{H(c)^{-1}}{\ap{f}{u}})$. Then there is an equivalence
 \begin{equation*}
-\eqv{\fib{\mathsf{gap}(p,q,H)}{(a,b,\alpha)}}{\fib{\fibf{(f,q,H)}(a)}{(b,\alpha^{-1})}}
+\eqv{\fib{\gap(p,q,H)}{(a,b,\alpha)}}{\fib{\fibf{(f,q,H)}(a)}{(b,\alpha^{-1})}}
 \end{equation*}
 \end{lem}
 
@@ -1242,7 +1224,7 @@ If the square is a pullback square, then by \cref{thm:pb_fibequiv} the fibers of
 If $p$ is an equivalence, then by \cref{thm:contr_equiv} both $\fib{p}{x}$ and $\fib{g}{f(x)}$ are contractible for any $x:X$. It follows by \cref{ex:contr_equiv} that the induced map $\fib{p}{x}\to\fib{g}{f(x)}$ is an equivalence. Thus we apply \cref{cor:pb_fibequiv} to conclude that the square is a pullback.
 \end{proof}
 
-\begin{thm}\label{thm:pb_fibequiv_complete}
+\begin{prp}\label{thm:pb_fibequiv_complete}
 Consider a diagram of the form
 \begin{equation*}
 \begin{tikzcd}
@@ -1261,7 +1243,7 @@ is a pullback square, is equivalent to the type of fiberwise equivalences
 \begin{equation*}
 \prd{x:X}\eqv{\fib{f}{x}}{\fib{g}{h(x)}}.
 \end{equation*}
-\end{thm}
+\end{prp}
 
 \begin{cor}\label{cor:pb_fibequiv_complete}
 Let $h:X\to Y$ be a map, and let $P$ and $Q$ be families over $X$ and $Y$, respectively.
@@ -1387,7 +1369,7 @@ of which the two front squares are pullback squares. Then the back left square i
 
 \subsection{Fibers of squares}
 
-\begin{thm}
+\begin{prp}
 Consider a commuting square
 \begin{equation*}
 \begin{tikzcd}
@@ -1404,13 +1386,13 @@ Then the commuting square
 \end{tikzcd}
 \end{equation*}
 is a pullback square. We call $\fib{h}{(x,b,p)}$ the \define{fiber} of the square.
-\end{thm}
+\end{prp}
 
 \section{The univalence axiom}
 
 The univalence axiom characterizes the identity type of the universe. Roughly speaking, it asserts that equivalent types are equal. It is considered to be an \emph{extensionality principle}\index{extensionality principle!types} for types. In the following theorem we introduce the univalence axiom and give two more equivalent ways of stating this.
 
-\begin{thm}\label{thm:univalence}
+\begin{prp}\label{thm:univalence}
 The following are equivalent:
 \begin{enumerate}
 \item The \define{univalence axiom}\index{univalence axiom|textbf}: for any $A:\UU$ the map\index{equiv_eq@{$\equiveq$}|textbf}
@@ -1435,7 +1417,7 @@ the map
 \end{equation*}
 given by $f\mapsto f(A,\idfunc[A])$ has a section.\qedhere
 \end{enumerate}
-\end{thm}
+\end{prp}
 
 It is a trivial observation, but nevertheless of fundamental importance, that by the univalence axiom the identity types of $\UU$ are equivalent to types in $\UU$, because it provides an equivalence $\eqv{(A=B)}{(\eqv{A}{B})}$, and the type $\eqv{A}{B}$ is in $\UU$ for any $A,B:\UU$. Since the identity types of $\UU$ are equivalent to types in $\UU$, we also say that the universe is \emph{locally small}.
 
@@ -1486,12 +1468,12 @@ For each function $f:A\to B$, the type $\esssmall(f)$ is a proposition, and for 
 This follows from the fact that propositions are closed under dependent products, established in \cref{thm:trunc_pi}.
 \end{proof}
 
-\begin{thm}\label{thm:fam_proj}
+\begin{prp}\label{thm:fam_proj}
 For any small type $A:\UU$ there is an equivalence
 \begin{equation*}
 \eqv{(A\to \UU)}{\Big(\sm{X:\UU} X\to A\Big)}.
 \end{equation*}
-\end{thm}
+\end{prp}
 
 \begin{proof}
 Note that we have the function
@@ -1558,7 +1540,7 @@ A \arrow[r,swap,"B"] & \UU
 \end{tikzcd}
 \end{equation*}
 is a pullback square. Therefore it follows that for any family $B:A\to\UU$ of small types, the projection map $\proj 1:\sm{x:A}B(x)\to A$ is an essentially small map.
-To see that the claim is a direct consequence of \cref{lem:pb_subst} we write the asserted square in its rudimentary form:
+To see that the claim is a direct consequence of \cref{thm:pb_fibequiv} we write the asserted square in its rudimentary form:
 \begin{equation*}
 %\begin{gathered}[b]
 \begin{tikzcd}[column sep=6em]
@@ -1645,7 +1627,7 @@ where the family $x\mapsto f(x)=g(x)$ is equipped with the base point $\ct{p}{q^
 
 \begin{defn}
 \begin{enumerate}
-\item For any pointed type $X$, we define the \define{pointed identity function} $\mathsf{id}^\ast_X\defeq (\idfunc[X],\refl{\ast})$. 
+\item For any pointed type $X$, we define the \define{pointed identity function} $\idp_X\defeq (\idfunc[X],\refl{\ast})$. 
 \item For any two pointed maps $f:X\to_\ast Y$ and $g:Y\to_\ast Z$, we define the \define{pointed composite}
 \begin{equation*}
 g\mathbin{\circ_\ast} f \defeq (g\circ f,\ct{\ap{g}{p_f}}{p_g}).
@@ -1664,10 +1646,10 @@ The loop space operation $\loopspacesym$ is \emph{functorial} in the sense that
 \begin{equation*}
 \loopspace{f}:\loopspace{X}\to_\ast \loopspace{Y},
 \end{equation*}
-defined by $\loopspace{f}(\omega)\defeq \ct{p_f}{\ap{f}{\omega}}{p_f^{-1}}$, which is base point preserving by $\mathsf{right\usc{}inv}(p_f)$. 
+defined by $\loopspace{f}(\omega)\defeq \ct{p_f}{\ap{f}{\omega}}{p_f^{-1}}$, which is base point preserving by $\rightinv(p_f)$. 
 \item For every pointed type $X$ there is a pointed homotopy
 \begin{equation*}
-\loopspace{\mathsf{id}_X^\ast}\htpy_\ast \mathsf{id}^\ast_{\loopspace{X}}.
+\loopspace{\idp_X}\htpy_\ast \idp_{\loopspace{X}}.
 \end{equation*}
 \item For any two pointed maps $f:X\to_\ast Y$ and $g:Y\to_\ast X$, there is a pointed homotopy witnessing that the triangle
 \begin{equation*}
@@ -1705,21 +1687,21 @@ A \define{fiber sequence} $F\hookrightarrow E \twoheadrightarrow B$ consists of:
 \begin{enumerate}
 \item Pointed types $F$, $E$, and $B$, with base points $x_0$, $y_0$, and $b_0$ respectively, 
 \item Base point preserving maps $i:F\to_\ast E$ and $p:E\to_\ast B$, with $\alpha:i(x_0)=y_0$ and $\beta:p(y_0)=b_0$,
-\item A pointed homotopy $H:\mathsf{const}_{b_0}\htpy_\ast p\circ_\ast i$ witnessing that the square
+\item A pointed homotopy $H:\const_{b_0}\htpy_\ast p\circ_\ast i$ witnessing that the square
 \begin{equation*}
 \begin{tikzcd}
 F \arrow[r,"i"] \arrow[d] & E \arrow[d,"p"] \\
-\unit \arrow[r,swap,"\mathsf{const}_{b_0}"] & B,
+\unit \arrow[r,swap,"\const_{b_0}"] & B,
 \end{tikzcd}
 \end{equation*}
 commutes and is a pullback square.
 \end{enumerate}
-We will write $\mathsf{Fib\usc{}Seq}$ for the type of all fiber sequences in $\UU$.
+We will write $\FibSeq$ for the type of all fiber sequences in $\UU$.
 \end{defn}
 
-\begin{thm}
+\begin{prp}
 The type of all fiber sequences is equivalent to the type
 \begin{equation*}
 \sm{(B,b):\UU_\ast}{P:B\to\UU}P(b).
 \end{equation*}
-\end{thm}
+\end{prp}

@@ -467,14 +467,14 @@ commutes.  But this is true by the universal property of $\modalunit$, since $\s
 Now suppose that $\modal$ is uniquely eliminating.
 To show that the modal units are connected, we want a term of type
 \begin{equation*}
-\prd{x:\modal X}\iscontr(\modal(\hfib{\modalunit}{x})).
+\prd{x:\modal X}\iscontr(\modal(\fib{\modalunit}{x})).
 \end{equation*}
 Using the dependent eliminators, it is easy to find a term
-$s:\prd{x:\modal X}\modal(\hfib{\modalunit}{x})$ with the property that
+$s:\prd{x:\modal X}\modal(\fib{\modalunit}{x})$ with the property that
 $s\circ\modalunit(x)=\modalunit(x,\refl{\modalunit(x)})$. Now we need to show
 that
 \begin{equation*}
-\prd{x:\modal X}{w:\modal(\hfib{\modalunit}{x})}w=s(x).
+\prd{x:\modal X}{w:\modal(\fib{\modalunit}{x})}w=s(x).
 \end{equation*}
 Since the type $w=s(x)$ is modal, this is equivalent to
 \begin{equation*}
@@ -506,8 +506,8 @@ such that $\proj1\circ f=p$ is equivalent to the type $\prd{z:\modal(\sm{x:X}P(x
 Using the assumption that $\modalunit$ is connected, we calculate
 \begin{align*}
 \prd{z:\modal(\sm{x:X}P(x))}P(p(z))
-& \eqvsym \prd{z:\modal(\sm{x:X}P(x))} \modal(\hfib{\modalunit}{z})\to P(p(z)) \\
-& \eqvsym \prd{z:\modal(\sm{x:X}P(x))} \hfib{\modalunit}{z}\to P(p(z)) \\
+& \eqvsym \prd{z:\modal(\sm{x:X}P(x))} \modal(\fib{\modalunit}{z})\to P(p(z)) \\
+& \eqvsym \prd{z:\modal(\sm{x:X}P(x))} \fib{\modalunit}{z}\to P(p(z)) \\
 & \eqvsym \prd{\pairr{x,y}:\sm{x:X}P(x)} P(x)
 \end{align*}
 We have the second projection $\proj 2$ of the latter type. We obtain a term
@@ -534,15 +534,15 @@ Hence $\sm{x:X}P(x)$ is modal.
 \begin{proof}
   For any $z:C$ we have
   \begin{align*}
-    \modal(\hfib{g\circ f}{z})
+    \modal(\fib{g\circ f}{z})
     & \eqvsym
-      \modal(\sm{p:\hfib{g}{z}}\hfib{f}{\proj1(p)}) \\
+      \modal(\sm{p:\fib{g}{z}}\fib{f}{\proj1(p)}) \\
     & \eqvsym
-      \modal(\sm{p:\hfib{g}{z}}\modal(\hfib{f}{\proj1(p)})) \\
+      \modal(\sm{p:\fib{g}{z}}\modal(\fib{f}{\proj1(p)})) \\
     & \eqvsym
-      \modal(\sm{p:\hfib{g}{z}}\unit) \\
+      \modal(\sm{p:\fib{g}{z}}\unit) \\
     & \eqvsym
-      \modal\hfib{g}{z}.
+      \modal\fib{g}{z}.
   \end{align*}
   using the fact that $f$ is $\modal$-connected.
   Thus, one is contractible if and only if the other is.
@@ -560,7 +560,7 @@ Define $\mathcal{L}$ to be the class of $\modal$-connected
 maps and $\mathcal{R}$ to be the the class of modal maps.
 We first show that both $\mathcal{L}$ and $\mathcal{R}$ are closed under
 composition. Recall that for $f:X\to Y$ and $g:Y\to Z$, one has
-$\hfib{g\circ f}{z}=\sm{p:\hfib{g}{z}}\hfib{f}{\proj1(p)}$.
+$\fib{g\circ f}{z}=\sm{p:\fib{g}{z}}\fib{f}{\proj1(p)}$.
 Thus, by $\Sigma$-closedness, if $f$ and $g$ are both in $\mathcal{R}$ then so is $g\circ f$, so $\cR$ is closed under composition; while \cref{thm:rsu-compose-cancel} implies that $\cL$ is closed under composition.
 And since the fibers of an identity map are contractible, and contractible types are both modal and $\modal$-connected, both $\mathcal{L}$ and $\mathcal{R}$ contain all identities.
 
@@ -575,7 +575,7 @@ And since the fibers of an identity map are contractible, and contractible types
 To obtain a factorization system,
 it remains to show that the type of
 $(\mathcal{L},\mathcal{R})$-factorizations of any function $f$ is contractible.
-Since $\pairr{X,f}=\pairr{\sm{y:Y}\hfib{f}{y},\proj1}$, it is sufficient to
+Since $\pairr{X,f}=\pairr{\sm{y:Y}\fib{f}{y},\proj1}$, it is sufficient to
 show that $\fact_{\mathcal{L},\mathcal{R}}(\proj1)$ is contractible for any
 $\proj1:\sm{y:Y}P(y)\to Y$. But $\proj1$ factors as
 \begin{equation*}
@@ -587,17 +587,17 @@ where $p_\mathcal{L}\defeq\total{\modalunit[P(\blank)]}$ and $p_\mathcal{R}\defe
 The fibers of $p_\mathcal{R}$ are $\modal(P(\blank))$, so it follows
 immediately that $p_\mathcal{R}$ is in $\mathcal{R}$.
 Moreover, since
-$\eqv{\hfib{\total{\modalunit}}{\pairr{y,u}}}{\hfib{\modalunit[P(y)]}{u}}$ and each $\modalunit$ is $\modal$-connected, it follows that $p_\mathcal{L}$ is in
+$\eqv{\fib{\total{\modalunit}}{\pairr{y,u}}}{\fib{\modalunit[P(y)]}{u}}$ and each $\modalunit$ is $\modal$-connected, it follows that $p_\mathcal{L}$ is in
 $\mathcal{L}$.
 
 Now consider any other factorization $(g,h,H)$ of $\proj1$ into
 an $\cL$-map $g:(\sm{y:Y}P(y))\to I$ followed by an $\cR$-map $h:I\to Y$. Since
-$I=\sm{y:Y}\hfib{h}{y}$, we have a commuting square
+$I=\sm{y:Y}\fib{h}{y}$, we have a commuting square
 \begin{equation*}
 \begin{tikzcd}
 \sm{y:Y}P(y) \arrow[r,"g"] \arrow[d,swap,"{\total{\gamma}}"]
   & I \arrow[d,"h"] \\
-\sm{y:Y}\hfib{h}{y} \arrow[ur,equals] \arrow[r,swap,"\proj1"] & Y
+\sm{y:Y}\fib{h}{y} \arrow[ur,equals] \arrow[r,swap,"\proj1"] & Y
 \end{tikzcd}
 \end{equation*}
 in which $\gamma(y,u)\defeq \pairr{g(y,u),H(y,u)}$.
@@ -606,15 +606,15 @@ Thus suffices to show that there is a commuting triangle
 \begin{equation*}
 \begin{tikzcd}[column sep=0]
 & P(y) \arrow[dl,swap,"\modalunit"] \arrow[dr,"{\gamma_y}"] \\
-\modal(P(y)) \arrow[rr,equals] & & \hfib{h}{y}
+\modal(P(y)) \arrow[rr,equals] & & \fib{h}{y}
 \end{tikzcd}
 \end{equation*}
 We will do this using \cref{lem:reflective_uniqueness}, by showing that $\gamma_y$ has the same universal property as $\modalunit[P(y)]$.
 This follows from the following calculation:
 \begin{align*}
-(\hfib{h}{y}\to Z) & \eqvsym ((\sm{w:\hfib{h}{y}}\modal(\hfib{g}{\proj1(w)}))\to Z) \\
-& \eqvsym ((\sm{w:\hfib{h}{y}}\hfib{g}{\proj1(w)})\to Z) \\
-& \eqvsym (\hfib{h\circ g}{y}\to Z) \\
+(\fib{h}{y}\to Z) & \eqvsym ((\sm{w:\fib{h}{y}}\modal(\fib{g}{\proj1(w)}))\to Z) \\
+& \eqvsym ((\sm{w:\fib{h}{y}}\fib{g}{\proj1(w)})\to Z) \\
+& \eqvsym (\fib{h\circ g}{y}\to Z) \\
 & \eqvsym (P(y)\to Z).
 \end{align*}
 which we can verify is given by precomposition with $\gamma_y$.
@@ -627,7 +627,7 @@ B' \arrow[r,swap,"g"] & B
 \end{tikzcd}
 \end{equation*}
 in which $l$ is in $\mathcal{L}$. By the pasting lemma for pullbacks, it
-follows that $\hfib{k}{b}=\hfib{l}{g(b)}$ for each $b:B'$. Thus, it follows that
+follows that $\fib{k}{b}=\fib{l}{g(b)}$ for each $b:B'$. Thus, it follows that
 $k$ is in $\mathcal{L}$.
 \end{proof}
 
@@ -647,8 +647,8 @@ $\modal f : \eqv{\modal{A}}{\modal{B}}$.
 \end{lem}
 \begin{proof}
   To define an inverse $g:\modal B \to \modal A$, by the universal property of $\modal B$, it suffices to define a map $B\to \modal A$.
-  But given $b:B$, we have a map $\proj1 : \hfib{f}{b} \to A$, hence $\modal\proj1 : \modal \hfib{f}{b} \to \modal A$.
-  And $\modal \hfib{f}{b}$ is contractible since $f$ is $\modal$-connected, so it has a point $c_b$, and we define $g(\modalunit[B](b)) = \modal \proj1(c_b)$.
+  But given $b:B$, we have a map $\proj1 : \fib{f}{b} \to A$, hence $\modal\proj1 : \modal \fib{f}{b} \to \modal A$.
+  And $\modal \fib{f}{b}$ is contractible since $f$ is $\modal$-connected, so it has a point $c_b$, and we define $g(\modalunit[B](b)) = \modal \proj1(c_b)$.
 
   Now by the universal property of $\modal A$ and $\modal B$, it suffices to show that the composites $g\circ \modal f \circ \modalunit[A]$ and $\modal f\circ g \circ \modalunit[B]$ are equal to $\modalunit[A]$ and $\modalunit[B]$ respectively.
   In the first case, for $a:A$ we have
@@ -656,17 +656,17 @@ $\modal f : \eqv{\modal{A}}{\modal{B}}$.
     g(\modal f(\modalunit[A](a)))
     &= g(\modalunit[B](f(a)))\\
     &= \modal \proj1(c_{f(a)})\\
-    &= \modal \proj1(\modalunit[\hfib f b](a,\refl{f(a)}))\\
+    &= \modal \proj1(\modalunit[\fib f b](a,\refl{f(a)}))\\
     &= \modalunit[A](\proj1(a,\refl{f(a)}))\\
     &= \modalunit[A](a).
   \end{align*}
-  using in the third line the fact that $\modal(\hfib f b)$ is contractible.
+  using in the third line the fact that $\modal(\fib f b)$ is contractible.
   And in the second case, for $b:B$ we have
   \begin{align*}
     \modal f(g(\modalunit[B](b)))
     &= \modal f(\modal \proj1(c_b))\\
     &= \modal(f\circ \proj1)(c_b)\\
-    &= \modal(\lam{u:\hfib f b} b)(c_b)\\
+    &= \modal(\lam{u:\fib f b} b)(c_b)\\
     &= \modal(\lam{u:\unit} b)(\modalunit[\unit](\ttt))\\
     &= \modalunit[B](b).\qedhere
   \end{align*}
@@ -694,20 +694,20 @@ For a fixed $f$ and $n\ge -2$, the following are equivalent.
 \begin{proof}
 First suppose $f$ is $\modal$-connected and let $P:B\to\modaltype$. Then:
 \begin{align*}
-  \prd{b:B} P(b) & \eqvsym \prd{b:B} \Parens{\modal{\hfib{f}b} \to P(b)}
-  \tag{since $\modal{\hfib{f}b}$ is contractible}\\
-  & \eqvsym \prd{b:B} \Parens{\hfib{f}b\to P(b)}
+  \prd{b:B} P(b) & \eqvsym \prd{b:B} \Parens{\modal{\fib{f}b} \to P(b)}
+  \tag{since $\modal{\fib{f}b}$ is contractible}\\
+  & \eqvsym \prd{b:B} \Parens{\fib{f}b\to P(b)}
   \tag{since $P(b)$ is modal}\\
   & \eqvsym \prd{b:B}{a:A}{p:f(a)= b} P(b)\\
   & \eqvsym \prd{a:A} P(f(a)).
 \end{align*}
 Thus,~\ref{item:conntest1}$\Rightarrow$\ref{item:conntest2}, and clearly~\ref{item:conntest2}$\Rightarrow$\ref{item:conntest3}.
 To show~\ref{item:conntest3}$\Rightarrow$\ref{item:conntest1}, let
-$P(b)\defeq \modal{\hfib{f}b}$.
-Then~\ref{item:conntest3} yields a map $c:\prd{b:B} \modal{\hfib{f}b}$ with
-$c(f(a))=\modalunit{\pairr{a,\refl{f(a)}}}$. To show that each $\modal{\hfib{f}b}$ is contractible, we will show that $c(b)=w$ for any $b:B$ and $w:\modal{\hfib{f}b}$.
-In other words, we must show that the identity function $\modal{\hfib{f}b} \to \modal{\hfib{f}b}$ is equal to the constant function at $c(b)$.
-By the universal property of $\modal{\hfib{f}b}$, it suffices to show that they become equal when precomposed with $\modalunit[\hfib{f}b]$, i.e.\ we may assume that $w = \modalunit\pairr{a,p}$ for some $a:A$ and $p:f(a)=b$.
+$P(b)\defeq \modal{\fib{f}b}$.
+Then~\ref{item:conntest3} yields a map $c:\prd{b:B} \modal{\fib{f}b}$ with
+$c(f(a))=\modalunit{\pairr{a,\refl{f(a)}}}$. To show that each $\modal{\fib{f}b}$ is contractible, we will show that $c(b)=w$ for any $b:B$ and $w:\modal{\fib{f}b}$.
+In other words, we must show that the identity function $\modal{\fib{f}b} \to \modal{\fib{f}b}$ is equal to the constant function at $c(b)$.
+By the universal property of $\modal{\fib{f}b}$, it suffices to show that they become equal when precomposed with $\modalunit[\fib{f}b]$, i.e.\ we may assume that $w = \modalunit\pairr{a,p}$ for some $a:A$ and $p:f(a)=b$.
 But now path induction on $p$ reduces our goal to the given $c(f(a))=\modalunit{\pairr{a,\refl{f(a)}}}$.
 \end{proof}
 
@@ -749,17 +749,17 @@ Conversely, if $\varphi$ and each $g_a$ are $\modal$-connected, and moreover $Q$
 For any $b:B$ and $v:Q(b)$ we have
 {\allowdisplaybreaks
 \begin{align*}
-\modal{\hfib{\varphi}{\pairr{b,v}}} & \eqvsym \modal{\sm{a:A}{u:P(a)}{p:f(a)= b} \trans{p}{g_a(u)}= v}\\
-& \eqvsym \modal{\sm{w:\hfib{f}b}{u:P(\proj1(w))} g_{\proj 1 w}(u)= \trans{\opp{\proj2(w)}}{v}}\\
-& \eqvsym \modal{\sm{w:\hfib{f}b} \hfib{g(\proj1 w)}{\trans{\opp{\proj 2(w)}}{v}}}\\
-& \eqvsym \modal{\sm{w:\hfib{f}b} \modal{\hfib{g(\proj1 w)}{\trans{\opp{\proj 2(w)}}{v}}}}\\
-& \eqvsym \modal{\hfib{f}b}
+\modal{\fib{\varphi}{\pairr{b,v}}} & \eqvsym \modal{\sm{a:A}{u:P(a)}{p:f(a)= b} \trans{p}{g_a(u)}= v}\\
+& \eqvsym \modal{\sm{w:\fib{f}b}{u:P(\proj1(w))} g_{\proj 1 w}(u)= \trans{\opp{\proj2(w)}}{v}}\\
+& \eqvsym \modal{\sm{w:\fib{f}b} \fib{g(\proj1 w)}{\trans{\opp{\proj 2(w)}}{v}}}\\
+& \eqvsym \modal{\sm{w:\fib{f}b} \modal{\fib{g(\proj1 w)}{\trans{\opp{\proj 2(w)}}{v}}}}\\
+& \eqvsym \modal{\fib{f}b}
 \end{align*}}%
 where the transportations along $f(p)$ and $f(p)^{-1}$ are with respect to $Q$, and we use \cref{lem:sum_idempotent} on the penultimate line.
-Therefore, if either of $\modal{\hfib{\varphi}{\pairr{b,v}}}$ or $\modal{\hfib{f}b}$ is contractible, so is the other.
+Therefore, if either of $\modal{\fib{\varphi}{\pairr{b,v}}}$ or $\modal{\fib{f}b}$ is contractible, so is the other.
 
-In particular, if $f$ is $\modal$-connected, then $\modal{\hfib{f}b}$ is contractible for all $b:B$, and hence so is $\modal{\hfib{\varphi}{\pairr{b,v}}}$ for all $(b,v):\sm{b:B} Q(b)$.
-On the other hand, if $\varphi$ is $\modal$-connected, then $\modal{\hfib{\varphi}{\pairr{b,v}}}$ is contractible for all $(b,v)$, hence so is $\modal{\hfib{f}b}$ for any $b:B$ such that there exists some $v:Q(b)$.
+In particular, if $f$ is $\modal$-connected, then $\modal{\fib{f}b}$ is contractible for all $b:B$, and hence so is $\modal{\fib{\varphi}{\pairr{b,v}}}$ for all $(b,v):\sm{b:B} Q(b)$.
+On the other hand, if $\varphi$ is $\modal$-connected, then $\modal{\fib{\varphi}{\pairr{b,v}}}$ is contractible for all $(b,v)$, hence so is $\modal{\fib{f}b}$ for any $b:B$ such that there exists some $v:Q(b)$.
 Finally, since contractibility is a mere proposition, it suffices to merely have such a $v$.
 \end{proof}
 
@@ -769,9 +769,9 @@ Then $\total f: \sm{a:A}P(a) \to \sm{a:A} Q(a)$ is $\modal$-connected if and onl
 \end{lem}
 \begin{proof}
 We have
-$\hfib{\total f}{\pairr{x,v}}\eqvsym\hfib{f(x)}v$
-for each $x:A$ and $v:Q(x)$. Hence $\modal{\hfib{\total f}{\pairr{x,v}}}$ is contractible if and only if
-$\modal{\hfib{f(x)}v}$ is contractible.
+$\fib{\total f}{\pairr{x,v}}\eqvsym\fib{f(x)}v$
+for each $x:A$ and $v:Q(x)$. Hence $\modal{\fib{\total f}{\pairr{x,v}}}$ is contractible if and only if
+$\modal{\fib{f(x)}v}$ is contractible.
 \end{proof}
 
 Of course, the ``if'' direction of \cref{prop:nconn_fiber_to_total} is a special case of \cref{lem:nconnected_postcomp_variation}.
@@ -788,9 +788,9 @@ $\proj1:(\UU_P)_\bullet\to\UU_P$ classifies the maps whose fibers satisfy $P$.
 \end{thm}
 
 \begin{proof}
-Let $f:Y\to X$ be any map into $X$. Then $\hfibfunc{f}:X\to\UU$ factors through
+Let $f:Y\to X$ be any map into $X$. Then $\fibf{f}:X\to\UU$ factors through
 $\UU_P$ if and only if all the fibers of $f$ satisfy $P$. Let us write
-$P(f)$ for $\prd{x:X}P(\hfib{f}{x})$. Then we see that the equivalence
+$P(f)$ for $\prd{x:X}P(\fib{f}{x})$. Then we see that the equivalence
 $\chi$ of Theorem 4.8.3 of \cite{TheBook} restricts to an
 equivalence
 \begin{equation*}
@@ -799,8 +799,8 @@ equivalence
 Now observe that the outer square and the square on the right in the diagram
 \begin{equation*}
 \begin{tikzcd}[column sep=6em]
-Y \arrow[d,swap,"f"] \arrow[rr,"{\lam{y}\pairr{\hfib{f}{f(y)},\blank,\pairr{y,\refl{f(y)}}}}"] & & \pointed{(\UU_P)} \arrow[r] \arrow[d] & \pointed{\UU} \arrow[d] \\
-X \arrow[rr,swap,"{\hfibfunc{f}}"] & & \UU_P \arrow[r] & \UU
+Y \arrow[d,swap,"f"] \arrow[rr,"{\lam{y}\pairr{\fib{f}{f(y)},\blank,\pairr{y,\refl{f(y)}}}}"] & & \pointed{(\UU_P)} \arrow[r] \arrow[d] & \pointed{\UU} \arrow[d] \\
+X \arrow[rr,swap,"{\fibf{f}}"] & & \UU_P \arrow[r] & \UU
 \end{tikzcd}
 \end{equation*}
 are pullback squares. Hence the square on the left is a pullback square.
@@ -1062,7 +1062,7 @@ for which $\idfunc:\im_{\mathcal{L},\mathcal{R}}(k)\to \im_{\mathcal{L},\mathcal
 Given $l,r,f,g$ and a homotopy $S : r \circ f = g  \circ l$, consider as $b:B$ varies all the diagrams of the form
 \begin{equation*}
 \begin{tikzcd}
-\hfib{l}{b} \arrow[r,"i_b"] \arrow[d,"!"'] & A \arrow[d,swap,"l"] \arrow[r,"f"] \ar[dr,phantom,"S"] & X \arrow[d,"r"] \\
+\fib{l}{b} \arrow[r,"i_b"] \arrow[d,"!"'] & A \arrow[d,swap,"l"] \arrow[r,"f"] \ar[dr,phantom,"S"] & X \arrow[d,"r"] \\
 \unit \arrow[r,swap,"b"] & B \arrow[r,swap,"g"] & Y
 \end{tikzcd}
 \end{equation*}
@@ -1095,9 +1095,9 @@ On the other hand, note that
   &\eqvsym
   \prd{a:A}{b:B}{l(a)=b} r(f(a)) = g(l(a))\\
   &\eqvsym
-  \prd{b:B}{u:\hfib l b} r(f(i_b(a))) = g(l(i_b(a)))\\
+  \prd{b:B}{u:\fib l b} r(f(i_b(a))) = g(l(i_b(a)))\\
   &\eqvsym
-  \prd{b:B}{u:\hfib l b} r(f(i_b(a))) = g(b)\\
+  \prd{b:B}{u:\fib l b} r(f(i_b(a))) = g(b)\\
   &\eqvsym
   \prd{b:B} (r \circ (f \circ i_b) = (g\circ b) \circ \mathord !)
 \end{align*}
@@ -1134,10 +1134,10 @@ which is what we computed as the domain of~\eqref{eq:fill-total} above.
 \begin{cor}
 In any orthogonal factorization system
 $(\mathcal{L},\mathcal{R})$, if
-$l:A\to B$ is a map such that $\hfib{l}{b} \to \unit$ is in $\cL$ for each $b:B$, then also $l$ itself is in $\cL$.
+$l:A\to B$ is a map such that $\fib{l}{b} \to \unit$ is in $\cL$ for each $b:B$, then also $l$ itself is in $\cL$.
 \end{cor}
 \begin{proof}
-  By \cref{lem:ofs_lifting}, $l$ is in $\cL$ iff $\fillers S$ is contractible for each $r\in\cR$ and $S$ as in \cref{lem:fill_compute}, while similarly $\hfib{l}{b} \to \unit$ is in $\cL$ iff $\fillers {S_b}$ is contractible.
+  By \cref{lem:ofs_lifting}, $l$ is in $\cL$ iff $\fillers S$ is contractible for each $r\in\cR$ and $S$ as in \cref{lem:fill_compute}, while similarly $\fib{l}{b} \to \unit$ is in $\cL$ iff $\fillers {S_b}$ is contractible.
   But the product of contractible types is contractible.
 \end{proof}
 
@@ -1147,7 +1147,7 @@ $l:A\to B$ is a map such that $\hfib{l}{b} \to \unit$ is in $\cL$ for each $b:B$
 \end{cor}
 \begin{proof}
   By \cref{lem:fill_compute}, for any $l\in\cL$ and commutative square $S$ from $l$ to $r$, we have $\fillers{S} \eqvsym \prd{b:B}\fillers{S_b}$.
-  Since $(\cL,\cR)$ is stable, each map $\mathord{!}_b:\hfib{l}{b}\to \unit$ is also in $\cL$, so that $\mathord{!}_b\perp r$ by assumption.
+  Since $(\cL,\cR)$ is stable, each map $\mathord{!}_b:\fib{l}{b}\to \unit$ is also in $\cL$, so that $\mathord{!}_b\perp r$ by assumption.
   Thus $\fillers{S_b}$ is contractible for all $b$, hence so is $\fillers{S}$.
 
   For the second statement, the type $f:A\to X$ is equivalent to the type of commutative squares
@@ -1162,7 +1162,7 @@ $l:A\to B$ is a map such that $\hfib{l}{b} \to \unit$ is in $\cL$ for each $b:B$
 
 \begin{lem}\label{lem:sofs_rfib}
 Let $(\mathcal{L},\mathcal{R})$ be a stable orthogonal factorization system.
-Then a map $r:X\to Y$ is in $\mathcal{R}$ if and only if $\hfib{r}{y}$
+Then a map $r:X\to Y$ is in $\mathcal{R}$ if and only if $\fib{r}{y}$
 is $(\mathcal{L},\mathcal{R})$-modal for each $y:Y$.
 \end{lem}
 
@@ -1186,22 +1186,22 @@ By \autoref{lem:fill_compute}, the type of diagonal fillers of the above diagram
 is equivalent to the dependent product of the types of fillers of
 \begin{equation*}
 \begin{tikzcd}
-\hfib{l}{b} \arrow[d] \arrow[r,"f\circ i_b"] & X \arrow[d,"r"] \\
+\fib{l}{b} \arrow[d] \arrow[r,"f\circ i_b"] & X \arrow[d,"r"] \\
 \unit \arrow[r,swap,"g(b)"] & Y
 \end{tikzcd}
 \end{equation*}
 indexed by $b:B$. Thus, it suffices that the type of diagonal fillers for this
 square is contractible for each $b:B$. Since any filler factors uniquely through
-the pullback $\unit\times_Y X$, which is $\hfib{r}{g(b)}$, the type of diagonal
+the pullback $\unit\times_Y X$, which is $\fib{r}{g(b)}$, the type of diagonal
 fillers of the above square is equivalent to the type of diagonal fillers of the
 square
 \begin{equation*}
 \begin{tikzcd}
-\hfib{l}{b} \arrow[d] \arrow[r,densely dotted] & \hfib{r}{g(b)} \arrow[d] \\
+\fib{l}{b} \arrow[d] \arrow[r,densely dotted] & \fib{r}{g(b)} \arrow[d] \\
 \unit \arrow[r,equals] & \unit
 \end{tikzcd}
 \end{equation*}
-where the dotted map, is the uniqe map into the pullback $\hfib{r}{g(b)}$. In
+where the dotted map, is the uniqe map into the pullback $\fib{r}{g(b)}$. In
 this square, the left map is in $\mathcal{L}$ because $\mathcal{L}$ is assumed
 to be stable under pullbacks, and the right map is in $\mathcal{R}$ by assumption,
 so the type of diagonal fillers is contractible.
@@ -1289,9 +1289,9 @@ We can construct them by nullifying any family of propositions (\autoref{thm:pro
   \item Any map between $\modal$-connected types is $\modal$-connected.\label{item:mu1a}
   \item Any $\modal$-modal function between $\modal$-connected types is an equivalence.\label{item:mu1b}
   \item If $f:A\to B$ and $\total g:(\sm{x:A} P(x)) \to (\sm{y:B} Q(y))$ are $\modal$-connected, then so is $g_a:P(a)\to Q(fa)$ for each $a:A$.\label{item:mu3b}
-  \item If $S:k\circ g = f\circ h$ is a commutative square in which $f$ and $g$ are $\modal$-connected, then for any $a$ the induced map $\hfib{h}{a} \to \hfib{k}{fa}$ is $\modal$-connected.\label{item:mu3c}
+  \item If $S:k\circ g = f\circ h$ is a commutative square in which $f$ and $g$ are $\modal$-connected, then for any $a$ the induced map $\fib{h}{a} \to \fib{k}{fa}$ is $\modal$-connected.\label{item:mu3c}
   \item If $S:k\circ g = f\circ h$ is a commutative square in which $f$ and $g$ are $\modal$-connected and $h$ and $k$ are $\modal$-modal, then the square is a pullback.\label{item:mu3d}
-  \item For any $f:A\to B$ and $b:B$, the evident map $\hfib{f}{b} \to \hfib{\modal f}{\modalunit b}$ is $\modal$-connected.\label{item:mu3a}
+  \item For any $f:A\to B$ and $b:B$, the evident map $\fib{f}{b} \to \fib{\modal f}{\modalunit b}$ is $\modal$-connected.\label{item:mu3a}
   \item For any $A$ and $x,y:A$, the induced map $\modal(x=y) \to (\modalunit[A](x) = \modalunit[A](y))$ is an equivalence.\label{item:mu6}
   \item The functor $\modal$ preserves pullbacks.\label{item:mu3}
   \item $\modal$-connected maps satisfy the 2-out-of-3 property.\label{item:mu4}
@@ -1303,22 +1303,22 @@ We can construct them by nullifying any family of propositions (\autoref{thm:pro
 
 \begin{proof}
   The equivalence~\ref{item:mu1}$\Leftrightarrow$\ref{item:mu1a} is easy, using the definition of $\modal$-connected maps and the fact that any function is equivalent to a fibration.
-  And~\ref{item:mu0}$\Rightarrow$\ref{item:mu1a} since $\hfib f b \jdeq \sm{a:A} (f(a)=b)$ and $\modal$-connected types are closed under $\Sigma$ (since $\modal$-connected maps are closed under composition, being the left class of a factorization system).
+  And~\ref{item:mu0}$\Rightarrow$\ref{item:mu1a} since $\fib f b \jdeq \sm{a:A} (f(a)=b)$ and $\modal$-connected types are closed under $\Sigma$ (since $\modal$-connected maps are closed under composition, being the left class of a factorization system).
 
   Condition~\ref{item:mu1b} is a special case of~\ref{item:mu1a}, since a function that is both modal and connected is an equivalence.
   But assuming~\ref{item:mu1b}, if $f:A\to B$ is any function between $\modal$-connected types, then in its $(\cL,\cR)$-factorization $A\xrightarrow{e} I\xrightarrow{m} B$ the type $I$ is also connected by right cancellation.
   Thus~\ref{item:mu1b} implies that $m$ is an equivalence; thus $f$, like $e$, is $\modal$-connected, giving~\ref{item:mu1a}.
 
-  Assuming~\ref{item:mu1a}, the $3\times 3$ lemma allows us to identify the fiber of $g_a$ over $q:Q(fa)$ with a fiber of the induced map $\hfib{\total{g}}{(a,q)} \to \hfib{f}{fa}$:
+  Assuming~\ref{item:mu1a}, the $3\times 3$ lemma allows us to identify the fiber of $g_a$ over $q:Q(fa)$ with a fiber of the induced map $\fib{\total{g}}{(a,q)} \to \fib{f}{fa}$:
   \begin{equation}
   \begin{tikzcd}[column sep=large]
   \bullet \arrow[r] \arrow[d] 
     & P(a) \arrow[r] \arrow[d] 
     & Q(f(a)) \arrow[d] \\
-  \hfib{\total{g}}{(a,q)} \arrow[r] \arrow[d] 
+  \fib{\total{g}}{(a,q)} \arrow[r] \arrow[d] 
     & \sm{x:A}P(x) \arrow[r,"{\total{g}}"] \arrow[d,swap,"{\proj1}"] 
     & \sm{y:B}Q(y) \arrow[d,"{\proj1}"] \\
-  \hfib{f}{f(a)} \arrow[r] 
+  \fib{f}{f(a)} \arrow[r] 
     & A \arrow[r,swap,"f"] 
     & B
   \end{tikzcd}%
@@ -1326,7 +1326,7 @@ We can construct them by nullifying any family of propositions (\autoref{thm:pro
   Since $f$ and $\total g$ are $\modal$-connected by assumption, their fibers are $\modal$-connected, and hence by~\ref{item:mu1a} so is this fiber; thus~\ref{item:mu3b} holds.
 
   Now assuming~\ref{item:mu3b}, we can deduce~\ref{item:mu3c} by replacing the maps $h$ and $k$ by equivalent dependent projections.
-  If in addition $h$ and $k$ are $\modal$-modal, then $\hfib{h}{a} \to \hfib{k}{fa}$ is a function between $\modal$-modal types, hence itself $\modal$-modal as well as $\modal$-connected and thus an equivalence; thus~\ref{item:mu3c}$\Rightarrow$\ref{item:mu3d}.
+  If in addition $h$ and $k$ are $\modal$-modal, then $\fib{h}{a} \to \fib{k}{fa}$ is a function between $\modal$-modal types, hence itself $\modal$-modal as well as $\modal$-connected and thus an equivalence; thus~\ref{item:mu3c}$\Rightarrow$\ref{item:mu3d}.
   On the other hand, the special case of~\ref{item:mu3d} in which $f$ and $g$ have codomain $\unit$ reduces to~\ref{item:mu1b}.
 
   Applying~\ref{item:mu3c} instead to the commutative square
@@ -1342,12 +1342,12 @@ We can construct them by nullifying any family of propositions (\autoref{thm:pro
   % \begin{equation}
   % \vcenter{\xymatrix{
   %     \bullet\ar[r]\ar[d] &
-  %     \hfib{f}{b}\ar[r]\ar[d] &
-  %     \hfib{\modal f}{\modalunit b}\ar[d]\\
-  %     \hfib{\modalunit[A]}{u}\ar[r]\ar[d] &
+  %     \fib{f}{b}\ar[r]\ar[d] &
+  %     \fib{\modal f}{\modalunit b}\ar[d]\\
+  %     \fib{\modalunit[A]}{u}\ar[r]\ar[d] &
   %     A\ar[r]^{\modalunit[A]}\ar[d]_f &
   %     \modal A\ar[d]^{\modal f}\\
-  %     \hfib{\modalunit[B]}{(\modal f)(u)}\ar[r] &
+  %     \fib{\modalunit[B]}{(\modal f)(u)}\ar[r] &
   %     B\ar[r]_{\modalunit[B]} &
   %     \modal B
   %     }}
@@ -1362,7 +1362,7 @@ We can construct them by nullifying any family of propositions (\autoref{thm:pro
     \sm{a:A}{b:B} (fa=gb) \longrightarrow \sm{x:\modal A}{y:\modal B} ((\modal f)(x) = (\modal g)(y))\label{eq:pbpres}
   \end{equation}
   is equivalent to the map on total spaces induced by $\modalunit[A]:A\to\modal A$ and the fiberwise transformation
-  \[ h : \prd{a:A} \left(\hfib{g}{fa} \to \hfib{\modal g}{(\modal f)(\modalunit a)}\right). \]
+  \[ h : \prd{a:A} \left(\fib{g}{fa} \to \fib{\modal g}{(\modal f)(\modalunit a)}\right). \]
   But since $(\modal f)(\modalunit a) = \modalunit(fa)$, by~\ref{item:mu3a} each $h_a$ is $\modal$-connected.
   Since $\modalunit[A]$ is also $\modal$-connected, by \cref{lem:nconnected_postcomp_variation} so is~\eqref{eq:pbpres}.
   Hence the induced map
@@ -1381,7 +1381,7 @@ We can construct them by nullifying any family of propositions (\autoref{thm:pro
   yielding~\ref{item:mu6}.
 
   For~\ref{item:mu4}, two-thirds of the 2-out-of-3 property holds for any modality, so it remains to show that for $f:A\to B$ and $g:B\to C$, if $g\circ f$ and $g$ are $\modal$-connected, so is $f$.
-  However, the unstable octahedral axiom~(\cite[ex4.4]{TheBook}) implies that for any $b:B$, the fiber $\hfib f b$ is equivalent to the fiber of the induced map $\hfib{g\circ f}{gb} \to \hfib{g}{gb}$.
+  However, the unstable octahedral axiom~(\cite[ex4.4]{TheBook}) implies that for any $b:B$, the fiber $\fib f b$ is equivalent to the fiber of the induced map $\fib{g\circ f}{gb} \to \fib{g}{gb}$.
   These two types are $\modal$-connected since $g\circ f$ and $g$ are; thus~\ref{item:mu1a}$\Rightarrow$\ref{item:mu4}.
   Conversely,~\ref{item:mu1a} is clearly a special case of~\ref{item:mu4}.
 
@@ -1417,11 +1417,11 @@ We can construct them by nullifying any family of propositions (\autoref{thm:pro
   But $\modal(x=x)$ is inhabited by $\modalunit(\refl x)$, hence $Q_x$ is also inhabited, and thus so is $\modal(x=y)$ for all $y$; thus it is contractible.
 \end{proof}
 
-Note that~\ref{item:mu3a} and~\ref{item:mu3} both imply that a lex modality preserves fibers: given $f:A\to B$ and $b:B$, the map $\modal(\hfib{f}{b}) \to \hfib{\modal f}{\modalunit b}$ is an equivalence.
+Note that~\ref{item:mu3a} and~\ref{item:mu3} both imply that a lex modality preserves fibers: given $f:A\to B$ and $b:B$, the map $\modal(\fib{f}{b}) \to \fib{\modal f}{\modalunit b}$ is an equivalence.
 In fact, this property (and hence also~\ref{item:mu3}) characterizes lex modalities even among reflective subuniverses.
 
 \begin{thm}\label{thm:rsu-lex}
-  If $\modal$ is a reflective subuniverse such that for any $f:A\to B$ and $b:B$, the map $\modal(\hfib{f}{b}) \to \hfib{\modal f}{\modalunit b}$ is an equivalence, then $\modal$ is $\Sigma$-closed (and hence a lex modality).
+  If $\modal$ is a reflective subuniverse such that for any $f:A\to B$ and $b:B$, the map $\modal(\fib{f}{b}) \to \fib{\modal f}{\modalunit b}$ is an equivalence, then $\modal$ is $\Sigma$-closed (and hence a lex modality).
 \end{thm}
 \begin{proof}
   Suppose $A$ and each $B(a)$ are $\modal$-modal.
@@ -1434,8 +1434,8 @@ In fact, this property (and hence also~\ref{item:mu3}) characterizes lex modalit
   \end{tikzcd}
   \]
   in which the bottom map is an equivalence.
-  Thus, to show that the top map is an equivalence it suffices to show that the induced map on each fiber $B(a) \to \hfib{\modal \proj1}{\modalunit a}$ is an equivalence.
-  But this map factors through the equivalence $B(a) \eqvsym \modal B(a)$ by the map $\modal B(a) \to \hfib{\modal \proj1}{\modalunit a}$, which is an equivalence by assumption.
+  Thus, to show that the top map is an equivalence it suffices to show that the induced map on each fiber $B(a) \to \fib{\modal \proj1}{\modalunit a}$ is an equivalence.
+  But this map factors through the equivalence $B(a) \eqvsym \modal B(a)$ by the map $\modal B(a) \to \fib{\modal \proj1}{\modalunit a}$, which is an equivalence by assumption.
 \end{proof}
 
 A particularly useful corollary of \cref{thm:lex-modalities} is the following.
@@ -1451,8 +1451,8 @@ A particularly useful corollary of \cref{thm:lex-modalities} is the following.
   Thus, we can prove it by $\modal$-induction on $u,v$.
   But for $x,y:A$ the type $\modalunit(x)=\modalunit(y)$ is equivalent to $\modal(x=y)$ by \cref{thm:lex-modalities}\ref{item:mu6}, hence is an $n$-type by the inductive hypothesis.
 
-  Now if $f:A\to B$ is $n$-truncated, to show that $\modal f$ is $n$-truncated we must show that $\hfib{\modal f}{y}$ is an $n$-type for all $y:\modal B$.
-  Again, by $\modal$-induction we can reduce to the case $y\defeq \modalunit(b)$ for some $b:B$, in which case \cref{thm:lex-modalities}\ref{item:mu3a} implies that $\hfib{\modal f}{\modalunit(b)} \eqvsym \modal(\hfib f b)$, which is an $n$-type since $f$ is $n$-truncated and $\modal$ preserves $n$-types.
+  Now if $f:A\to B$ is $n$-truncated, to show that $\modal f$ is $n$-truncated we must show that $\fib{\modal f}{y}$ is an $n$-type for all $y:\modal B$.
+  Again, by $\modal$-induction we can reduce to the case $y\defeq \modalunit(b)$ for some $b:B$, in which case \cref{thm:lex-modalities}\ref{item:mu3a} implies that $\fib{\modal f}{\modalunit(b)} \eqvsym \modal(\fib f b)$, which is an $n$-type since $f$ is $n$-truncated and $\modal$ preserves $n$-types.
 \end{proof}
 
 Not every modality satisfying \cref{modaln-truncated} is lex.
@@ -1545,20 +1545,20 @@ But in fact, if we allow ourselves to assume rather than conclude lex-ness, then
   Thus each type $D(c)$ is $\modal$-connected, so every $\modal$-modal type is $D$-null.
   For the converse, suppose $X$ is $D$-null and let $a:A$.
   We want to show that $X$ is $B(a)$-null, i.e.\ that the ``constant functions'' map $c : X\to (B(a) \to X)$ is an equivalence.
-  Let $f:B(a) \to X$; we will show that $\hfib{c}{f}$ is contractible.
+  Let $f:B(a) \to X$; we will show that $\fib{c}{f}$ is contractible.
 
-  Now $X$ and $B(a)\to X$ are both $D$-null, hence so is $\hfib{c}{f}$, and hence so is the proposition ``$\hfib{c}{f}$ is contractible''.
+  Now $X$ and $B(a)\to X$ are both $D$-null, hence so is $\fib{c}{f}$, and hence so is the proposition ``$\fib{c}{f}$ is contractible''.
   Thus, we may assume in proving it that we have $\brck{B(a)}$.
   But it is also a proposition, so we may furthermore assume that we have some $b:B(a)$.
 
-  If we also write $b$ for the induced map $\unit \to B(a)$, then for any $u:B(a)$ we have $\hfib{b}{u} \simeq (b=u)$, which belongs to $D$.
+  If we also write $b$ for the induced map $\unit \to B(a)$, then for any $u:B(a)$ we have $\fib{b}{u} \simeq (b=u)$, which belongs to $D$.
   Thus $b:\unit\to B(a)$ is $D$-connected.
 
-  We construct a point in $\hfib{c}{f}$ by taking $f(b)$ and constructing a path $p:\prd{u:B(a)} f(u)=f(b)$.
+  We construct a point in $\fib{c}{f}$ by taking $f(b)$ and constructing a path $p:\prd{u:B(a)} f(u)=f(b)$.
   To give $p$, note that since $X$ is $D$-modal, so is the type $f(u)=f(b)$.
   Thus, by \cref{prop:nconnected_tested_by_lv_n_dependent types}, since $b:\unit\to B(a)$ is $D$-connected, it suffices to prove $f(b)=f(b)$, which is of course trivial.
 
-  Finally, suppose we have some other point $(x,q) : \hfib{c}{f}$, i.e.\ an $x:X$ with $q:\prd{u:B(a)} f(u)=x$.
+  Finally, suppose we have some other point $(x,q) : \fib{c}{f}$, i.e.\ an $x:X$ with $q:\prd{u:B(a)} f(u)=x$.
   Then $q_b : f(b) = x$, so it remains to show that for any $u:B(a)$ we have $q_b = \ct{p_u^{-1}}{q_u}$.
   But since this is an iterated equality type in $X$, it is $D$-modal, so using again the fact that $b:\unit\to B(a)$ is $D$-connected it suffices to prove it when $u=b$.
   But $p_b = \refl{f(b)}$ by definition, so in this case the goal reduces to $q_b = q_b$, which is trivial.
@@ -1587,13 +1587,13 @@ Moreover, \emph{every} lex modality is ``almost topological'' in the following s
   By the inductive hypothesis, therefore, $(x=y)$ is $\modal$-modal.
   Hence by \cref{thm:lex-modalities}\ref{item:mu6}, the map $\modalunit[A]:A\to \modal A$ is an embedding; thus it suffices to show that it is surjective.
 
-  Now given $z:\modal A$, since $\modalunit[A]$ is an embedding, its fiber $\hfib{\modalunit[A]}{z}$ is a mere proposition; and it is $\modal$-connected since $\modalunit[A]$ is connected.
-  Thus, by assumption $A \to (\hfib{\modalunit[A]}{z} \to A)$ is an equivalence.
-  But we have $\proj1 : \hfib{\modalunit[A]}{z} \to A$, so there exists an $x:A$ such that $\proj1 = \lam{\nameless}x$, i.e.\ for any $y:A$ with $\modalunit (y)=z$ we have $y = x$.
+  Now given $z:\modal A$, since $\modalunit[A]$ is an embedding, its fiber $\fib{\modalunit[A]}{z}$ is a mere proposition; and it is $\modal$-connected since $\modalunit[A]$ is connected.
+  Thus, by assumption $A \to (\fib{\modalunit[A]}{z} \to A)$ is an equivalence.
+  But we have $\proj1 : \fib{\modalunit[A]}{z} \to A$, so there exists an $x:A$ such that $\proj1 = \lam{\nameless}x$, i.e.\ for any $y:A$ with $\modalunit (y)=z$ we have $y = x$.
 
   We claim that $\modalunit(x) = z$.
   This is a modal type, since it is an equality in $\modal A$.
-  Thus, since $\hfib{\modalunit[A]}{z}$ is $\modal$-connected, when proving $\modalunit(x) = z$ we may assume that $\hfib{\modalunit[A]}{z}$, i.e.\ we have $y:A$ with $\modalunit (y) = z$.
+  Thus, since $\fib{\modalunit[A]}{z}$ is $\modal$-connected, when proving $\modalunit(x) = z$ we may assume that $\fib{\modalunit[A]}{z}$, i.e.\ we have $y:A$ with $\modalunit (y) = z$.
   But then $y=x$ as shown above, so that $\modalunit (x) = z$ as well.
 \end{proof}
 
@@ -1648,8 +1648,8 @@ The closure of $\infty$-connectedness under fibers also implies:
   Then we have
   \begin{align*}
     (A \to Z)
-    &\simeq (\sm{b:B}\hfib{f}{b}) \to Z\\
-    &\simeq \prd{b:B} (\hfib{f}{b} \to Z)\\
+    &\simeq (\sm{b:B}\fib{f}{b}) \to Z\\
+    &\simeq \prd{b:B} (\fib{f}{b} \to Z)\\
     &\simeq \prd{b:B} Z\\
     &\jdeq (B\to Z).\qedhere
   \end{align*}
@@ -1676,8 +1676,8 @@ But in type theory, the best we can do at present is show that \emph{if} such a 
 
   Next we prove~\ref{item:hc2}.
   By \cref{thm:infconn}, any $\modal$-connected map is $\infty$-connected.
-  Conversely, if $f:A\to B$ is $\infty$-connected, then any fiber $\hfib{f}{b}$ is also $\infty$-connected.
-  Thus for any $\modal$-modal type $Z$ we have $Z \eqvsym (\hfib{f}{b}\to Z)$; hence $\hfib{f}{b}$ is $\modal$-connected, and thus so is $f$.
+  Conversely, if $f:A\to B$ is $\infty$-connected, then any fiber $\fib{f}{b}$ is also $\infty$-connected.
+  Thus for any $\modal$-modal type $Z$ we have $Z \eqvsym (\fib{f}{b}\to Z)$; hence $\fib{f}{b}$ is $\modal$-connected, and thus so is $f$.
 
   This shows~\ref{item:hc2}.
   Now the lex-ness of $\modal$ follows from the fact that $\infty$-connected maps satisfy the 2-out-of-3 property, since $f$ is $\infty$-connected if and only if each $\trunc n f$ is an equivalence, and equivalences satisfy the 2-out-of-3 property.
@@ -2202,4 +2202,124 @@ The paradigmatic example is the following.
   It is unclear to us whether the more general version has any applications.
 \end{eg}
 
+\section{Accessible modalities}
+A general localization is only a reflective subuniverse, but there is a convenient sufficient condition for it to be a modality: if each $C(a)=\unit$.
+A localization modality of this sort is called \emph{nullification}.
 
+\begin{thm}\label{thm:nullification_modality}
+  If $F:\prd{a:A} B(a) \to C(a)$ is such that each $C(a)=\unit$, then localization at $F$ is a modality, called \define{nullification at $B$}.
+\end{thm}
+\begin{proof}
+  It suffices to show that for any $B:A\to\UU$, the $B$-null types are $\Sigma$-closed.
+  Thus, let $X:\UU$ and $Y:X\to \UU$ be such that $X$ and each $Y(x)$ are $B$-null.
+  Then
+  \begin{align*}
+    (B\to \sm{x:X} Y(x))
+    &\eqvsym \sm{g:B\to X} \prd{b:B} Y(g(b)) \\
+    &\eqvsym \sm{x:X} B \to Y(x) \\
+    &\eqvsym \sm{x:X} Y(x)
+  \end{align*}
+  with the inverse equivalence being given by constant maps.
+  Thus, $\sm{x:X} Y(x)$ is $B$-null.
+\end{proof}
+
+Of course, it might happen that $\localization{F}$ is a modality even if $F$ doesn't satisfy the condition of \cref{thm:nullification_modality}.
+For instance, if $B:A\to \UU$ has a section $s:\prd{a:A} B(a)$, then localizing at the family $s' : \prd{a:A} \unit \to B(a)$ is equivalent to nullifying at $B$, since in a section-retraction pair the section is an equivalence if and only if the retraction is.
+However, we can say the following.
+
+\begin{lem}\label{thm:acc-modal}
+  If $F:\prd{a:A} B(a)\to C(a)$ is such that $\localization{F}$ is a modality, then there exists a family $E:D\to \UU$ such that $\localization{F}$ coincides with nullification at $E$.
+\end{lem}
+\begin{proof}
+  Write $\modal\defeq\localization{F}$ and $\modalunit$ for its modal unit.
+  Define $D = \sm{a:A} (\modal (B(a)) + \modal(C(a)))$, and $E:D\to \UU$ by
+  \begin{align*}
+    E(a,\inl(b)) &\defeq \fib{\modalunit[B(a)]}{b}\\
+    E(a,\inr(c)) &\defeq \fib{\modalunit[C(a)]}{c}.
+  \end{align*}
+  Then since $\modalunit$ is $\modal$-connected, each $E(d)$ is $\modal$-connected, and hence every $F$-local type is $E$-null.
+
+  On the other hand, suppose $X$ is an $E$-null type.
+  Each $\modalunit[B(a)]$ and $\modalunit[C(a)]$ is $\localization{E}$-connected, since their fibers are $\localization{E}$-connected (by definition); thus $X$ is also $\modalunit[B(a)]$-local and $\modalunit[C(a)]$-local.
+  But we have the following commutative square:
+  \[
+  \begin{tikzcd}[column sep=large]
+    B(a) \ar[r,"{\modalunit[B(a)]}"] \ar[d,"F(a)"'] & \modal(B(a)) \ar[d,"{\modal(F(a))}"]\\
+    C(a) \ar[r,"{\modalunit[C(a)]}"'] & \modal(C(a))
+  \end{tikzcd}
+  \]
+  and ${\modal(F(a))}$ is an equivalence; thus $X$ is also $F(a)$-local.
+  So the $F$-local types coincide with the $E$-null types.
+\end{proof}
+
+This shows that the following pair of definitions are consistent.
+
+\begin{defn}\label{defn:accessible}
+A reflective subuniverse on $\UU$ is said to be \define{accessible} if it is the localization at a family of maps in $\UU$, indexed by a type in $\UU$.
+Similarly, a modality $\modal$ on $\UU$ is said to be \define{accessible} if it is the nullification at a family of types in $\UU$, indexed by a type in $\UU$.
+
+Explicitly, a \define{presentation} of a reflective subuniverse $\modal$ of $\UU$ consists of a family of maps $F : \prd{a:A} B(a) \to C(a)$, where $A:\UU$ and $B,C:A\to\UU$, such that $\modal = \localization{F}$.
+Similarly, a \define{presentation} of a modality $\modal$ consists of a family of types $B: A\to\UU$, where $A:\UU$, such that $\modal = \localization{B}$.
+\end{defn}
+
+One of the main uses of accessibility is when passing between universes.
+Our definitions of reflective subuniverses and modalities are relative to a \emph{particular} universe $\UU$, but most examples are ``uniform'' or ``polymorphic'' and apply to types in all universes (or all sufficiently large universes) simultaneously.
+Accessibility is one technical condition which ensures that this holds and that moreover these modal operators on different universes ``fit together'' in a convenient way.
+For instance, we have:
+
+\begin{lem}\label{thm:acc-extend}
+  If $\modal$ is an accessible reflective subuniverse on a universe $\UU$, and $\UU'$ is a larger universe containing $\UU$, then there is a reflective subuniverse $\modal'$ on $\UU'$ such that:
+  \begin{enumerate}
+  \item If $\modal$ is a modality, so is $\modal'$.\label{item:ae5}
+  \item A type $X:\UU$ is $\modal'$-modal if and only if it is $\modal$-modal.\label{item:ae1}
+  \item For $X:\UU$, the induced map $\modal' X \to \modal X$ is an equivalence.\label{item:ae2}
+  \item A type $X:\UU'$ is $\modal'$-modal if and only if $(\blank\circ f) : (B\to X) \to (A\to X)$ is an equivalence for any map $f:A\to B$ in $\UU$ such that $\modal(f)$ is an equivalence.\label{item:ae3}
+  \item $\modal'$ depends only on $\modal$, not on a choice of presentation for it.\label{item:ae4}
+  \end{enumerate}
+\end{lem}
+\begin{proof}
+  Since $\modal$ is accessible, it is generated by some family $F:\prd{a:A} B(a) \to C(a)$.
+  Define $\modal':\UU'\to\UU'$ to be the higher inductive localization at the same family $F$, which lives in $\UU'$ as well since $\UU'$ is larger than $\UU$.
+  If $\modal$ is a modality, we can take each $C(a)=\unit$ so that $\modal'$ is also a modality, giving~\ref{item:ae5}.
+
+  The notion of $F$-locality for a type $X$ is independent of what universe $X$ lives in, giving~\ref{item:ae1}.
+  Moreover, because the induction principle for a higher inductive localization allows us to eliminate into any type in any universe, \cref{thm:local-ump} applies no matter what universe the target lives in.
+  Thus, if $X:\UU$ then $\modal X$ and $\modal' X$ have the same universal property, hence are canonically equivalent, giving~\ref{item:ae2}.
+
+  To prove~\ref{item:ae3}, note first that certainly each $\modal (F(a))$ is an equivalence, so any type with the stated property is $F$-local.
+  Conversely, if $X$ is $F$-local, hence $\modal'$-modal, then $(B\to X) \to (A\to X)$ is certainly an equivalence for any map $f$ such that $\modal'(f)$ is an equivalence; but $\modal'$ and $\modal$ coincide on $\UU$.
+  Thus~\ref{item:ae3} holds; and this implies~\ref{item:ae4} since a reflective subuniverse is determined by its modal types.
+\end{proof}
+
+We refer to the $\modal'$ constructed in \cref{thm:acc-extend} as the \textbf{canonical accessible extension} of $\modal$ to $\UU'$.
+
+\begin{egs}
+  Our characterizations of the truncation and open and closed modalities in \cref{thm:trunc-acc,thm:open-acc,thm:closed-acc} made no reference to the ambient universe.
+  Thus, when these modalities are defined in the standard ways on $\UU$ and $\UU'$ respectively, their $\UU'$-version is the canonical accessible extension of their $\UU$-version.
+\end{egs}
+
+\begin{eg}
+  By contrast, the double-negation modality $\neg\neg$ \emph{is} defined in a polymorphic way on all universes, but in general there seems no reason for it to be accessible on any of them.
+  However, if propositional resizing holds, then it is the nullification at $\bool$ together with all propositions $P$ such that $\neg\neg P$ holds, and hence accessible.
+
+  Whether or not any inaccessible modalities remain after imposing propositional resizing may depend on large-cardinal principles.
+  It is shown in~\cite{css:large-cardinal} that this is the case for the analogous question about reflective sub-$(\infty,1)$-categories of the $(\infty,1)$-category of $\infty$-groupoids.
+\end{eg}
+
+\begin{eg}
+  Suppose that all types in $\UU$ are 0-types.
+  We have tacitly assumed that all universes are closed under all higher inductive types, so (assuming univalence) this is not actually possible, but to get a feeling for what else could in principle go wrong suppose we drop that assumption.
+  Then if $F$ is a family such that the higher inductive type $\localization{F}$ does not preserve 0-types, we might (depending on what we assume about closure under higher inductive types) still be able to define a modality on $\UU$ by $\modal X = \trunc0{\localization{F}X}$.
+  But if $\UU'$ is a larger universe containing non-0-types, then this $\modal$ would not eliminate into types in $\UU'$, and if we define $\modal'$ by localizing at $F$ in $\UU'$ then the canonical map $\modal' X \to \modal X$ would be the 0-truncation rather than an equivalence.
+  So \cref{thm:acc-extend} is not as trivial as it may seem.
+\end{eg}
+
+\begin{rmk}\label{rmk:extend-oops}
+  It is tempting to think that \emph{any} reflective subuniverse $\modal$ on $\UU$ could be extended to an accessible one on $\UU'$ by localizing at the family of \emph{all} functions in $\UU$ that are inverted by $\modal$ (or nullifying at the family of all $\modal$-connected types in $\UU$, in the case of modalities), which is a $\UU'$-small family though not a $\UU$-small one.
+  This does produce an accessible reflective subuniverse $\modal'$ of $\UU'$ such that the $\modal'$-modal types in $\UU$ coincide with the $\modal$-modal ones, but there seems no reason why the modal \emph{operators} $\modal'$ and $\modal$ should agree on types in $\UU$.
+\end{rmk}
+
+\begin{rmk}
+  Reflective subuniverses and modalities defined by localization have another convenient property: their eliminators have a strict judgmental computation rule (assuming that our higher inductive localization type has a judgmental computation rule on point-constructors, which is usually assumed).
+  This will be useful in \cref{thm:subtopos-model}.
+\end{rmk}

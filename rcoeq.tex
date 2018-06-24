@@ -1046,7 +1046,6 @@ Let $\mathcal{B}$ be a family of reflexive graphs over $\mathcal{A}$. The follow
 
 \section{Colimits of diagrams over graphs}
 
-\marginnote{Boil this down to the most essential theorems\\Revise notation\\State theorems in intro\\Fix crefs}
 \begin{defn}
 Let $\mathcal{A}$ be a reflexive graph. A diagram $\mathcal{D}$ over $\mathcal{A}$ is a triple $(\pts{D},\edg{D},\rfx{\mathcal{D}})$ consisting of
 \begin{align*}
@@ -1103,40 +1102,54 @@ are all pullback squares.
 %We will write $D'\mathbin{\to_\times}D$ for the type of cartesian natural transformations from $D'$ to $D$.
 \end{defn}
 
-\begin{lem}\label{lem:pb_total}
+We need the following general fact about pullbacks.
+
+\begin{prp}\label{lem:pb_total}
 Let $I$ be a type, and consider for each $i:I$ a commuting square
 \begin{equation*}
 \begin{tikzcd}
-C_i \arrow[r] \arrow[d] & B_i \arrow[d] \\
-A_i \arrow[r] & X_i.
+C_i \arrow[r,"q_i"] \arrow[d,swap,"p_i"] & B_i \arrow[d,"g_i"] \\
+A_i \arrow[r,swap,"f_i"] & X_i.
 \end{tikzcd}
 \end{equation*}
-Then the following are equivalent:
+with $H_i:f_i\circ p_i\htpy g_i\circ q_i$. Then the following are equivalent:
 \begin{enumerate}
 \item For each $i:I$, the square is a pullback square.
 \item The induced square on total spaces
 \begin{equation*}
 \begin{tikzcd}
-\sm{i:I}C_i \arrow[r] \arrow[d] & \sm{i:I}B_i \arrow[d] \\
-\sm{i:I}A_i \arrow[r] & \sm{i:I}X_i.
+\sm{i:I}C_i \arrow[r,"\total{q}"] \arrow[d,swap,"\total{p}"] & \sm{i:I}B_i \arrow[d,"\total{g}"] \\
+\sm{i:I}A_i \arrow[r,swap,"\total{f}"] & \sm{i:I}X_i.
 \end{tikzcd}
 \end{equation*}
+which commutes via the homotopy $\total{H}:\total{f}\circ\total{p}\htpy\total{g}\circ\total{q}$, is a pullback square.
 \end{enumerate}
-\end{lem}
+\end{prp}
 
-\begin{lem}
+\begin{proof}
+The gap map of the square in assertion (ii) factors as follows:
+\begin{equation*}
+\begin{tikzcd}[column sep=small]
+\phantom{\Big(\sm{i:I}A_i\Big)\times_{\big(\sm{i:I}X_i\big)} \Big(\sm{i:I}B_i\Big)} & \sm{i:I}C_i \arrow[dl,swap,"\total{\mathsf{gap}(p_i,q_i,H_i)}"] \arrow[dr,"{\mathsf{gap}(\total{p},\total{q},\total{H})}"] \\
+\sm{i:I}A_i\times_{X_i}B_i \arrow[rr,swap,"{\lam{(i,a,b,p)}((i,a),(i,b),(\refl{i},p))}"] & & \Big(\sm{i:I}A_i\Big)\times_{\big(\sm{i:I}X_i\big)} \Big(\sm{i:I}B_i\Big)
+\end{tikzcd}
+\end{equation*}
+and the bottom map is an equivalence. Therefore it follows by the 3-for-2 property and an application of \cref{thm:fib_equiv} that $\mathsf{gap}(p_i,q_i,H_i)$ is an equivalence for each $i:I$, if and only if $\mathsf{gap}(\total{p},\total{q},\total{H})$ is an equivalence.
+\end{proof}
+
+\begin{prp}
 Let $\tau:\mathsf{nat}(\mathcal{D}',\mathcal{D})$ be a natural transformation of diagrams over $\mathcal{A}$. Then $\tau$ is cartesian if and only if the induced morphism of reflexive graphs
 \begin{equation*}
 \total{\tau} : \mathsf{rGph}(\msm{\mathcal{A}}{\mathcal{D}'},\msm{\mathcal{A}}{\mathcal{D}})
 \end{equation*}
 is cartesian.
-\end{lem}
+\end{prp}
 
 \begin{proof}
 Straightforward consequence of \cref{lem:pb_total}.
 \end{proof}
 
-\begin{thm}
+\begin{cor}
 Let $\tau:\mathsf{cart}(\mathcal{E},\mathcal{D})$ be a cartesian morphisms of diagrams over $\mathcal{A}$, and consider a commuting square of reflexive graphs of the following form
 \begin{equation*}
 \begin{tikzcd}
@@ -1156,7 +1169,7 @@ Then the following are equivalent:
 \end{equation*}
 is a pullback square.
 \end{enumerate}
-\end{thm}
+\end{cor}
 
 \section{Sequential colimits}
 
@@ -1350,3 +1363,419 @@ B_\infty \arrow[r] & Y
 \end{equation*} 
 is a pullback square.
 \end{cor}
+
+\section{Type sequences}
+Infinite sequences of types can be seen as diagrams over the graph of natural
+numbers with an edge between each number and its successor. Since diagrams over
+a graph model dependent type theory with $\Sigma$ and $\idtypevar{}$, we also
+get the structure of type dependency for infinite sequences of types. We make
+that structure explicit here.
+
+\begin{defn}
+A \define{type sequence} $\sequence{A}{f}$ consists of a diagram of the form
+\begin{equation*}
+\begin{tikzcd}
+A_0 \arrow[r,"f_0"] & A_1 \arrow[r,"f_1"] & A_2 \arrow[r,"f_2"] & \cdots
+\end{tikzcd}
+\end{equation*}
+Thus, the type of all sequences of types is
+\begin{equation*}
+\mathrm{Seq} \defeq \sm{A:\nat\to\type}\prd{n:\nat} A_n\to A_{n+1}
+\end{equation*}
+\end{defn}
+
+Recall that the relation $\leq$ on the natural numbers is defined as an inductive family of types $\leq:\N\to\N\to\UU$ with
+\begin{align*}
+r & : \prd{n:\N} n\leq n \\
+s & : \prd{n,m:\N} n\leq m \to n\leq m+1.
+\end{align*}
+It follows that $n\leq m$ is a a mere proposition for each $n,m:\N$.
+
+\begin{defn}
+Let $\sequence{A}{f}$ be a type sequence. For any $n,m:\nat$, we define
+\begin{equation*}
+f^{n\leq m} : A_n\to A_m.
+\end{equation*}
+where we leave the proof that $n\leq m$ implicit.
+\end{defn}
+
+\begin{proof}[Construction]
+We define $f^{n\leq m}$ by induction on the proof that $n\leq m$ by taking
+\begin{align*}
+f^{n\leq n} & \defeq \idfunc[A_n] \\
+f^{n\leq m+1} & \defeq f_m\circ f^{n\leq m} \qedhere
+\end{align*}
+\end{proof}
+
+\begin{defn}
+Let $\sequence{A}{f}$ be a type sequence. For any $n,k:\nat$, we define
+$f_n^k:A_n\to A_{n+k}$ to be $f^{n\leq n+k}(p)$, where $p$ is the canonical proof that $n\leq n+k$.
+\end{defn}
+
+\begin{defn}
+A \define{sequence $\sequence{B}{g}$ of types over $\sequence{A}{f}$} consists of a diagram of the form
+\begin{equation*}
+\begin{tikzcd}
+B_{0} \arrow[r,"g_0"] \arrow[d,->>] & B_{1} \arrow[r,"g_1"] \arrow[d,->>] & B_{2} \arrow[r,"g_2"] \arrow[d,->>] & \cdots \\
+A_0 \arrow[r,"f_0"] & A_1 \arrow[r,"f_1"] & A_2 \arrow[r,"f_2"] & \cdots
+\end{tikzcd}
+\end{equation*}
+where each $g_n$ has type $\prd{a:A_n} B_n(x)\to B_{n+1}(f_n(a))$, implicitly rendering the
+squares commutative.
+
+We say that a sequence $\sequence{B}{g}$ over $\sequence{A}{f}$ is \define{equifibered} if each $g_n$ is a family of equivalences.
+\end{defn}
+
+\begin{comment}
+\begin{defn}
+A \define{global section} $\sequence{t}{T}$ of a sequence $\sequence{P}{f}$ over
+$\sequence{A}{a}$ consists of 
+\begin{align*}
+t & : \prd{n:\nat}{x:A_n}P_n(x) \\
+T & : \prd{n:\nat}{x:A_n}\id{t_{n+1}(a_n(x))}{f_n(t_n(x))}
+\end{align*}
+\end{defn}
+
+For the following definition, recall that for any two types $X$ and $Y$, we
+may consider the constant type family $\ctxwk{X}{Y}\defeq\lam{x}Y:X\to\type$.
+This process is called weakening.
+
+\begin{defn}
+Let $\sequence{A}{a}$ and $\sequence{B}{b}$ be sequences of types. Then we
+define the \define{weakened sequence} $\ctxwk{\sequence{A}{a}}{\sequence{B}{b}}$ over
+$\sequence{A}{a}$ to consist of
+\begin{equation*}
+\begin{tikzcd}[column sep=large]
+\ctxwk{A_0}{B_0} \arrow[r,"\lam{x} b_0"] \arrow[d,->>] & \ctxwk{A_1}{B_1} \arrow[r,"\lam{x}b_1"] \arrow[d,->>] & \ctxwk{A_2}{B_2} \arrow[r,"\lam{x}b_2"] \arrow[d,->>] & \cdots \\
+A_0 \arrow[r,"a_0"] & A_1 \arrow[r,"a_1"] & A_2 \arrow[r,"a_2"] & \cdots
+\end{tikzcd}
+\end{equation*}
+\end{defn}
+\end{comment}
+
+\begin{defn}
+Let $\sequence{A}{f}$ and $\sequence{A'}{f'}$ be type sequences.
+A \define{natural transformation} $\sequence{A}{f}\to\sequence{A'}{f'}$
+is a pair $\sequence{\tau}{H}$ consisting of a family of maps
+\begin{equation*}
+\tau : \prd{n:\N} A_n \to A'_n
+\end{equation*}
+and a family $H_n$ of homotopies witnessing that the diagram
+\begin{equation*}
+\begin{tikzcd}
+A_{0} \arrow[r,"f_0"] \arrow[d,"\tau_0"] & A_{1} \arrow[r,"f_1"] \arrow[d,"\tau_1"] & A_{2} \arrow[r,"f_2"] \arrow[d,"\tau_2"] & \cdots \\
+A'_0 \arrow[r,"{f'_0}"] & A'_1 \arrow[r,"{f'_1}"] & A'_2 \arrow[r,"{f'_2}"] & \cdots
+\end{tikzcd}
+\end{equation*}
+commutes.
+\end{defn}
+
+\begin{defn}
+A \define{natural equivalence} is a natural
+transformation $(\tau,H)$ such that each $\tau_n$ is an equivalence. 
+The type of natural equivalences from $\sequence{A}{f}$ to $\sequence{A'}{f'}$
+is called $\mathsf{NatEq}(\sequence{A}{f},\sequence{A'}{f'})$.
+\end{defn}
+
+\begin{lem}
+The canonical dependent function $\mathsf{idtonateq}$ 
+\begin{equation*}
+%\prd{\sequence{A}{f},\sequence{A'}{f'}:\mathrm{Seq}} 
+(\id{\sequence{A}{f}}{\sequence{A'}{f'}})\to \mathsf{NatEq}(\sequence{A}{f},\sequence{A'}{f'})
+\end{equation*}
+which sends $\refl{\sequence{A}{f}}$ to the identity natural transformation, is
+an equivalence.
+\end{lem}
+
+\begin{proof}
+Straightforward application of univalence.
+\end{proof}
+
+Every type sequence $\sequence{B}{g}$ over $\sequence{A}{f}$ gives rise to a natural transformation, by the following definition. 
+
+\begin{defn}
+Let $\sequence{B}{g}$ be a sequence over $\sequence{A}{f}$. Then we define the
+sequence $\msm{\sequence{A}{f}}{\sequence{B}{g}}$ to consist of the diagram
+\begin{equation*}
+\begin{tikzcd}[column sep=large]
+\sm{a:A_0}B_0(a) \arrow[r,"\pairr{f_0,g_0}"] & \sm{a:A_1}B_1(a) \arrow[r,"\pairr{f_1,g_1}"]
+& \sm{a:A_2}B_2(a) \arrow[r,"\pairr{f_2,g_2}"] & \cdots
+\end{tikzcd}
+\end{equation*}
+where we take the usual definition
+\begin{equation*}
+\pairr{f_n,g_n} \defeq \lam{\pairr{a,b}}\pairr{f_n(a),g_n(a,b)}.
+\end{equation*}
+Furthermore, we define a natural transformation 
+\begin{equation*}
+\sequence{\pi}{\theta}:\msm{\sequence{A}{f}}{\sequence{B}{g}}\to \sequence{A}{f}
+\end{equation*}
+by taking 
+\begin{align*}
+\pi_n & \defeq \proj1 & & : (\sm{a:A_n}B_n(a))\to A_n \\
+\theta_n(a,b) & \defeq\refl{f_n(a)} & & : f_n(\proj 1(a,b))= \proj 1(f_n(a),g_n(b)).
+\end{align*}
+\end{defn}
+
+\begin{defn}
+A natural transformation is said to be \define{cartesian} if all the naturality squares are pullback squares.
+\end{defn}
+
+Of course, every natural equivalence is also cartesian. Recall that for any $f:A\to A'$ and any $g:\prd{a:A}B(a)\to B'(f(a))$, the square
+\begin{equation*}
+\begin{tikzcd}
+\sm{a:A}B(a) \arrow[r,"\pairr{f,g}"] \arrow[d,->>] & \sm{a':A'}B'(a') \arrow[d,->>] \\
+A \arrow[r,swap,"f"] & A'
+\end{tikzcd}
+\end{equation*}
+is a pullback square if and only if $g$ is a family of equivalences. Thus, we have the following:
+
+\begin{lem}
+A family $\sequence{B}{g}$ of sequences over $\sequence{A}{f}$ is equifibered if and only if the projection transformation $(\pi,\theta):\msm{(A,f)}{(B,g)}\to (A,f)$ is cartesian. \qed
+\end{lem}
+
+We end this section with reviewing the shift operation on type sequences, in particular to bring up subtleties that come up in the formalization of mathematics in homotopy type theory. The issue we face is that equality in the natural numbers isn't always strict. For instance, when addition is defined by induction on the second argument, then $n+0$ is judgmentally equal to $n$, while $0+n$ is not. This implies that sometimes we might have to \emph{transport} along the equalities in the natural numbers (such as $n=0+n$), and this complicates the formalization process.
+
+We define the shift operation.
+\begin{defn}
+For any type sequence $\sequence{A}{f}$ we define the type sequence $(S(A),S(f))$ by taking
+\begin{align*}
+S(A)_n & \defeq A_{n+1} \\
+S(f)_n & \defeq f_{n+1}.
+\end{align*}
+\end{defn}
+
+Of course we can iterated the shift operation, defining a type sequence $(S^k(A),S^k(f))$ for every $k:\N$. However, while the type $S^k(A)_n$ is $A_{n+k}$, the function $S^k(f)_n$ is some function $A_{n+k}\to A_{(n+1)+k}$ that isn't judgmentally equal to a function of the form $f_m$ for some $m:\N$. Therefore, we make the following alternative definition of the $k$-shift.
+
+\begin{defn}
+Given a type sequence $(A,f)$, we define $S_k(A,f)\jdeq(S_k(A),S_k(f))$ to be the type sequence given by
+\begin{align*}
+S_k(A)_n & \defeq A_{k+n} \\
+S_k(f)_n & \defeq f_{k+n}.
+\end{align*}
+Given a dependent sequence $(B,g)$ over $(A,f)$, we also define $S_k(B,g)\jdeq (S_k(B),S_k(g))$ by 
+\begin{align*}
+S_k(B)_n & \defeq B_{k+n} \\
+S_k(g)_n & \defeq g_{k+n}.
+\end{align*}
+\end{defn}
+
+The sequence $(S_{k+1}(A),S_{k+1}(f))$ is not judgmentally equal to the sequence $S(S_k(A),S_k(f))$, since in general we do not have $(k+1)+n\jdeq (k+n)+1$. Therefore we have the following lemma.
+
+\begin{lem}\label{lem:iterate_succ}
+For any $k,n:\nat$ and $a : A_k$, one has $q_{k,n}(a):\dpath{A}{p(k,n)}{f_k^{n+1}(a)}{f_{k+1}^n(f_k(a))}$ where $p(k,n):(k+n)+1=(k+1)+n$ is the canonical path in $\nat$.
+\end{lem}
+
+\begin{proof}
+By induction on $n:\N$.
+\end{proof}
+
+\begin{cor}
+For any type sequence $\sequence{A}{f}$, the type sequence $(S_{k+1}(A),S_{k+1}(f))$ is naturally equivalent to the type sequence $(S(S_k(A)),S(S_k(f)))$. 
+\end{cor}
+
+\begin{comment}
+\begin{defn}
+A \define{dependent natural transformation} $\tau:\sequence{P}{f}\to\sequence{Q}{g}$ of
+dependent sequences over $\sequence{A}{a}$ consists of functions
+$\tau_n(x):P_n(x)\to Q_n(x)$ for each $x:A_n$, together with a term witnessing 
+that any square of the form
+\begin{equation*}
+\begin{tikzcd}
+P_n(x) \arrow[r,"f_n(x)"] \arrow[d,swap,"\tau_n(x)"] & P_{n+1}(a(x)) \arrow[d,"\tau_{n+1}(a(x))"] \\
+Q_n(x) \arrow[r,"g_n(x)"] & Q_{n+1}(a(x))
+\end{tikzcd}
+\end{equation*}
+commutes. A \define{dependent natural equivalence} is a dependent natural transformation
+$\tau$ for which $\tau_n(x)$ is an equivalence for each $n:\nat$ and $x:A_n$.
+\end{defn}
+
+\begin{lem}
+For any two dependent sequences $\sequence{P}{f}$ and $\sequence{Q}{g}$ over
+$\sequence{A}{a}$, the function
+\begin{equation*}
+(\id{\sequence{P}{f}}{\sequence{Q}{g}})\to\mathsf{NatEq}_{\sequence{A}{a}}(\sequence{P}{f},\sequence{Q}{g})
+\end{equation*}
+is an equivalence.
+\end{lem}
+\end{comment}
+
+\section{Sequential colimits}
+
+\begin{defn}
+Consider the sequence $\sequence{A}{f}$ of types
+\begin{equation*}
+\begin{tikzcd}
+A_0 \arrow[r,"f_0"] & A_1 \arrow[r,"f_1"] & A_2 \arrow[r,"f_2"] & \cdots
+\end{tikzcd}
+\end{equation*}
+We define the colimit $A_\infty$ to be the higher inductive type with constructors
+\begin{align*}
+\iota^{A,f} & : \prd{n:\mathbb{N}} A_n\to A_\infty \\
+\kappa^{A,f} & : \prd{n:\mathbb{N}}{x:A_n} \id{\iota_{n+1}(f(x))}{\iota_n(x)}.
+\end{align*}
+\end{defn}
+
+\begin{rmk}
+The induction principle for sequential colimits tells us how to construct a dependent function $f:\prd{a:A_\infty}P(a)$ for a type family $P:A_\infty\to\type$.
+
+Given $s:\prd{a:A_\infty}P(a)$ we get
+\begin{align*}
+\lam{n}{a} s(\iota_n(a)) & : \prd{n:\N}{a:A_n}P(\iota_n(a)) \\
+\lam{n}{a} \apd{s}{\kappa_n(a)} & : \prd{n:\N}{a:A_n} s(\iota_n(a)) =_{\kappa_n(a)}^P s(\iota_{n+1}(f_n(a)))
+\end{align*}
+In other words, we have a canonical map
+\begin{equation*}
+\Big(\prd{a:A_\infty}P(a)\Big)\to\Big(\sm{h:\prd{n:\N}{a:A_n}P(\iota_n(a))}\prd{n:\N}{a:A_n} h_n(a) =_{\kappa_n(a)}^P h_{n+1}(f_n(a))\Big)
+\end{equation*}
+Now we can state the induction principle and computation rule concisely: the canonical map described above comes equipped with a section. We assume that that the computation rule is strict on the point constructors.
+\end{rmk}
+
+The universal property of sequential colimits is a straightforward consequence of the induction principle.
+
+\begin{thm}
+Let $\sequence{A}{f}$ be a type sequence, and let $X$ be a type. Then the canonical map
+\begin{equation*}
+(A_\infty\to X)\to \sm{h:\prd{n:\N}A_n\to X}\prd{n:\N} h_n\htpy h_{n+1}\circ f_n
+\end{equation*}
+is an equivalence.
+\end{thm}
+
+The following theorem is a descent theorem for sequential colimits.
+
+\begin{thm}\label{thm:descent}
+Consider a sequence $\sequence{A}{f}$. The type $A_\infty\to\UU$ is equivalent to the type of equifibered type sequences over $\sequence{A}{f}$.
+\end{thm}
+
+\begin{proof}
+By the universal property of $A_\infty$ and by univalence we have
+\begin{align*}
+(A_\infty\to \UU) & \eqvsym \sm{B:\prd{n:\N}A_n\to \UU}\prd{n:\N} B_n\htpy B_{n+1}\circ f_n \\
+& \eqvsym \sm{B:\prd{n:\N}A_n\to \UU}\prd{n:\N}{x:A_n} B_n(x)\eqvsym B_{n+1}(f_n(x))\qedhere
+\end{align*}
+\end{proof}
+
+\begin{lem}\label{lem:seq_colim_functor}
+  Given a natural transformation $(\tau,H):\sequence{A}{f}\to\sequence{A'}{f'}$.
+  \begin{enumerate}
+    \item\label{part:seq_colim_functor} We get a function $\tfcolim(\tau,H)$ or $\tau_\infty:A_\infty\to A'_\infty$.
+    \item\label{part:1_functoriality} The sequential colimit is 1-functorial. This means the following three things. If $(\sigma,K):\sequence{A'}{f'}\to\sequence{A''}{f''}$ then $(\tau\circ\sigma)_\infty\sim\tau_\infty\circ\sigma_\infty$. Moreover, $1_\infty\sim \idfunc$, where $1$ is the identity natural transformation. Lastly, if $(\tau',H'):\sequence{A}{f}\to\sequence{A'}{f'}$ and $q:\prd{n:\N}\tau_n\sim\tau'_n$ and we can fill the following square for all $a:A_n$
+    \begin{center}\begin{tikzcd}[column sep=25mm]
+      \tau_{n+1}(f_na)
+      \ar[r,equal,"{q_{n+1}(f_na)}"] 
+      \ar[d,equal,"{H_n(a)}"] &
+      \tau'_{n+1}(f_na)
+      \ar[d,equal,"{H'_n(a)}"]\\
+      f'_n(\tau_n(a))
+      \ar[r,equal,"{\apfunc{f'_n}(q_n(a))}"] & 
+      f'_n(\tau'_n(a))
+    \end{tikzcd}\end{center}
+    then $\tau_\infty\sim\tau'_\infty$.
+    \item\label{part:functor_equivalence} If $\tau$ is a natural equivalence then $\tau_\infty$ is an equivalence.
+  \end{enumerate}
+\end{lem}
+\begin{proof}\mbox{}
+  \begin{enumerate}
+    \item 
+    We define $\tau_\infty(\iota_n(a))\defeq\iota_n(\tau_n(a))$ and 
+    $$\apfunc{\tau_\infty}(\kappa_n(a))\vcentcolon=\apfunc{\iota_{n+1}}(H(a))\cdot\kappa_n(\tau_n(a)):
+    \iota_{n+1}(\tau_{n+1}(f_na))=\iota_n(\tau_n(a)).$$
+    \item All three parts are by induction on the element of $A_\infty$, and all parts are straightforward.
+    % to do? We might want to give an explicit proof
+    \item We define $(\tau_\infty)^{-1}\defeq(\tau^{-1})_\infty$ where $\tau^{-1}$ is the natural transformation by inverting $\tau_n$ for each $n$. Now we can check that this is really the inverse by using all three parts of the 1-functoriality.
+    $$\tau_\infty^{-1}\circ\tau_\infty\sim (\tau^{-1}\circ\tau)_\infty\sim 1_\infty\sim\idfunc[A_\infty].$$
+    For the second homotopy we need to show that we can fill a certain square, which is straightforward.
+    The other composite is homotopic to the identity by a similar argument.\qedhere
+  \end{enumerate}
+\end{proof}
+
+\begin{lem}\label{lem:colim_shift_one}
+For any type sequence $(A,f)$, the colimits of $(A,f)$ and $S(A,f)$ are equivalent.
+\end{lem}
+
+\begin{proof}
+We construct a map $\varphi:A_\infty \to S(A)_\infty$ by induction on $A_\infty$, by taking
+\begin{align*}
+(x:A_n) & \mapsto \iota^{S(A),S(f)}_n(f_n(x)) \\
+(x:A_n) & \mapsto \kappa^{S(A),S(f)}_n(f_n(x)).
+\end{align*}
+
+Next, we construct a map $\psi:S(A)_\infty\to A_\infty$ by induction on $S(A)_\infty$, by taking
+\begin{align*}
+(x:S(A)_n) & \mapsto \iota^{A,f}_{n+1}(x) \\
+(x:S(A)_n) & \mapsto \kappa^{A,f}_{n+1}(x).
+\end{align*}
+
+Then we prove that $\psi\circ \varphi\htpy \idfunc$ by induction on $A_\infty$, by taking
+\begin{align*}
+(x:A_n) & \mapsto \kappa^{A,f}_n(x)
+\end{align*}
+Now we compute
+\begin{align*}
+\mathsf{ap}_{\psi\circ\varphi}(\kappa^{A,f}_n(x))) & = \mathsf{ap}_\psi(\mathsf{ap}_\varphi(\kappa^{A,f}_n(x))) \\
+& = \mathsf{ap}_\psi(\kappa^{S(A),S(f)}_n(f_n(x))) \\
+& = \kappa^{A,f}_{n+1}(f_n(x))
+\end{align*}
+from the computation rules of $A_\infty$ and $S(A)_\infty$.
+
+We construct the homotopy $\varphi\circ\psi\htpy\idfunc$ by induction on $A_\infty$, by taking
+\begin{align*}
+(x:S(A)_n) & \mapsto \kappa_{n+1}(S(f)_n(x))
+\end{align*}
+Now we compute
+\begin{align*}
+\mathsf{ap}_{\varphi\circ\psi}(\kappa^{S(A),S(f)}_n(x)) & = \mathsf{ap}_\varphi(\mathsf{ap}_\psi(\kappa^{S(A),S(f)}_n(x))) \\
+& = \mathsf{ap}_\varphi(\kappa^{A,f}_{n+1}(x)) \\
+& = \kappa^{S(A),S(f)}_{n+1}(f_{n+1}(x)).\qedhere
+\end{align*}
+\end{proof}
+
+\begin{lem}\label{lem:colim_shift_k}
+For any type sequence $(A,f)$, we have an equivalence
+\begin{equation*}
+\kshiftequiv_{k} : \tfcolim(A,f)\eqvsym\tfcolim (S_k(A,f)).
+\end{equation*}
+\end{lem}
+
+The shift operations and the corresponding equivalences on the sequential colimits can be used to turn an arbitrary sequence $\sequence{B}{g}$ over $\sequence{A}{f}$ into an equifibered sequence over $\sequence{A}{f}$. 
+
+\begin{defn}
+Given a dependent sequence $(B,g)$ over $(A,f)$ and $x:A_0$, we define a type sequence $(B[x],g[x])$ by
+\begin{align*}
+B[x]_n & \defeq B_n(f^n(x)) \\
+g[x]_n & \defeq g_n(f^n(x),\blank).
+\end{align*}
+\end{defn}
+
+\begin{defn}
+Given any sequence $\sequence{B}{g}$ over $\sequence{A}{f}$, we define an equifibered sequence
+$\sequence{\square B}{\square g}$ over the sequence $\sequence{A}{f}$.
+\end{defn}
+
+\begin{constr}
+For $x:A_n$ we define
+\begin{equation*}
+(\square B)_n(x) \defeq S_n(B)[x]_{\infty} \jdeq \tfcolim_m(B_{n+m}(f^m(x))).
+\end{equation*}
+Now note that
+\begin{align*}
+  (\square B)_{n+1}(f(x)) & \jdeq \tfcolim_m(B_{(n+1)+m}(f^m(f(x))) \\
+  & \simeq \tfcolim_m(B_{n+(m+1)}(f^{m+1}(x))\\
+  & \simeq \tfcolim_m(B_{n+m}(f^m(x))\\
+  & \jdeq (\square B)_n(x)
+\end{align*}
+The first equivalence $u_{n,m}$ is given by transporting along the dependent path in \autoref{lem:iterate_succ} in the family $B$. This forms a natural equivalence, because $\mathsf{transport}$ is natural. The second equivalence is given by applying \autoref{lem:colim_shift_one}. We call the composite equivalence $F$, which shows that $\square B$ is an equifibered sequence.
+\end{constr}
+
+\begin{defn}
+Let $\sequence{B}{g}$ be a sequence over $\sequence{A}{f}$. Then we define
+\begin{equation*}
+B_\infty : A_\infty\to\UU
+\end{equation*}
+to be the family over $A_\infty$ associated to the equifibered sequence $(\square B,\square g)$ via the equivalence of \autoref{thm:descent}.
+\end{defn}
+
+By construction of $B_\infty$ we get the equality
+$$r(y):\transfib{B_\infty}{\kappa_n(x)}{y}=F(y)$$
+for $y:B_\infty(\iota_{n+1}(f_n(x)))$ witnessing that $B_\infty$ is defined by the equivalence $F$ on the path constructor.
+
