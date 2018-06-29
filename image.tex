@@ -606,6 +606,22 @@ We define $\istrunc{} : \Z_{\geq-2}\to\UU\to\UU$ by induction on $k:\Z_{\geq -2}
 For any type $A$, we say that $A$ is \define{$k$-truncated}, or a \define{$k$-type}, if there is a term of type $\istrunc{k}(A)$. We say that a map $f:A\to B$ is $k$-truncated if its fibers are $k$-truncated.
 \end{defn}
 
+\begin{lem}\label{cor:pb_trunc}
+Consider a pullback square
+\begin{equation*}
+\begin{tikzcd}
+C \arrow[r,"q"] \arrow[d,swap,"p"] & B \arrow[d,"g"] \\
+A \arrow[r,swap,"f"] & X.
+\end{tikzcd}
+\end{equation*}
+If $g$ is a $k$-truncated map, then so is $p$. In particular, if $g$ is an embedding then so is $p$.\index{truncated!map!pullbacks of truncated maps|textit}\index{embedding!pullbacks of embeddings|textit}
+\end{lem}
+
+\begin{proof}
+Since the square is assumed to be a pullback square, it follows from \cref{cor:pb_fibequiv} that for each $x:A$, the fiber $\fib{p}{x}$ is equivalent to the fiber $\fib{g}{f(x)}$, which is $k$-truncated. Since $k$-truncated types are closed under equivalences by \cref{thm:ktype_eqv}, it follows that $p$ is a $k$-truncated map.
+\end{proof}
+
+
 \begin{lem}\label{thm:istrunc_next}
 If $A$ is a $k$-type, then $A$ is also a $(k+1)$-type.
 \end{lem}

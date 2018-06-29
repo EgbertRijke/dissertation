@@ -2,7 +2,7 @@
 
 The material of this chapter is joint work with Bas Spitters, which we started in the academic year 2012-2013 while I was a research assistant at the Radboud University of Nijmegen.
 
-We begin this chapter with a proof of the type theoretic Yoneda lemma, \cref{lem:yoneda}. The Yoneda lemma is used to show in \cref{thm:emb_disc} that the discrete functor $\Delta:\UU\to\mathsf{rGph}$ from small types into the small reflexive graphs, is an embedding. In \cref{thm:discrete_rgraph} we show that a reflexive graph $\mathcal{A}$ is discrete if and only if it satisfies any one of the unique extension properties
+We begin this chapter with a proof of the type theoretic Yoneda lemma, \cref{lem:yoneda}. The Yoneda lemma is used to show in \cref{thm:emb_disc} that the discrete functor $\Delta:\UU\to\mathsf{rGph}$ from small types into the type of small reflexive graphs, is an embedding. In \cref{thm:discrete_rgraph} we show that a reflexive graph $\mathcal{A}$ is discrete if and only if it satisfies any one (and hence all) of the unique extension properties
 \begin{equation*}
 \begin{tikzcd}
 \mathcal{I} \arrow[r] \arrow[d] & \mathcal{A} & \unit \arrow[d,swap,"0"] \arrow[r] & \mathcal{A} & \unit \arrow[d,swap,"1"] \arrow[r] & \mathcal{A}, \\
@@ -36,7 +36,7 @@ Y^B \arrow[r,swap,"\blank\circ i"] & Y^A
 \end{equation*}
 is a pullback square. We use this way of stating the orthogonality condition in our definition of fibrations of reflexive graphs.
 
-We show in \cref{thm:fib_cart} that the class of fibrations is precisely the class of \emph{cartesian} morphisms of reflexive graphs, i.e.~the morphisms $f:\mathcal{A}\to\mathcal{B}$ for which the naturality squares
+We show in \cref{prp:fib_cart} that the class of fibrations is precisely the class of \emph{cartesian} morphisms of reflexive graphs, i.e.~the morphisms $f:\mathcal{B}\to\mathcal{A}$ for which the naturality squares
 \begin{equation*}
 \begin{tikzcd}
 \pts{B} \arrow[d] & \sm{i,j:\pts{B}}\edg{B}(i,j) \arrow[d] \arrow[r] \arrow[l] & \pts{B} \arrow[d] & \pts{B} \arrow[r] \arrow[d] & \sm{i,j:\pts{B}}\edg{B}(i,j) \arrow[d] \\
@@ -52,9 +52,9 @@ are pullback squares. It follows that $f:\mathcal{B}\to\mathcal{A}$ is a fibrati
 \end{equation*}
 of discrete reflexive graphs. Pulling back along $h:\mathcal{A}\to\Delta X$ therefore provides an operation
 \begin{equation*}
-h^\ast : \Big(\sm{Y:\UU}(Y\to X)\Big)\to \Big(\sm{B:\mathsf{rGph}}\mathsf{fib}(\mathcal{B},\mathcal{A})\Big).
+h^\ast : \Big(\sm{Y:\UU}(Y\to X)\Big)\to \Big(\sm{\mathcal{B}:\mathsf{rGph}}\mathsf{fib}(\mathcal{B},\mathcal{A})\Big).
 \end{equation*}
-The descent property for reflexive coequalizers, established in \cref{thm:descent_rcoeq}, states that this map is an equivalence whenever $f:\mathcal{A}\to\Delta X$ is a reflexive coequalizer. As a corollary of the descent property we obtain in \cref{thm:rcoeq_cartesian} that for any fibration $f:\mathcal{B}\to\mathcal{A}$ of reflexive graphs, a commuting square of the form
+The descent property for reflexive coequalizers, established in \cref{thm:descent_rcoeq}, states that this map is an equivalence whenever $f:\mathcal{A}\to\Delta X$ is a reflexive coequalizer. As a consequence of the descent property we obtain in \cref{thm:rcoeq_cartesian} that for any fibration $f:\mathcal{B}\to\mathcal{A}$ of reflexive graphs, a commuting square of the form
 \begin{equation*}
 \begin{tikzcd}
 \mathcal{B} \arrow[d,->>,swap,"f"] \arrow[r] & \Delta Y \arrow[d] \\
@@ -70,7 +70,23 @@ is a pullback square of reflexive graphs if and only if the square
 \end{equation*}
 is a pullback square. A minor note about the forward direction is that the hypothesis that $f$ is a fibration is implied by the assumption that the square is a pullback square, so this assumption is unrestrictively superfluous. However, this assumption is necessary for the converse direction.
 
-In the final section of this chapter we apply the previous results to colimits of diagrams indexed by a (reflexive) graph. Most useful to us are the results on sequential colimits, which we will rely on on later chapters.
+The situation here is that we have an adjunction $F\dashv G$ (in the present case $\mathsf{rcoeq}\dashv \Delta$) satisfying the `descent condition' that if $f$ is a fibration, i.e. the naturality square of the unit $\eta:\idfunc\Rightarrow GF$ at $f$ is a pullback square, then any square of the form
+\begin{equation*}
+\begin{tikzcd}
+A \arrow[d,swap,"f"] \arrow[r] & GX \arrow[d,"Gg"] \\
+B \arrow[r] & GY
+\end{tikzcd}
+\end{equation*}
+is a pullback square if and only if the square
+\begin{equation*}
+\begin{tikzcd}
+FA \arrow[r] \arrow[d,swap,"Ff"] & X \arrow[d,"g"] \\
+FB \arrow[r] & Y
+\end{tikzcd}
+\end{equation*}
+is a pullback square. We will investigate this situation further in \cref{sec:modal_descent}, where we study the descent condition for general modalities.
+
+In the final section of this chapter we apply the previous results to colimits of diagrams indexed by a (reflexive) graph. Most useful to us are the results on sequential colimits, which we will rely on in later chapters.
 
 \section{The Yoneda lemma}
 The universal property of identity types is sometimes called the type theoretic Yoneda lemma: families of maps out of the identity type are uniquely determined by their action on the reflexivity identification.
@@ -96,21 +112,6 @@ This follows by path induction on $p$, since $\ind{a=}(f(a,\refl{a}),a,\refl{a})
 \begin{cor}
 Let $B$ be a type family over $A$, and let $a:A$. Then there is an equivalence
 \begin{equation*}
-\mathsf{ev\usc{}refl}:\Big(\prd{x:A} (a=x)\eqvsym B(x)\Big)\eqvsym \Big(B(a)\times\iscontr\Big(\sm{x:A}B(x)\Big)\Big)
-\end{equation*}
-\end{cor}
-
-\begin{proof}
-The type of fiberwise equivalences $\prd{x:A} (a=x)\eqvsym B(x)$ is equivalent to the type
-\begin{equation*}
-\sm{f:\prd{x:A}(a=x)\to B(x)}\prd{x:A}\isequiv(f)
-\end{equation*}
-By \cref{thm:id_fundamental}, the type $\prd{x:A}\isequiv(f)$ is equivalent to the contractibility of the total space of $B$. Now the claim follows from \cref{lem:yoneda}.
-\end{proof}
-
-\begin{cor}
-Let $B$ be a type family over $A$, and let $a:A$. Then there is an equivalence
-\begin{equation*}
 \eqv{\Big(\idtypevar{A}(a)=B\Big)}{\Big(B(a)\times\iscontr\Big(\sm{x:A}B(x)\Big)\Big)}.
 \end{equation*}
 Furthermore, for $b:B(a)$ there is an equivalence
@@ -119,11 +120,28 @@ Furthermore, for $b:B(a)$ there is an equivalence
 \end{equation*}
 \end{cor}
 
-\begin{cor}\label{cor:yoneda_rel}
-Let $R:A\to (A\to \UU)$ be a reflexive relation on $A$, in the sense that it comes equipped with
+\begin{proof}
+First we show that there is an equivalence
+\begin{equation*}
+\eqv{\Big(\prd{x:A} (a=x)\eqvsym B(x)\Big)}{B(a)\times\iscontr\Big(\sm{x:A}B(x)\Big)}.
+\end{equation*}
+To see this, note that the type of fiberwise equivalences $\prd{x:A} (a=x)\eqvsym B(x)$ is equivalent to the type
+\begin{equation*}
+\sm{f:\prd{x:A}(a=x)\to B(x)}\prd{x:A}\isequiv(f)
+\end{equation*}
+By \cref{thm:id_fundamental}, the type $\prd{x:A}\isequiv(f)$ is equivalent to the contractibility of the total space of $B$. Now the claim follows from \cref{lem:yoneda}. The claims in the statement are now easy consequences.
+\end{proof}
+
+\begin{defn}
+A (small) \define{reflexive relation} $\mathcal{R}$ on $A$ is a pair $(R,\rho)$ consisting of a binary type-valued relation $R:A\to (A\to \UU)$ equipped with a proof of reflexivity
 \begin{equation*}
 \rho : \prd{x:A}R(x,x).
 \end{equation*}
+We will write $\mathsf{rRel}(A)$ for the type of all small reflexive relations on $A$.
+\end{defn}
+
+\begin{cor}\label{cor:yoneda_rel}
+Let $\mathcal{R}\jdeq (R,\rho)$ be a reflexive relation on $A$.
 Then there is an equivalence
 \begin{equation*}
 \eqv{\Big((\idtypevar,\refl{})=(R,\rho)\Big)}{\prd{a:A}\iscontr\Big(\sm{x:A}R(a,x)\Big)}.
@@ -158,7 +176,7 @@ The last equivalence follows since $X\times \iscontr(X)\eqvsym \iscontr(X)$ for 
 \section{Discrete reflexive graphs}
 
 \begin{defn}\label{defn:graphs_ctx}
-A \define{graph} $\mathcal{A}$ in $\UU$ is a pair $\pairr{\pts{A},\edg{A}}$ consisting of
+A \define{non-reflexive graph} $\mathcal{A}$ in $\UU$ is a pair $\pairr{\pts{A},\edg{A}}$ consisting of
 \begin{align*}
 \pts{A} & : \UU \\
 \edg{A} & : \pts{A}\to\pts{A}\to\UU.
@@ -184,28 +202,28 @@ for the type of reflexive graphs in $\UU$.
 E \arrow[r,yshift=1.5ex,"s"] \arrow[r,yshift=-1.5ex,swap,"t"] & V, \arrow[l,"r" description]
 \end{tikzcd}
 \end{equation*}
-equipped with homotopies $H_{sr}:\idfunc[V]\htpy s\circ r$ and $H_{tr}:\idfunc[V]\htpy t\circ r$.
+equipped with homotopies $H_{sr}:s\circ r\htpy \idfunc[V]$ and $H_{tr}:t\circ r\htpy \idfunc[V]$.
 Given a reflexive pair as above, we obtain a reflexive graph $\mathcal{A}$ by taking
 \begin{align*}
 \pts{A} & \defeq V \\
-\edg{A}(v,w) & \defeq \sm{e:E} (v=s(e))\times (w=t(e)) \\
+\edg{A}(v,w) & \defeq \sm{e:E} (s(e)=v)\times (t(e)=w) \\
 \rfx{\mathcal{A}}(v) & \defeq \pairr{r(v),H_{sr}(v),H_{tr}(v)}.
 \end{align*}
 By a routine construction it can be shown that the type of small reflexive pairs is equivalent to the type of small reflexive graphs.
-\item \label{eg:disc_codisc} Given a type $X$, we have the \define{discrete graph} $\Delta(X)$ on $X$ consisting of
+\item \label{eg:disc_codisc} Given a type $X$, the \define{discrete graph} $\Delta(X)$ on $X$ is the reflexive graph consisting of
 \begin{align*}
 \pts{\Delta(X)} & \defeq X \\
 \edg{\Delta(X)} & \defeq \idtypevar{X} \\
-\rfx{\Delta(X)} & \defeq \refl{},
+\rfx{\Delta(X)} & \defeq \refl{}.
 \end{align*}
-and we have the \define{indiscrete graph} $\nabla(X)$ on $X$ consisting of
+The \define{indiscrete graph} $\nabla(X)$ on $X$ is the reflexive graph consisting of
 \begin{align*}
 \pts{\nabla(X)} & \defeq X \\
 \edg{\nabla(X)} & \defeq \lam{x}{y}\unit \\
 \rfx{\nabla(X)} & \defeq \ttt.
 \end{align*}
 In particular, we have the \define{unit} graph $\unit\defeq\nabla(\unit)$, which happens to also be $\Delta(\unit)$. 
-\item The \define{walking arrow} $\mathcal{I}$ is an example of a reflexive graph. It consists of
+\item The \define{walking arrow} $\mathcal{I}$ is an example of a reflexive graph. One way of defining it is by taking
 \begin{align*}
 \pts{\mathcal{I}} & \defeq \bool \\
 \edg{\mathcal{I}}(x,y) & \defeq \tau(x)\to \tau(y) \\
@@ -230,7 +248,7 @@ A \define{morphism} of reflexive graphs $f$ from $\mathcal{A}$ to $\mathcal{B}$ 
 witnessing that reflexivity is preserved. We write $\mathsf{rGph}(\mathcal{A},\mathcal{B})$ for the type of reflexive graph morphisms from $\mathcal{A}$ to $\mathcal{B}$.
 \end{defn}
 
-For any reflexive graph there is an identity morphism, and for any composable pair of morphisms there is a composite. Furthermore, these operations are associative, and satisfy the unit laws. It should be noted, however, that composition of reflexive graph morphisms is not expected to be associative on the nose, since the reflexivity is only preserved up to higher identification. In other words, preservation of reflexivity is part of the \emph{structure} of a reflexive graph morphism, and is not a property. 
+For any reflexive graph there is an identity morphism, and for any composable pair of morphisms there is a composite. Furthermore, these operations are associative, and satisfy the unit laws. It should be noted, however, that composition of reflexive graph morphisms is not expected to be associative on the nose, since the reflexivity is only preserved up to higher identification.
 
 \begin{eg}\label{eg:rgraph_morphism}
 \begin{enumerate}
@@ -240,12 +258,13 @@ For any reflexive graph there is an identity morphism, and for any composable pa
 \edg{\Delta f} & \defeq \apfunc{f} \\
 \rfx{\Delta f} & \defeq \refl{\refl{f(x)}}
 \end{align*}
+The action of $\Delta$ on morphisms preserves identity morphisms and compositions, and moreover it preserves the unit laws and associativity. 
 \item The graph $\nabla(\unit)$ is the terminal reflexive graph in the sense that for any graph $\mathcal{A}$, the type $\mathsf{rGph}(\mathcal{A},\unit)$ is contractible.
 \item For any reflexive graph $\mathcal{A}$, the map 
 \begin{equation*}
 \mathsf{ev\usc{}pt}:\mathsf{rGph}(\unit,\mathcal{A})\to\pts{A}
 \end{equation*}
-given by $f\mapsto \pts{f}(\ttt)$, is an equivalence. The analogous statement is false for (non-reflexive) graphs.
+given by $f\mapsto \pts{f}(\ttt)$, is an equivalence. The analogous statement is false for non-reflexive graphs.
 \item The universal property of the walking arrow $\mathcal{I}$ is that every edge $e$ in a graph $\mathcal{A}$, the type of reflexive graph morphisms that map the edge $a$ of $\mathcal{I}$ to $e$ is contractible. In other words, the map
 \begin{equation*}
 \mathsf{ev\usc{}arrow} : \mathsf{rGph}(\mathcal{I},\mathcal{A})\to \sm{i,j:\pts{A}}\edg{A}(i,j)
@@ -353,7 +372,7 @@ Suppose (i) holds. We have a commuting square
 \pts{A} \arrow[r] & \sm{i,j:\pts{A}}\edg{A}(i,j)
 \end{tikzcd}
 \end{equation*}
-where both vertical maps are equivalences, and the top map is an equivalence by assumption. Therefore the bottom map is an equivalence.
+where both vertical maps are equivalences, and the bottom map is an equivalence by assumption. Therefore the top map is an equivalence. This proves that (i) implies (ii).
 
 Since the reflexive graph morphism $\mathsf{rGph}(\mathcal{I},\unit)$ is a common retraction of both end-point inclusions, it follows that the pre-composition map
 \begin{equation*}
@@ -378,13 +397,13 @@ in which both vertical maps are equivalences. Therefore the fibers of $\pi_1$ ar
 \end{equation*}
 so it follows from (iii) that these are contractible. Then (i) follows by the fundamental theorem of identity types, \cref{thm:id_fundamental}.
 
-The argument that (i) follows from (iv) is similar, using $\pi_2$ instead of $\pi_1$ in the square.
+The argument that (i) follows from (iv) is similar, using $\pi_2$ and $1^\ast$ instead of $\pi_1$ and $0^\ast$ in the square.
 \end{proof}
 
 \section{Reflexive coequalizers}
 
 \begin{defn}
-Consider a reflexive graph $\mathcal{A}$ and a type $X$ equipped with a morphism $f:\mathsf{rGph}(\mathcal{A},\Delta(X))$. We say that $X$ is a \define{reflexive coequalizer} if the map
+Consider a reflexive graph $\mathcal{A}$ and a type $X$ equipped with a morphism $f:\mathsf{rGph}(\mathcal{A},\Delta(X))$. We say that $f$ is a \define{reflexive coequalizer} if the map
 \begin{equation*}
 \Delta(\blank) \circ f: (X\to Y)\to \mathsf{rGph}(\mathcal{A},\Delta(Y))
 \end{equation*}
@@ -438,40 +457,48 @@ Then the map
 \begin{equation*}
 \mathsf{coh\usc{}red}:\Big(\sm{x:A}{r:R(x,x)}\alpha(r)=\refl{x}\Big)\to \Big(\sm{x,y:A}R(x,y)\Big).
 \end{equation*}
-given by $(x,r,c)\mapsto (x,x,r)$ is an equivalence.
+given by $(x,r,c)\mapsto (x,x,r)$ is an equivalence.\qed
 \end{cor}
 
-\begin{proof}
-Immediate by \cref{thm:fib_equiv}.
-\end{proof}
+\begin{defn}
+For any reflexive graph $\mathcal{A}$ we define the span $\tilde{\mathcal{A}}$ of $\mathcal{A}$ to consist of
+\begin{equation*}
+\begin{tikzcd}
+\tilde{A}_0 & \tilde{A}_1 \arrow[l,swap,"\pi_1"] \arrow[r,"\pi_2"] & \tilde{A}_0
+\end{tikzcd}
+\end{equation*}
+where $\tilde{A}_0\defeq A_0$ and $\tilde{A}_1\defeq\sm{x,y:A_0}A_1(x,y)$.
+\end{defn}
 
 \begin{lem}\label{lem:rcoeq_into_disc}
 For any reflexive graph $\mathcal{A}$, and any type $X$, the map
 \begin{equation*}
-f\mapsto (f_0,f_0,\lam{(x,(y,e))}\edg{f}(e)) : \mathsf{rGph}(\mathcal{A},\Delta X) \to \mathsf{cocone}_{\tilde{\mathcal{A}}}(X),
+f\mapsto (f_0,f_0,\lam{(x,y,e)}\edg{f}(e)) : \mathsf{rGph}(\mathcal{A},\Delta X) \to \mathsf{cocone}_{\tilde{\mathcal{A}}}(X),
 \end{equation*}
 is an equivalence, where $\tilde{\mathcal{A}}$ is the span $(\tilde{A}_1,\pi_1,\pi_2)$ from $A_0$ to $A_0$. 
 \end{lem}
 
 \begin{proof}
-Write $\varphi$ for the asserted map, and write
-\begin{align*}
-\mathsf{rGph}'(\mathcal{A},\Delta X) & \defeq \sm{\pts{f}:\pts{A}\to X}{\edg{f}:\prd{x,y:\pts{A}}\edg{A}(x,y)\to f(x)=f(y)} \\
-& \phantom{\defeq\sm{\pts{f}:\pts{A}\to X}} \mathsf{eq\usc{}htpy}(\lam{x}\edg{f}(\rfx{\mathcal{A}}(x)))=\refl{\pts{f}} \\
-\mathsf{cocone}'_{\tilde{A}}(X) & \defeq \sm{f,g:\pts{A}\to X}\prd{x,y:\pts{A}}\edg{A}(x,y)\to f(x)=f(y).
-\end{align*}
-Note that we have a commuting square
+First observe that $\mathsf{rGph}(\mathcal{A},\Delta X)$ is equivalent to the type
+\begin{equation*}
+\sm{\pts{f}:\pts{A}\to X}{\edg{f}:\prd{x,y:\pts{A}}\edg{A}(x,y)\to f(x)=f(y)}\mathsf{eq\usc{}htpy}(\lam{x}\edg{f}(\rfx{\mathcal{A}}(x)))=\refl{\pts{f}}.
+\end{equation*}
+We write $\mathsf{rGph}'(\mathcal{A},\Delta X)$ for the latter type. Furthermore, we observe that the type $\mathsf{cocone}_{\tilde{\mathcal{A}}}(X)$ is equivalent to the type
+\begin{equation*}
+\mathsf{cocone}'_{\tilde{A}}(X) \defeq \sm{f,g:\pts{A}\to X}\prd{x,y:\pts{A}}\edg{A}(x,y)\to f(x)=f(y).
+\end{equation*}
+Now we note that we have a commuting square
 \begin{equation*}
 \begin{tikzcd}[column sep=large]
 \mathsf{rGph}(\mathcal{A},\Delta X) \arrow[d] \arrow[r,"\varphi"] & \mathsf{cocone}_{\tilde{\mathcal{A}}}(X) \arrow[d] \\
 \mathsf{rGph}'(\mathcal{A},\Delta X) \arrow[r,swap,"\mathsf{coh\usc{}red}"] & \mathsf{cocone}'_{\tilde{\mathcal{A}}}(X).
 \end{tikzcd}
 \end{equation*}
-The coherence reduction map uses the homotopy
+where the map $\varphi$ is the map in the statement, and the coherence reduction map uses the homotopy
 \begin{equation*}
 (f,g,H)\mapsto \mathsf{eq\usc{}htpy}(\lam{x}H(\rfx{A}(x))).
 \end{equation*}
-The vertical map on the left is obtained by function extensionality, so it is an equivalence. The vertical map on the right is obtained by evaluating at a pair, which is an equivalence by the dependent universal property of $\Sigma$-types. It follows that the asserted map is an equivalence.
+Both vertical maps and the coherence reduction map are equivalences, so it follows that the asserted map is an equivalence.
 \end{proof}
 
 \begin{prp}\label{thm:rcoeq_is_pushout}
@@ -508,7 +535,7 @@ commutes, for any type $Y$. In this triangle, the bottom map is the map defined 
 \begin{enumerate}
 \item The reflexive graph quotient of the discrete graph $\Delta(X)$ of a type $X$ is just $X$ itself. It also follows that $\mathsf{constr} : \mathsf{rGph}(\mathcal{A},\Delta(\mathsf{rcoeq}(\mathcal{A})))$ is an equivalence of reflexive graphs if and only if $\mathcal{A}$ is a discrete graph.
 \item The reflexive graph quotient of the indiscrete graph $\nabla(X)$ on a type $X$ is the join square $\join{X}{X}$.
-\item Let $\mathcal{A}$ be a non-reflexive graph, and let $F(\mathcal{A})$ be the reflexive graph obtained by freely adding a proof of reflexivity, as in \autoref{eg:freerfx} of \autoref{eg:running_graphs}. Then the non-reflexive graph quotient of $\mathcal{A}$ is the reflexive graph quotient of $F(\mathcal{A})$. 
+\item Let $\mathcal{A}$ be a non-reflexive graph, and let $F(\mathcal{A})$ be the reflexive graph obtained by freely adding a proof of reflexivity, as in \autoref{eg:freerfx} of \autoref{eg:rgraph_morphism}. Then the non-reflexive graph quotient of $\mathcal{A}$ is the reflexive graph quotient of $F(\mathcal{A})$. 
 \item Let $X$ be a type with base point $x_0:X$. Define the reflexive graph $SX$ by
 \begin{align*}
 \pts{SX} & \defeq \unit \\
@@ -582,23 +609,15 @@ Given an equifibered family $\mathcal{E}$, we form the reflexive graph $\msm{\ma
 \edg{\msm{\mathcal{A}}{\mathcal{E}}}((x,u),(y,v)) & \defeq \sm{e:\edg{A}(x,y)} \edg{E}(e,u) = v \\
 \rfx{\msm{\mathcal{A}}{\mathcal{E}}}(x,u) & \defeq (\rfx{\mathcal{A}}(x),\rfx{\mathcal{E}}(x,u)).
 \end{align*}
-There is an obvious projection morphism $\proj 1 : \mathsf{rGph}(\msm{\mathcal{A}}{\mathcal{E}},\mathcal{A})$, which is cartesian.
-\end{eg}
-
-\begin{lem}
-Suppose that $f:\mathsf{rGph}(\mathcal{B},\mathcal{A})$ is left or right cartesian. Then the square
+There is an obvious projection morphism $\proj 1 : \mathsf{rGph}(\msm{\mathcal{A}}{\mathcal{E}},\mathcal{A})$, which is cartesian, because the squares in the diagram
 \begin{equation*}
 \begin{tikzcd}
-\pts{B} \arrow[r] \arrow[d] & \sm{i,j:\pts{B}}\edg{B}(i,j) \arrow[d] \\
-\pts{A} \arrow[r] & \sm{i,j:\pts{A}}\edg{A}(i,j)
+\pts{\msm{\mathcal{A}}{\mathcal{E}}} \arrow[d,"\proj 1"] & \sm{s,t:\msm{\mathcal{A}}{\mathcal{E}}}\edg{\msm{\mathcal{A}}{\mathcal{E}}} \arrow[l] \arrow[r] \arrow[d,swap,"\proj 1"] & \pts{\msm{\mathcal{A}}{\mathcal{E}}} \arrow[d] \\
+\pts{\mathcal{A}} & \sm{x,y:\pts{A}}\edg{A}(x,y) \arrow[l] \arrow[r] & \pts{\mathcal{A}}
 \end{tikzcd}
 \end{equation*}
-is a pullback square.
-\end{lem}
-
-\begin{proof}
-Analogous to the proof of \cref{lem:leftfib_Inull}.
-\end{proof}
+are pullback squares by \cref{thm:pb_fibequiv}.
+\end{eg}
 
 \begin{lem}
 Consider $f:\mathsf{rGph}(\mathcal{B},\mathcal{A})$ and $g:\mathsf{rGph}(\mathcal{C},\mathcal{B})$, and suppose that $f$ is (left/right) cartesian. Then $g$ is (left/right) cartesian if and only if $f\circ g$ is (left/right) cartesian, respectively.
@@ -631,6 +650,17 @@ For any morphism $f:\mathsf{rGph}(\mathcal{B},\mathcal{A})$ we have the commutin
 in which all vertical maps are equivalences. Therefore the top square is a pullback if and only if the bottom square is a pullback, which proves that (ii) holds if and only if (iii) holds.
 \end{proof}
 
+\begin{cor}
+Suppose that $f:\mathsf{rGph}(\mathcal{B},\mathcal{A})$ is left or right cartesian. Then the square
+\begin{equation*}
+\begin{tikzcd}
+\pts{B} \arrow[r] \arrow[d] & \sm{i,j:\pts{B}}\edg{B}(i,j) \arrow[d] \\
+\pts{A} \arrow[r] & \sm{i,j:\pts{A}}\edg{A}(i,j)
+\end{tikzcd}
+\end{equation*}
+is a pullback square.
+\end{cor}
+
 \begin{prp}
 Consider a commuting square
 \begin{equation*}
@@ -658,14 +688,14 @@ Straightforward.
 \end{proof}
 
 \begin{prp}
-Consider a pullback square
+Consider a pullback square\marginnote{Should be a general lemma about orthogonality}
 \begin{equation*}
 \begin{tikzcd}
 \mathcal{B}' \arrow[r] \arrow[d,swap,"{f'}"] & \mathcal{B} \arrow[d,"f"] \\
 \mathcal{A}' \arrow[r] & \mathcal{A}
 \end{tikzcd}
 \end{equation*}
-and let $h:\mathsf{rGph}(\mathcal{Y},\mathcal{X})$ be a morphism of reflexive graphs. If $f$ is right orthogonal to $h$, then so is $f'$. In particular, if $f$ is a (left/right) fibration, then so is $f'$. 
+of reflexive graphs, and let $h:\mathsf{rGph}(\mathcal{Y},\mathcal{X})$ be a morphism of reflexive graphs. If $f$ is right orthogonal to $h$, then so is $f'$. In particular, if $f$ is a (left/right) fibration, then so is $f'$. 
 \end{prp}
 
 \begin{proof}
@@ -689,14 +719,14 @@ For any map $f:X\to Y$, the morphism $\Delta f : \Delta X \to \Delta Y$ is a fib
 The commuting square
 \begin{equation*}
 \begin{tikzcd}
-\mathsf{rGph}(\mathcal{I},\Delta X) \arrow[d] \arrow[r] & \mathsf{rGph}(\unit,\Delta X) \arrow[d] \\
-\mathsf{rGph}(\mathcal{I},\Delta Y) \arrow[r] & \mathsf{rGph}(\unit,\Delta Y)
+\mathsf{rGph}(\mathcal{I},\Delta X) \arrow[d] \arrow[r,"0^\ast/1^\ast"] & \mathsf{rGph}(\unit,\Delta X) \arrow[d] \\
+\mathsf{rGph}(\mathcal{I},\Delta Y) \arrow[r,swap,"0^\ast/1^\ast"] & \mathsf{rGph}(\unit,\Delta Y)
 \end{tikzcd}
 \end{equation*}
 is a pullback square, since both horizontal maps are equivalences.
 \end{proof}
 
-It follows that any pullback of a morphism between discrete reflexive graphs is a fibration. We will see in \cref{thm:etale_fibration} that a morphism of reflexive graphs is a fibration if and only if the square
+It follows that any pullback of a morphism between discrete reflexive graphs is a fibration. We will see in \cref{thm:etale_fibration}\marginnote{This theorem is in a much later chapter!} that a morphism of reflexive graphs is a fibration if and only if the square
 \begin{equation*}
 \begin{tikzcd}
 \mathcal{A} \arrow[d,swap,"f"] \arrow[r] & \Delta(\rcoeq(\mathcal{A})) \arrow[d,"\Delta(\rcoeq(f))"] \\
@@ -713,7 +743,7 @@ Consider any square (commuting or not)
 \mathcal{A} \arrow[r,swap,"h"] & \Delta X.
 \end{tikzcd}
 \end{equation*}
-Then the type of identifications witnessing that the square commutes is equivalent to the type of triples $(H,H',K)$ consisting of two homotopies $H,H': h_0 \circ f_0\htpy g\circ k_0$ and a homotopy witnessing that the cube
+Then the type of identifications witnessing that the square commutes is equivalent to the type of triples $(H,H',K)$ consisting of two homotopies $H,H': h_0 \circ f_0\htpy g\circ k_0$ and a homotopy $K$ witnessing that the cube
 \begin{equation*}
 \begin{tikzcd}
 & \tilde{B}_1 \arrow[dl] \arrow[d] \arrow[dr] \\
@@ -722,7 +752,7 @@ Then the type of identifications witnessing that the square commutes is equivale
 & X
 \end{tikzcd}
 \end{equation*}
-commutes. In this cube we assign $H$ and $H'$ to the front left and right squares, respectively.
+commutes. In this cube we assign $H$ and $H'$ to the front left and right squares, respectively.\marginnote{To prove}
 \end{lem}
 
 \begin{thm}\label{thm:descent_rcoeq}
@@ -730,7 +760,7 @@ Consider a reflexive graph morphism $h:\mathsf{rGph}(\mathcal{A},\Delta X)$. If 
 \begin{equation*}
 h^\ast : \Big(\sm{Y:\UU}Y\to X\Big)\to \Big(\sm{\mathcal{B}:\mathsf{rGph}}\mathsf{fib\usc{}rGph}(\mathcal{B},\mathcal{A})\Big)
 \end{equation*}
-is an equivalence. 
+is an equivalence. \marginnote{To prove}
 \end{thm}
 
 \begin{cor}\label{cor:descent_rcoeq}
@@ -758,11 +788,11 @@ of reflexive graphs. Then the following are equivalent:
 \item The square
 \begin{equation*}
 \begin{tikzcd}
-\mathsf{rcoeq}(\mathcal{B}) \arrow[r] \arrow[d] & Y \arrow[d] \\
+\mathsf{rcoeq}(\mathcal{B}) \arrow[r] \arrow[d,swap,"\mathsf{rcoeq}(f)"] & Y \arrow[d] \\
 \mathsf{rcoeq}(\mathcal{A}) \arrow[r] & X 
 \end{tikzcd}
 \end{equation*}
-of types is a pullback square.
+of types is a pullback square.\marginnote{To prove}
 \end{enumerate}
 \end{thm}
 
@@ -1364,418 +1394,4 @@ B_\infty \arrow[r] & Y
 is a pullback square.
 \end{cor}
 
-\section{Type sequences}
-Infinite sequences of types can be seen as diagrams over the graph of natural
-numbers with an edge between each number and its successor. Since diagrams over
-a graph model dependent type theory with $\Sigma$ and $\idtypevar{}$, we also
-get the structure of type dependency for infinite sequences of types. We make
-that structure explicit here.
-
-\begin{defn}
-A \define{type sequence} $\sequence{A}{f}$ consists of a diagram of the form
-\begin{equation*}
-\begin{tikzcd}
-A_0 \arrow[r,"f_0"] & A_1 \arrow[r,"f_1"] & A_2 \arrow[r,"f_2"] & \cdots
-\end{tikzcd}
-\end{equation*}
-Thus, the type of all sequences of types is
-\begin{equation*}
-\mathrm{Seq} \defeq \sm{A:\nat\to\type}\prd{n:\nat} A_n\to A_{n+1}
-\end{equation*}
-\end{defn}
-
-Recall that the relation $\leq$ on the natural numbers is defined as an inductive family of types $\leq:\N\to\N\to\UU$ with
-\begin{align*}
-r & : \prd{n:\N} n\leq n \\
-s & : \prd{n,m:\N} n\leq m \to n\leq m+1.
-\end{align*}
-It follows that $n\leq m$ is a a mere proposition for each $n,m:\N$.
-
-\begin{defn}
-Let $\sequence{A}{f}$ be a type sequence. For any $n,m:\nat$, we define
-\begin{equation*}
-f^{n\leq m} : A_n\to A_m.
-\end{equation*}
-where we leave the proof that $n\leq m$ implicit.
-\end{defn}
-
-\begin{proof}[Construction]
-We define $f^{n\leq m}$ by induction on the proof that $n\leq m$ by taking
-\begin{align*}
-f^{n\leq n} & \defeq \idfunc[A_n] \\
-f^{n\leq m+1} & \defeq f_m\circ f^{n\leq m} \qedhere
-\end{align*}
-\end{proof}
-
-\begin{defn}
-Let $\sequence{A}{f}$ be a type sequence. For any $n,k:\nat$, we define
-$f_n^k:A_n\to A_{n+k}$ to be $f^{n\leq n+k}(p)$, where $p$ is the canonical proof that $n\leq n+k$.
-\end{defn}
-
-\begin{defn}
-A \define{sequence $\sequence{B}{g}$ of types over $\sequence{A}{f}$} consists of a diagram of the form
-\begin{equation*}
-\begin{tikzcd}
-B_{0} \arrow[r,"g_0"] \arrow[d,->>] & B_{1} \arrow[r,"g_1"] \arrow[d,->>] & B_{2} \arrow[r,"g_2"] \arrow[d,->>] & \cdots \\
-A_0 \arrow[r,"f_0"] & A_1 \arrow[r,"f_1"] & A_2 \arrow[r,"f_2"] & \cdots
-\end{tikzcd}
-\end{equation*}
-where each $g_n$ has type $\prd{a:A_n} B_n(x)\to B_{n+1}(f_n(a))$, implicitly rendering the
-squares commutative.
-
-We say that a sequence $\sequence{B}{g}$ over $\sequence{A}{f}$ is \define{equifibered} if each $g_n$ is a family of equivalences.
-\end{defn}
-
-\begin{comment}
-\begin{defn}
-A \define{global section} $\sequence{t}{T}$ of a sequence $\sequence{P}{f}$ over
-$\sequence{A}{a}$ consists of 
-\begin{align*}
-t & : \prd{n:\nat}{x:A_n}P_n(x) \\
-T & : \prd{n:\nat}{x:A_n}\id{t_{n+1}(a_n(x))}{f_n(t_n(x))}
-\end{align*}
-\end{defn}
-
-For the following definition, recall that for any two types $X$ and $Y$, we
-may consider the constant type family $\ctxwk{X}{Y}\defeq\lam{x}Y:X\to\type$.
-This process is called weakening.
-
-\begin{defn}
-Let $\sequence{A}{a}$ and $\sequence{B}{b}$ be sequences of types. Then we
-define the \define{weakened sequence} $\ctxwk{\sequence{A}{a}}{\sequence{B}{b}}$ over
-$\sequence{A}{a}$ to consist of
-\begin{equation*}
-\begin{tikzcd}[column sep=large]
-\ctxwk{A_0}{B_0} \arrow[r,"\lam{x} b_0"] \arrow[d,->>] & \ctxwk{A_1}{B_1} \arrow[r,"\lam{x}b_1"] \arrow[d,->>] & \ctxwk{A_2}{B_2} \arrow[r,"\lam{x}b_2"] \arrow[d,->>] & \cdots \\
-A_0 \arrow[r,"a_0"] & A_1 \arrow[r,"a_1"] & A_2 \arrow[r,"a_2"] & \cdots
-\end{tikzcd}
-\end{equation*}
-\end{defn}
-\end{comment}
-
-\begin{defn}
-Let $\sequence{A}{f}$ and $\sequence{A'}{f'}$ be type sequences.
-A \define{natural transformation} $\sequence{A}{f}\to\sequence{A'}{f'}$
-is a pair $\sequence{\tau}{H}$ consisting of a family of maps
-\begin{equation*}
-\tau : \prd{n:\N} A_n \to A'_n
-\end{equation*}
-and a family $H_n$ of homotopies witnessing that the diagram
-\begin{equation*}
-\begin{tikzcd}
-A_{0} \arrow[r,"f_0"] \arrow[d,"\tau_0"] & A_{1} \arrow[r,"f_1"] \arrow[d,"\tau_1"] & A_{2} \arrow[r,"f_2"] \arrow[d,"\tau_2"] & \cdots \\
-A'_0 \arrow[r,"{f'_0}"] & A'_1 \arrow[r,"{f'_1}"] & A'_2 \arrow[r,"{f'_2}"] & \cdots
-\end{tikzcd}
-\end{equation*}
-commutes.
-\end{defn}
-
-\begin{defn}
-A \define{natural equivalence} is a natural
-transformation $(\tau,H)$ such that each $\tau_n$ is an equivalence. 
-The type of natural equivalences from $\sequence{A}{f}$ to $\sequence{A'}{f'}$
-is called $\mathsf{NatEq}(\sequence{A}{f},\sequence{A'}{f'})$.
-\end{defn}
-
-\begin{lem}
-The canonical dependent function $\mathsf{idtonateq}$ 
-\begin{equation*}
-%\prd{\sequence{A}{f},\sequence{A'}{f'}:\mathrm{Seq}} 
-(\id{\sequence{A}{f}}{\sequence{A'}{f'}})\to \mathsf{NatEq}(\sequence{A}{f},\sequence{A'}{f'})
-\end{equation*}
-which sends $\refl{\sequence{A}{f}}$ to the identity natural transformation, is
-an equivalence.
-\end{lem}
-
-\begin{proof}
-Straightforward application of univalence.
-\end{proof}
-
-Every type sequence $\sequence{B}{g}$ over $\sequence{A}{f}$ gives rise to a natural transformation, by the following definition. 
-
-\begin{defn}
-Let $\sequence{B}{g}$ be a sequence over $\sequence{A}{f}$. Then we define the
-sequence $\msm{\sequence{A}{f}}{\sequence{B}{g}}$ to consist of the diagram
-\begin{equation*}
-\begin{tikzcd}[column sep=large]
-\sm{a:A_0}B_0(a) \arrow[r,"\pairr{f_0,g_0}"] & \sm{a:A_1}B_1(a) \arrow[r,"\pairr{f_1,g_1}"]
-& \sm{a:A_2}B_2(a) \arrow[r,"\pairr{f_2,g_2}"] & \cdots
-\end{tikzcd}
-\end{equation*}
-where we take the usual definition
-\begin{equation*}
-\pairr{f_n,g_n} \defeq \lam{\pairr{a,b}}\pairr{f_n(a),g_n(a,b)}.
-\end{equation*}
-Furthermore, we define a natural transformation 
-\begin{equation*}
-\sequence{\pi}{\theta}:\msm{\sequence{A}{f}}{\sequence{B}{g}}\to \sequence{A}{f}
-\end{equation*}
-by taking 
-\begin{align*}
-\pi_n & \defeq \proj1 & & : (\sm{a:A_n}B_n(a))\to A_n \\
-\theta_n(a,b) & \defeq\refl{f_n(a)} & & : f_n(\proj 1(a,b))= \proj 1(f_n(a),g_n(b)).
-\end{align*}
-\end{defn}
-
-\begin{defn}
-A natural transformation is said to be \define{cartesian} if all the naturality squares are pullback squares.
-\end{defn}
-
-Of course, every natural equivalence is also cartesian. Recall that for any $f:A\to A'$ and any $g:\prd{a:A}B(a)\to B'(f(a))$, the square
-\begin{equation*}
-\begin{tikzcd}
-\sm{a:A}B(a) \arrow[r,"\pairr{f,g}"] \arrow[d,->>] & \sm{a':A'}B'(a') \arrow[d,->>] \\
-A \arrow[r,swap,"f"] & A'
-\end{tikzcd}
-\end{equation*}
-is a pullback square if and only if $g$ is a family of equivalences. Thus, we have the following:
-
-\begin{lem}
-A family $\sequence{B}{g}$ of sequences over $\sequence{A}{f}$ is equifibered if and only if the projection transformation $(\pi,\theta):\msm{(A,f)}{(B,g)}\to (A,f)$ is cartesian. \qed
-\end{lem}
-
-We end this section with reviewing the shift operation on type sequences, in particular to bring up subtleties that come up in the formalization of mathematics in homotopy type theory. The issue we face is that equality in the natural numbers isn't always strict. For instance, when addition is defined by induction on the second argument, then $n+0$ is judgmentally equal to $n$, while $0+n$ is not. This implies that sometimes we might have to \emph{transport} along the equalities in the natural numbers (such as $n=0+n$), and this complicates the formalization process.
-
-We define the shift operation.
-\begin{defn}
-For any type sequence $\sequence{A}{f}$ we define the type sequence $(S(A),S(f))$ by taking
-\begin{align*}
-S(A)_n & \defeq A_{n+1} \\
-S(f)_n & \defeq f_{n+1}.
-\end{align*}
-\end{defn}
-
-Of course we can iterated the shift operation, defining a type sequence $(S^k(A),S^k(f))$ for every $k:\N$. However, while the type $S^k(A)_n$ is $A_{n+k}$, the function $S^k(f)_n$ is some function $A_{n+k}\to A_{(n+1)+k}$ that isn't judgmentally equal to a function of the form $f_m$ for some $m:\N$. Therefore, we make the following alternative definition of the $k$-shift.
-
-\begin{defn}
-Given a type sequence $(A,f)$, we define $S_k(A,f)\jdeq(S_k(A),S_k(f))$ to be the type sequence given by
-\begin{align*}
-S_k(A)_n & \defeq A_{k+n} \\
-S_k(f)_n & \defeq f_{k+n}.
-\end{align*}
-Given a dependent sequence $(B,g)$ over $(A,f)$, we also define $S_k(B,g)\jdeq (S_k(B),S_k(g))$ by 
-\begin{align*}
-S_k(B)_n & \defeq B_{k+n} \\
-S_k(g)_n & \defeq g_{k+n}.
-\end{align*}
-\end{defn}
-
-The sequence $(S_{k+1}(A),S_{k+1}(f))$ is not judgmentally equal to the sequence $S(S_k(A),S_k(f))$, since in general we do not have $(k+1)+n\jdeq (k+n)+1$. Therefore we have the following lemma.
-
-\begin{lem}\label{lem:iterate_succ}
-For any $k,n:\nat$ and $a : A_k$, one has $q_{k,n}(a):\dpath{A}{p(k,n)}{f_k^{n+1}(a)}{f_{k+1}^n(f_k(a))}$ where $p(k,n):(k+n)+1=(k+1)+n$ is the canonical path in $\nat$.
-\end{lem}
-
-\begin{proof}
-By induction on $n:\N$.
-\end{proof}
-
-\begin{cor}
-For any type sequence $\sequence{A}{f}$, the type sequence $(S_{k+1}(A),S_{k+1}(f))$ is naturally equivalent to the type sequence $(S(S_k(A)),S(S_k(f)))$. 
-\end{cor}
-
-\begin{comment}
-\begin{defn}
-A \define{dependent natural transformation} $\tau:\sequence{P}{f}\to\sequence{Q}{g}$ of
-dependent sequences over $\sequence{A}{a}$ consists of functions
-$\tau_n(x):P_n(x)\to Q_n(x)$ for each $x:A_n$, together with a term witnessing 
-that any square of the form
-\begin{equation*}
-\begin{tikzcd}
-P_n(x) \arrow[r,"f_n(x)"] \arrow[d,swap,"\tau_n(x)"] & P_{n+1}(a(x)) \arrow[d,"\tau_{n+1}(a(x))"] \\
-Q_n(x) \arrow[r,"g_n(x)"] & Q_{n+1}(a(x))
-\end{tikzcd}
-\end{equation*}
-commutes. A \define{dependent natural equivalence} is a dependent natural transformation
-$\tau$ for which $\tau_n(x)$ is an equivalence for each $n:\nat$ and $x:A_n$.
-\end{defn}
-
-\begin{lem}
-For any two dependent sequences $\sequence{P}{f}$ and $\sequence{Q}{g}$ over
-$\sequence{A}{a}$, the function
-\begin{equation*}
-(\id{\sequence{P}{f}}{\sequence{Q}{g}})\to\mathsf{NatEq}_{\sequence{A}{a}}(\sequence{P}{f},\sequence{Q}{g})
-\end{equation*}
-is an equivalence.
-\end{lem}
-\end{comment}
-
-\section{Sequential colimits}
-
-\begin{defn}
-Consider the sequence $\sequence{A}{f}$ of types
-\begin{equation*}
-\begin{tikzcd}
-A_0 \arrow[r,"f_0"] & A_1 \arrow[r,"f_1"] & A_2 \arrow[r,"f_2"] & \cdots
-\end{tikzcd}
-\end{equation*}
-We define the colimit $A_\infty$ to be the higher inductive type with constructors
-\begin{align*}
-\iota^{A,f} & : \prd{n:\mathbb{N}} A_n\to A_\infty \\
-\kappa^{A,f} & : \prd{n:\mathbb{N}}{x:A_n} \id{\iota_{n+1}(f(x))}{\iota_n(x)}.
-\end{align*}
-\end{defn}
-
-\begin{rmk}
-The induction principle for sequential colimits tells us how to construct a dependent function $f:\prd{a:A_\infty}P(a)$ for a type family $P:A_\infty\to\type$.
-
-Given $s:\prd{a:A_\infty}P(a)$ we get
-\begin{align*}
-\lam{n}{a} s(\iota_n(a)) & : \prd{n:\N}{a:A_n}P(\iota_n(a)) \\
-\lam{n}{a} \apd{s}{\kappa_n(a)} & : \prd{n:\N}{a:A_n} s(\iota_n(a)) =_{\kappa_n(a)}^P s(\iota_{n+1}(f_n(a)))
-\end{align*}
-In other words, we have a canonical map
-\begin{equation*}
-\Big(\prd{a:A_\infty}P(a)\Big)\to\Big(\sm{h:\prd{n:\N}{a:A_n}P(\iota_n(a))}\prd{n:\N}{a:A_n} h_n(a) =_{\kappa_n(a)}^P h_{n+1}(f_n(a))\Big)
-\end{equation*}
-Now we can state the induction principle and computation rule concisely: the canonical map described above comes equipped with a section. We assume that that the computation rule is strict on the point constructors.
-\end{rmk}
-
-The universal property of sequential colimits is a straightforward consequence of the induction principle.
-
-\begin{thm}
-Let $\sequence{A}{f}$ be a type sequence, and let $X$ be a type. Then the canonical map
-\begin{equation*}
-(A_\infty\to X)\to \sm{h:\prd{n:\N}A_n\to X}\prd{n:\N} h_n\htpy h_{n+1}\circ f_n
-\end{equation*}
-is an equivalence.
-\end{thm}
-
-The following theorem is a descent theorem for sequential colimits.
-
-\begin{thm}\label{thm:descent}
-Consider a sequence $\sequence{A}{f}$. The type $A_\infty\to\UU$ is equivalent to the type of equifibered type sequences over $\sequence{A}{f}$.
-\end{thm}
-
-\begin{proof}
-By the universal property of $A_\infty$ and by univalence we have
-\begin{align*}
-(A_\infty\to \UU) & \eqvsym \sm{B:\prd{n:\N}A_n\to \UU}\prd{n:\N} B_n\htpy B_{n+1}\circ f_n \\
-& \eqvsym \sm{B:\prd{n:\N}A_n\to \UU}\prd{n:\N}{x:A_n} B_n(x)\eqvsym B_{n+1}(f_n(x))\qedhere
-\end{align*}
-\end{proof}
-
-\begin{lem}\label{lem:seq_colim_functor}
-  Given a natural transformation $(\tau,H):\sequence{A}{f}\to\sequence{A'}{f'}$.
-  \begin{enumerate}
-    \item\label{part:seq_colim_functor} We get a function $\tfcolim(\tau,H)$ or $\tau_\infty:A_\infty\to A'_\infty$.
-    \item\label{part:1_functoriality} The sequential colimit is 1-functorial. This means the following three things. If $(\sigma,K):\sequence{A'}{f'}\to\sequence{A''}{f''}$ then $(\tau\circ\sigma)_\infty\sim\tau_\infty\circ\sigma_\infty$. Moreover, $1_\infty\sim \idfunc$, where $1$ is the identity natural transformation. Lastly, if $(\tau',H'):\sequence{A}{f}\to\sequence{A'}{f'}$ and $q:\prd{n:\N}\tau_n\sim\tau'_n$ and we can fill the following square for all $a:A_n$
-    \begin{center}\begin{tikzcd}[column sep=25mm]
-      \tau_{n+1}(f_na)
-      \ar[r,equal,"{q_{n+1}(f_na)}"] 
-      \ar[d,equal,"{H_n(a)}"] &
-      \tau'_{n+1}(f_na)
-      \ar[d,equal,"{H'_n(a)}"]\\
-      f'_n(\tau_n(a))
-      \ar[r,equal,"{\apfunc{f'_n}(q_n(a))}"] & 
-      f'_n(\tau'_n(a))
-    \end{tikzcd}\end{center}
-    then $\tau_\infty\sim\tau'_\infty$.
-    \item\label{part:functor_equivalence} If $\tau$ is a natural equivalence then $\tau_\infty$ is an equivalence.
-  \end{enumerate}
-\end{lem}
-\begin{proof}\mbox{}
-  \begin{enumerate}
-    \item 
-    We define $\tau_\infty(\iota_n(a))\defeq\iota_n(\tau_n(a))$ and 
-    $$\apfunc{\tau_\infty}(\kappa_n(a))\vcentcolon=\apfunc{\iota_{n+1}}(H(a))\cdot\kappa_n(\tau_n(a)):
-    \iota_{n+1}(\tau_{n+1}(f_na))=\iota_n(\tau_n(a)).$$
-    \item All three parts are by induction on the element of $A_\infty$, and all parts are straightforward.
-    % to do? We might want to give an explicit proof
-    \item We define $(\tau_\infty)^{-1}\defeq(\tau^{-1})_\infty$ where $\tau^{-1}$ is the natural transformation by inverting $\tau_n$ for each $n$. Now we can check that this is really the inverse by using all three parts of the 1-functoriality.
-    $$\tau_\infty^{-1}\circ\tau_\infty\sim (\tau^{-1}\circ\tau)_\infty\sim 1_\infty\sim\idfunc[A_\infty].$$
-    For the second homotopy we need to show that we can fill a certain square, which is straightforward.
-    The other composite is homotopic to the identity by a similar argument.\qedhere
-  \end{enumerate}
-\end{proof}
-
-\begin{lem}\label{lem:colim_shift_one}
-For any type sequence $(A,f)$, the colimits of $(A,f)$ and $S(A,f)$ are equivalent.
-\end{lem}
-
-\begin{proof}
-We construct a map $\varphi:A_\infty \to S(A)_\infty$ by induction on $A_\infty$, by taking
-\begin{align*}
-(x:A_n) & \mapsto \iota^{S(A),S(f)}_n(f_n(x)) \\
-(x:A_n) & \mapsto \kappa^{S(A),S(f)}_n(f_n(x)).
-\end{align*}
-
-Next, we construct a map $\psi:S(A)_\infty\to A_\infty$ by induction on $S(A)_\infty$, by taking
-\begin{align*}
-(x:S(A)_n) & \mapsto \iota^{A,f}_{n+1}(x) \\
-(x:S(A)_n) & \mapsto \kappa^{A,f}_{n+1}(x).
-\end{align*}
-
-Then we prove that $\psi\circ \varphi\htpy \idfunc$ by induction on $A_\infty$, by taking
-\begin{align*}
-(x:A_n) & \mapsto \kappa^{A,f}_n(x)
-\end{align*}
-Now we compute
-\begin{align*}
-\mathsf{ap}_{\psi\circ\varphi}(\kappa^{A,f}_n(x))) & = \mathsf{ap}_\psi(\mathsf{ap}_\varphi(\kappa^{A,f}_n(x))) \\
-& = \mathsf{ap}_\psi(\kappa^{S(A),S(f)}_n(f_n(x))) \\
-& = \kappa^{A,f}_{n+1}(f_n(x))
-\end{align*}
-from the computation rules of $A_\infty$ and $S(A)_\infty$.
-
-We construct the homotopy $\varphi\circ\psi\htpy\idfunc$ by induction on $A_\infty$, by taking
-\begin{align*}
-(x:S(A)_n) & \mapsto \kappa_{n+1}(S(f)_n(x))
-\end{align*}
-Now we compute
-\begin{align*}
-\mathsf{ap}_{\varphi\circ\psi}(\kappa^{S(A),S(f)}_n(x)) & = \mathsf{ap}_\varphi(\mathsf{ap}_\psi(\kappa^{S(A),S(f)}_n(x))) \\
-& = \mathsf{ap}_\varphi(\kappa^{A,f}_{n+1}(x)) \\
-& = \kappa^{S(A),S(f)}_{n+1}(f_{n+1}(x)).\qedhere
-\end{align*}
-\end{proof}
-
-\begin{lem}\label{lem:colim_shift_k}
-For any type sequence $(A,f)$, we have an equivalence
-\begin{equation*}
-\kshiftequiv_{k} : \tfcolim(A,f)\eqvsym\tfcolim (S_k(A,f)).
-\end{equation*}
-\end{lem}
-
-The shift operations and the corresponding equivalences on the sequential colimits can be used to turn an arbitrary sequence $\sequence{B}{g}$ over $\sequence{A}{f}$ into an equifibered sequence over $\sequence{A}{f}$. 
-
-\begin{defn}
-Given a dependent sequence $(B,g)$ over $(A,f)$ and $x:A_0$, we define a type sequence $(B[x],g[x])$ by
-\begin{align*}
-B[x]_n & \defeq B_n(f^n(x)) \\
-g[x]_n & \defeq g_n(f^n(x),\blank).
-\end{align*}
-\end{defn}
-
-\begin{defn}
-Given any sequence $\sequence{B}{g}$ over $\sequence{A}{f}$, we define an equifibered sequence
-$\sequence{\square B}{\square g}$ over the sequence $\sequence{A}{f}$.
-\end{defn}
-
-\begin{constr}
-For $x:A_n$ we define
-\begin{equation*}
-(\square B)_n(x) \defeq S_n(B)[x]_{\infty} \jdeq \tfcolim_m(B_{n+m}(f^m(x))).
-\end{equation*}
-Now note that
-\begin{align*}
-  (\square B)_{n+1}(f(x)) & \jdeq \tfcolim_m(B_{(n+1)+m}(f^m(f(x))) \\
-  & \simeq \tfcolim_m(B_{n+(m+1)}(f^{m+1}(x))\\
-  & \simeq \tfcolim_m(B_{n+m}(f^m(x))\\
-  & \jdeq (\square B)_n(x)
-\end{align*}
-The first equivalence $u_{n,m}$ is given by transporting along the dependent path in \autoref{lem:iterate_succ} in the family $B$. This forms a natural equivalence, because $\mathsf{transport}$ is natural. The second equivalence is given by applying \autoref{lem:colim_shift_one}. We call the composite equivalence $F$, which shows that $\square B$ is an equifibered sequence.
-\end{constr}
-
-\begin{defn}
-Let $\sequence{B}{g}$ be a sequence over $\sequence{A}{f}$. Then we define
-\begin{equation*}
-B_\infty : A_\infty\to\UU
-\end{equation*}
-to be the family over $A_\infty$ associated to the equifibered sequence $(\square B,\square g)$ via the equivalence of \autoref{thm:descent}.
-\end{defn}
-
-By construction of $B_\infty$ we get the equality
-$$r(y):\transfib{B_\infty}{\kappa_n(x)}{y}=F(y)$$
-for $y:B_\infty(\iota_{n+1}(f_n(x)))$ witnessing that $B_\infty$ is defined by the equivalence $F$ on the path constructor.
 

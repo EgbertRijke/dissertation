@@ -1,4 +1,4 @@
-\chapter{$2$-simplicial types}
+\chapter{$2$-simplicial types}\label{chap:simplicial}
 
 We have observed in \cref{eg:rcoeq} that for any $f:A\to X$ we have a reflexive coequalizer diagram
 \begin{equation*}
@@ -9,7 +9,7 @@ We have observed in \cref{eg:rcoeq} that for any $f:A\to X$ we have a reflexive 
 and for any coherent H-space $X$ we have a reflexive coequalizer diagram
 \begin{equation*}
 \begin{tikzcd}
-X \arrow[r,yshift=1ex] \arrow[r,yshift=-1ex] & \unit \arrow[l] \arrow[r] & \susp X,
+X \arrow[r,yshift=1ex] \arrow[r,yshift=-1ex] & \unit \arrow[l] \arrow[r] & \susp X.
 \end{tikzcd}
 \end{equation*}
 However, both the pre-kernel of a map and a coherent H-space come equipped with a multiplicative structure that satisfies unit laws. What spaces do we get when take not only the reflexive coequalizer, but also take the multiplicative structure and unit laws into account?
@@ -20,7 +20,7 @@ A_0 & : \UU \\
 A_1 & : A_0 \to A_0 \to \UU\\
 A_2 & : \prd{x,y,z:A_0} A_1(x,y) \to A_1(x,z)\to A_1(y,z) \to \UU,
 \end{align*}
-representing the $0$-, $1$-, and $2$-cells, equipped with a `unital' or `simplicial' structure consisting of a unit (the reflexivity term of $A_1$), a right and left unit law and a coherence between them.
+representing the types of $0$-, $1$-, and $2$-cells, equipped with a `unital' or `simplicial' structure consisting of a unit (the reflexivity term of $A_1$), a right and left unit law and a coherence between them.
 
 In \cref{prp:2disc_emb} we show that the operation $\Delta:\UU\to \mathsf{sType}_2$, taking types to discrete $2$-simplicial types, is an embedding. Moreover, its action on morphisms
 \begin{equation*}
@@ -45,14 +45,14 @@ Analogous to \cref{thm:rcoeq_is_pushout}, we show that the geometric realization
 where $\tilde{A}_i$ is the total space of all $i$-cells.
 This presentation of the geometric realization allows us to compute geometric realizations as iterated pushouts.
 
-We will show in \cref{eg:2-pre-kernel} that the geometric realization of the $2$-pre-kernel of a map $f:A\to X$ is the triple fiberwise join $\join[X]{A}{\join[X]{A}{A}}$, and we will show in \cref{eg:geom_hspace} that the geometric realization of a coherent H-space is the cofiber of the Hopf fibration
+We will show in \cref{cor:2-pre-kernel} that the geometric realization of the $2$-pre-kernel of a map $f:A\to X$ is the triple fiberwise join $\join[X]{A}{\join[X]{A}{A}}$, and we will show in \cref{cor:geom_hspace} that the geometric realization of a coherent H-space is the cofiber of the Hopf fibration
 \begin{equation*}
 \begin{tikzcd}
 \join{X}{X} \arrow[r,"\eta_X"] \arrow[d] & \susp X \arrow[d] \\
 \unit \arrow[r] & \mathsf{cof}_{\eta_X}.
 \end{tikzcd}
 \end{equation*}
-Of course, in this result we use the coherence of a coherent H-space. I do not know what one gets without it.
+Of course, in this result we use the coherence of a coherent H-space.
 
 We will also be able to use the material of this chapter to show that the join and smash product are associative operations. 
 
@@ -65,7 +65,7 @@ A small $2$-simplicial type $\mathcal{A}$ consists of:
 \begin{align*}
 A_0 & : \UU \\
 A_1 & : A_0 \to A_0 \to \UU \\
-A_2 & : \prd{x_1,x_2,x_3:A_0} A_1(x_1,x_2)\to A_1(x_1,x_3)\to A_1(x_2,x_3)\to\UU.
+A_2 & : \prd{x_0,x_1,x_2:A_0} A_1(x_0,x_1)\to A_1(x_0,x_2)\to A_1(x_1,x_2)\to\UU.
 \end{align*}
 Terms of $A_0$ are also called \define{vertices} or \define{$0$-cells}. Terms of type $A_1(x,y)$ are also called \define{edges} or \define{$1$-cells}. Terms of type $A_2(p,r,q)$ are also called \define{$2$-cells}.
 \item A \define{$2$-simplicial structure} or \define{unital structure}
@@ -75,36 +75,36 @@ Terms of $A_0$ are also called \define{vertices} or \define{$0$-cells}. Terms of
 consisting of
 \begin{align*}
 \rfx{\mathcal{A}} & : \prd{x:\pts{A}} \edg{A}(x,x) \\
-\mathsf{right\usc{}unit}_{\mathcal{A}} & : \prd{x_1,x_2:A_0}{f:A_1(x_1,x_2)} A_2(f,f,\rfx{\mathcal{A}}(x_2)) \\
-\mathsf{left\usc{}unit}_{\mathcal{A}} & : \prd{x_2,x_3:A_0}{g:A_1(x_2,x_3)} A_2(\rfx{\mathcal{A}}(x_2),g,g) \\
+\mathsf{right\usc{}unit}_{\mathcal{A}} & : \prd{x_0,x_1:A_0}{f:A_1(x_0,x_1)} A_2(f,f,\rfx{\mathcal{A}}(x_1)) \\
+\mathsf{left\usc{}unit}_{\mathcal{A}} & : \prd{x_1,x_2:A_0}{g:A_1(x_1,x_2)} A_2(\rfx{\mathcal{A}}(x_1),g,g) \\
 \mathsf{coh\usc{}unit}_{\mathcal{A}} & : \prd{x:A_0} \mathsf{left\usc{}unit}(\rfx{\mathcal{A}}(x))=\mathsf{right\usc{}unit}(\rfx{\mathcal{A}}(x)).
 \end{align*}
-Given a semi-simplicial structure $\mathcal{A}$, we write $\mathsf{simp}(\mathcal{A})$ for the type of quadruples in the $2$-simplicial structre of $\mathcal{A}$.
+Given a 2-semi-simplicial structure $\mathcal{A}$, we write $\mathsf{simp}(\mathcal{A})$ for the type of quadruples in the $2$-simplicial structre of $\mathcal{A}$.
 \end{enumerate}
 \end{defn}
 
 \begin{eg}
-Let $A$ be a type. The \define{discrete} $2$-simplicial type $\Delta(A)$ consists of
+Let $X$ be a type. The \define{discrete} $2$-simplicial type $\Delta X$ consists of
 \begin{samepage}
 \begin{align*}
-\pts{\Delta(A)} & \defeq A \\
-\edg{\Delta(A)}(x,y) & \defeq x=y \\
-\Delta(A)_2(p,r,q) & \defeq \ct{p}{q}=r,
+\pts{\Delta X} & \defeq X \\
+\edg{\Delta X}(x,y) & \defeq x=y \\
+\Delta X_2(p,r,q) & \defeq \ct{p}{q}=r,
 \end{align*}
 \end{samepage}%
 using that the identity type is reflexive and that composition satisfies the coherent unit laws. 
 \end{eg}
 
 \begin{eg}
-Let $A$ be a type. The \define{indiscrete} $2$-simplicial type $\nabla(A)$ consists of
+Let $X$ be a type. The \define{indiscrete} $2$-simplicial type $\nabla X$ consists of
 \begin{samepage}
 \begin{align*}
-\pts{\Delta(A)} & \defeq A \\
-\edg{\Delta(A)}(x,y) & \defeq \unit \\
-\Delta(A)_2(p,r,q) & \defeq \unit. \\
+\pts{\Delta X} & \defeq X \\
+\edg{\Delta X}(x,y) & \defeq \unit \\
+\Delta X_2(p,r,q) & \defeq \unit. \\
 \end{align*}
 \end{samepage}%
-Since the types of $1$-cells and $2$-cells are always contractible, the indiscrete $2$-simplicial type $\nabla(A)$ possesses the unital structure in a unique way. 
+Since the types of $1$-cells and $2$-cells are always contractible, the indiscrete $2$-simplicial type $\nabla X$ possesses the unital structure in a unique way. 
 \end{eg}
 
 \begin{eg}
@@ -133,12 +133,12 @@ Since $X$ has a unit and the multiplication satisfies the coherent unit laws, we
 
 \begin{table}
 \centering
-\caption{\label{table:stype_eg}The specification of the $2$-simplicial types $\Delta(A)$, $\nabla(A)$, $k^2(f)$, and $S^2 X$.}
+\caption{\label{table:stype_eg}The specification of the $2$-simplicial types $\Delta X$, $\nabla X$, $k^2(f)$, and $S^2 X$.}
 \begin{tabular}{lllll}
 \toprule
-$\mathcal{A}$ & $\Delta(A)$ & $\nabla(A)$ & $k^2(f)$ & $S^2X$ \\
+$\mathcal{A}$ & $\Delta X$ & $\nabla X$ & $k^2(f)$ & $S^2X$ \\
 \midrule
-$\pts{A}$ & $A$ & $A$ & $A$ & $\unit$  \\
+$\pts{A}$ & $X$ & $X$ & $A$ & $\unit$  \\
 $\edg{A}(x,y)$ &  $x=y$ & $\unit$ & $f(x)=f(y)$ & $X$ \\
 $\rfx{\mathcal{A}}$(x) & $\refl{x}$ & $\ttt$ & $\refl{f(x)}$ & $1$  \\
 $A_2(p,r,q)$ & $\ct{p}{q}=r$ & $\unit$ & $\ct{p}{q}=r$ & $\mu(p,q)=r$ \\
@@ -183,7 +183,7 @@ We define the map $\mathsf{ev\usc{}simp}(f_0,f_1,f_2):\mathsf{simp}(\mathcal{A})
 \lam{x} \ap{f_2}{\beta_{00}(x)}
 \end{array}\right)
 \end{equation*}
-A morphism of $2$-simplicial types is defined to be a quadruple $(f_0,f_1,f_2,f_u)$ consisting of $(f_0,f_1,f_2)$ as before, and an identification
+A \define{morphism of $2$-simplicial types} is defined to be a quadruple $(f_0,f_1,f_2,f_u)$ consisting of $(f_0,f_1,f_2)$ as before, and an identification
 \begin{align*}
 f_u & : \mathsf{ev\usc{}simp}(f_0,f_1,f_2,(\rfx{\mathcal{A}},\mathsf{right\usc{}unit}_{\mathcal{A}},\mathsf{left\usc{}unit}_{\mathcal{A}},\mathsf{coh\usc{}unit}_{\mathcal{A}})) \\
 & \qquad\qquad = (\rfx{\mathcal{B}},\mathsf{right\usc{}unit}_{\mathcal{B}},\mathsf{left\usc{}unit}_{\mathcal{B}},\mathsf{coh\usc{}unit}_{\mathcal{B}}).
@@ -194,7 +194,7 @@ We write $\mathsf{sType}_2(\mathcal{A},\mathcal{B})$ for the type of morphisms o
 It is clear that for each $2$-simplicial type $\mathcal{A}$ there is an identity morphism, and that morphisms of $2$-simplicial types can be composed. Moreover, composition is associative and satisfies the unit laws.
 
 \begin{eg}
-For every map $f:A\to B$ there is a unique way to equip it with the structure of a morphism of $2$-simplicial types from $\Delta(A)$ to $\Delta(B)$. Indeed, we have seen in \cref{eg:rgraph_morphism} that $\apfunc{f}$ is the unique action on edges such that $\ap{f}{\refl{x}}=\refl{f(x)}$ for each $x:A$. Similarly, it follows by \cref{thm:yoneda} that the type of fiberwise transformations
+For every map $f:A\to B$ there is a unique way to equip it with the structure of a morphism of $2$-simplicial types from $\Delta(A)$ to $\Delta(B)$. Indeed, we have seen in \cref{eg:rgraph_morphism} that $\apfunc{f}$ is the unique action on edges such that $\ap{f}{\refl{x}}=\refl{f(x)}$ for each $x:A$. Similarly, it follows by \cref{lem:yoneda} that the type of fiberwise transformations
 \begin{equation*}
 f_2 : \prd{x,y,z:A}{p:x=y,\ q:y=z,\ r:x=z} (\ct{p}{q}=r)\to (\ct{\ap{f}{p}}{\ap{f}{q}}=\ap{f}{r})
 \end{equation*}
@@ -206,7 +206,7 @@ equipped with a coherence with the left unit law is again contractible. We concl
 \begin{equation*}
 (A\to B)\to \mathsf{sType}_2(\Delta(A),\Delta(B))
 \end{equation*}
-is an equivalence. Moreover, we note that our proof that $\Delta$ is an embedding uses the coherence of the unit laws, and we don't expect $\Delta$ to be an equivalence without the coherence being part of the data of a $2$-simplicial type.
+is an equivalence. We note that our proof that $\Delta$ is an embedding uses the coherence of the unit laws.
 \end{eg}
 
 \begin{eg}
@@ -244,6 +244,31 @@ We obtain a diagram of the form
 of morphisms of $2$-simplicial types, where the three arrows $\Delta[1]\to\Delta[2]$ are characterized by the three non-degenerate edges of $\Delta[2]$, the two arrows $\Delta[0]\to\Delta[1]$ are characterized by the two vertices of $\Delta[1]$, the downward arrows $\Delta[2]\to\Delta[1]$ are obtained from the unit laws, and the arrow $\Delta[1]\to \Delta[0]$ is by reflexivity\footnote{There is a `$2$-cosimplicial object of $2$-simplicial types', although we have not fully specified it here, because we will only make use of the morphisms}.
 \end{eg}
 
+\begin{eg}
+The horns $\Lambda_0[2]$, $\Lambda_1[2]$, and $\Lambda_2[2]$ are the $2$-simplicial types indicated by the diagrams
+\begin{equation*}
+\begin{tikzcd}[column sep=tiny]
+& 1 & &[2em] & 1 \arrow[dr] & &[2em] & 1 \arrow[dr] \\
+0 \arrow[ur] \arrow[rr] & & 2, & 0 \arrow[ur] & & 2, & 0 \arrow[rr] & & 2,
+\end{tikzcd}
+\end{equation*}
+respectively. More formally, $\Lambda_0[2]$ is the 2-simplicial type consisting of
+\begin{align*}
+\pts{\Lambda_0[2]} & \defeq \{0,1,2\} \\
+\edg{\Lambda_0[2]}(i,j) & \defeq (i\leq j)\land (i=0) \\
+\Lambda_0[2]_2(x_0,x_1,x_2,p,r,q) & \defeq \Big(\sm{\alpha:x_0=x_1}\mathsf{tr}(\alpha,r)=q\Big)\vee\Big(\sm{\alpha:x_1=x_2}\mathsf{tr}(\alpha^{-1},r)=p\Big),
+\end{align*}
+and there is only one way to equip this 2-semi-simplical structure with a simplical structure.
+The horns $\Lambda_1[2]$ and $\Lambda_2[2]$ can be defined similarly. We note that the horns can also be presented as pushouts (of $2$-simplicial types) as follows:
+\begin{equation*}
+\begin{tikzcd}
+\Delta[0] \arrow[r,"0"] \arrow[d,swap,"0"] \arrow[dr,phantom,"\ulcorner" at end] & \Delta[1] \arrow[d] & \Delta[0] \arrow[r,"1"] \arrow[d,swap,"0"] \arrow[dr,phantom,"\ulcorner" at end] & \Delta[1] \arrow[d] & \Delta[0] \arrow[r,"1"] \arrow[d,swap,"1"] \arrow[dr,phantom,"\ulcorner" at end] & \Delta[1] \arrow[d] \\
+\Delta[1] \arrow[r] & \Lambda_0[2] & \Delta[1] \arrow[r] & \Lambda_1[2] & \Delta[1] \arrow[r] & \Lambda_2[2]
+\end{tikzcd}
+\end{equation*}
+In particular, the horn inclusions $\mathsf{horn\usc{}in}_i:\Lambda_i[2]\to \Delta[2]$ can be obtained by the universal property of the pushout.
+\end{eg}
+
 \begin{defn}
 Let $\mathcal{A}$ be a $2$-simplicial type. We say that $\mathcal{A}$ satisfies the \define{Segal condition} if the square
 \begin{equation*}
@@ -255,17 +280,17 @@ Let $\mathcal{A}$ be a $2$-simplicial type. We say that $\mathcal{A}$ satisfies 
 is a pullback square.
 \end{defn}
 
-\begin{thm}
+\begin{prp}
 Let $\mathcal{A}$ be a $2$-simplicial type. The following are equivalent:
 \begin{enumerate}
 \item $\mathcal{A}$ satisfies the Segal condition.
-\item $\mathcal{A}$ is $i$-local, where
+\item $\mathcal{A}$ is $\mathsf{horn\usc{}in}_1$-local, where
 \begin{equation*}
-i : \mathsf{sType}_2(\Lambda^1[2],\Delta[2])
+\mathsf{horn\usc{}in}_1 : \mathsf{sType}_2(\Lambda_1[2],\Delta[2])
 \end{equation*}
 is the horn inclusion. In other words, the map
 \begin{equation*}
-\mathsf{sType}(\Delta[2],\mathcal{A}) \to \mathsf{sType}_2(\Lambda^1[2],\mathcal{A})
+\mathsf{sType}_2(\Delta[2],\mathcal{A}) \to \mathsf{sType}_2(\Lambda_1[2],\mathcal{A})
 \end{equation*}
 is an equivalence.
 \item For every $f:A_1(x,y)$ and $g:A_1(y,z)$ the type
@@ -274,18 +299,38 @@ is an equivalence.
 \end{equation*}
 is contractible.
 \end{enumerate}
-\end{thm}
+\end{prp}
+
+\begin{proof}
+Note that the map $\mathsf{sType}_2(\Delta[2],\mathcal{A}) \to \mathsf{sType}_2(\Lambda_1[2],\mathcal{A})$ is the gap map of the square
+\begin{equation*}
+\begin{tikzcd}
+\mathsf{sType}_2(\Delta[2],\mathcal{A}) \arrow[r] \arrow[d] & \mathsf{sType}_2(\Delta[1],\mathcal{A}) \arrow[d] \\
+\mathsf{sType}_2(\Delta[1],\mathcal{A}) \arrow[r]  & \mathsf{sType}_2(\Delta[0],\mathcal{A}),
+\end{tikzcd}
+\end{equation*}
+so it follows by the universal property of $\Lambda_1[2]$ as a pushout that condition (ii) holds if and only if this square is a pullback square. Now we also see that (i) holds if and only if (ii) holds, since we have a commuting cube
+\begin{equation*}
+\begin{tikzcd}
+& \mathsf{sType}_2(\Delta[2],\mathcal{A}) \arrow[dl] \arrow[d] \arrow[dr] \\
+\mathsf{sType}_2(\Delta[1],\mathcal{A}) \arrow[d] & \tilde{A}_2 \arrow[dl] \arrow[dr] & \mathsf{sType}_2(\Delta[1],\mathcal{A}) \arrow[d] \arrow[dl,crossing over] \\
+\tilde{A}_1 \arrow[dr] & \mathsf{sType}_2(\Delta[0],\mathcal{A}) \arrow[from=ul,crossing over] \arrow[d] & \tilde{A}_1 \arrow[dl] \\
+& \tilde{A}_0
+\end{tikzcd}
+\end{equation*}
+in which the vertical maps are equivalences.\marginnote{Still have to write down equivalence with (iii)}
+\end{proof}
 
 \begin{defn}
-Let $\mathcal{A}$ be a $2$-simplicial type. We say that $\mathcal{A}$ is \define{$1$-discrete} the type
+Let $\mathcal{A}$ be a $2$-simplicial type. For $k=0,1,2$, we say that $\mathcal{A}$ is \define{$k$-discrete} if it is $\Delta[k]$-null, in the sense that the map
 \begin{equation*}
-\sm{y:A_0}A_1(x,y)
+\mathsf{sType}_2(\Delta[0],\mathcal{A})\to\mathsf{sType}_2(\Delta[k],\mathcal{A})
 \end{equation*}
-is contractible for every $x:A_0$. We say that $\mathcal{A}$ is \define{discrete} if it is $1$-discrete and satisfies the Segal condition. 
+is an equivalence. We say that $\mathcal{A}$ is \define{discrete} if $\mathcal{A}$ is $k$-discrete for all $k\in\{0,1,2\}$.
 \end{defn}
 
-\begin{thm}
-Let $\mathcal{A}$ be a $2$-simplicial type. The following are equivalent:
+\begin{prp}
+Let $\mathcal{A}$ be a $2$-simplicial type. The following are equivalent:\marginnote{In a presheaf $\infty$-category, is it the case that a morphism is $X$-null for every representable object $X$, if and only if it is $f$-local for every morphism between representables, or does such a relation depend on the shape of the indexing category (since we're using that the terminal object is representable)?}
 \begin{enumerate}
 \item $\mathcal{A}$ is discrete.
 \item $\mathcal{A}$ is right orthogonal to every morphism in the diagram
@@ -294,17 +339,25 @@ Let $\mathcal{A}$ be a $2$-simplicial type. The following are equivalent:
 \Delta[2] \arrow[r,yshift=1ex] \arrow[r,yshift=-1ex] & \Delta[1] \arrow[l,yshift=2ex] \arrow[l] \arrow[l,yshift=-2ex] \arrow[r] & \Delta[0]. \arrow[l,yshift=1ex] \arrow[l,yshift=-1ex]
 \end{tikzcd}
 \end{equation*}
-\item Conjecture: $\mathcal{A}$ is $\Delta[2]$-null in the sense that the pre-composition map
-\begin{equation*}
-\mathsf{sType}_2(\Delta[0],\mathcal{A})\to \mathsf{sType}_2(\Delta[2],\mathcal{A})
-\end{equation*}
-is an equivalence.
+\item $\mathcal{A}$ is $2$-discrete.
+\item $\mathcal{A}$ is $1$-discrete and satisfies the Segal condition.
 \end{enumerate}
-\end{thm}
+\end{prp}
+
+\begin{proof}
+If $\mathcal{A}$ is $\Delta[0]$-, $\Delta[1]$-, and $\Delta[2]$-null, then it is $f$-local for any $f:\Delta[i]\to\Delta[j]$, for $i,j\in\{0,1,2\}$. Thus it is immediate that (i) holds if and only if (ii) holds. Note that (i) holds if and only if (iii) holds, because $\Delta[1]$ is a retract of $\Delta[2]$. To see that (i) holds if and only if (iv) holds, note that for $\mathcal{A}$ $1$-discrete the square
+\begin{equation*}
+\begin{tikzcd}
+\tilde{A}_2 \arrow[r] \arrow[d] & \tilde{A}_1 \arrow[d] \\
+\tilde{A}_1 \arrow[r] & \tilde{A}_0
+\end{tikzcd}
+\end{equation*}
+is a pullback square if and only if both morphisms $\tilde{A}_2\to\tilde{A}_1$ are equivalences, which is by the 3-for-2 property equivalent to the condition that the composite $\tilde{A}_2\to \tilde{A}_0$ is an equivalence, i.e.~that $\mathcal{A}$ is $\Delta[2]$-null.
+\end{proof}
 
 In \cref{prop:disc_unique} we have established that every type can be equipped with the structure of a discrete reflexive graph in a unique way. Now we extend this observation to see that every type can be equipped with the structure of a discrete $2$-simplicial type in a unique way.
 
-\begin{prp}
+\begin{prp}\label{prp:2disc_emb}
 The operation $\Delta:\UU\to \mathsf{sType}_2$ is an embedding.
 \end{prp}
 
@@ -339,7 +392,7 @@ A_{100} \arrow[dr] & A_{010} \arrow[d] \arrow[from=ul,crossing over] \arrow[from
 More formally:
 
 \begin{defn}
-A $2$-cospan consists of 
+A \define{$2$-cospan} consists of 
 \begin{enumerate}
 \item types
 \begin{equation*}
@@ -417,12 +470,26 @@ A \define{global section} of a $2$-span $\mathcal{A}$ consists of
 We write $\Gamma(\mathcal{A})$ for the type of global sections of $\mathcal{A}$.
 \end{defn}
 
-\begin{thm}
-For any $2$-span $\mathcal{A}$ the type $\Gamma(\mathcal{A})$ can be given the structure of a limiting cone.
-\end{thm}
+\begin{prp}
+For any $2$-span $\mathcal{A}$ the type $\Gamma(\mathcal{A})$ is the vertex of a limiting cone.
+\end{prp}
+
+\begin{proof}
+First we define a cone on the $2$-span $\mathcal{A}$ by taking
+\begin{align*}
+p_{011}(\gamma) & \defeq \gamma_{011} \\
+p_{101}(\gamma) & \defeq \gamma_{101} \\
+p_{110}(\gamma) & \defeq \gamma_{110} \\
+K_{001}(\gamma) & \defeq \gamma_{001} \\
+K_{010}(\gamma) & \defeq \gamma_{010} \\
+K_{100}(\gamma) & \defeq \gamma_{100} \\
+L_{000}(\gamma) & \defeq \gamma_{000}.
+\end{align*}
+for any global section $\gamma$ of $\mathcal{A}$. Now it is easy to verify that this cone is limiting. The proof is analogous to the proof showing that the canonical pullback is a pullback, by iterated applications of \cref{thm:choice}. 
+\end{proof}
 
 \begin{thm}
-Consider a cube
+Consider a commuting cube
 \begin{equation*}
 \begin{tikzcd}
 & A_{111} \arrow[dl] \arrow[d] \arrow[dr] \\
@@ -433,7 +500,7 @@ A_{100} \arrow[dr] & A_{010} \arrow[d] \arrow[from=ul,crossing over] \arrow[from
 \end{equation*}
 The following are equivalent:
 \begin{enumerate}
-\item The cube is cartesian.
+\item The cube is cartesian, in the sense that the cone with vertex $A_{111}$ is limiting.
 \item The the square
 \begin{equation*}
 \begin{tikzcd}
@@ -446,7 +513,22 @@ is cartesian.
 \end{thm}
 
 \begin{proof}
-Let $X$ be a type. The type of cones with vertex $X$ on the 2-cospan $\mathcal{A}^{\vee}$
+Note that the type of global sections $\Gamma(\mathcal{A})$ of the $2$-cospan
+\begin{equation*}
+\begin{tikzcd}
+A_{110} \arrow[d] & A_{101} \arrow[dl] \arrow[dr] & A_{011} \arrow[d] \\
+A_{100} \arrow[dr] & A_{010} \arrow[d] \arrow[from=ul,crossing over] \arrow[from=ur,crossing over] & A_{001} \arrow[dl] \\
+& A_{000}.
+\end{tikzcd}
+\end{equation*}
+is also the following pullback:
+\begin{equation*}
+\begin{tikzcd}
+\Gamma(\mathcal{A}) \arrow[r] \arrow[d] & A_{101}\times_{A_{001}} A_{011} \arrow[d] \\
+A_{110} \arrow[r] & A_{100} \times_{A_{000}} A_{010}.
+\end{tikzcd}
+\end{equation*}
+Thus the claim follows.
 \end{proof}
 
 \begin{cor}
@@ -498,7 +580,7 @@ A_{100} & A_{010} \arrow[from=ul,crossing over] \arrow[from=ur,crossing over] & 
 More formally:
 
 \begin{defn}
-A $2$-span consists of 
+A \define{$2$-span} consists of 
 \begin{enumerate}
 \item types
 \begin{equation*}
@@ -731,21 +813,86 @@ is $n$-cocartesian.
 \section{Geometric realizations as iterated pushouts}
 
 \begin{defn}
-Every $2$-simplicial type $\mathcal{A}$ determines a $2$-span $\mathcal{S}(\mathcal{A})$ given by
+Every $2$-simplicial type $\mathcal{A}$ determines a $2$-span $\tilde{\mathcal{A}}$ given by
+\begin{equation*}
+\begin{tikzcd}[column sep=large,row sep=large]
+& \tilde A_2 \arrow[dl,swap,"\pi_{01}"] \arrow[d,"\pi_{02}"] \arrow[dr,"\pi_{12}"] \\
+\tilde A_1 \arrow[d] & \tilde A_1 \arrow[dl] \arrow[dr] & \tilde A_1 \arrow[dl,crossing over] \arrow[d] \\
+\tilde A_0 & \tilde A_0 \arrow[from=ul,crossing over] & \tilde A_0. 
+\end{tikzcd}
+\end{equation*}
+The maps range over the projections
+\begin{align*}
+\pi_0 & \defeq \lam{(x,y,p)}x\\
+\pi_1 & \defeq \lam{(x,y,p)}y\\
+\pi_{01} & \defeq \lam{(x,y,z,p,r,q,s)}(x,y,p) \\
+\pi_{02} & \defeq \lam{(x,y,z,p,r,q,s)}(x,z,r) \\
+\pi_{12} & \defeq \lam{(x,y,q,p,r,q,s)}(y,z,q),
+\end{align*}
+and the squares commute by the homotopies
+\begin{align*}
+H_{00} & \defeq \lam{(x,y,z,p,r,q,s)}\refl{x} & & : \pi_0\circ\pi_{01}\htpy \pi_0\circ \pi_{02} \\
+H_{10} & \defeq \lam{(x,y,z,p,r,q,s)}\refl{y} & & : \pi_1\circ\pi_{01}\htpy \pi_0\circ \pi_{12} \\
+H_{11} & \defeq \lam{(x,y,z,p,r,q,s)}\refl{z} & & : \pi_1\circ\pi_{02}\htpy \pi_1\circ \pi_{12}.
+\end{align*}
+Furthermore, for any $f:\mathsf{sType}_2(\mathcal{A},\Delta X)$ we define the cocone
+\begin{equation*}
+\tilde{f}\defeq (\tilde{f}_0,\tilde{f}_0,\tilde{f}_0,\tilde{f}_1,\tilde{f}_1,\tilde{f}_1,\tilde{f}_2)
+\end{equation*}
+on the $2$-span $\tilde{\mathcal{A}}$ with vertex $X$, where
+\begin{align*}
+\tilde{f}_0 & \defeq f_0 \\
+\tilde{f}_1 & \defeq \lam{(x,y,p)}f_1(x,y,p) \\
+\tilde{f}_2 & \defeq 
+\end{align*}
+\end{defn}
+
+\begin{comment}
+\begin{lem}
+Consider a $2$-semi-simplicial type $\mathcal{A}$
+\begin{align*}
+A_0 & : \UU \\
+A_1 & : A_0\to A_0\to \UU \\
+A_2 & : \prd{x,y,z:A_0} A_1(x,y)\to A_1(x,z)\to A_1(y,z)\to \UU,
+\end{align*}
+and consider
+\begin{align*}
+\alpha & : \prd{x,y:A_0} A_1(x,y)\to (x=y) \\
+\beta & : \prd{x,y,z:A_0}{p:A_1(x,y)}{r:A_1(x,z)}{q:A_1(y,z)} A_2(p,r,q)\to (\ct{\alpha(p)}{\alpha(q)}=\alpha(r)). 
+\end{align*}
+Then the function $(x,y,z,p,q,r,s)\mapsto(x,x,x,y,y,y,z)$ of type
+\begin{align*}
+\cdots \to \tilde{A}_2
+\end{align*}
+is an equivalence. 
+\end{lem}
+\end{comment}
+
+The following theorem, which states that $f:\mathcal{A}\to \Delta X$ is a geometric realization if and only if the cube
 \begin{equation*}
 \begin{tikzcd}
 & \tilde A_2 \arrow[dl] \arrow[d] \arrow[dr] \\
-\tilde A_1 \arrow[d] \arrow[dr] & \tilde A_1 \arrow[dl,crossing over] & \tilde A_1 \arrow[dl] \arrow[d] \\
-\tilde A_0 & \tilde A_0 & \tilde A_0. \arrow[from=ul,crossing over] 
+\tilde A_1 \arrow[d] & \tilde A_1 \arrow[dl] \arrow[dr] & \tilde A_1 \arrow[dl,crossing over] \arrow[d] \\
+\tilde A_0 \arrow[dr,swap,"f_0"] & \tilde A_0 \arrow[from=ul,crossing over] \arrow[d,swap,"f_0" near start] & \tilde A_0  \arrow[dl,"f_0"] \\
+& X
 \end{tikzcd}
 \end{equation*}
-The maps range over the projections, and the homotopies are the obvious ones.
-\end{defn}
+is cocartesian, is analogous to \cref{thm:rcoeq_is_pushout}.
 
-The following theorem is analogous to \cref{thm:rcoeq_is_pushout}.
 \begin{thm}
-For any $2$-simplicial type $\mathcal{A}$, its geometric realization $|\mathcal{A}|$ is equivalent to the colimit of the $2$-span $B(\mathcal{A})$.
+Consider a morphism $f:\mathsf{sType}_2(\mathcal{A},\Delta X)$. Then $f$ is a geometric realization if and only if the cocone $\tilde{f}$ on the $2$-span $\tilde{A}$ with vertex $X$ is colimiting.
 \end{thm}
+
+\begin{proof}
+Let $Y$ be a type. Then we have the commuting triangle
+\begin{equation*}
+\begin{tikzcd}[column sep=tiny]
+\phantom{\mathsf{cocone}_{\tilde{\mathcal{A}}}(Y)} & Y^X \arrow[dl,swap,"\Delta(\blank)\circ f"] \arrow[dr,"\mathsf{cocone\usc{}map}(\tilde{f})"] & \phantom{\mathsf{sType}_2(\mathcal{A},\Delta Y)} \\
+\mathsf{sType}_2(\mathcal{A},\Delta Y) \arrow[rr,swap,"\varphi"] & & \mathsf{cocone}_{\tilde{\mathcal{A}}}(Y),
+\end{tikzcd}
+\end{equation*}
+where the bottom map is given by $((f_0,f_1,f_2),\alpha)\mapsto (\tilde f_0,\tilde f_0,\tilde f_0,\tilde f_1,\tilde f_1,\tilde f_1,\tilde f_2)$. Therefore it suffices to show that $\varphi$ is an equivalence.
+\end{proof}
 
 \begin{cor}
 The geometric realization of the discrete $2$-simplicial type $\Delta(A)$ is equivalent to $A$.
@@ -759,10 +906,14 @@ The geometric realization of the indiscrete $2$-simplicial type $\nabla(A)$ is e
 The geometric realization of the $2$-pre-kernel of a map $f:A\to B$ is the type $\join[X]{A}{\join[X]{A}{A}}$. 
 \end{cor}
 
-\begin{cor}
-Given an $H$-space $X$, the geometric realization of the $2$-simplicial type $S^2 X$ is the cofiber of the Hopf fibration $X \hookrightarrow \join{X}{X} \twoheadrightarrow \susp X$.
+\begin{cor}\label{cor:geom_hspace}
+Given a coherent $H$-space $X$, the geometric realization of the $2$-simplicial type $S^2 X$ is the cofiber of the Hopf fibration $X \hookrightarrow \join{X}{X} \twoheadrightarrow \susp X$.
 \end{cor}
 
 \begin{cor}
 The geometric realization of the standard simplices $\Delta[0]$, $\Delta[1]$, and $\Delta[2]$ are contractible.
 \end{cor}
+
+\section{A speculative note on simplicial spaces}
+
+We expect a simplicial space to be discrete, in the sense that the unit $\eta:\mathcal{A}\to |\mathcal{A}|$ of the geometric realization is an equivalence, if and only if it is $\Delta[k]$-null for all $k\in\mathbb{N}$, which happens if and only if $\mathcal{A}$ is $f$-local for all morphisms $f$ between representables. Furthermore, we expect that a morphism $f:\mathcal{A}\to\mathcal{B}$ of simplicial spaces is \'etale in the sense that the naturality square of the unit of geometric realization is a homotopy pullback square, if and only if $f$ is right orthogonal to all morphisms between representables. This can only be the case if the naturality squares (since $f$ is a morphism between presheaves valued in Kan-simplicial sets) are all pullback squares, i.e.~$f$ is cartesian. 

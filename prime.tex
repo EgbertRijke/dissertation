@@ -242,10 +242,10 @@ We first prove a lemma, which will also be used in \cref{example:notlex}.
 Our next goal is to give conditions under which $f$-localization
 preserves $n$-connected\-ness.
 
-\begin{prop}\label{prop:Kequiv-Lf}
+\begin{prp}\label{prop:Kequiv-Lf}
 Let $K$ be a reflective subuniverse and let $f$ be a family of $K$-equiva\-lences.
 Then $\eta : X \to L_f X$ is a $K$-equivalence for every $X$.
-\end{prop}
+\end{prp}
 
 \begin{proof}
 Since each $f_i$ is a $K$-equivalence, every $K$-local type is $f$-local,
@@ -462,13 +462,13 @@ commutes.
 So we conclude that $\precomp{\degg(S(a))}$ is an equivalence if and only if $S(a)$ is an equivalence.
 \end{proof}
 
-\begin{prop}\label{prop:homotopygroupsoflocalarelocal}
+\begin{prp}\label{prop:homotopygroupsoflocalarelocal}
     If $X$ is a pointed, $\degg(S)$-local type, then $\pi_{m+1}(X)$ is uniquely $S$-divisible
     for each $m : \N$.
     Conversely, if for some $n \geq 0$, $X$ is a pointed, simply connected $n$-type
     such that $\pi_{m+1}(X)$ is uniquely $S$-divisible for each $m : \N$,
     then $X$ is $\degg(S)$-local.
-\end{prop}
+\end{prp}
 
 For the converse, the requirement that $X$ be truncated is needed because
 we need to use Whitehead's theorem.
@@ -754,12 +754,12 @@ The following proposition implies that localizations of groups always exist
 (see \cref{rmk:localizationofgroups})
 and is also used to prove \cref{theorem:localizationKgn}.
 
-\begin{prop}\label{lemma:localizationlocalizesfirst}
+\begin{prp}\label{lemma:localizationlocalizesfirst}
     For $n \geq 1$,
     the $\degg(S)$-localization of a pointed, $(n-1)$-connected type $X$ localizes $\pi_n(X)$ away from $S$.
     The algebraic localization takes place in the category of groups if $n = 1$ and
     abelian groups otherwise.
-\end{prop}
+\end{prp}
 
 \begin{proof}
     By \cref{prop:homotopygroupsoflocalarelocal},
@@ -1178,14 +1178,14 @@ The following elementary lemma is the key ingredient.
     so by the uniqueness of $\hat{x}$, we have $\hat{y} \hat{x} \hat{y}^{-1} = \hat{x}$.
 \end{proof}
 
-\begin{prop}
+\begin{prp}
     Let $G$ be an abelian group, let $n : \N$, and let $n : G \to G$ be the multiplication by $n$ map.
     Then, for every uniquely $n$-divisible group $H$, the precomposition map
     \[
         n^* : \Hom(G,H) \lra \Hom(G,H)
     \]
     is an equivalence.
-\end{prop}
+\end{prp}
 
 \begin{proof}
     Given a map $f : G \to H$, we have to show that there exists a unique $\hat{f} : G \to H$ such that

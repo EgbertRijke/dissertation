@@ -5,42 +5,29 @@ In this section I describe joint work with Ulrik Buchholtz \cite{realprojective}
 
 \subsection{The type of $2$-element sets}
 
+We write $\UU_{\sphere{0}}$ for the connected component at $\sphere{0}$ of the universe. 
+
 \begin{lem}\label{lem:isequiv_evunit}
-The map
+Let $X:\UU_{\sphere{0}}$. Then the map
 \begin{equation*}
-\evunit : (\eqv{\sphere{0}}{\sphere{0}})\to \sphere{0}.
+\equivpt_X : (\eqv{\sphere{0}}{X})\to X.
 \end{equation*}
-given by $e\mapsto e(\north)$ is an equivalence. 
+given by $e\mapsto e(\north)$ is an equivalence. We will write 
+\begin{equation*}
+\ptequiv_X : X\to (\eqv{\sphere{0}}{X})
+\end{equation*}
+for its inverse.
 \end{lem}
 
 \begin{proof}
-The map in the converse direction is definec by case analysis:
+Since $\isequiv(\evunit_X)$ is a proposition, it suffices to prove the claim for $X\jdeq\sphere{0}$. 
+
+The inverse of $\evunit_{\sphere{0}}$ is defined by case analysis:
 \begin{align*}
 \north & \mapsto \idfunc \\
 \south & \mapsto \bneg.
 \end{align*}
-It is straightforward to verify that this defines the inverse of $\evunit$.
-\end{proof}
-
-\begin{thm}\label{thm:ptd_2elt_sets}
-The type
-\begin{equation*}
-\sm{A:\UU_{\sphere{0}}}A
-\end{equation*}
-of pointed $2$\nobreakdash-element sets is contractible.
-\end{thm}
-
-\begin{proof}
-We take $\pairr{\sphere{0},\north}$ as the center of contraction.
-To define the contraction, we will show that the identity type $\pairr{\sphere{0},\north}=\pairr{A,a}$ is contractible, for any $A:\UU_{\sphere{0}}$ and $a:A$. This might look stronger than necessary, but since being contractible is a proposition we get to assume that $\id{\sphere{0}}{A}$ by induction on $\brck{\sphere{0}=A}$. Then we proceed by path induction, so it suffices to show that the type
-\begin{equation*}
-\pairr{\sphere{0},\north}=\pairr{\sphere{0},a}
-\end{equation*}
-is contractible, for any $a:\sphere{0}$. We note that there is an equivalence
-\begin{equation*}
-\eqv{\Big(\pairr{\sphere{0},\north}=\pairr{\sphere{0},a}\Big)}{\Big(\sm{e:\eqv{\sphere{0}}{\sphere{0}}}e(\north)=a\Big)}.
-\end{equation*}
-by \autoref{lem:equiv_of_ptdtype}, and the latter type is just the fiber of $\mathsf{ev\usc{}unit}$. Thus the claim follows by \cref{lem:isequiv_evunit}.
+It is straightforward to verify that this defines the inverse of $\evunit_{\sphere{0}}$.
 \end{proof}
 
 \begin{cor}\label{cor:id_U2}
@@ -53,6 +40,25 @@ given by $\mathsf{pt\usc{}eq}(\refl{\sphere{0}})\defeq \north$ is an equivalence
 \mathsf{eq\usc{}pt} : \prd{A:\UU_{\sphere{0}}} A \to (\sphere{0}=A)
 \end{equation*}
 for the inverse fiberwise transformation.
+\end{cor}
+
+\begin{proof}
+The map $\mathsf{pt\usc{}eq}$ factors as a composite of equivalences
+\begin{equation*}
+\begin{tikzcd}[column sep=tiny]
+(\sphere{0}=X) \arrow[dr,swap,"\equiveq"] \arrow[rr,"\mathsf{pt\usc{}eq}"] & & X \\
+& (\eqv{\sphere{0}}{X}) \arrow[ur,swap,"\ptequiv"] & \phantom{(\sphere{0}=X)}
+\end{tikzcd}
+\end{equation*}
+so it is an equivalence.
+\end{proof}
+
+\begin{cor}\label{thm:ptd_2elt_sets}
+The type
+\begin{equation*}
+\sm{X:\UU_{\sphere{0}}}X
+\end{equation*}
+of pointed $2$\nobreakdash-element sets is contractible.
 \end{cor}
 
 \begin{proof}
@@ -72,6 +78,28 @@ A \arrow[r,swap,"B"] & \UU_{\sphere{0}},
 \end{equation*}
 which commutes via the homotopy $\lam{(x,y)}\mathsf{eq\usc{}pt}(y)^{-1}$, is a pullback square. 
 \end{cor}
+
+\begin{proof}
+The square
+\begin{equation*}
+\begin{tikzcd}
+\sm{x:A}B(x) \arrow[r] \arrow[d,swap,"\proj 1"] & \sm{X:\UU_{\sphere{0}}}X \arrow[d,"{\proj 1}"] \\
+A \arrow[r,swap,"B"] & \UU_{\sphere{0}},
+\end{tikzcd}
+\end{equation*}
+is a pullback square by \cref{thm:pb_fibequiv}. The claim follows by the fact that $\sm{X:\UU_{\sphere{0}}}X$ is contractible.
+\end{proof}
+
+\begin{prp}
+For every $\sphere{0}$-bundle $B$ over $A$, the square
+\begin{equation*}
+\begin{tikzcd}[column sep=12em]
+\Big(\sm{x:A}B(x)\Big)\times\sphere{0} \arrow[r,"{\lam{((x,y),b)}(x,\equivpt_{B(x)}(y,b))}"] \arrow[d,swap,"\proj 1"] & \sm{x:A}B(x) \arrow[d,"\proj 1"] \\
+\sm{x:A}B(x) \arrow[r,swap,"\proj 1"] & A
+\end{tikzcd}
+\end{equation*}
+is a pullback square. 
+\end{prp}
 
 \subsection{Finite dimensional real projective spaces}
 \label{sec:fdrp}

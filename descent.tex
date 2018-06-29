@@ -1,6 +1,6 @@
-\chapter{Type theoretic descent}
+\chapter{Type theoretic descent}\label{chap:descent}
 
-In this chapter we study homotopy pushouts, which were established as higher inductive types in section 6.8 of \cite{hottbook}. From this chapter on, we will assume that universes are closed under homotopy pushouts. This is the last assumption that we will be making in the present work. In particular, we will not assume the existence of higher inductive types with some self-reference in the constructors (e.g.~the propositional truncation).
+In this chapter we study homotopy pushouts, which were established in homotopy type theory as higher inductive types in section 6.8 of \cite{hottbook}. From this chapter on, we will assume that universes are closed under homotopy pushouts. This is the last assumption that we will be making in the present work. In particular, we will not assume the existence of higher inductive types with some self-reference in the constructors (e.g.~the propositional truncation).
 
 Our first main result is the descent theorem for homotopy pushouts (\cref{thm:descent,cor:descent_fib}), in which we establish that a cartesian transformation of spans
 \begin{equation*}
@@ -18,9 +18,9 @@ A \arrow[dr] & A'\sqcup^{S'}B' \arrow[d] \arrow[from=ul,crossing over] & B \arro
 & A\sqcup^S B
 \end{tikzcd}
 \end{equation*}
-of which the vertical sides are pullback squares. 
+of which the vertical sides are pullback squares. Here we need univalence to establish uniqueness.
 
-Our second main result of this chapter, \cref{thm:cartesian_cube}, is closely related to the descent theorem but can be stated without a universe: for any commuting cube
+The second main theorem of this chapter, \cref{thm:cartesian_cube}, is an adaption to homotopy type theory of a theorem due to \cite{AnelBiedermanFinsterJoyal}. It is closely related to the descent theorem but can be stated without a universe: for any commuting cube
 \begin{equation*}
 \begin{tikzcd}
 & S' \arrow[dl] \arrow[dr] \arrow[d] \\
@@ -36,8 +36,7 @@ A' \sqcup^{S'} B' \arrow[r] \arrow[d] & X' \arrow[d] \\
 A\sqcup^{S} B \arrow[r] & X.
 \end{tikzcd}
 \end{equation*}
-is a pullback square. Even though this statement does not involve a universe, we use the univalence axiom in our proof that this square being pullback implies that the front two vertical squares of the cube are pullback squares. Function extensionality suffices for the converse direction. 
-
+is a pullback square. Even though this statement does not involve a universe, we use the univalence axiom in our proof that this square being pullback implies that the front two vertical squares of the cube are pullback squares. Function extensionality suffices for the converse direction.
 
 \section{Homotopy pushouts}
 
@@ -97,31 +96,12 @@ S \arrow[r,"g"] \arrow[d,swap,"f"] & B \arrow[d,"j"] \\
 A \arrow[r,swap,"i"] & X
 \end{tikzcd}
 \end{equation*}
-with $H:i\circ f \htpy j\circ g$, and consider a cocone $(i',j',H')$ with vertex $Y$ on the same span $\mathcal{S}\jdeq(S,f,g)$. The unique map $h:X\to Y$ such that 
+with $H:i\circ f \htpy j\circ g$, and consider a cocone $(i',j',H')$ with vertex $Y$ on the same span $\mathcal{S}\jdeq(S,f,g)$. Then the unique map $h:X\to Y$ such that 
 \begin{equation*}
 \mathsf{cocone\usc{}map}((i,j,H),Y,h)= (i',j',H')
 \end{equation*}
 is called the \define{cogap map} of $(i',j',H')$. We also write $\mathsf{cogap}(i',j',H')$ for the cogap map. 
 \end{defn}
-
-\begin{lem}\label{lem:cocone_pb}
-For any span $\mathcal{S}\jdeq (S,f,g)$ from $A$ to $B$, and any type $X$ the square\index{cocone_S(X)@{$\mathsf{cocone}_{\mathcal{S}}(X)$}!as a pullback|textit}
-\begin{equation*}
-\begin{tikzcd}
-\mathsf{cocone}_{\mathcal{S}}(X) \arrow[r,"\pi_2"] \arrow[d,swap,"\pi_1"] & X^B \arrow[d,"\blank\circ g"] \\
-X^A \arrow[r,swap,"\blank\circ f"] & X^S,
-\end{tikzcd}
-\end{equation*}
-which commutes by the homotopy $\pi_3 \defeq\lam{(i,j,H)} \mathsf{eq\usc{}htpy}(H)$, is a pullback square.
-\end{lem}
-
-\begin{proof}
-The gap map $\mathsf{cocone}_{\mathcal{S}}(X)\to X^A\times_{X^S} X^B$ is the function 
-\begin{equation*}
-\lam{(i,j,H)}(i,j,\mathsf{eq\usc{}htpy}(H)).
-\end{equation*}
-This is an equivalence by \cref{thm:fib_equiv}, since it is the induced map on total spaces of the fiberwise equivalence $\mathsf{eq\usc{}htpy}$. Therefore, the square is a pullback square by \cref{thm:is_pullback}.
-\end{proof}
 
 \begin{prp}\label{thm:pushout_up}
 Consider a commuting square\index{universal property!of pushouts|textit}
@@ -146,14 +126,18 @@ which commutes by the homotopy
 \lam{h} \mathsf{eq\usc{}htpy}(h\cdot H),
 \end{equation*}
 is a pullback square, for every type $Y$.
-\item The square
+\item For every type family $P$ over $X$, the square
 \begin{equation*}
-\begin{tikzcd}
-\prd{x:X}P(x) \arrow[r] \arrow[d] & \prd{b:B}P(j(b)) \arrow[d] \\
-\prd{a:A}P(i(a)) \arrow[r] & \prd{x:S}P(j(g(x)))
+\begin{tikzcd}[column sep=6em]
+\prd{x:X}P(x) \arrow[r,"\blank\circ j"] \arrow[d,swap,"\blank\circ i"] & \prd{b:B}P(j(b)) \arrow[d,"\blank\circ g"] \\
+\prd{a:A}P(i(a)) \arrow[r,swap,"{\lam{h}{x} \tr_{P}(H(x),h(f(x)))}"] & \prd{x:S}P(j(g(x))),
 \end{tikzcd}
 \end{equation*}
-is a pullback square, for every type family $P$ over $X$. This property is also called the \define{dependent universal property of pushouts}.
+which commutes by the homotopy
+\begin{equation*}
+\lam{h}\mathsf{eq\usc{}htpy}(\lam{x}\apd{h}{H(x)})
+\end{equation*}
+is a pullback square. This property is also called the \define{dependent universal property of pushouts}.
 \item The gap map of the square
 \begin{equation*}
 \begin{tikzcd}
@@ -164,6 +148,27 @@ is a pullback square, for every type family $P$ over $X$. This property is also 
 has a section, for any type family $P$ over $X$. This property is also called the \define{induction principle of pushouts}.
 \end{enumerate}
 \end{prp}
+
+\begin{defn}
+From now on we will assume that any span has a pushout, and moreover that universes are closed under pushouts. We will write $A\sqcup^{\mathcal{S}} B$ for the pushout of the span $\mathcal{S}\jdeq(S,f,g)$ from $A$ to $B$. The type $A\sqcup^{\mathcal{S}} B$ comes equipped with a colimiting cocone $(\inl,\inr,\glue)$, as displayed in the pushout square
+\begin{equation*}
+\begin{tikzcd}
+S \arrow[d,swap,"f"] \arrow[r,"g"] & B \arrow[d,"\inr"] \\
+A \arrow[r,swap,"\inl"] & A \sqcup^{\mathcal{S}} B.
+\end{tikzcd}
+\end{equation*}
+\end{defn}
+
+\begin{rmk}
+We note that if $\mathcal{S}\jdeq (S,f,g)$ is a span of \emph{pointed} and pointed maps between them, then the pushout $A\sqcup^{\mathcal{S}} B$ of $\mathcal{S}$ is again a pointed type. The cocone $(\inl,\inr,\glue)$ consists of two pointed maps and a pointed homotopy filling the square of pointed maps. Moreover, the pushout $A\sqcup^{\mathcal{S}} B$ satisfies a pointed version of the universal property: for any pointed type $Y$ the square
+\begin{equation*}
+\begin{tikzcd}
+(A\sqcup^{\mathcal{S}} B \to_\ast Y) \arrow[r] \arrow[d] & (B\to_\ast Y) \arrow[d] \\
+(A\to_\ast Y) \arrow[r] & (S\to_\ast Y)
+\end{tikzcd}
+\end{equation*}
+is a pullback square. 
+\end{rmk}
 
 \begin{comment}
 \begin{proof}
@@ -188,7 +193,27 @@ X \arrow[r] \arrow[d] & \unit \arrow[d,"\inr"] \\
 \unit \arrow[r,swap,"\inl"] & \susp X 
 \end{tikzcd}
 \end{equation*}
+We will write $\north\defeq\inl(\ttt)$ and $\south\defeq\inr(\ttt)$. 
 \end{defn}
+
+\begin{rmk}By the universal property it follows that the map
+\begin{equation*}
+(\susp X \to Y) \to \sm{y,y':Y}X\to (y=y')
+\end{equation*}
+given by $h\mapsto (h(\north),h(\south),h\cdot\glue)$ is an equivalence. 
+
+Moreover, if $X$ is a pointed type, then the suspension is considered to be a pointed type with base point $\north$. By the universal property of $\susp X$ it follows that the square
+\begin{equation*}
+\begin{tikzcd}
+(\susp X\to_\ast Y) \arrow[r] \arrow[d] & (\unit \to_\ast Y) \arrow[d] \\
+(\unit\to_\ast Y) \arrow[r] & (X\to_\ast Y)
+\end{tikzcd}
+\end{equation*}
+is a pullback square. Since $\unit\to_\ast Y$ is contractible, it follows that 
+\begin{equation*}
+(\susp X\to_\ast Y) \eqvsym \loopspace{X\to_\ast Y} \eqvsym X \to_\ast \loopspace Y
+\end{equation*}
+\end{rmk}
 
 \begin{defn}
 Given a map $f:A\to B$, we define the \define{cofiber}\index{cofiber|textbf} $\mathsf{cof}_f$\index{cofib_f@{$\mathsf{cof}_f$}|textbf} of $f$ as the pushout
@@ -350,7 +375,7 @@ is an equivalence.
 By the 3-for-2 property of equivalences it suffices to construct an equivalence $\varphi:\mathsf{cocone}_{\mathcal{S}}(\UU)\to\mathsf{Desc}(\mathcal{S})$ such that the triangle
 \begin{equation*}
 \begin{tikzcd}
-& \UU^X \arrow[dl,swap,"{\mathsf{cocone\usc{}map}_{\mathcal{S}}(i,j,H)}"] \arrow[dr,"{\mathsf{desc\usc{}fam}_{\mathcal{S}}(i,j,H)}"] \\
+& \UU^X \arrow[dl,swap,"{\mathsf{cocone\usc{}map}_{\mathcal{S}}(i,j,H)}"] \arrow[dr,"{\mathsf{desc\usc{}fam}_{\mathcal{S}}(i,j,H)}"] & \phantom{\mathsf{cocone}_{\mathcal{S}}(\UU)} \\
 \mathsf{cocone}_{\mathcal{S}}(\UU) \arrow[rr,densely dotted,"\eqvsym","\varphi"'] & & \mathsf{Desc}(\mathcal{S})
 \end{tikzcd}
 \end{equation*}
@@ -362,7 +387,7 @@ Since we have equivalences
 \end{equation*}
 for all $x:S$, we obtain an equivalence on the dependent products
 \begin{equation*}
-{\Big(\prd{x:S}P_A(f(x))=P_B(g(x))\Big)}\to{\Big(\prd{x:S}\eqv{P_A(f(x))}{P_B(g(x))}\Big)}.
+\eqv{\Big(\prd{x:S}P_A(f(x))=P_B(g(x))\Big)}{\Big(\prd{x:S}\eqv{P_A(f(x))}{P_B(g(x))}\Big)}.
 \end{equation*}
 by post-composing with the equivalences $\mathsf{equiv\usc{}eq}$. 
 We define $\varphi$ to be the induced map on total spaces. Explicitly, we have
@@ -395,7 +420,7 @@ commutes, is contractible.
 \end{cor}
 
 \begin{proof}
-The fiber of this map at $(P_A,P_B,P_S)$ is equivalent to the type of quadruples $(P,e_A,e_B,e_S)$ as described in the theorem, which are contractible by \cref{thm:contr_equiv}.
+The fiber of $\mathsf{desc\usc{}fam}_{\mathcal{S}}(i,j,H)$ map at $(P_A,P_B,P_S)$ is equivalent to the type of quadruples $(P,e_A,e_B,e_S)$ as described in the theorem, which are contractible by \cref{thm:contr_equiv}.
 \end{proof}
 
 For the remainder of this subsection we consider a pushout square
@@ -468,19 +493,17 @@ Y^{\sm{a:A}P_A(a)} \arrow[d,swap,"\mathsf{ev\usc{}pair}"] & \prd{x:X}Y^{P(x)} \a
 \phantom{\prd{b:B}Y^{P_B(b)}} & \prd{x:S}Y^{P_A(f(x))} & \phantom{\prd{a:A}Y^{P_A(a)}}
 \end{tikzcd}
 \end{equation*}
-for any type $Y$. In this cube, the bottom square is a pullback square since $X$ is a pushout. The vertical maps (of the form $\mathsf{ev\usc{}pair}$) are equivalences, so it follows that the top square is a pullback square. We conclude that $\sm{x:X}P(x)$ is a pushout.
+for any type $Y$. In this cube, the bottom square is a pullback square by property (iii) of \cref{thm:pushout_up}. The vertical maps (of the form $\mathsf{ev\usc{}pair}$) are equivalences, so it follows that the top square is a pullback square. We conclude that $\sm{x:X}P(x)$ is a pushout.
 \end{proof}
 
 \subsection{The descent property for pushouts}
-
-In the previous section there was a significant role for fiberwise equivalences, and we know by \cref{thm:pb_fibequiv,cor:pb_fibequiv}: fiberwise equivalences indicate the presence of pullbacks. In this section we reformulate the results of the previous section using pullbacks where we used fiberwise equivalences before, to obtain new and useful results. We begin by considering the type of descent data from the perspective of pullback squares.
 
 \begin{defn}
 Consider a span $\mathcal{S}$ from $A$ to $B$, and a span $\mathcal{S}'$ from $A'$ to $B'$. A \define{cartesian transformation} of spans\index{cartesian transformation!of spans|textbf} from $\mathcal{S}'$ to $\mathcal{S}$ is a tuple
 \begin{equation*}
 (h_A,h_S,h_B,F,G,p_f,p_g)
 \end{equation*}
-consistinf of maps $h_A:A'\to A$, $h_S:S'\to S$, and $h_B:B'\to B$, as indicated in the diagram
+consisting of maps $h_A:A'\to A$, $h_S:S'\to S$, and $h_B:B'\to B$, as indicated in the diagram
 \begin{equation*}
 \begin{tikzcd}
 A' \arrow[d,swap,"h_A"]  & S' \arrow[l,swap,"{f'}"] \arrow[r,"{g'}"] \arrow[d,swap,"h_S"] & B' \arrow[d,"h_B"] \\
@@ -489,8 +512,8 @@ A & S \arrow[l,"f"] \arrow[r,swap,"g"] & B,
 \end{equation*}
 with homotopies $F:f\circ h_S\htpy h_A\circ f'$ and $G:g\circ h_S\htpy h_B\circ g'$, satisfying the conditions
 \begin{align*}
-p_f & : \mathsf{is\usc{}pullback}(h_S,h_A,F) \\
-p_g & : \mathsf{is\usc{}pullback}(h_S,h_B,G)
+p_f & : \mathsf{is\usc{}pullback}(h_S,f',F) \\
+p_g & : \mathsf{is\usc{}pullback}(h_S,g',G)
 \end{align*}
 that both squares are pullback squares. We write $\mathsf{cart}(\mathcal{S}',\mathcal{S})$\index{cart(S,S')@{$\mathsf{cart}(\mathcal{S},\mathcal{S}')$}|textbf} for the type of cartesian transformations from $\mathcal{S}'$ to $\mathcal{S}$, and we write
 \begin{equation*}
@@ -814,29 +837,140 @@ the two back squares are pullback squares, and the top and bottom squares are pu
 \section{Applications of the descent theorem for pushouts}
 \sectionmark{Applications of the descent theorem}
 
-\begin{prp}
-The commuting square
-\begin{equation*}
-\begin{tikzcd}[column sep=large]
-\sphere{1}+\sphere{1} \arrow[r,"{[\idfunc,\idfunc]}"] \arrow[d,swap,"{[\idfunc,\idfunc]}"] & \sphere{1} \arrow[d,"{\lam{t}(t,\base)}"] \\
-\sphere{1} \arrow[r,swap,"{\lam{t}(t,\base)}"] & \sphere{1}\times\sphere{1}
-\end{tikzcd}
-\end{equation*}
-is a pushout square.
-\end{prp}
+\subsection{Fiber sequences}
 
-\begin{proof}
-We have the commuting cube
+\begin{defn}
+A \define{pointed type} is a pair $(X,x)$ consisting of a type $X$ equipped with a \define{base point} $x:X$. We will write $\UU_\ast$ for the type $\sm{X:\UU}X$ of all pointed types.
+\end{defn}
+
+In the following lemma we characterize the identity type of $\UU_\ast$. 
+
+\begin{lem}\label{lem:equiv_of_ptdtype}
+For any $(A,a),(B,b):\UU_\ast$ we have an equivalence
+\begin{equation*}
+\eqv{\Big(\pairr{A,a}=\pairr{B,b}\Big)}{\Big(\sm{e:\eqv{A}{B}}e(a)=b\Big)}.
+\end{equation*}
+\end{lem}
+
+\begin{proof}[Construction]
+By \cref{thm:eq_sigma} the type on the left hand side is
+equivalent to the type $\sm{p:A=B}\tr_{\universalfam}({p},{a})=b$.
+By the univalence axiom, the map 
+\begin{equation*}
+\equiveq_{A,B}:(A=B)\to (\eqv{A}{B})
+\end{equation*}
+is an equivalence for each $B:\UU$. 
+Therefore, we have an equivalence of type
+\begin{equation*}
+\eqv{\Big(\sm{p:A=B}\tr_{\universalfam}({p},{a})=b\Big)}{\Big(\sm{e:\eqv{A}{B}}\tr_{\universalfam}({\eqequiv(e)},{a})=b\Big)}
+\end{equation*} 
+Moreover, by equivalence induction (the analogue of path induction for 
+equivalences), we can compute the transport:
+\begin{equation*}
+\tr_{\universalfam}({\eqequiv(e)},{a})=e(a).
+\end{equation*}
+It follows that $\eqv{(\tr_{\universalfam}({\eqequiv(e)},{a})=b)}
+{(e(a)=b)}$.
+\end{proof}
+
+\begin{defn}
+\begin{enumerate}
+\item Let $(X,\ast_X)$ be a pointed type. A \define{pointed family} over $(X,\ast_X)$ consists of a type family $P:X\to \UU$ equipped with a base point $\ast_P:P(\ast_X)$. 
+\item Let $(P,\ast_P)$ be a pointed family over $(X,\ast_X)$. A \define{pointed section} of $(P,\ast_P)$ consists of a dependent function $f:\prd{x:X}P(x)$ and an identification $p:f(\ast_X)=\ast_P$. We define the \define{pointed $\Pi$-type} to be the type of pointed sections:
+\begin{equation*}
+\Pi^\ast_{(x:X)}P(x) \defeq \sm{f:\prd{x:X}P(x)}f(\ast_X)=\ast_P
+\end{equation*}
+In the case of two pointed types $X$ and $Y$, we may also view $Y$ as a pointed family over $X$. In this case we write $X\to_\ast Y$ for the type of pointed functions.
+\item Given any two pointed sections $f$ and $g$ of a pointed family $P$ over $X$, we define the type of pointed homotopies
+\begin{equation*}
+f\htpy_\ast g \defeq \Pi^\ast_{(x:X)} f(x)=g(x),
+\end{equation*}
+where the family $x\mapsto f(x)=g(x)$ is equipped with the base point $\ct{p}{q^{-1}}$. 
+\end{enumerate}
+\end{defn}
+
+\begin{defn}
+\begin{enumerate}
+\item For any pointed type $X$, we define the \define{pointed identity function} $\idp_X\defeq (\idfunc[X],\refl{\ast})$. 
+\item For any two pointed maps $f:X\to_\ast Y$ and $g:Y\to_\ast Z$, we define the \define{pointed composite}
+\begin{equation*}
+g\mathbin{\circ_\ast} f \defeq (g\circ f,\ct{\ap{g}{p_f}}{p_g}).
+\end{equation*}
+\end{enumerate}
+\end{defn}
+
+\begin{defn}
+Let $X$ be a pointed type with base point $x$. We define the \define{loop space} $\loopspace{X,x}$ of $X$ at $x$ to be the pointed type $x=x$ with base point $\refl{x}$. 
+\end{defn}
+
+\begin{defn}
+The loop space operation $\loopspacesym$ is \emph{functorial} in the sense that
+\begin{enumerate}
+\item For every pointed map $f:X\to_\ast Y$ there is a pointed map
+\begin{equation*}
+\loopspace{f}:\loopspace{X}\to_\ast \loopspace{Y},
+\end{equation*}
+defined by $\loopspace{f}(\omega)\defeq \ct{p_f}{\ap{f}{\omega}}{p_f^{-1}}$, which is base point preserving by $\rightinv(p_f)$. 
+\item For every pointed type $X$ there is a pointed homotopy
+\begin{equation*}
+\loopspace{\idp_X}\htpy_\ast \idp_{\loopspace{X}}.
+\end{equation*}
+\item For any two pointed maps $f:X\to_\ast Y$ and $g:Y\to_\ast X$, there is a pointed homotopy witnessing that the triangle
 \begin{equation*}
 \begin{tikzcd}
-& \sphere{1}+\sphere{1} \arrow[dl] \arrow[d] \arrow[dr] \\
-\sphere{1} \arrow[d] & \bool \arrow[dl] \arrow[dr] & \sphere{1} \arrow[dl,crossing over] \arrow[d] \\
-\unit \arrow[dr] & \sphere{1}\times \sphere{1} \arrow[d] \arrow[from=ul,crossing over] & \unit \arrow[dl] \\
-& \sphere{1}
+& \loopspace{Y} \arrow[dr,"\loopspace{g}"] \\
+\loopspace{X} \arrow[rr,swap,"\loopspace{g\circ_\ast f}"] \arrow[ur,"\loopspace{f}"] & & \loopspace{Z}
 \end{tikzcd}
 \end{equation*}
-of which the vertical squares are pullback squares. Since the bottom square is a pushout square, it follows by \cref{cor:descent} that the top square is a pushout square.
+of pointed types commutes.
+\end{enumerate}
+\end{defn}
+
+\begin{lem}\label{lem:equiv_of_ptdequiv}
+For any $\pairr{e,p},\pairr{f,q}:\sm{e:\eqv{A}{B}}e(a)=b$, we have an equivalence of type
+\begin{equation*}
+\eqv{\Big(\pairr{e,p}=\pairr{f,q}\Big)}{\Big(\sm{h:e\htpy f} p=\ct{h(a)}{q}\Big)}.
+\end{equation*}
+\end{lem}
+
+\begin{proof}[Construction]
+The type $\pairr{e,p}=\pairr{f,q}$ is equivalent
+to the type $\sm{h:e=f}\tr({h},{p})=q$.
+Note that by the principle of function extensionality,
+the map $\htpyeq:(e=f)\to(e\htpy f)$
+is an equivalence. Furthermore, it follows by homotopy induction that for any 
+$h:e\htpy f$ we have an equivalence of type
+\begin{equation*}
+\eqv{(\tr({\eqhtpy(h)},{p})=q)}
+    {(p= \ct{h(a)}{q})}.\qedhere
+\end{equation*}
 \end{proof}
+
+\begin{defn}
+A \define{fiber sequence} $F\hookrightarrow E \twoheadrightarrow B$ consists of:
+\begin{enumerate}
+\item Pointed types $F$, $E$, and $B$, with base points $x_0$, $y_0$, and $b_0$ respectively, 
+\item Base point preserving maps $i:F\to_\ast E$ and $p:E\to_\ast B$, with $\alpha:i(x_0)=y_0$ and $\beta:p(y_0)=b_0$,
+\item A pointed homotopy $H:\const_{b_0}\htpy_\ast p\circ_\ast i$ witnessing that the square
+\begin{equation*}
+\begin{tikzcd}
+F \arrow[r,"i"] \arrow[d] & E \arrow[d,"p"] \\
+\unit \arrow[r,swap,"\const_{b_0}"] & B,
+\end{tikzcd}
+\end{equation*}
+commutes and is a pullback square.
+\end{enumerate}
+We will write $\FibSeq$ for the type of all fiber sequences in $\UU$.
+\end{defn}
+
+\begin{prp}
+The type of all fiber sequences is equivalent to the type
+\begin{equation*}
+\sm{(B,b):\UU_\ast}{P:B\to\UU}P(b).
+\end{equation*}
+\end{prp}
+
+\subsection{Fiber sequences obtained by the descent property}
 
 \begin{defn}
 Let $f:A\to B$ be a map. The \define{codiagonal}\index{codiagonal}\index{nabla@{$\nabla_f$}} $\nabla_f$ of $f$ is the map obtained from the universal property of the pushout, as indicated in the diagram
@@ -1049,6 +1183,7 @@ For any coherent H-space $X$ there is a fiber sequence
 \begin{equation*}
 X \hookrightarrow \join{X}{X} \twoheadrightarrow \susp X.
 \end{equation*}
+The map $\eta_X:\join{X}{X}\to \susp X$ is called the \define{Hopf fibration}.
 \end{thm}
 
 \begin{proof}
