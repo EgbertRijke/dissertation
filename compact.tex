@@ -259,7 +259,7 @@ is contractible. In particular, any such map is a quasi $F$-local extension.
 If $Y$ is $F$-local, then the map $F_i^\ast : Y^{Q_i}\to Y^{P_i}$ is an equivalence, for any $i:I$. Since equivalences are right orthogonal to any map, the claim follows.
 \end{proof}
 
-\begin{lem}
+\begin{lem}\label{lem:equiv_colim_diagfiller}
 Suppose $h:\mathsf{Seq}(\mathcal{A},\mathcal{B})$ is a natural transformation of type sequences equipped with the structure of a diagonal filler for each naturality square
 \begin{equation*}
 \begin{tikzcd}
@@ -341,11 +341,11 @@ Our goal is now to construct the initial quasi $F$-local extension of a type $X$
 F_i : P_i \to Q_i \\
 F_i^\ast : X^{Q_i} \to X^{P_i}.
 \end{align*}
-In the following characterization of quasi $F$-local extensions we use the pushout-product $F_i^\ast\square F_i$, which is defined as follows
+In the following characterization of quasi $F$-local extensions we use the pushout-product $F_i^\ast\mathbin{\square} F_i$, which is defined as follows
 \begin{equation*}
 \begin{tikzcd}
 X^{Q_i}\times P_i \arrow[r] \arrow[d] & X^{Q_i}\times Q_i \arrow[ddr,bend left=15] \arrow[d] \\
-X^{P_i}\times P_i \arrow[drr,bend right=15] \arrow[r] & \big(X^{P_i} \times P_i\big)\sqcup^{\big(X^{Q_i}\times P_i\big)}\big(X^{Q_i}\times Q_i\big) \arrow[dr,densely dotted,swap,"F_i^\ast\square F_i"] \\
+X^{P_i}\times P_i \arrow[drr,bend right=15] \arrow[r] & \big(X^{P_i} \times P_i\big)\sqcup^{\big(X^{Q_i}\times P_i\big)}\big(X^{Q_i}\times Q_i\big) \arrow[dr,densely dotted,swap,"F_i^\ast\mathbin{\square} F_i"] \\
 & & X^{P_i}\times Q_i
 \end{tikzcd}
 \end{equation*}
@@ -370,7 +370,7 @@ X^{P_i} \arrow[r,swap,"l\circ \blank"] & Y^{P_i}
 is equivalent to the type of morphisms $j: \Big(\sm{i:I}X^{P_i}\times Q_i\Big)\to Y$ equipped with a homotopy witnessing that the square
 \begin{equation*}
 \begin{tikzcd}[column sep=6em]
-\sm{i:I}\Big(\big(X^{P_i} \times P_i\big)\sqcup^{\big(X^{Q_i}\times P_i\big)}\big(X^{Q_i}\times Q_i\big)\Big) \arrow[r,"\total{\lam{i}F_i^\ast\square F_i}"] \arrow[d,swap,"\lam{(i,t)}\varepsilon_i(t)"] & \sm{i:I} X^{P_i}\times Q_i \arrow[d] \\
+\sm{i:I}\Big(\big(X^{P_i} \times P_i\big)\sqcup^{\big(X^{Q_i}\times P_i\big)}\big(X^{Q_i}\times Q_i\big)\Big) \arrow[r,"\total{\lam{i}F_i^\ast\mathbin{\square} F_i}"] \arrow[d,swap,"\lam{(i,t)}\varepsilon_i(t)"] & \sm{i:I} X^{P_i}\times Q_i \arrow[d] \\
 X \arrow[r] & Y
 \end{tikzcd}
 \end{equation*}
@@ -381,13 +381,13 @@ commutes.
 It suffices to show that for each $i:I$, the type of diagonal fillers in the first description is equivalent to the type of maps $j:X^{P_i}\times Q_i\to Y$ equipped with a homotopy witnessing that the square
 \begin{equation*}
 \begin{tikzcd}[column sep=huge]
-\Big(\big(X^{P_i} \times P_i\big)\sqcup^{\big(X^{Q_i}\times P_i\big)}\big(X^{Q_i}\times Q_i\big)\Big) \arrow[r,"F_i^\ast\square F_i"] \arrow[d,swap,"\varepsilon_i"] & X^{P_i}\times Q_i \arrow[d] \\
+\Big(\big(X^{P_i} \times P_i\big)\sqcup^{\big(X^{Q_i}\times P_i\big)}\big(X^{Q_i}\times Q_i\big)\Big) \arrow[r,"F_i^\ast\mathbin{\square} F_i"] \arrow[d,swap,"\varepsilon_i"] & X^{P_i}\times Q_i \arrow[d] \\
 X \arrow[r] & Y
 \end{tikzcd}
 \end{equation*}
 commutes. The type $X^{P_i}\to Y^{Q_i}$ is equivalent to the type $X^{P_i}\times Q_i\to Y$ by adjointness. 
 
-By the dependent universal property of pushouts established in \cref{thm:pushout_dup}, the type $l\circ \varepsilon_i \htpy j\circ (F_i^\ast\square F_i)$ is equivalent to the type of triples $(K,L,M)$ consisting of
+By the dependent universal property of pushouts established in \cref{thm:pushout_dup}, the type $l\circ \varepsilon_i \htpy j\circ (F_i^\ast\mathbin{\square} F_i)$ is equivalent to the type of triples $(K,L,M)$ consisting of
 \begin{align*}
 K & : \prd{f:P_i\to X}{p:P_i} l(f(p))=j(f,F_i(p)) \\ 
 L & : \prd{g:Q_i\to X}{q:Q_i} l(g(q))=j(g\circ F_i,q) \\
@@ -404,7 +404,7 @@ at $(l^{Q_i},l^{P_i},\mathsf{htpy\usc{}refl})$.
 For any type $X$, we define the initial quasi $F$-local extension $l:X\to QL_FX$ of $X$ to be the pushout
 \begin{equation*}
 \begin{tikzcd}[column sep=large]
-\sm{i:I}\Big(\big(X^{P_i} \times P_i\big)\sqcup^{\big(X^{Q_i}\times P_i\big)}\big(X^{Q_i}\times Q_i\big)\Big) \arrow[r,"F_i^\ast\square F_i"] \arrow[d,swap,"\lam{(i,t)}\varepsilon_i(t)"] & \sm{i:I} X^{P_i}\times Q_i \arrow[d] \\
+\sm{i:I}\Big(\big(X^{P_i} \times P_i\big)\sqcup^{\big(X^{Q_i}\times P_i\big)}\big(X^{Q_i}\times Q_i\big)\Big) \arrow[r,"F_i^\ast\mathbin{\square} F_i"] \arrow[d,swap,"\lam{(i,t)}\varepsilon_i(t)"] & \sm{i:I} X^{P_i}\times Q_i \arrow[d] \\
 X \arrow[r,swap,"l"] & QL_FX
 \end{tikzcd}
 \end{equation*}
@@ -466,7 +466,7 @@ If $X$ is $F$-local, then $l:X\to QL_F X$ is an equivalence.
 \end{prp}
 
 \begin{proof}
-If $X$ is $F$-local, then each $F_i^\ast$ is an equivalence. It follows that the pushout-product $F_i^\ast\square F_i$ is an equivalence. Since pushouts of equivalences are equivalences, the claim follows.
+If $X$ is $F$-local, then each $F_i^\ast$ is an equivalence. It follows that the pushout-product $F_i^\ast\mathbin{\square} F_i$ is an equivalence. Since pushouts of equivalences are equivalences, the claim follows.
 \end{proof}
 
 \begin{thm}
@@ -523,5 +523,147 @@ and therefore it follows that $\eta^\ast:(LX\to Y)\to (X\to Y)$ is an equivalenc
 \begin{cor}
 For any family $N:I\to \UU$ of compact types, the subuniverse of $N$-null types is a modality.
 \end{cor}
+
+\section{An orthogonal factorization system associated to a reflective subuniverse presented by a family of maps between compact types}
+\sectionmark{An orthogonal factorization system}
+\label{sec:nonstable-factsys}
+
+We have seen in \cref{sec:modal-refl-subun} that $\Sigma$-closed reflective subuniverses are equivalent to stable orthogonal factorization systems.
+Without $\Sigma$-closedness and stability, this equivalence fails.
+However, we can still say:
+
+\begin{lem}
+  Any orthogonal factorization system has an underlying reflective subuniverse, consisting of those types $X$ such that $X\to\unit$ is in $\cR$.
+\end{lem}
+\begin{proof}
+  If $Y$ is modal in this sense, then by orthogonality for squares
+  \[
+  \begin{tikzcd}
+    A \ar[d,"f"'] \ar[r] & Y \ar[d] \\ B \ar[r] & \unit
+  \end{tikzcd}
+  \]
+  we see that if $f:A\to B$ lies in $\cL$, then precomposition
+  \[ (-\circ f) : (B\to Y) \to (A\to Y) \]
+  is an equivalence.
+  Thus, it suffices to show that for every $X$ there is an $\cL$-map $X\to \modal X$ where $\modal X\to \unit$ is in $\cR$; but this is just an $(\cL,\cR)$-factorization of the map $X\to\unit$.
+\end{proof}
+
+Conversely, in classical category theory there are various ways of extending a reflective subcategory to a factorization system.
+One canonical one is considered in~\cite{chk:reflocfact}, but this is harder to reproduce homotopy-theoretically.
+Instead, if we have an \emph{accessible} reflective subuniverse presented by localization at a family of maps, we can generalize the construction of localization to produce a factorization system (though in general the result will depend on the choice of presentation, not just on the reflective subuniverse we started with). We present here a construction of an orthogonal factorization associated to a family of maps, analogous to the construction in 2.4 of \cite{RijkeShulmanSpitters}, which used recursive higher inductive types.  
+
+For simplicity we work with only one map $f:A\to B$ instead of a family of maps $f:\prd{i:I}A_i\to B_i$.
+It is straightforward to generalize the construction to a family of maps.
+
+\begin{defn}
+Let $f:A\to B$ and let $g:X\to Y$ be maps. A \define{quasi-$f$-right extension} of $g$ consists of a commuting triangle
+\begin{equation*}
+\begin{tikzcd}[column sep=tiny]
+X \arrow[rr,"l"] \arrow[dr,swap,"g"] & & X' \arrow[dl,"g'"] \\
+& Y
+\end{tikzcd}
+\end{equation*}
+equipped with a diagonal filler for the square
+\begin{equation*}
+\begin{tikzcd}
+X^B \arrow[r] \arrow[d] & X'^B \arrow[d] \\
+X^A\times_{Y^A}Y^B \arrow[r] & X'^A\times_{Y^A}Y^B.
+\end{tikzcd}
+\end{equation*}
+\end{defn}
+
+\begin{prp}
+Suppose $f:A\to B$ is a map between compact types, and suppose we are given a sequence
+\begin{equation*}
+\begin{tikzcd}
+X_0 \arrow[r,"l"] \arrow[dr,swap,"g_0"] & X_1 \arrow[r,"l"] \arrow[d,swap,"g_1" near start] & X_2 \arrow[r,"l"] \arrow[dl,swap,"g_2"] & \cdots \arrow[dll,bend left=10] \\
+& Y
+\end{tikzcd}
+\end{equation*}
+where each $g_{n+1}$ is a quasi-$f$-right extension of $g_n$. Then the map $g_\infty:X_\infty\to Y$ is right orthogonal to $f$.
+\end{prp}
+
+\begin{proof}
+Since pullbacks are preserved by sequential colimits and since $A$ and $B$ are assumed to be compact, we have a commuting square
+\begin{equation*}
+\begin{tikzcd}
+\mathsf{colim}_n(X_n^B) \arrow[r] \arrow[d,swap,"\mathsf{colim}(\mathsf{gap})"] & X_\infty^B \arrow[d,"\mathsf{gap}"] \\
+\mathsf{colim}_n(X_n^A\times_{Y^A}Y^B) \arrow[r] & X_\infty^A\times_{Y^A}Y^B
+\end{tikzcd}
+\end{equation*}
+in which the top and bottom maps are equivalences.
+
+Moreover, since each naturality square in the natural transformation
+\begin{equation*}
+\begin{tikzcd}
+X_0^B \arrow[r,"l"] \arrow[d,swap,"\mathsf{gap}"] & X_1^B \arrow[r,"l"] \arrow[d,swap,"\mathsf{gap}"] & X_2^B \arrow[r,"l"] \arrow[d,swap,"\mathsf{gap}"] & \cdots \\
+X_0^A\times_{Y^A} Y^B \arrow[r] & X_1^A\times_{Y^A}Y^B \arrow[r] & X_2^A\times_{Y^A}Y^B \arrow[r] & \cdots
+\end{tikzcd}
+\end{equation*}
+has a diagonal filler, it follows by \cref{lem:equiv_colim_diagfiller} that the colimit $\mathsf{colim}(\mathsf{gap})$ is an equivalence. Thus we conclude that the gap map $X_\infty^B\to X_\infty^A\times_{Y^A}Y^B$ is an equivalence.
+\end{proof}
+
+\begin{defn}
+Consider maps $f:A\to B$ and $g:X\to Y$. We define the \define{initial quasi-$f$-right extension} $QR_f(g):QR_f X\to Y$\marginnote{Obviously the terminology might need some consideration} of $g$ to be the cogap map of the cube
+\begin{equation*}
+\begin{tikzcd}
+& X^B\times A \arrow[dl] \arrow[dr] \arrow[d] & \phantom{(X^A\times_{Y^A}Y^B)\times B} \\
+X^B \times B \arrow[d] & (X^A\times_{Y^A} Y^B)\times A \arrow[dl] \arrow[dr] & X \arrow[dl,crossing over] \arrow[d] \\
+(X^A\times_{Y^A}Y^B)\times B \arrow[dr] & X \arrow[from=ul,crossing over] \arrow[d] & X \arrow[dl] \\
+& Y
+\end{tikzcd}
+\end{equation*}
+\end{defn}
+
+\begin{rmk}
+Equivalently, the quasi-$f$-right extension $QR_f(g):QR_f X \to Y$ is described as the cogap map of the square
+\begin{equation*}
+\begin{tikzcd}
+(X^B\times B)\sqcup^{(X^B\times A)}((X^A\times_{Y^A} Y^B)\times A) \arrow[d,swap,"\mathsf{gap}\mathbin{\square} f"] \arrow[r] & X \arrow[d,"g"] \\
+(X^A\times_{Y^A} Y^B)\times B \arrow[r] & Y,
+\end{tikzcd}
+\end{equation*}
+where $\mathsf{gap}:X^B \to X^A\times_{Y^A} Y^B$ is the gap map of the square
+\begin{equation*}
+\begin{tikzcd}
+X^B \arrow[r] \arrow[d] & Y^B \arrow[d] \\
+X^A \arrow[r] & Y^A.
+\end{tikzcd}
+\end{equation*}
+\end{rmk}
+
+\begin{lem}
+For any $g:X\to Y$, the initial quasi-$f$-right extension of $g$ is a quasi-$f$-right extension of $g$.
+\end{lem}
+
+\begin{lem}
+Suppose $g:X\to Y$ is right orthogonal to $f:A\to B$. Then the map $q:X\to QR_fX$ is an equivalence.
+\end{lem}
+
+\begin{proof}
+If $g$ is right orthogonal to $f$, then (by definition) the gap map $\mathsf{gap}:X^B\to X^A\times_{Y^A} Y^B$ is an equivalence. It follows that the pushout-product $\mathsf{gap}\mathbin{\square} f$ is an equivalence, and hence $q:X\to QR_f X$ is an equivalence.
+\end{proof}
+
+\begin{defn}
+Consider a map $g$. We define the $f$-right factor $g_\mathcal{R}:QR_f^{\infty} X\to Y$ of $g$ to be the colimit of the sequence
+\begin{equation*}
+\begin{tikzcd}
+X \arrow[dr] \arrow[r] & QR_fX \arrow[d] \arrow[r] & QR_f^2 X \arrow[ld] \arrow[r] & \cdots \arrow[dll,bend left=10] \\
+& T
+\end{tikzcd}
+\end{equation*}
+\end{defn}
+
+\begin{prp}
+For any map $h:Z\to Y$ that is right orthogonal to $f:A\to B$, the map
+\begin{equation*}
+\mathsf{hom}_Y(g_{\mathcal{R}},h)\to \mathsf{hom}_Y(g,h)
+\end{equation*}
+is an equivalence.
+\end{prp}
+
+\begin{thm}
+For any map $f:A\to B$ between compact types, let $\mathcal{R}$ denote the class of maps which are right orthogonal to $f$, and let $\mathcal{L}$ be the class of maps which are left orthogonal to every map in $\mathcal{R}$. Then $(\mathcal{L},\mathcal{R})$ forms an orthogonal factorization system.
+\end{thm}
 
 \section{Inductive types specified by families of compact types}

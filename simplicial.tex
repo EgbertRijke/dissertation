@@ -59,7 +59,7 @@ We will also be able to use the material of this chapter to show that the join a
 \section{Discrete and Segal $2$-simplicial types}
 
 \begin{defn}
-A small $2$-simplicial type $\mathcal{A}$ consists of:
+A small \define{$2$-simplicial type}\marginnote{I'm not entirely sold on the terminology of $2$-simplicial type. Open to suggestions} $\mathcal{A}$ consists of:
 \begin{enumerate}
 \item A \define{$2$-semi-simplicial structure} $(A_0,A_1,A_2)$ consisting of
 \begin{align*}
@@ -370,7 +370,7 @@ A cone on a $2$-simplicial type $\mathcal{A}$ with vertex $X$ is simply a morphi
 \begin{equation*}
 \mathsf{sType}_2(\mathcal{A},\Delta X).
 \end{equation*}
-A morphism $f:\mathsf{sType}_2(\mathcal{A},\Delta X)$ is said to be a \define{geometric realization} of $\mathcal{A}$ if the function
+A morphism $f:\mathsf{sType}_2(\mathcal{A},\Delta X)$ is said to be a \define{geometric realization}\marginnote{If geometric realization is not good terminology, could use `$2$-simplicial coequalizer' or something along those lines} of $\mathcal{A}$ if the function
 \begin{equation*}
 \Delta(\blank)\circ f : (X\to Y) \to \mathsf{sType}_2(\mathcal{A},\Delta Y)
 \end{equation*}
@@ -817,8 +817,8 @@ Every $2$-simplicial type $\mathcal{A}$ determines a $2$-span $\tilde{\mathcal{A
 \begin{equation*}
 \begin{tikzcd}[column sep=large,row sep=large]
 & \tilde A_2 \arrow[dl,swap,"\pi_{01}"] \arrow[d,"\pi_{02}"] \arrow[dr,"\pi_{12}"] \\
-\tilde A_1 \arrow[d] & \tilde A_1 \arrow[dl] \arrow[dr] & \tilde A_1 \arrow[dl,crossing over] \arrow[d] \\
-\tilde A_0 & \tilde A_0 \arrow[from=ul,crossing over] & \tilde A_0. 
+\tilde A_1 \arrow[d,swap,"\pi_0"] & \tilde A_1 \arrow[dl,"\pi_0" near end] \arrow[dr,swap,"\pi_1" near end] & \tilde A_1 \arrow[dl,crossing over,swap,"\pi_0" near start] \arrow[d,"\pi_1"] \\
+\tilde A_0 & \tilde A_0 \arrow[from=ul,crossing over,"\pi_1" near start] & \tilde A_0. 
 \end{tikzcd}
 \end{equation*}
 The maps range over the projections
@@ -842,8 +842,14 @@ Furthermore, for any $f:\mathsf{sType}_2(\mathcal{A},\Delta X)$ we define the co
 on the $2$-span $\tilde{\mathcal{A}}$ with vertex $X$, where
 \begin{align*}
 \tilde{f}_0 & \defeq f_0 \\
-\tilde{f}_1 & \defeq \lam{(x,y,p)}f_1(x,y,p) \\
-\tilde{f}_2 & \defeq 
+\tilde{f}_1 & \defeq \lam{(x,y,p)}f_1(x,y,p),
+\end{align*}
+and the homotopy $\tilde{f}_2:\ct{(\tilde{f}_1\cdot \pi_{01})}{(\ct{(\tilde{f}_0\cdot H_{10})}{(\tilde{f}_1\cdot \pi_{12})})}\htpy \ct{(\tilde{f}_0\cdot H_{00})}{(\ct{(\tilde{f}_1\cdot\pi_{02})}{(\tilde{f}_0\cdot H_{11})})}$ takes $(x,y,z,p,r,q,s)$ to the composite
+\begin{align*}
+\ct{f_1(p)}{(\ct{\ap{f_0}{\refl{y}}}{f_1(q)})} & = \ct{f_1(p)}{f_1(q)} \\
+& = f_1(r) \\
+& = \ct{f_1(r)}{\ap{f_0}{\refl{z}}} \\
+& = \ct{\ap{f_0}{\refl{x}}}{(\ct{f_1(r)}{\ap{f_0}{\refl{z}}})}.
 \end{align*}
 \end{defn}
 
@@ -892,6 +898,8 @@ Let $Y$ be a type. Then we have the commuting triangle
 \end{tikzcd}
 \end{equation*}
 where the bottom map is given by $((f_0,f_1,f_2),\alpha)\mapsto (\tilde f_0,\tilde f_0,\tilde f_0,\tilde f_1,\tilde f_1,\tilde f_1,\tilde f_2)$. Therefore it suffices to show that $\varphi$ is an equivalence.
+
+Note that the map $\varphi$ factors through the type of triples $(f_0,f_1,f_2)$.\marginnote{This proof is horrible to write down. I need to set myself to it, but I postpone because I hope to think of something smart.}
 \end{proof}
 
 \begin{cor}
@@ -907,7 +915,7 @@ The geometric realization of the $2$-pre-kernel of a map $f:A\to B$ is the type 
 \end{cor}
 
 \begin{cor}\label{cor:geom_hspace}
-Given a coherent $H$-space $X$, the geometric realization of the $2$-simplicial type $S^2 X$ is the cofiber of the Hopf fibration $X \hookrightarrow \join{X}{X} \twoheadrightarrow \susp X$.
+Given a coherent $H$-space $X$, the geometric realization of the $2$-simplicial type $S^2 X$ is the cofiber of the Hopf fibration $\eta_X: \join{X}{X} \to \susp X$.
 \end{cor}
 
 \begin{cor}
@@ -916,4 +924,5 @@ The geometric realization of the standard simplices $\Delta[0]$, $\Delta[1]$, an
 
 \section{A speculative note on simplicial spaces}
 
+\marginnote{It might be better to write something about simplicial spaces in \cref{chap:equifibrant}, or in the introduction}
 We expect a simplicial space to be discrete, in the sense that the unit $\eta:\mathcal{A}\to |\mathcal{A}|$ of the geometric realization is an equivalence, if and only if it is $\Delta[k]$-null for all $k\in\mathbb{N}$, which happens if and only if $\mathcal{A}$ is $f$-local for all morphisms $f$ between representables. Furthermore, we expect that a morphism $f:\mathcal{A}\to\mathcal{B}$ of simplicial spaces is \'etale in the sense that the naturality square of the unit of geometric realization is a homotopy pullback square, if and only if $f$ is right orthogonal to all morphisms between representables. This can only be the case if the naturality squares (since $f$ is a morphism between presheaves valued in Kan-simplicial sets) are all pullback squares, i.e.~$f$ is cartesian. 

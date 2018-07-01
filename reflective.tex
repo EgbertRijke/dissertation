@@ -101,6 +101,30 @@ are equivalences. It follows that they induce an equivalence from the fiber of t
 \]
 \end{proof}
 
+\begin{prp}
+Let $P:\UU\to\prop$ be a subuniverse, and write $\tilde{\UU}_P \defeq\sm{X:\UU_P}X$. The projection
+$\proj1:\tilde{\UU}_P \to\UU_P$ classifies the small maps whose fibers satisfy $P$.
+\end{prp}
+
+\begin{proof}
+Let $f:Y\to X$ be any map into $X$. Then $\fibf{f}:X\to\UU$ factors through
+$\UU_P$ if and only if all the fibers of $f$ satisfy $P$. Let us write
+$P(f)$ for $\prd{x:X}P(\fib{f}{x})$. Then we see that the equivalence
+$\chi$ of Theorem 4.8.3 of \cite{TheBook} restricts to an
+equivalence
+\begin{equation*}
+\chi^P:(\sm{Y:\UU}{f:Y\to X}P(f))\to(X\to\UU_P).
+\end{equation*}
+Now observe that the outer square and the square on the right in the diagram
+\begin{equation*}
+\begin{tikzcd}[column sep=6em]
+Y \arrow[d,swap,"f"] \arrow[rr,"{\lam{y}\pairr{\fib{f}{f(y)},\blank,\pairr{y,\refl{f(y)}}}}"] & & \tilde{\UU}_P \arrow[r] \arrow[d] & \tilde{\UU} \arrow[d] \\
+X \arrow[rr,swap,"{\fibf{f}}"] & & \UU_P \arrow[r] & \UU
+\end{tikzcd}
+\end{equation*}
+are pullback squares. Hence the square on the left is a pullback square.
+\end{proof}
+
 \begin{defn}
 A \define{reflective subuniverse} $L$ is a subuniverse $\UU_L\to \UU$ equipped with an $L$-localization 
 \begin{equation*}
@@ -387,9 +411,22 @@ However, we will see in~\autoref{modaln-truncated} that lex modalities do preser
 \section{The reflective subuniverse of separated types}
 
 \begin{defn}
+Consider a subuniverse $P:\UU\to\prop$. We say that a type $X$ is \define{$P$-separated} if the identity types of $X$ are $P$-types. We write $P'$ for the subuniverse of $P$-separated types.
+\end{defn}
+
+\begin{eg}
+We define $\istrunc{} : \Z_{\geq-2}\to\UU\to\UU$ by induction on $k:\Z_{\geq -2}$, taking
+\begin{align*}
+\istrunc{-2}(A) & \defeq \iscontr(A) \\
+\istrunc{k+1}(A) & \defeq \prd{x,y:A}\istrunc{k}(\id{x}{y}).\qedhere
+\end{align*}
+For any type $A$, we say that $A$ is \define{$k$-truncated}, or a \define{$k$-type}, if there is a term of type $\istrunc{k}(A)$. We say that a map $f:A\to B$ is $k$-truncated if its fibers are $k$-truncated.
+
+In other words, the subuniverse of $(n+1)$-truncated types is precisely the subuniverse of \define{$n$-separated types}, i.e. the subuniverse of types whose identity types are $n$-truncated.
+\end{eg}
+
+\begin{defn}
 Let $L$ be a reflective subuniverse and let $X : \UU$ be a type. 
-We say that $X$ is \define{$L$-separated} if its identity types are $L$-local types.
-We write $L'$ for the subuniverse of $L$-separated types.
 An \define{$L'$-localization} of a type $X$ is a localization with respect to the subuniverse of $L$-separated types.
 \end{defn}
 
@@ -731,7 +768,91 @@ Therefore, this $f$ must also equal $\lam{z}\idfunc[L(x=z)]$,
 showing that $\alpha_{x,x}(\eta(\refl{x})) = \beta_{x,x}(\eta(\refl{x}))$.
 \end{proof}
 
-\subsection{$L'$-localization and finite limits}\label{ss:lex}
+\begin{thm}
+For each $k\geq -2$, the subuniverse of $k$-truncated types is reflective.
+\end{thm}
+
+\begin{proof}
+The subuniverse of contractible types is obviously reflective, it's localization is just the constant function $\lam{X}\unit$ mapping every type to the unit type. Since the subuniverse of $(k+1)$-truncated types is precisely the subuniverse of $k$-separated types, the claim follows inductively by \cref{thm:Lsep}.
+\end{proof}
+
+\section{$L$-local maps}
+
+\begin{defn}
+A map $f:A\to B$ is said to be \define{$L$-local} if its fibers are $L$-local.
+\end{defn}
+
+\begin{thm}
+Let $B$ be a type family over $A$. Then the following are equivalent:
+\begin{enumerate}
+\item For each $x:A$ the type $B(x)$ is $L$-local.
+\item The projection map
+\begin{equation*}
+\proj 1 : \Big(\sm{x:A}B(x)\Big)\to A
+\end{equation*}
+is an $L$-local map.
+\end{enumerate}
+\end{thm}
+
+\begin{proof}
+By \cref{ex:fib_replacement,ex:fiber_trans} we obtain equivalences
+\begin{equation*}
+\eqv{B(x)}{\fib{\proj 1}{x}}
+\end{equation*}
+for every $x:A$.
+\end{proof}
+
+\begin{thm}\label{thm:trunc_ap}
+Let $f:A\to B$ be a map. The following are equivalent:
+\begin{enumerate}
+\item The map $f$ is $L'$-local.
+\item For each $x,y:A$, the map
+\begin{equation*}
+\apfunc{f} : (x=y)\to (f(x)=f(y))
+\end{equation*}
+is $L$-local.
+\item The diagonal $\delta_f:A\to A\times_B A$ of $f$ is $L$-local. 
+\end{enumerate}
+\end{thm}
+
+\begin{proof}
+First we show that for any $s,t:\fib{f}{b}$ there is an equivalence
+\begin{equation*}
+\eqv{(s=t)}{\fib{\apfunc{f}}{\ct{\proj 2(s)}{\proj 2(t)^{-1}}}}
+\end{equation*}
+We do this by $\Sigma$-induction on $s$ and $t$, and then we calculate using \cref{ex:trans_ap} and basic manipulations of identifications that
+\begin{align*}
+(\pairr{x,p}=\pairr{y,q}) & \eqvsym \sm{r:x=y} \mathsf{tr}_{f(\blank)=b}(r,p)=q \\
+& \eqvsym \sm{r:x=y} \ct{\ap{f}{r}^{-1}}{p}=q \\
+& \eqvsym \sm{r:x=y} \ap{f}{r}=\ct{p}{q^{-1}} \\
+& \jdeq \fib{\apfunc{f}}{\ct{p}{q^{-1}}}.
+\end{align*}
+By these equivalences, it follows that if $\apfunc{f}$ is $L$-local, then for each $s,t:\fib{f}{b}$ the identity type $s=t$ is an $L$-local type.
+
+For the converse, note that we have equivalences
+\begin{align*}
+\fib{\apfunc{f}}{p} & \eqvsym ((x,p)=(y,\refl{f(y)})).
+\end{align*}
+Therefore it follows that if $f$ is $L'$-local, then the identity type $(x,p)=(y,\refl{f(y)})$ in $\fib{f}{f(y)}$ is $L$-local for any $p:f(x)=f(y)$, and therefore $\fib{\apfunc{f}}{p}$ is $L$-local. 
+\end{proof}
+
+\begin{thm}
+Let $f:\prd{x:A}B(x)\to C(x)$ be a fiberwise transformation. Then the following are equivalent:
+\begin{enumerate}
+\item For each $x:A$ the map $f(x)$ is $L$-local.
+\item The induced map 
+\begin{equation*}
+\total{f}:\Big(\sm{x:A}B(x)\Big)\to\Big(\sm{x:A}C(x)\Big)
+\end{equation*}
+is $L$-local.
+\end{enumerate}
+\end{thm}
+
+\begin{proof}
+This follows directly from \cref{lem:fib_total}.
+\end{proof}
+
+\section{Quasi-left-extactness of $L'$-localization}\label{ss:lex}
 
 We now explain how $L$ and $L'$ together behave similarly to a \define{lex modality},
 i.e., a modality that preserves pullbacks.
@@ -805,42 +926,142 @@ F' \arrow[r,hookrightarrow] & L'E \arrow[r,->>,swap,"L'p"] & L'B
     in which the left vertical map is an $L$-equivalence.\qed
 \end{cor}
 
+\section{Connected maps}
+\label{sec:connected-maps}
+
+\marginnote{Some results in this section come from section 1.3.3 of \cite{RijkeShulmanSpitters}, some come from my MRC group, and some I came up with as I edited my dissertation. In terms of crediting it is a mess, but the results are so closely related that they really should be in one section}
 \begin{defn}
-A map $f:X\to Y$ is said to be \define{$L$-connected} if $L(\fib{f}{y})$ is contractible for every $y:Y$.
+A map $f:A\to B$ is said to be \define{$L$-connected} if $L(\fib{f}{b})$ is contractible for every $b:B$. In particular, a type $A$ is $L$-connected if and only if $LA$ is contractible.
 \end{defn}
 
-\begin{prp}\label{cor:L'equivalenceisLconnected} % like RSS Thm 3.1 (xii)
-    Then every $L'$-equivalence $f : Y \to X$ is $L$-connected.
-    In particular, $\eta' : X \to L'X$ is $L$-connected.
+In the following proposition we characterize $L'$-connected types. We will establish a similar claim for maps in \cref{cor:L'connected_maps}
+
+\begin{prp}\label{lem:L'connected_types}
+A type $A$ is $L'$-connected if and only if $A$ is merely inhabited (i.e.~$\brck{A}$ holds), and the identity types of $A$ are $L$-connected.
 \end{prp}
 
 \begin{proof}
-    Let $x : X$.  We must show that the $L$-localization of $F$, the fiber of $f$ over $x : X$, is contractible.
-    To prove this we use \cref{corollary:preservationfibersequences2},
-    which gives us an $L$-equivalence between $F$ and $F'$, the fiber of $L'f$ at $\eta' x$.
-    But $L' f$ is an equivalence by hypothesis, so $F' \simeq 1$, and thus $F$ is $L$-connected.
+$A$ is $L'$-connected if and only if $A\to\unit$ is an $L'$-localization. By \cref{thm:separation_characterization} this holds if and only if $A\to\unit$ is surjective, and the maps $(x=y)\to \loopspace\unit$ are $L$-localizations --- in other words: if and only if $A$ is merely inhabited and the identity types of $A$ are $L$-connected.
 \end{proof}
 
-While the converse of \cref{cor:L'equivalenceisLconnected} does not hold,
-it is shown in~\cite[Lemma~1.35]{RijkeShulmanSpitters} that every $L$-connected map is an $L$-equivalence.
+In the following proposition we provide two equivalent conditions to a map being $L$-connected.
 
-\begin{prp}\label{proposition:2outof3} % like RSS Thm 3.1 (xi)
-Consider a commuting square
+\begin{prp}\label{prop:nconnected_tested_by_lv_n_dependent types}
+Consider a map $f:A\to B$. The following are equivalent:
+\begin{enumerate}
+\item $f$ is $L$-connected.\label{item:conntest1}
+\item For every family $P:B\to \UU_L$ of $L$-local types, the map 
+\begin{equation*}
+\lam{s} s\circ f :\Parens{\prd{b:B} P(b)}\to\Parens{\prd{a:A}P(f(a))}.
+\end{equation*}
+is an equivalence.\label{item:conntest2}
+\item For every family $P:B\to \UU_L$ of $L$-local types, the map 
+\begin{equation*}
+\lam{s} s\circ f :\Parens{\prd{b:B} P(b)}\to\Parens{\prd{a:A}P(f(a))}.
+\end{equation*}
+has a section.\label{item:conntest3}
+\end{enumerate}
+\end{prp}
+
+\begin{proof}
+First suppose $f$ is $L$-connected and let $P:B\to \UU_L$. Then the map
+\begin{equation*}
+\lam{p}\mathsf{const}_p : P(b)\to (\fib{f}{b}\to P(b))
+\end{equation*}
+is an equivalence for every $b:B$, since $L(\fib{f}{b})$ is assumed to be contractible.
+Therefore we obtain a commuting square
+\begin{equation*}
+\begin{tikzcd}[column sep=large]
+\prd{b:B}P(b) \arrow[r] \arrow[d] & \prd{a:A}P(f(a)) \\
+\prd{b:B}\big(\fib{f}{b}\to P(b)\big) \arrow[r,swap,"\mathsf{evpair}"] & \prd{b:B}{a:A}(f(a)=b)\to P(b) \arrow[u,swap,"\evrefl"]
+\end{tikzcd}
+\end{equation*}
+in which three out of four maps are known equivalences. The remainin map must therefore also be an equivalence.
+
+Thus,~\ref{item:conntest1}$\Rightarrow$\ref{item:conntest2}, and clearly~\ref{item:conntest2}$\Rightarrow$\ref{item:conntest3}.
+To show~\ref{item:conntest3}$\Rightarrow$\ref{item:conntest1}, let
+$P(b)\defeq L(\fib{f}b)$.
+Then~\ref{item:conntest3} yields a map $c:\prd{b:B} L(\fib{f}b)$ with
+$c(f(a))=\modalunit{\pairr{a,\refl{f(a)}}}$. To show that each $L(\fib{f}b)$ is contractible, we will show that $c(b)=w$ for any $b:B$ and $w:L(\fib{f}b)$.
+In other words, we must show that the identity function $L(\fib{f}b) \to L(\fib{f}b)$ is equal to the constant function at $c(b)$.
+By the universal property of $L(\fib{f}b)$, it suffices to show that they become equal when precomposed with $\modalunit[\fib{f}b]$, i.e.\ we may assume that $w = \modalunit\pairr{a,p}$ for some $a:A$ and $p:f(a)=b$.
+But now path induction on $p$ reduces our goal to the given $c(f(a))=\modalunit{\pairr{a,\refl{f(a)}}}$.
+\end{proof}
+
+Dually, we will prove in \cref{thm:detect-right-by-fibers} that when $L$ is a modality, if this holds for all $L$-connected $A$ then $B$ is $L$-local.
+
+\begin{cor}
+If $f:A\to B$ is an $L$-connected map into an $L$-local type $B$, then $f$ is an $L$-localization. (The converse only holds when $L$ is a modality.)
+\end{cor}
+
+\begin{prp}\label{cor:L'equivalenceisLconnected}
+Consider a map $f:A\to B$.
+\begin{enumerate}
+\item If $f$ is an $L'$-equivalence, then $f$ is $L$-connected.
+\item If $f$ is $L$-connected, then $f$ is an $L$-equivalence.
+\end{enumerate}
+\end{prp}
+
+The converses of both statements in \cref{cor:L'equivalenceisLconnected} are false in general, even for modalities; we will see in \cref{thm:lex-modalities} that the converse of (ii) holds precisely when $\modal$ is lex.
+
+\begin{proof}
+The first statement is a direct consequence of \cref{corollary:preservationfibersequences2}, since we get for each $b:B$ a map of fiber sequences
+\begin{equation*}
+\begin{tikzcd}
+\fib{f}{b} \arrow[r] \arrow[d] & A \arrow[r,"f"] \arrow[d,swap,"\eta'"] & B \arrow[d,"\eta'"] \\
+\fib{L'f}{\eta'b} \arrow[r] & L'A \arrow[r,swap,"L'f"] & L'B
+\end{tikzcd}
+\end{equation*}
+in which the induced map $\fib{f}{b}\to\fib{L'f}{\eta'b}$ is an $L$-equivalence. Since $L'f$ is an equivalence, it follows that $\fib{L'f}{\eta'b}$ is contractible, so we conclude that $\fib{f}{b}$ is $L$-connected. It follows that $f$ is $L$-connected.
+
+For the second statement, we observe that if $f$ is $L$-connected, then by \cref{prop:nconnected_tested_by_lv_n_dependent types} it induces an equivalence
+\begin{equation*}
+\precomp{f} : (B\to X)\to (A\to X)
+\end{equation*}
+for every $L$-local type $X$. Therefore we conclude by \cref{lem:local_equivalence} that $f$ is an $L$-equivalence.
+\end{proof}
+
+\begin{prp}\label{thm:rsu-compose-cancel} % like RSS Thm 3.1 (xi)
+Consider a commuting triangle
 \begin{equation*}
 \begin{tikzcd}[column sep=tiny]
 A \arrow[rr,"h"] \arrow[dr,swap,"f"] & & B \arrow[dl,"g"] \\
 & X
 \end{tikzcd}
 \end{equation*}
-and suppose that $f$ is $L'$-connected. Then the following are equivalent:
+\begin{enumerate}
+\item If $h$ is $L$-connected, then the following are equivalent:
+\begin{enumerate}
+\item $f$ is $L$-connected.
+\item $g$ is $L$-connected.
+\end{enumerate}
+\item If $f$ is $L'$-connected, then the following are equivalent:
 \begin{enumerate}
 \item $g$ is $L'$-connected.
 \item $h$ is $L$-connected.
 \end{enumerate}
 In particular, $g$ is $(n+1)$-connected if and only if $h$ is $n$-connected, assuming that $f$ is $(n+1)$-connected.
+\end{enumerate}
 \end{prp}
 
 \begin{proof}
+For the first statement suppose that $h$ is $L$-connected.
+  For any $z:C$ we have
+  \begin{align*}
+    L(\fib{g\circ h}{z})
+    & \eqvsym
+      L(\sm{p:\fib{g}{z}}\fib{h}{\proj1(p)}) \\
+    & \eqvsym
+      L(\sm{p:\fib{g}{z}}L(\fib{h}{\proj1(p)})) \\
+    & \eqvsym
+      L(\sm{p:\fib{g}{z}}\unit) \\
+    & \eqvsym
+      L(\fib{g}{z}).
+  \end{align*}
+  using the fact that $h$ is $L$-connected.
+  Thus, one is contractible if and only if the other is. We conclude that $f$ is $L$-connected if and only if $g$ is.
+
+For the second statement, suppose that $f$ is $L'$-connected.
     If $g$ is $L'$-connected, then both $g\circ h$ and $g$ are $L'$-equivalences,
     and thus $h$ is an $L'$-equivalence. Then \cref{cor:L'equivalenceisLconnected}
     implies that $h$ is $L$-connected.
@@ -867,6 +1088,8 @@ is an $L$-localization. Now it follows by our assumption that $h$ is $L$-connect
 \end{proof}
 
 \begin{rmk}
+In general it is not true that if $g$ and $g\circ h$ are $\modal$-connected then $h$ is; this is one of the equivalent characterizations of lex modalities (\cref{thm:lex-modalities}).
+
 The above proposition almost gives us a 3-for-2 property that combines $L$ and $L'$.
 However the map $\emptyt \to \unit$ is $(-2)$-connected, and $\unit$ is $(-1)$-connected,
 whereas $\emptyt$ is not $(-1)$-connected. So the remaining implication of the 3-for-2 property
@@ -882,6 +1105,121 @@ one can show that given an $L'$-localization $\eta' : X \to L' X$
 and a map $f: Y \to X$ with $L$-local fibers, $f$ is the pullback of
 the fiberwise $L$-localization of $\eta' \circ f$.
 \end{rmk}
+
+\begin{defn}
+A commuting square
+\begin{equation*}
+\begin{tikzcd}
+A\arrow[d,swap,"f"] \arrow[r,"h"] & B \arrow[d,"g"] \\
+X \arrow[r,swap,"i"] & Y
+\end{tikzcd}
+\end{equation*}
+is said to be \define{$L$-cartesian} if its gap map is $L$-connected.
+\end{defn}
+
+\begin{prp}
+Consider a commuting square
+\begin{equation*}
+\begin{tikzcd}
+A\arrow[d,swap,"f"] \arrow[r,"h"] & B \arrow[d,"g"] \\
+X \arrow[r,swap,"i"] & Y.
+\end{tikzcd}
+\end{equation*}
+\begin{enumerate}
+\item Suppose that $g$ is surjective, and that the square is $L$-cartesian. Then the following are equivalent:
+\begin{enumerate}
+\item The map $h:A\to B$ is $L$-connected.
+\item The map $i:X\to Y$ is $L$-connected.
+\end{enumerate}
+\item Suppose that $i:X\to Y$ is $L'$-connected. Then the following are equivalent:
+\begin{enumerate}
+\item The map $h:A\to B$ is $L'$-connected.
+\item The square is $L$-cartesian.
+\end{enumerate}
+\end{enumerate}
+\end{prp}
+
+\begin{proof}
+For the first statement we observe that by \cref{thm:rsu-compose-cancel} $h$ is an $L$-connected if and only if $g^\ast i$ is an $L$-connected. Since $g$ is assumed to be surjective, it follows that $g^\ast i$ is $L$-connected if and only if $i$ is $L$-connected.
+
+For the second statement we observe that, since $i:X\to Y$ is assumed to be $L'$-connected, the map $g^\ast i:X\times_Y B\to B$. Now it follows by \cref{thm:rsu-compose-cancel} that the gap map is $L$-connected if and only if $h$ is $L'$-connected.
+\end{proof}
+
+\begin{cor}
+A map $f:A\to B$ is an $L'$-equivalence if and only if $f$ is surjective and $\delta_f:A\to A\times_B A$ is an $L$-equivalence.
+\end{cor}
+
+\begin{proof}
+Since every proposition is $L'$-local, it follows that $\brck{X}=\brck{L'X}$ for any type $X$. In particular, if $X$ is $L'$-connected, then $\brck{X}=\unit$. From this observation it follows that if $f$ is $L'$-connected, then $f$ is surjective. Furthermore, since the identity function $\idfunc[A]:A\to A$ is obviously $L'$-connected, it follows that the square
+\begin{equation*}
+\begin{tikzcd}
+A \arrow[d] \arrow[r] & A \arrow[d,"f"] \\
+A \arrow[r,swap,"f"] & B
+\end{tikzcd}
+\end{equation*}
+is $L$-cartesian. In other words: $\delta_f:A\to A\times_B A$ is $L$-connected.
+
+Now suppose that $f$ is surjective and that $\delta_f$ is $L$-connected. Then the fibers of $\delta_f$ are $L$-connected. Since we have equivalences
+\begin{equation*}
+((x,p)=(y,q))\eqvsym \fib{\delta_f}{x,y,\ct{p}{q^{-1}}}
+\end{equation*}
+for any $(x,p),(y,q):\fib{f}{b}$ it follows by \cref{lem:L'connected_types} that $\fib{f}{b}$ is $L'$-connected for every $b:B$. In other words: $f$ is $L'$-connected.
+\end{proof}
+
+\begin{cor}
+A pointed connected type $A$ is $L'$-connected if and only if the map $\unit\to A$ is $L$-connected.
+\end{cor}
+
+\begin{proof}
+If $A$ is $L'$-connected, then its loop space is $L$-connected. It follows that the square
+\begin{equation*}
+\begin{tikzcd}
+\unit \arrow[r] \arrow[d] & \unit \arrow[d] \\
+\unit \arrow[r] & A
+\end{tikzcd}
+\end{equation*}
+is $L$-cartesian. Since the map $\unit\to\unit$ is obviously $L$-connected and the map $\unit\to A$ is surjective by the assumption that $A$ is connected, it follows that the map $\unit\to A$ is $L$-connected.
+
+For the converse, suppose that the map $\unit\to A$ is $L$-connected. Then the identity types of $A$ are $L$-connected, since all identity types of $A$ are merely equal to $\loopspace{A}$. Therefore it follows by \cref{lem:L'connected_types} that $A$ is $L'$-connected.
+\end{proof}
+
+\begin{cor}\label{lem:nconnected_postcomp_variation}
+Let $P:A\to\UU$ and $Q:B\to\UU$ be type families, and let
+\begin{equation*}
+g:\prd{x:A}P(x)\to Q(f(x))
+\end{equation*}
+be a fiberwise transformation over $f:A\to B$.
+\begin{enumerate}
+\item Suppose that each $g_x:P(x)\to Q(f(x))$ is $L$-connected. Then we have the following:
+\begin{enumerate}
+\item If $f$ is $L$-connected, then $\total[f]{g}$ is $L$-connected.
+\item If each $Q(x)$ is merely inhabited and $\total[f]{g}$ is $L$-connected, then $f$ is $L$-connected.
+\end{enumerate}
+\item Suppose that $f$ is $L'$-connected. Then the following are equivalent:
+\begin{enumerate}
+\item Each $g_x:P(x)\to Q(f(x))$ is $L$-connected.
+\item The map $\total[f]{g}$ is $L'$-connected.
+\end{enumerate}  
+\end{enumerate}
+\end{cor}
+
+\begin{prp}\label{prop:nconn_fiber_to_total}
+Let $P,Q:A\to\type$ be type families and $f:\prd{a:A} \Parens{P(a)\to Q(a)}$. Then the following are equivalent
+\begin{enumerate}
+\item Each $f(a):P(a)\to Q(a)$ is $L$-connected.
+\item The map $\total{f}: \sm{a:A}P(a) \to \sm{a:A} Q(a)$ is an $L$-connected.
+\end{enumerate}
+\end{prp}
+
+\begin{proof}
+By \cref{lem:fib_total} we have $\fib{\total f}{\pairr{x,v}}\eqvsym\fib{f(x)}v$
+for each $x:A$ and $v:Q(x)$. Hence $L(\fib{\total f}{\pairr{x,v}})$ is contractible if and only if
+$L(\fib{f(x)}v)$ is contractible.
+\end{proof}
+
+Of course, the ``if'' direction of \cref{prop:nconn_fiber_to_total} is a special case of \cref{lem:nconnected_postcomp_variation}.
+This suggests a similar generalization of the ``only if'' direction of \cref{prop:nconn_fiber_to_total}, which would be a version of \cref{lem:nconnected_postcomp_variation} asserting that if $f$ and $\varphi$ are $L$-connected then so is each $g_a$.
+However, this is not true in general; we will see in \cref{thm:lex-modalities} that it holds if and only if the modality is lex.
 
 \section{Accessible reflective subuniverses}\label{sec:accessible}
 
@@ -946,152 +1284,6 @@ in which the horizontal maps are equivalences.
 So $X$ is $\suspsym f$-local if and only if the right vertical map is an equivalence
 for every $i : I$, if and only if for each $x,y : X$, the type $x = y$ is $f_i$-local
 for every $i : I$.
-\end{proof}
-
-
-\section{Non-stable factorization systems}
-\label{sec:nonstable-factsys}
-
-We have seen in \cref{sec:modal-refl-subun} that $\Sigma$-closed reflective subuniverses are equivalent to stable orthogonal factorization systems.
-Without $\Sigma$-closedness and stability, this equivalence fails.
-However, we can still say:
-
-\begin{lem}
-  Any orthogonal factorization system has an underlying reflective subuniverse, consisting of those types $X$ such that $X\to\unit$ is in $\cR$.
-\end{lem}
-\begin{proof}
-  If $Y$ is modal in this sense, then by orthogonality for squares
-  \[
-  \begin{tikzcd}
-    A \ar[d,"f"'] \ar[r] & Y \ar[d] \\ B \ar[r] & \unit
-  \end{tikzcd}
-  \]
-  we see that if $f:A\to B$ lies in $\cL$, then precomposition
-  \[ (-\circ f) : (B\to Y) \to (A\to Y) \]
-  is an equivalence.
-  Thus, it suffices to show that for every $X$ there is an $\cL$-map $X\to \modal X$ where $\modal X\to \unit$ is in $\cR$; but this is just an $(\cL,\cR)$-factorization of the map $X\to\unit$.
-\end{proof}
-
-Conversely, in classical category theory there are various ways of extending a reflective subcategory to a factorization system.
-One canonical one is considered in~\cite{chk:reflocfact}, but this is harder to reproduce homotopy-theoretically.
-Instead, if we have an \emph{accessible} reflective subuniverse presented by localization at a family of maps, we can generalize the construction of localization to produce a factorization system (though in general the result will depend on the choice of presentation, not just on the reflective subuniverse we started with).
-
-To avoid too much wrangling with witnesses of commutative squares, we will factorize dependent types rather than functions.
-In this case, right orthogonality (\cref{defn:orthogonal}) can be expressed as follows:
-
-\begin{lem}\label{thm:orth-dep}
-  For $l:A\to B$ and $X:Y\to\UU$, the map $\proj1 : (\sm{y:Y}X(y)) \to Y$ is right orthogonal to $l$ if and only if for every $g:B\to Y$ and $f:\prd{a:A} X(gla)$, the type
-  \begin{equation}
-    \sm{j:\prd{b:B} X(gb)} \prd{a:A} jla = fa\label{eq:dep-fillers}
-  \end{equation}
-  is contractible.
-\end{lem}
-\begin{proof}
-  First note that given $g,f$ as above, the square
-  \[
-  \begin{tikzcd}
-    A \ar[d,"l"'] \ar[r,"{(g\circ l,f)}"] & \sm{y:Y}X \ar[d,"\proj1"] \\ B \ar[r,"g"] & X
-  \end{tikzcd}
-  \]
-  commutes judgmentally.
-  Moreover, if we have any commutative square
-  \[
-  \begin{tikzcd}
-    A \ar[d,"l"'] \ar[r,"f'"] \ar[dr,phantom,"S"] & \sm{y:Y}X \ar[d,"\proj1"] \\ B \ar[r,"g"] & X
-  \end{tikzcd}
-  \]
-  witnessed by $S:\proj1 \circ f'=g\circ l$, we can define $f(a) \defeq \trans{S(a)}{\proj2(f'(a))}$ to get a judgmentally commutative square as above.
-  Thus, it suffices to consider such squares.
-  Now given such a square, the type of diagonal fillers is equivalent to
-  \[ \sm{j:B\to \sm{y:Y} X(y)}{H_f : j\circ l = (g\circ l,f)}{H_g : \proj1 \circ j = g} \proj1 \circ H_f = H_g \circ l \]
-  and thereby to
-  \[ \sm{j_1:B\to Y}{j_2 : \prd{b:B} X(j_1(b))}{H_{f1} : j_1 \circ l = g\circ l}{H_{f2} : \dpath{X}{H_{f1}}{j_2\circ l}{f}}{H_g : j_1 = g} H_{f1} = H_g \circ l. \]
-  But now we can contract two based path spaces to get the type shown in the lemma statement.
-\end{proof}
-
-Let $F:\prd{a:A} B(a) \to C(a)$ and let $X:Y\to\UU$ be a type family.
-We define an indexed higher inductive type $\mathcal{J}_F X : Y\to \UU$ by the following constructors:
-\begin{align*}
-\beta^F_X &: \prd{y:Y} X(y) \to \mathcal{J}_F X(y)\\
-\mathsf{lift} &: \prd{a:A}{y:Y}{g:C(a) \to Y}{f:\prd{b:B(a)} \mathcal{J}_F X(g(F(a,b)))}{c:C(a)} \mathcal{J}_F X(g(c))\\
-\mathsf{islift} &
-: \prd{a:A}{y:Y}{g:C(a) \to Y}{f:\prd{b:B(a)} \mathcal{J}_F X(g(F(a,b)))}{b:B(a)}
-\mathsf{lift}(g,f,F(a,b)) = f(b)
-\end{align*}
-The induction principle of $\mathcal{J}_F X$ says that for any $P:\prd{y:Y} \mathcal{J}_F X(y) \to \UU$ with
-\begin{align*}
-N &: \prd{y:Y}{x:X(y)} P(y,\beta^F_X(y,x))\\
-R &: \prd{a:A}{g:C(a) \to Y}{f:\prd{b:B(a)} \mathcal{J}_F X(g(F(a,b)))}
-  \prd{f':\prd{b:B(a)} P(g(F(a,b)),f(b))}{c:C(a)} P(g(c),\mathsf{lift}(g,f,c))\\
-S &
-: \prd{a:A}{g:C(a) \to Y}{f:\prd{b:B(a)} \mathcal{J}_F X(g(F(a,b)))}
-  \prd{f':\prd{b:B(a)} P(g(F(a,b)),f(b))}{b:B(a)} \dpath{P}{\mathsf{islift}(g,f,b)}{R(g,f,f',F(a,b))}{f'(b)}
-\end{align*}
-there is a section $s:\prd{y:Y}{z:\mathcal{J}_F X(y)} P(y,z)$ such that $s \circ \beta^F_X = N$ (plus two more computation rules we ignore).
-
-\begin{lem}\label{thm:appx-factsys}
-  If $\proj1 : (\sm{y:Y} Z(y)) \to Y$ is right orthogonal to $F$, then
-  \[(-\circ \beta^F_X) : \Big(\prd{y:Y} (\mathcal{J}_F X(y) \to Z(y))\Big) \to \Big(\prd{y:Y} (X(y) \to Z(y))\Big) \]
-  is an equivalence.
-\end{lem}
-\begin{proof}
-  As in \cref{thm:appx-loc}, we will show that it is path-split using the induction principle of $\mathcal{J}_F X$.
-
-  First, given $h:\prd{y:Y} (X(y) \to Z(y))$, we take $P(y,x) \defeq Z(y)$ and $N\defeq h$.
-  To give the remaining data $R,S$, suppose given $a:A$, $g:C(a) \to Y$, $f:\prd{b:B(a)} \mathcal{J}_F X(g(F(a,b)))$, and $f':\prd{b:B(a)} Z(g(F(a,b)))$.
-  Now we can apply \cref{thm:orth-dep} with $l\defeq F(a)$ and $f\defeq f'$: an inhabitant of~\eqref{eq:dep-fillers} consists exactly of the desired $R$ and $S$.
-
-  Second, given $h,k:\prd{y:Y} (\mathcal{J}_F X(y) \to Z(y))$ and $p:h\circ \beta^F_X = k\circ \beta^F_X$, we take $P(y,x) \defeq (h(y,x)=k(y,x))$ and $N\defeq p$.
-  To give $R,S$, suppose given $a:A$, $g:C(a) \to Y$, $f:\prd{b:B(a)} \mathcal{J}_F X(g(F(a,b)))$, and
-  \[f':\prd{b:B(a)} h(g(F(a,b)),f(b))=k(g(F(a,b)),f(b)).\]
-  Define
-  \begin{align*}
-    j(c) &\defeq h(g(c),\mathsf{lift}(g,f,c))\\
-    j'(c) &\defeq k(g(c),\mathsf{lift}(g,f,c))\\
-    q(b) &\defeq k(g(F(a,b),f(b)).
-  \end{align*}
-  Then we can apply \cref{thm:orth-dep} to the square
-  \[
-  \begin{tikzcd}
-    B(a) \ar[d,"F(a)"'] \ar[r,"q"] & \sm{y:Y} Z(y) \ar[d,"\proj1"] \\
-    C(a) \ar[r,"g"'] & Y.
-  \end{tikzcd}
-  \]
-  We have
-  \[ j'(F(a,b)) \jdeq k(g(F(a,b)),\mathsf{lift}(g,f,F(a,b))) = k(g(F(a,b)),f(b)) \jdeq q(b) \]
-  and
-  \begin{multline*}
-    j(F(a,b)) \jdeq h(g(F(a,b)),\mathsf{lift}(g,f,F(a,b))) = h(g(F(a,b)),f(b))\\ \overset p= k(g(F(a,b)),f(b)) \jdeq q(b),
-  \end{multline*}
-  giving two inhabitants $(j,\nameless)$ and $(j',\nameless)$ of~\eqref{eq:dep-fillers}, which are therefore equal.
-  This equality consists of an equality $j=j'$, which gives precisely $R$, and an equality between the above two paths, which gives precisely $S$.
-\end{proof}
-
-\begin{thm}
-  Given $F:\prd{a:A} B(a) \to C(a)$, define $\cR = F^{\perp}$ and $\cL = {}^{\perp}\cR$, and let $\hat F$ be as in \cref{sec:localizing} and $\mathcal{J}_{\hat F}$ constructed as above for $\hat F$.
-  Then for any $X:Y\to\UU$, the composite
-  \[ \Big(\sm{y:Y} X(y)\Big) \to \Big(\sm{y:Y} \mathcal{J}_{\hat F} X(y)\Big) \to Y \]
-  is an $(\cL,\cR)$-factorization.
-  Therefore, $(\cL,\cR)$ is an orthogonal factorization system.
-\end{thm}
-\begin{proof}
-  First we note that~\eqref{eq:dep-fillers} for the codiagonal $\nabla_l$ is essentially a path-space of~\eqref{eq:dep-fillers} for $l$, and hence also contractible under the same hypotheses.
-  Thus, \cref{thm:appx-factsys} applied to $\hat F$ implies that the first factor of this factorization is in $\cL$.
-  It remains to show the second factor is in $\cR$, which is to say that~\eqref{eq:dep-fillers} is contractible for $l\defeq F(a)$ and $X\defeq \mathcal{J}_{\hat F} X$.
-
-  Using the $F(a)$s appearing in $\hat F$, we get an inhabitant
-  \[(\mathsf{lift}(\inl(a),g,f),\mathsf{islift}(\inl(a),g,f))\]
-  of this type.
-  It remains to show this type is a mere proposition, so let $(j,h)$ and $(j',h')$ be elements of it.
-  Then $j$ and $j'$ together with $\ct{h}{(h')^{-1}}$ give a map $f':\prd{d:C(a) +_{B(a)} C(a)} \mathcal{J}_{\hat F} X(g(\nabla_{F(a)}(d)))$, so we have $\mathsf{lift}(\inr(a),g,f') :\prd{c:C(a)} \mathcal{J}_{\hat F} X(g(c))$, and a path $\mathsf{islift}(\inr(a),g,f')$ that can be decomposed into
-  \begin{align*}
-    k &: \mathsf{lift}(\inr(a),g,f') = j\\
-    k' &: \mathsf{lift}(\inr(a),g,f') = j'\\
-    k'' &: (\ct{k^{-1}}{k'}) \circ F(a) = \ct{h}{(h')^{-1}}.
-  \end{align*}
-  Thus, $j=j'$ by a path $\ct{k^{-1}}{k'}$ that identifies $h$ with $h'$, as desired.
-
-  Finally, in \cref{sec:modal-refl-subun} we defined orthogonal factorization systems by the uniqueness of factorizations and proved from this the orthogonality of the two classes of maps; but it is easy to show that, as in classical category theory, orthogonality implies the uniqueness of factorizations when they exist, since any two factorizations must lift uniquely against each other.
 \end{proof}
 
 \section{These results should go to where they are first needed}
@@ -1162,3 +1354,374 @@ We include the proof since it is straightforward.
 For (3), one checks that the unit $\eta^L_X : X \to LX$ has the universal
 property of $K$-localization.
 \end{proof}
+
+\section{Localization with respect to a family of maps}\label{section:localization}
+
+In this section, we discuss localization with respect to a family of maps.
+%% Vague:
+%In \cref{ss:basic-properties} we give the definition,
+%present some examples, and prove some basic properties.
+Our primary examples are localization at the degree $k$ map from $\sphere{1}$ to $\sphere{1}$
+and localization at a family of such maps.
+%We quote a result of~\cite{RSS} showing that in the special case when $B$ is $1$,
+%the localization one obtains is a modality.
+
+In \cref{ss:basic-properties}, we prove some basic properties and study some consequences
+of the general theory of separated subuniverses in the case of localization with respect to families of maps.
+In \cref{ss:connectedness}, we give conditions under which
+$f$-localization preserves coproducts and connectedness.
+Finally, \cref{ss:orthogonal-factorization-systems} contains results about the interaction between
+orthogonal factorization systems and localizations at families of maps, generalizing some
+previous results. The results in \cref{ss:orthogonal-factorization-systems} are not used in the rest
+of the paper.
+
+\subsection{Local types and their properties}\label{ss:basic-properties}
+
+We recall the following definitions from~\cite{RSS}.
+\begin{defn}\ 
+\begin{enumerate}
+\item    Let $f: \prd{i:I} A_i \to B_i$ be a family of maps indexed by a type $I$.
+    A type $X$ is \define{$f$-local} if
+    $\precomp{f_i} : (B_i \to X) \to (A_i \to X)$ is an equivalence for every $i : I$.
+\item Let $A:I\to\UU$ be a family of types. A type $X$ is said to be \define{$A$-null} if it is $u$-local for the family of maps $u:\prd{i:I}A_i\to\unit$. 
+\end{enumerate}
+\end{defn} 
+
+As previously noted, \cite[Theorem 2.16]{RSS} shows that for every
+family $f$, the $f$-local types form a reflective subuniverse.
+The localization $L_f X$ is constructed as a higher inductive type,
+and we write $\eta_X : X \to L_f X$ for the unit.
+In the case of a family $A:I\to\UU$, localization at the unique family $u:\prd{i:I}A_i \to \unit$ is called \define{$A$-nullification}.
+By \cite[Theorem 2.17]{RSS}, the reflective subuniverse of $A$-null types is stable under dependent sums and therefore $A$-nullification is a modality (\cref{modality}).
+
+\begin{eg} We recall the following basic examples from~\cite{RSS}.
+\begin{enumerate}
+\item The unit type is $f$-local for any map $f$.
+\item A type $X$ is $(\emptyt\to\unit)$-local if and only if $X$ is contractible.
+\item A type $X$ is $(\sphere{n+1}\to\unit)$-local if and only if $X$ is $n$-truncated.
+\end{enumerate}
+\end{eg}
+
+When $f$ consists of pointed map between pointed types, we can test whether
+a type $X$ is local using the pointed mapping types.
+
+\begin{lem}\label{lemma:pointed}
+    If $f : \prd{i:I} A_i \to B_i$ is a pointed map between pointed types,
+    then a type $X$ is $f$-local if and only if
+    $\precomp{f_i} : (B \pto X) \to (A \pto X)$ is an equivalence
+    for every base point $x : X$ and every $i : I$.
+    If $X$ is connected, then it is enough to check this for one $x : X$.
+\end{lem}
+
+\begin{proof}
+    The second claim follows from the first one, since
+    $\mathsf{isEquiv}$ is a mere proposition.
+    For the first claim, fix $i : I$ and consider the diagram
+    \[
+        \begin{tikzpicture}
+          \matrix (m) [matrix of math nodes,row sep=2em,column sep=3em,minimum width=2em]
+          { (B_i \pto X) & (B_i \to X) & X \\
+            (A_i \pto X) & (A_i \to X) & X , \\};
+          \path[->]
+            (m-1-1) edge [right hook->] node [above] {} (m-1-2)
+                    edge node [left] {} (m-2-1)
+            (m-1-2) edge node [above] {} (m-1-3)
+                    edge node [left] {} (m-2-2)
+            (m-2-1) edge [right hook->] node [above] {} (m-2-2)
+            (m-2-2) edge node [above] {} (m-2-3)
+            (m-1-3) edge [double equal sign distance,-] node [left] { } (m-2-3)
+            ;
+        \end{tikzpicture}
+    \]
+    where the horizontal sequences are fiber sequences with the fiber taken over
+    some $x : X$. Since fiberwise maps are equivalences exactly when they are fiberwise
+    equivalences, the vertical map in the middle is an equivalence if and
+    only if the vertical map on the left is an equivalence for every $x : X$.
+\end{proof}
+
+Since the pointed mapping space $\unit\to_\ast X$ is contractible for any pointed space $X$, we have the following corollary.
+
+\begin{cor}\label{cor:pointed_null}
+If $A$ is a family of pointed types, then a type $X$ is $A$-null
+if and only if $(A_i \pto X)$ is contractible
+for every base point $x : X$ and every $i : I$. \qed
+\end{cor}
+
+We turn to a comparison of $L_f$ and $L_{\suspsym f}$.
+The next corollary follows immediately from \cref{lemma:characterizationsigmaflocal}
+and \cref{thm:separation_characterization}.
+
+\begin{cor}\label{remark:commutativitylooplocalization}
+    Let $f : \prd{i:I} A_i \to B_i$.
+    For any pointed type $X$, we have
+    $\loopspacesym L_{\susp{f}} X \simeq L_f \loopspacesym X$. \qed
+\end{cor}
+
+This result is a type theoretic analog of \cite[Theorem 3.1]{Bousfield} and \cite[3.A.1]{DrorFarjoun}.
+Interestingly, the classical proofs use delooping techniques which are not yet available in type theory.
+Our proof instead makes essential use of a universe.
+
+Given this corollary, we are led to consider the relationship between $f$-local types and $\suspsym f$-local types, as a step towards comparing $L_f$ and $L_{\suspsym f}$.
+
+\begin{thm}\label{theorem:characterizinglocalness}
+    Let $f: \prd{i:I} A_i \to B_i$ and let $n \geq 1$.
+    Consider the following conditions on a type $X$:
+    \begin{enumerate}
+    \item $X$ is $f$-local.
+    \item $X$ is $\suspsym^{n-1} C_f$-null,
+    where $C_f$ is the family of cofibers of the family $f$. 
+    \item $X$ is $\suspsym^{n} f$-local.
+    \end{enumerate}
+    Then (1) $\Rightarrow$ (2) $\Rightarrow$ (3).
+    Moreover, if the pointed mapping spaces $(A_i \pto X)$ and $(B_i \pto X)$
+    are $(n-1)$-connected for all choices of base point $x : X$
+    and every $i : I$,
+    then the three conditions are equivalent.
+\end{thm}
+
+\begin{proof}
+We will show the required implications for each $i : I$.
+So, without loss of generality we consider a single map $f : A \to B$.
+
+By \cref{lemma:pointed}, it suffices to consider pointed mapping
+spaces for each $x : X$.
+With $x$ chosen, we have a long fiber sequence
+\[
+  \begin{tikzpicture}[descr/.style={fill=white,inner sep=1.5pt}]
+        \matrix (m) [matrix of math nodes,row sep=2em,column sep=3em,minimum width=2em]
+        {   &  (A\pto X) & {(B\pto X)} & (C_f \pto X) \\
+            & (\suspsym A \pto X) & (\suspsym B \pto X)& (\suspsym C_f \pto X) \\
+            & \hspace*{2em}\cdots\hspace*{2em} \\
+        };
+
+        \path[overlay,->, font=\scriptsize]
+        (m-1-3) edge (m-1-2)
+        (m-1-4) edge (m-1-3)
+        (m-2-2) edge[out=175,in=355] node[descr,yshift=0.3ex]{}(m-1-4)
+        (m-2-3) edge (m-2-2)
+        (m-2-4) edge (m-2-3)
+        (m-3-2) edge[out=175,in=355] node[descr,yshift=0.3ex] {} (m-2-4);
+  \end{tikzpicture}
+\]
+
+Assuming (1), from the first fiber sequence in the diagram above
+it follows that $(C_f \pto X)$ is contractible. This means that $X$ is $C_f$-null and
+thus $\suspsym^{n-1} C_f$-null, since any $C_f$-null type is also $C_f$-separated. Thus (1) implies (2).
+
+To see that (2) implies (3), consider a piece of the above fiber sequence:
+\[
+  (\suspsym^{n} B \pto X) \xrightarrow{\precomp{(\suspsym^n f)}}
+  (\suspsym^n A\pto X) \lra (\suspsym^{n-1} C_f \pto X).
+\]
+If (2) holds, then the base of the fiber sequence is contractible and thus the inclusion of the
+fiber in the total space
+is an equivalence, proving (3).
+
+Finally, we show that (3) implies (1) under the connectedness hypotheses.
+Notice that we can express
+$\precomp{(\suspsym^{n} f)} : (\suspsym^n B \pto X) \to (\suspsym^n A \pto X)$ as
+\[
+    (\suspsym^n B\pto X) \simeq \loopspacesym^n(B \pto X) \xrightarrow{\loopspacesym^n (\precomp{f})}
+    \loopspacesym^n(A \pto X) \simeq (\suspsym^n A \pto X),
+\]
+using~\cite[Lemma~6.5.4]{hottbook}.
+If $X$ is $\suspsym^{n}f$-local, it follows that $\loopspacesym^n (\precomp{f})$ is an equivalence.
+By hypothesis, $(A\pto X)$ and $(B\pto X)$ are $(n-1)$-connected, and so by~\cite[Corollary~8.8.2]{hottbook} applied $n$ times
+it follows that $\precomp{f} : (B \pto X) \to (A \pto X)$ is an equivalence.
+\end{proof}
+
+%\begin{eg}
+%    Consider the unique map $\underline{n} : \sphere{n} \to \unit$.
+%    For a pointed type $X$, composition with $\underline{n}$ induces the unique pointed map
+%    \[
+%        \unit \simeq (\unit \pto X) \to (\sphere{n} \pto X) \simeq \loopspacesym^n X.
+%    \]
+%    By \cref{lemma:pointed}, a type $X$ is $\underline{n}$-local if and only if
+%    this map is an equivalence for every point $x$ in $X$.
+%    Therefore, $X$ is $\underline{n}$-local if and only if $X$ is $(n-1)$-truncated.
+%\end{eg}
+
+\subsection{Preservation of coproducts and connectedness}\label{ss:connectedness}
+
+We begin this section by studying conditions under which
+$f$-localization preserves coproducts. 
+By a coproduct, we mean a set-indexed $\sum$-type.
+We first prove a lemma, which will also be used in \cref{example:notlex}.
+
+\begin{lem}\label{lemma:setsarelocal}
+    Let $f : \prd{i:I} A_i \to B_i$ be a family of pointed maps
+    between pointed, connected types.
+    Then a coproduct of $f$-local types is $f$-local.
+    In particular, sets are $f$-local.
+\end{lem}
+
+\begin{proof}
+    It suffices to prove the lemma for each $f_i$, so we assume
+    that we are given a single map $f : A \to B$.
+    Let $J$ be a set and let $T : J \to \UU$ be a type family.
+    Since $A$ is pointed and connected, any map $A \to \sum_{j:J} T_j$ factors through a well-defined summand
+    $T_j$, so we have $(A \to \sum_j T_j) \simeq \sum_j (A \to T_j)$. The same is true for $B$, so
+    we can factor the map $\precomp{f} : (B \to \sum_j T_j) \to (A \to \sum_j T_j)$ as
+    \[
+        \left(B \to \sum_j T_j \right) \simeq \sum_j (B \to T_j) \simeq \sum_j (A \to T_j) \simeq \left(A \to \sum_j T_j\right),
+    \]
+    which shows that $\sum_j T_j$ is $f$-local.
+
+    Since $\unit$ is $f$-local, a special case is that $\sum_j \unit \simeq J$ is $f$-local.
+\end{proof}
+
+\begin{cor}
+    Let $f : \prd{i:I} A_i \to B_i$ be a family of pointed maps
+    between pointed, connected types.
+    Then $f$-localization preserves coproducts.
+\end{cor}
+
+\begin{proof}
+    Let $J$ be a set and let $S : J \to \UU$ be a type family.
+    Consider the coproduct $\sum_j S_j$.
+    By \cref{lemma:setsarelocal}, $\sum_j L_f S_j$ is $f$-local. We claim that the natural
+    map $\sum_j S_j \to \sum_j L_f S_j$ is a localization.
+    Let $Y$ be $f$-local. Then we have
+    \[
+        \Bigg( \bigg( \sum_j S_j \bigg) \to Y \Bigg) \simeq \prod_j (S_j \to Y) \simeq
+        \prod_j (L_f S_j \to Y) \simeq \Bigg( \bigg( \sum_j L_f S_j \bigg) \to Y \Bigg).\qedhere
+    \]
+\end{proof}
+
+\medskip
+
+Our next goal is to give conditions under which $f$-localization
+preserves $n$-connected\-ness.
+
+\begin{prp}\label{prop:Kequiv-Lf}
+Let $K$ be a reflective subuniverse and let $f$ be a family of $K$-equiva\-lences.
+Then $\eta : X \to L_f X$ is a $K$-equivalence for every $X$.
+\end{prp}
+
+\begin{proof}
+Since each $f_i$ is a $K$-equivalence, every $K$-local type is $f$-local,
+by \cref{lemma:characterizationorthogonal}.
+Therefore, $\eta : X \to L_f X$ is a $K$-equivalence
+by \cref{lemma:comparelocalization}(1).
+\end{proof}
+
+\begin{cor}\label{cor:preserve-n-connected}
+For $n \geq -1$, let $f$ be a family of maps such that each $\trunc{n}{f_i}$ is an equivalence.
+If $X$ is $n$-connected, then $L_f X$ is $n$-connected.
+\end{cor}
+
+\begin{proof}
+Let $K$ be the subuniverse of $n$-truncated types.
+Then each $f_i$ is a $K$-equivalence, by assumption.
+It follows from \cref{prop:Kequiv-Lf} that $X \to L_f X$ is a $K$-equivalence.
+Thus, if $\trunc{n}{X}$ is contractible, so is $\trunc{n}{L_f X}$.
+\end{proof}
+
+\subsection{Orthogonal factorization systems}\label{ss:orthogonal-factorization-systems}
+
+In this section, we strengthen \cref{cor:preserve-n-connected}, using
+the framework of orthogonal factorization systems.
+While we do not need this generalization in the rest of the paper,
+the stronger results will likely be of independent interest.
+
+Roughly speaking, an \define{orthogonal factorization system} consists of
+classes $\LLL$ and $\RRR$ of maps such that every map factors uniquely as
+$r \circ l$, with $l$ in $\LLL$ and $r$ in $\RRR$.
+See~\cite{RSS} for more information.
+The reader not familiar with orthogonal factorization systems can assume
+that $\LLL$ is the class of $n$-connected maps
+and $\RRR$ is the class of $n$-truncated maps for some $n \geq -2$;
+this case is treated in~\cite[Section 7.6]{hottbook}.
+(For example, when $n = -1$, $\LLL$ consists of the surjective maps
+and $\RRR$ consists of the embeddings.)
+
+\begin{lem}\label{lemma:subtypes}
+    Let $(\LLL, \RRR)$ be an orthogonal factorization system and
+    let $f : \prd{i:I} A_i \to B_i$ be a family of maps in $\LLL$.
+    If $r : S \to X$ is in $\RRR$ and $X$ is $f$-local, then $S$ is $f$-local.
+    In particular, if each $f_i$ is surjective,
+    then any subtype of an $f$-local type is $f$-local.
+\end{lem}
+
+\begin{proof}
+    Suppose that $X$ is $f$-local
+    and that $r : S \to X$ is in $\RRR$.
+    Fix $i : I$.
+    Since $f_i$ is in $\LLL$ and $r$ is in $\RRR$, the following square is a pullback:
+    \[
+        \begin{tikzpicture}
+          \matrix (m) [matrix of math nodes,row sep=2em,column sep=3em,minimum width=2em]
+          { (B_i \sto S) & (A_i \sto S) \\
+            (B_i \sto X) & (A_i \sto X) . \\};
+          \path[->]
+            (m-1-1) edge node [above] {$\precomp{f_i}$} (m-1-2)
+                    edge node [left] {$r \circ \blank$} (m-2-1)
+            (m-1-2) edge node [right] {$r \circ \blank$} (m-2-2)
+            (m-2-1) edge node [below] {$\precomp{f_i}$} (m-2-2)
+            ;
+        \end{tikzpicture}
+    \]
+    This follows from~\cite[Lemma~1.44]{RSS}, which says that the fibers of
+    the map comparing $S^{B_i}$ to the pullback are contractible.
+    The bottom arrow is an equivalence since $X$ is $f$-local,
+    so the top arrow is an equivalence, as required.
+\end{proof}
+% The previous proof was missing awkward details about the witnesses
+% to the various commuting squares and triangles.
+
+\begin{thm}\label{theorem:localizationpreservesconnected}
+    Let $(\LLL, \RRR)$ be an orthogonal factorization system and
+    let $f$ be a family of maps in $\LLL$.
+    Then $\eta : X \to L_f X$ is in $\LLL$ for every $X$.
+\end{thm}
+
+%Note that if $A$ is pointed and $B$ is connected, then $f$ is surjective.
+
+\begin{proof}
+    Factor the unit map as $X \xrightarrow{l} I \xrightarrow{r} L_f X$, with $l$ in $\LLL$
+    and $r$ in $\RRR$.
+    By \cref{lemma:subtypes},
+    $I$ is $f$-local. This gives us a map $\overline{l} : L_f X \to I$
+    such that $r \circ \overline{l} \circ \eta = r \circ l = \eta$.
+    By the universal property of $L_f X$, it must be the case that $r \circ \overline{l}$
+    is homotopic to the identity of $L_f X$.
+    Similarly, $\overline{l} \circ r$ is an automorphism of $I$ that respects the
+    factorization, so it must be homotopic to the identity of $I$.
+    Thus $r$ is an equivalence and so $\eta = r \circ l$ is in $\LLL$.
+\end{proof}
+
+\begin{cor}\label{cor:preserve-n-connected-stronger}
+    For $n \geq -1$, let $f$ be a family of $(n-1)$-connected maps.
+    If $X$ is $n$-connected, then $L_f X$ is $n$-connected.
+\end{cor}
+
+\begin{proof}
+    Applying \cref{theorem:localizationpreservesconnected} with
+    $\LLL$ the $(n-1)$-connected maps and $\RRR$ the $(n-1)$-truncated maps
+    gives that $\eta : X \to L_f X$ is $(n-1)$-connected.
+%    \note{The last sentence is wishy-washy, but giving details about basepoints is messy.
+%    I think there must be a sharper argument; can anyone find it?}
+    By examining homotopy groups, it follows that when $X$ is $n$-connected,
+    so is $L_f X$.
+\end{proof}
+
+\cref{prop:Kequiv-Lf} and \cref{theorem:localizationpreservesconnected} are very similar.
+To compare them in a concrete situation, take $K$ to be the subuniverse of $n$-truncated
+types and consider the orthogonal factorization system in which $\LLL$ is the
+class of $n$-connected maps.
+If a map $g$ is $n$-connected, then $Kg = \trunc{n}{g}$ is an equivalence, so
+\cref{theorem:localizationpreservesconnected} makes a stronger assumption on $f$
+and gives a stronger conclusion about $\eta : X \to L_f X$.
+Thus neither result implies the other.
+
+On the other hand, \cref{cor:preserve-n-connected-stronger} has the same
+conclusion as \cref{cor:preserve-n-connected}, but makes a weaker hypothesis,
+since if $\trunc{n}{f}$ is an equivalence then $f$ is $(n-1)$-connected.
+This is strictly weaker.  For example, if $n = 0$, the former is the
+condition that $f$ is a bijection on components, while the latter is
+the condition that $f$ is surjective on components.
+% Similarly, for $n = -1$,
+% being $-1$-connected is the same as being surjective.
+% But being an equivalence under $\trunc{-1}{-}$ is the same as being
+% a logical equivalence, which is much weaker.  E.g. \emph{any} map
+% between pointed types is a logical equivalence.

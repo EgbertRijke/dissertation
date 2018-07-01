@@ -132,7 +132,7 @@ To see this, note that the type of fiberwise equivalences $\prd{x:A} (a=x)\eqvsy
 By \cref{thm:id_fundamental}, the type $\prd{x:A}\isequiv(f)$ is equivalent to the contractibility of the total space of $B$. Now the claim follows from \cref{lem:yoneda}. The claims in the statement are now easy consequences.
 \end{proof}
 
-\begin{defn}
+\begin{defn}\label{defn:rrel}
 A (small) \define{reflexive relation} $\mathcal{R}$ on $A$ is a pair $(R,\rho)$ consisting of a binary type-valued relation $R:A\to (A\to \UU)$ equipped with a proof of reflexivity
 \begin{equation*}
 \rho : \prd{x:A}R(x,x).
@@ -216,7 +216,8 @@ By a routine construction it can be shown that the type of small reflexive pairs
 \edg{\Delta(X)} & \defeq \idtypevar{X} \\
 \rfx{\Delta(X)} & \defeq \refl{}.
 \end{align*}
-The \define{indiscrete graph} $\nabla(X)$ on $X$ is the reflexive graph consisting of
+\item Given a map $f:A\to X$, the \define{pre-kernel} $k(f)$ of $f$ is the reflexive relation on $A$ given by $x,y\mapsto f(x)=f(y)$.
+\item The \define{indiscrete graph} $\nabla(X)$ on $X$ is the reflexive graph consisting of
 \begin{align*}
 \pts{\nabla(X)} & \defeq X \\
 \edg{\nabla(X)} & \defeq \lam{x}{y}\unit \\
@@ -536,6 +537,7 @@ commutes, for any type $Y$. In this triangle, the bottom map is the map defined 
 \item The reflexive graph quotient of the discrete graph $\Delta(X)$ of a type $X$ is just $X$ itself. It also follows that $\mathsf{constr} : \mathsf{rGph}(\mathcal{A},\Delta(\mathsf{rcoeq}(\mathcal{A})))$ is an equivalence of reflexive graphs if and only if $\mathcal{A}$ is a discrete graph.
 \item The reflexive graph quotient of the indiscrete graph $\nabla(X)$ on a type $X$ is the join square $\join{X}{X}$.
 \item Let $\mathcal{A}$ be a non-reflexive graph, and let $F(\mathcal{A})$ be the reflexive graph obtained by freely adding a proof of reflexivity, as in \autoref{eg:freerfx} of \autoref{eg:rgraph_morphism}. Then the non-reflexive graph quotient of $\mathcal{A}$ is the reflexive graph quotient of $F(\mathcal{A})$. 
+\item Let $f:A\to B$ be a map. Then the reflexive coequalizer of the reflexive graph $(A,k(f))$ is the fiberwise join $\join[X]{A}{A}$, which was introduced in \cref{defn:fib_join}.
 \item Let $X$ be a type with base point $x_0:X$. Define the reflexive graph $SX$ by
 \begin{align*}
 \pts{SX} & \defeq \unit \\

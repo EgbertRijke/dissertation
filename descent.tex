@@ -100,7 +100,13 @@ with $H:i\circ f \htpy j\circ g$, and consider a cocone $(i',j',H')$ with vertex
 \begin{equation*}
 \mathsf{cocone\usc{}map}((i,j,H),Y,h)= (i',j',H')
 \end{equation*}
-is called the \define{cogap map} of $(i',j',H')$. We also write $\mathsf{cogap}(i',j',H')$ for the cogap map. 
+is called the \define{cogap map} of $(i',j',H')$. We also write $\mathsf{cogap}(i',j',H')$ for the cogap map, and we write
+\begin{align*}
+\mathsf{left\usc{}comp}(i',j',H') & : i' \htpy \mathsf{cogap}(i',j',H')\circ \inl  \\
+\mathsf{right\usc{}comp}(i',j',H') & : j' \htpy \mathsf{cogap}(i',j',H')\circ \inr  \\
+\mathsf{coh\usc{}comp}(i',j',H') & : \ct{(\mathsf{left\usc{}comp}(i',j',H')\cdot g)}{H'} \htpy \ct{(\mathsf{cogap}(i',j',H')\cdot \glue)}{(\mathsf{right\usc{}comp}(i',j',H')\cdot f)}.
+\end{align*}
+for the homotopies determining the uniqueness of $\mathsf{cogap}(i',j',H')$.
 \end{defn}
 
 \begin{prp}\label{thm:pushout_up}
@@ -1044,8 +1050,8 @@ A\times D \arrow[dr] & \unit \arrow[from=ul,crossing over] \arrow[d] & B\times C
 of which the vertical sides are pullback squares. Hence the claim follows from \cref{thm:cartesian_cube}.
 \end{proof}
 
-\begin{defn}
-Let $f:A\to X$ and $g:B\to X$ be maps into $X$. We define the type $\join[X]{A}{B}$ and the \define{join}\footnote{\emph{Warning}: By $\join{f}{g}$ we do \emph{not} mean the functorial action of the
+\begin{defn}\label{defn:fib_join}
+Let $f:A\to X$ and $g:B\to X$ be maps into $X$. We define the \define{fiberwise join} $\join[X]{A}{B}$ and the \define{join}\footnote{\emph{Warning}: By $\join{f}{g}$ we do \emph{not} mean the functorial action of the
 join, applied to $(f,g)$.} $\join{f}{g}:\join[X]{A}{B}\to X$ of
 $f$ and $g$, as indicated in the following diagram:
 \begin{equation*}

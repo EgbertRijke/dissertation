@@ -1,6 +1,6 @@
 \chapter{Homotopy images}
 
-We have observed in \cref{eg:rcoeq} that the reflexive coequalier of the pre-kernel of a map $f:A\to X$ is the fiberwise join $\join[X]{A}{A}$, i.e.~we have a reflexive coequalizer diagram
+\marginnote{Cite Floris and Nicolai}We have observed in \cref{eg:rcoeq} that the reflexive coequalier of the pre-kernel of a map $f:A\to X$ is the fiberwise join $\join[X]{A}{A}$, i.e.~we have a reflexive coequalizer diagram
 \begin{equation*}
 \begin{tikzcd}
 A\times_X A \arrow[r,yshift=1ex] \arrow[r,yshift=-1ex] & A \arrow[l] \arrow[r] & \join[X]{A}{A}.
@@ -12,15 +12,15 @@ Furthermore, we have observed in \cref{cor:2-pre-kernel} that the geometric real
 A\times_{X} A \times_{X} A \arrow[r,yshift=2ex] \arrow[r] \arrow[r,yshift=-2ex] & A \times_X A \arrow[l,yshift=1ex] \arrow[l,yshift=-1ex] \arrow[r,yshift=1ex] \arrow[r,yshift=-1ex] & A \arrow[l] \arrow[r] & \join[X]{A}{\join[X]{A}{A}}.
 \end{tikzcd}
 \end{equation*}
-These results suggest that if we were to continue this process ad infinitum to construct the Czech nerve of a map, which requires one to solve the currently open problem of defining in homotopy type theory the type of simplicial types, then its geometric realization is the sequential colimit of the type sequence
+These results suggest that if we were to continue this process ad infinitum, in order to construct the Czech nerve of a map (which requires one to solve the currently open problem of defining in homotopy type theory the type of simplicial types) then one might expect that its geometric realization is the sequential colimit of the type sequence
 \begin{equation*}
 \begin{tikzcd}
 A \arrow[r] & \join[X]{A}{A} \arrow[r] & \join[X]{A}{(\join[X]{A}{A})} \arrow[r] & \cdots
 \end{tikzcd}
 \end{equation*}
-and its sequential colimit. However, we \emph{can} analyze this type sequence and its colimit in homotopy type theory, since it is constructed entirely in terms of known operations. We will show in \cref{thm:image} that for any map $f:A\to X$, the infinite fiberwise join-power $\join[X]{\cdots}{\join[X]{A}{\join[X]{A}{A}}}$ is the image of $f$. We conclude that the image of a map always exists in univalent type theory with homotopy pushouts. This construction of the image of $f$ is called the join construction, and first appeard in \cite{joinconstruction}. Moreover, we show in \cref{thm:image_small} that the image of an essentially small type mapping into a locally small type is again essentially small. In particular, the image of a map from a small type into the universe is essentially small. This corollary should be viewed as a type theoretic replacement axiom. This fact has the important consequence that any connected component of the universe is essentially small.
+and its sequential colimit. However, we \emph{can} analyze this type sequence and its colimit in homotopy type theory, since it is constructed entirely in terms of known operations. We will show in \cref{thm:image} that for any map $f:A\to X$, the infinite fiberwise join-power $\join[X]{\cdots}{\join[X]{A}{\join[X]{A}{A}}}$ is the image of $f$. We conclude that the image of a map always exists in univalent type theory with homotopy pushouts. This construction of the image of $f$ is called the join construction, and first appeared in \cite{joinconstruction}. Moreover, we show in \cref{thm:image_small} that the image of an essentially small type mapping into a locally small type is again essentially small. In particular, the image of a map from a small type into the universe is essentially small. This corollary should be viewed as a type theoretic replacement axiom. This fact has the important consequence that any connected component of the universe is essentially small.
 
-The join construction leads to new constructions of set quotients and of Rezk completions. Set-quotients have been first constructed in \cite{UniMath2015,UniMath} using propositional resizing, and as higher inductive types in \cite{hottbook} in the case where $A$ is assumed to be a set. The Rezk completion of a pre-category is due to \cite{AhrensKapulkinShulman}, and is also explained in section 9.9 of \cite{hottbook}. In \cref{sec:set-quotient} we elaborate on set quotients, with the aim of generalizing the construction in \cref{chap:giraud} to quotients of type-valued equivalence relations.
+The join construction leads to new constructions of set quotients and of Rezk completions. Set-quotients have been first constructed in \cite{UniMath2015,UniMath} using propositional resizing, and as higher inductive types in \cite{hottbook} in the case where $A$ is assumed to be a set. The Rezk completion of a pre-category is due to \cite{AhrensKapulkinShulman}, and is also explained in section 9.9 of \cite{hottbook}. In \cref{sec:set-quotient} we elaborate on set quotients, with the aim of generalizing the construction in \cref{chap:giraud} to quotients of type-valued equivalence relations.\marginnote{Cite Sets in HoTT}
 
 In the final section of this chapter we show that the $k$-truncation can be constructed, for any $k\geq -2$. This result is established in \cref{thm:truncation}. In our construction we use a generalization of the join extension and connectivity theorems, stated in \cref{thm:join-extension,thm:join-connectivity}.
 
@@ -30,7 +30,7 @@ In the final section of this chapter we show that the $k$-truncation can be cons
 Consider a commuting triangle
 \begin{equation*}
 \begin{tikzcd}[column sep=small]
-A \arrow[rr,"i"] \arrow[dr,swap,"f"] & & B \arrow[dl,"m"] \\
+A \arrow[rr,"i"] \arrow[dr,swap,"f"] & & U \arrow[dl,"m"] \\
 & X
 \end{tikzcd}
 \end{equation*}
@@ -40,11 +40,11 @@ We say that $m$ has the \define{universal property of the image of $f$}\index{un
 (i,I)^\ast : \mathrm{hom}_X(m,m')\to\mathrm{hom}_X(f,m')
 \end{equation*}
 defined by $(i,I)^\ast(h,H)\defeq (h\circ i,\ct{I}{(i\cdot H)})$,
-is an equivalence for every embedding $m':B'\to X$. 
+is an equivalence for every embedding $m':U'\to X$. 
 \end{defn}
 
 \begin{lem}
-For any $f:A\to X$ and any embedding\index{embedding} $m:B\to X$, the type $\mathrm{hom}_X(f,m)$ is a proposition.
+For any $f:A\to X$ and any embedding\index{embedding} $m:U\to X$, the type $\mathrm{hom}_X(f,m)$ is a proposition.
 \end{lem}
 
 \begin{proof}
@@ -61,7 +61,7 @@ Thus we see that the type $\prd{x:X}\fib{f}{x}\to\fib{m}{x}$ is a product of pro
 Consider a commuting triangle
 \begin{equation*}
 \begin{tikzcd}[column sep=small]
-A \arrow[rr,"i"] \arrow[dr,swap,"f"] & & B \arrow[dl,"m"] \\
+A \arrow[rr,"i"] \arrow[dr,swap,"f"] & & U \arrow[dl,"m"] \\
 & X
 \end{tikzcd}
 \end{equation*}
@@ -69,23 +69,16 @@ with $I:f\htpy m\circ i$, and where $m$ is an embedding. Then $m$ satisfies the 
 \begin{equation*}
 \mathrm{hom}_X(f,m')\to\mathrm{hom}_X(m,m')
 \end{equation*}
-holds for every embedding $m':B'\to X$. 
+holds for every embedding $m':U'\to X$. 
 \end{cor}
 
-Note that embeddings into the unit type are just propositions. To see this, note that
-\begin{align*}
-\sm{A:\UU}{f:A\to\unit}\isemb(f)
-& \eqvsym \sm{A:\UU}\isemb(\const_\ttt) \\
-& \eqvsym \sm{A:\UU}\prd{x:\unit}\isprop(\fib{\const_\ttt}{x}) \\
-& \eqvsym \sm{A:\UU}\isprop(\fib{\const_\ttt}{\ttt}) \\
-& \eqvsym \sm{A:\UU}\isprop(A).
-\end{align*}
+Recall that embeddings into the unit type are just propositions.
 Therefore, the universal property of the image of the map $A\to\unit$ is a proposition $P$ satisfying the universal property of the propositional truncation:
 
 \begin{defn}
-Let $A$ be a type, and let $P$ be a proposition that comes equipped with a map $\eta:A\to P$. We say that $\eta:A\to P$ satisfies the \define{universal property of propositional truncation}\index{univeral property!of propositional truncation|textit} if for every proposition $Q$, the precomposition map
+Let $A$ be a type, and let $P$ be a proposition that comes equipped with a map $f:A\to P$. We say that $f:A\to P$ satisfies the \define{universal property of propositional truncation}\index{univeral property!of propositional truncation|textit} if for every proposition $Q$, the precomposition map
 \begin{equation*}
-\blank\circ\eta:(P\to Q)\to (A\to Q)
+\blank\circ f:(P\to Q)\to (A\to Q)
 \end{equation*}
 is an equivalence.
 \end{defn}
@@ -158,16 +151,16 @@ given by $h\mapsto \lam{n}(h\circ \seqin_n)$ is an equivalence.
 \begin{proof}
 By the universal property of sequential colimits established in \cref{thm:sequential_up} we obtain that $\coconemap$ is an equivalence. Note that we have a commuting triangle
 \begin{equation*}
-\begin{tikzcd}
-& P^{A_\infty} \arrow[dl,swap,"\coconemap"] \arrow[dr,"\seqin^\ast"] \\
-\cocone(P) \arrow[rr,swap,"\proj 1"] & & \Big(\prd{n:\N}A_n\to P\Big).
+\begin{tikzcd}[column sep=tiny]
+\phantom{\Big(\prd{n:\N}A_n\to P\Big).} & P^{A_\infty} \arrow[dl,swap,"\coconemap"] \arrow[dr,"\seqin^\ast"] & \phantom{\cocone(P)} \\
+\cocone(P) \arrow[rr,swap,"\proj 1"] & & \Big(\prd{n:\N}A_n\to P\Big)
 \end{tikzcd}
 \end{equation*}
 Note that for any $g:\prd{n:\N}A_n\to P$ the type 
 \begin{equation*}
 \prd{n:\N} g_n\htpy g_{n+1}\circ f_n
 \end{equation*}
-is a product of contractible types, since $P$ is a proposition. Therefore it is contractible by \cref{thm:funext_wkfunext}, and it follows by \cref{ex:proj_fiber} that the projection is an equivalence. We conclude by the 3-for-2 property of equivalences (\cref{ex:3_for_2}) that $\seqin^\ast$ is an equivalence.
+is a product of contractible types, since $P$ is a proposition. Therefore it is contractible by \cref{thm:funext_wkfunext}, and it follows that the projection is an equivalence. We conclude by the 3-for-2 property of equivalences that $\seqin^\ast$ is an equivalence.
 \end{proof}
 
 \begin{lem}\label{lem:infjp_up}
@@ -181,8 +174,8 @@ is an equivalence.
 \begin{proof}
 We have the commuting triangle
 \begin{equation*}
-\begin{tikzcd}
-&[-3em] P^{A^{\ast\infty}} \arrow[dl,swap,"\seqin^\ast"] \arrow[dr,"\blank\circ\seqin_0"] \\
+\begin{tikzcd}[column sep=0]
+& P^{A^{\ast\infty}} \arrow[dl,swap,"\seqin^\ast"] \arrow[dr,"\blank\circ\seqin_0"] & \phantom{\Big(\prd{n:\N}A^{\ast n} \to P\Big)} \\
 \Big(\prd{n:\N}A^{\ast n} \to P\Big) \arrow[rr,swap,"\lam{h}h_0"] & & P^A.
 \end{tikzcd}
 \end{equation*}
@@ -193,22 +186,32 @@ Therefore it suffices to show that the bottom map is an equivalence. Since this 
 by induction on $n:\N$. The base case is trivial. Given a map $g:A^{\ast n}\to P$, we obtain a map $g:A^{\ast(n+1)}\to P$ by \cref{lem:extend_join_prop}.
 \end{proof}
 
+\begin{lem}\label{lem:seqcolim_contr}
+Consider a type sequence
+\begin{equation*}
+\begin{tikzcd}
+A_0 \arrow[r,"f_0"] & A_1 \arrow[r,"f_1"] & A_2 \arrow[r,"f_2"] & \cdots
+\end{tikzcd}
+\end{equation*}
+and suppose that each $A_n$ is equipped with a base point $a_n:A_n$, and each $f_n$ is equipped with a homotopy $H_n:\mathsf{const}_{a_{n+1}}\htpy f_n$. Then the sequential colimit $A_\infty$ is contractible.\qed
+\end{lem}
+
 \begin{lem}\label{lem:isprop_infjp}
 The type $A^{\ast\infty}$ is a proposition for any type $A$.
 \end{lem}
 
 \begin{proof}
-By \cref{cor:contr_prop} it suffices to show that $A^{\ast\infty}\to \iscontr(A^{\ast\infty})$, and by \cref{lem:infjp_up} it suffices to show that
+By \cref{lem:prop_char} it suffices to show that $A^{\ast\infty}\to \iscontr(A^{\ast\infty})$, and by \cref{lem:infjp_up} it suffices to show that
 \begin{equation*}
 A\to \iscontr(A^{\ast\infty}),
 \end{equation*}
-because $\iscontr(A^{\ast\infty})$ is a proposition by \cref{ex:isprop_istrunc}. 
+because $\iscontr(A^{\ast\infty})$ is a proposition. 
 
-Let $x:A$. To see that $A^{\ast\infty}$ is contractible it suffices by \cref{ex:seqcolim_contr} to show that $\inr:A^{\ast n}\to A^{\ast(n+1)}$ is homotopic to the constant function $\const_{\inl(x)}$. However, we get a homotopy $\const_{\inl(x)}\htpy \inr$ immediately from the path constructor $\glue$.  
+Let $x:A$. To see that $A^{\ast\infty}$ is contractible it suffices by \cref{lem:seqcolim_contr} to show that $\inr:A^{\ast n}\to A^{\ast(n+1)}$ is homotopic to the constant function $\const_{\inl(x)}$. However, we get a homotopy $\const_{\inl(x)}\htpy \inr$ immediately from the path constructor $\glue$.  
 \end{proof}
 
 \begin{thm}
-For any type $A$ there is a type $\brck{A}$ that comes equipped with a map $\eta:A\to \brck{A}$, and satisfies the universal property of propositional truncation.
+For any type $A:\UU$ there is a proposition $\brck{A}:\UU$ that comes equipped with a map $\eta:A\to \brck{A}$, and satisfies the universal property of propositional truncation.
 \end{thm}
 
 \begin{proof}
@@ -216,7 +219,7 @@ Let $A$ be a type. Then we define $\brck{A}\defeq A^{\ast\infty}$, and we define
 \end{proof}
 
 \subsection{Stage two: constructing the image of a map}\label{sec:join_stage2}
-The image of a map $f:A\to X$ can be defined using the propositional truncation:
+Following Definition 7.6.3 of \cite{hottbook}, we recall that the image of a map $f:A\to X$ can be defined using the propositional truncation:
 \begin{defn}
 For any map $f:A\to X$ we define the \define{image}\index{image|textbf} of $f$ to be the type
 \begin{equation*}
@@ -224,10 +227,10 @@ For any map $f:A\to X$ we define the \define{image}\index{image|textbf} of $f$ t
 \end{equation*}
 and we define the \define{image inclusion} to be the projection $\proj 1 :\im(f)\to X$. 
 \end{defn}
-However, the construction of the fiberwise join in \cref{ex:fib_join} suggests that we can also define the image of $f$ as the infinite join power $f^{\ast\infty}$, where we repeatedly take the fiberwise join of $f$ with itself. Our reason for defining the image in this way is twofold: 
+However, the construction of the fiberwise join in \cref{defn:fib_join} suggests that we can also define the image of $f$ as the infinite join power $f^{\ast\infty}$, where we repeatedly take the fiberwise join of $f$ with itself. Our reason for defining the image in this way is twofold: 
 \begin{itemize}
 \item We use this construction to show that the image of a map $f:A\to B$ from an essentially small type $A$ into a locally small type $B$ is again essentially small.
-\item Many interesting types, such as the real and complex projective spaces, appear in specific instances of this construction.
+\item Some interesting types, such as the real and complex projective spaces, appear in specific instances of this construction.
 \end{itemize}
 
 \begin{lem}
@@ -246,7 +249,7 @@ Note that both types are propositions, so any equivalence can be used to prove t
 & \eqvsym \prd{x:X}\fib{g}{x}\to\fib{m}{x} \\
 & \eqvsym \mathrm{hom}_X(g,m).
 \end{align*}
-The first equivalence holds by \cref{ex:triangle_fib}; the second equivalence holds by \cref{ex:fib_join}, also using \cref{ex:equiv_precomp,lem:postcomp_equiv} where we established that that pre- and postcomposing by an equivalence is an equivalence; the third equivalence holds by \cref{lem:extend_join_prop,lem:postcomp_equiv}; the last equivalence again holds by \cref{ex:triangle_fib}.
+The first equivalence holds by \cref{cor:fib_triangle}; the second equivalence holds by \cref{defn:join-fiber}; the third equivalence holds by \cref{lem:extend_join_prop}; the last equivalence again holds by \cref{cor:fib_triangle}.
 \end{proof}
 
 For the construction of the image of $f:A\to X$ we observe that if we are given an embedding $m:U\to X$ and a map $(i,I):\mathrm{hom}_X(f,m)$, then $(i,I)$ extends uniquely along $\inr:A\to \join[X]{A}{A}$ to a map $\mathrm{hom}_X(\join{f}{f},m)$. This extension again extends uniquely along $\inr:\join[X]{A}{A}\to \join[X]{A}{(\join[X]{A}{A})}$ to a map $\mathrm{hom}_X(\join{f}{(\join{f}{f})},m)$ and so on, resulting in a diagram of the form
@@ -260,7 +263,7 @@ A \arrow[dr] \arrow[r,"\inr"] & \join[X]{A}{A} \arrow[d,densely dotted] \arrow[r
 \begin{defn}
 Suppose $f:A\to X$ is a map. Then we define the \define{fiberwise join powers} 
 \begin{equation*}
-f^{\ast n}:A_X^{\ast n} X.
+f^{\ast n}\defeq A_X^{\ast n}\to X.
 \end{equation*}
 \end{defn}
 
@@ -344,7 +347,7 @@ Recall that in set theory, the replacement axiom asserts that for any family of 
 For any small type family $B:A\to\UU$, where $A$ is small, the image $\im(B)$ is essentially small. We call $\im(B)$ the \define{univalent completion} of $B$. 
 \end{cor}
 
-\section{Set quotients}
+\section{Set quotients}\label{sec:set-quotients}
 
 \subsection{Sets in homotopy type theory}
 \begin{defn}
@@ -355,12 +358,7 @@ A type $A$ is said to be a \define{set} if there is a term of type
 \end{defn}
 
 \begin{lem}\label{lem:prop_to_id}
-Let $A$ be a type, and let $R:A\to A\to\UU$ be a binary relation on $A$ satisfying
-\begin{enumerate}
-\item Each $R(x,y)$ is a proposition,
-\item $R$ is reflexive, as witnessed by $\rho:\prd{x:A}R(x,x)$.
-\end{enumerate}
-Then any fiberwise map
+Let $A$ be a type, and let $(R,\rho):\mathsf{rRel}(A)$ be a reflexive relation on $A$ such that $R(x,y)$ is a proposition for each $x,y:A$. Then any fiberwise map
 \begin{equation*}
 \prd{x,y:A}R(x,y)\to (\id{x}{y})
 \end{equation*}
@@ -373,7 +371,7 @@ Since $R$ is assumed to be reflexive, we also have a fiberwise transformation
 \begin{equation*}
 \ind{x{=}}(\rho(x)):\prd{y:A}(\id{x}{y})\to R(x,y).
 \end{equation*}
-Since each $R(x,y)$ is assumed to be a proposition, it therefore follows that each $R(x,y)$ is a retract of $\id{x}{y}$. We conclude by \autoref{ex:id_fundamental_retr} that for each $x,y:A$, the map $f(x,y):R(x,y)\to(\id{x}{y})$ must be an equivalence.
+Since each $R(x,y)$ is assumed to be a proposition, it therefore follows that each $R(x,y)$ is a retract of $\id{x}{y}$. We conclude by \autoref{cor:id_fundamental_retr} that for each $x,y:A$, the map $f(x,y):R(x,y)\to(\id{x}{y})$ must be an equivalence.
 
 Now it also follows that $A$ is a set, since its identity types are (equivalent to) propositions.
 \end{proof}
@@ -384,7 +382,7 @@ One can apply \cref{lem:prop_to_id} using the \define{observational equality} $\
 \mathrm{Eq}_\N(0,0) & \defeq \unit & \mathrm{Eq}_\N(\mathsf{succ}(n),0) & \defeq \emptyt \\
 \mathrm{Eq}_\N(0,\mathsf{succ}(m)) & \defeq \emptyt & \mathrm{Eq}_\N(\mathsf{succ}(n),\mathsf{succ}(m)) & \defeq \mathrm{Eq}_\N(n,m)
 \end{align*}
-to show that $\N$ is a set. To see that $\mathrm{Eq}_\N$ implies identity, note that $\mathrm{Eq}_\N$ implies any reflexive relation $R:\N\to\N\to\UU$.
+to show that $\N$ is a set. A routine induction argument shows that $\mathrm{Eq}_\N$ implies identity.
 \end{eg}
 
 \subsection{Equivalence relations}
@@ -396,7 +394,7 @@ Let $R:A\to (A\to\prop)$ be a binary relation valued in the propositions. We say
 \sigma & : \prd{x,y:A} R(x,y)\to R(y,x) \\
 \tau & : \prd{x,y,z:A} R(x,y)\to (R(y,z)\to R(x,z)).
 \end{align*}
-Given an equivalence relation $R:A\to (A\to\prop)$, the \define{equivalence class}\index{equivalence class|textbf} $[x]_R$ of $x:A$ is defined to be
+Given an equivalence relation $R:A\to (A\to\prop)$, the \define{equivalence class}\index{equivalence class|textbf} $[x]_R:A\to\prop$ of $x:A$ is defined to be
 \begin{equation*}
 [x]_R\defeq R(x).
 \end{equation*}
@@ -404,9 +402,9 @@ Given an equivalence relation $R:A\to (A\to\prop)$, the \define{equivalence clas
 
 \begin{defn}
 Let $R:A\to (A\to\prop)$ be a $0$-equivalence relation. 
-We define for any $x,y:A$ a map\index{class_eq@{$\mathsf{class\usc{}eq}$}|textbf}
+We define for any $x,y:A$ a map\index{class_eq@{$\mathsf{eq\usc{}class}$}|textbf}
 \begin{equation*}
-\mathsf{class\usc{}eq}:R(x,y)\to ([x]_R=[y]_R).
+\mathsf{eq\usc{}class}:R(x,y)\to ([x]_R=[y]_R).
 \end{equation*}
 \end{defn}
 
@@ -422,14 +420,14 @@ Let $z:A$. By the univalence axiom, the type $R(x,z)=R(y,z)$ is equivalent to th
 We have the map $\tau_{y,x,z}(\sigma(r)):R(x,z)\to R(y,z)$. Since this is a map between propositions, we only have to construct a map in the converse direction to show that it is an equivalence. The map in the converse direction is just $\tau_{x,y,z}(r):R(y,z)\to R(x,z)$. 
 \end{proof}
 
-\begin{thm}\label{thm:equivalence_classes}
+\begin{prp}\label{thm:equivalence_classes}
 Let $R:A\to (A\to\prop)$ be a $0$-equivalence relation. 
 Then for any $x,y:A$ the map
 \begin{equation*}
-\mathsf{class\usc{}eq} : R(x,y)\to ([x]_R=[y]_R)
+\mathsf{eq\usc{}class} : R(x,y)\to ([x]_R=[y]_R)
 \end{equation*}
 is an equivalence.
-\end{thm}
+\end{prp}
 
 \begin{proof}
 By the 3-for-2 property of equivalences, it suffices to show that the map
@@ -442,14 +440,6 @@ is an equivalence. Since this is a map between propositions, it suffices to cons
 \end{equation*}
 This map is simply $\lam{f} \sigma_{y,x}(f_x(\rho(x)))$. 
 \end{proof}
-
-\begin{rmk}
-By \cref{thm:equivalence_classes} we can begin to think of the \emph{quotient}\index{quotient} $A/R$ of a type $A$ by an equivalence relation $R$. Classically, the quotient is described as the set of equivalence classes, and \cref{thm:equivalence_classes} establishes that two equivalence classes $[x]_R$ and $[y]_R$ are equal precisely when $x$ and $y$ are related by $R$.
-
-However, the type $A\to\prop$ may contain many more terms than just the $R$-equivalence classes. Therefore we are facing the task of finding a type theoretic description of the smallest subtype of $A\to\prop$ containing the equivalence classes.
-Another to think about this is as the \emph{image}\index{image} of $R$ in $A\to \prop$. 
-The construction of the (homotopy) image of a map can be done with \emph{higher inductive types}\index{higher inductive type}, which we will do in \cref{chap:image}.
-\end{rmk}
 
 \subsection{The universal property of set quotients}
 
@@ -498,7 +488,7 @@ with $H:R\htpy m\circ q$, where $m$ is an embedding. Then we have
 \end{equation*}
 \end{lem}
 
-\begin{thm}\label{thm:quotient_up}
+\begin{prp}\label{thm:quotient_up}
 Let $R:A\to (A\to \prop)$ be an equivalence relation\index{equivalence relation|textit}, for $A:\UU$, and consider a commuting triangle
 \begin{equation*}
 \begin{tikzcd}[column sep=tiny]
@@ -511,10 +501,10 @@ with $H:R\htpy m\circ q$, where $m$ is an embedding. Then the following are equi
 \item The embedding $m:U\to \prop^A$ satisfies the universal property of the image of $R$.
 \item The map $q:A\to U$ satisfies the universal property of the set quotient $A/R$.
 \end{enumerate}
-\end{thm}
+\end{prp}
 
 \begin{proof}
-Suppose $m:U\to \prop^A$ satisfies the universal property of the image of $R$. Then it follows by \cref{thm:surjective} that the map $q:A\to U$ is surjective. Our goal is to prove that $U$ satisfies the universal property of the set quotient $A/R$. 
+Suppose $m:U\to \prop^A$ satisfies the universal property of the image of $R$. Then it follows by \cref{thm:surjective} that the map $q:A\to U$ is surjective. Our goal is to prove that $U$ satisfies the universal property of the set quotient $A/R$. \marginnote{Proof incomplete}
 \end{proof}
 
 \begin{rmk}
@@ -522,641 +512,4 @@ Suppose $m:U\to \prop^A$ satisfies the universal property of the image of $R$. T
 Therefore it is not clear that the quotient $A/R$ is essentially small\index{essentially small}, as it should be. Luckily, our construction of the image of a map allows us to show that the image is indeed essentially small, using the fact that $\prop^A$ is locally small\index{locally small}.
 \end{rmk}
 
-\subsection{The construction of set quotients}
-\begin{lem}
-Consider a commuting square
-\begin{equation*}
-\begin{tikzcd}
-A \arrow[r] \arrow[d] & B \arrow[d] \\
-C \arrow[r] & D.
-\end{tikzcd}
-\end{equation*}
-\begin{enumerate}
-\item If the square is cartesian, $B$ and $C$ are essentially small, and $D$ is locally small, then $A$ is essentially small.
-\item If the square is cocartesian, and $A$, $B$, and $C$ are essentially small, then $D$ is essentially small. 
-\end{enumerate}
-\end{lem}
-
-\begin{cor}
-Suppose $f:A\to X$ and $g:B\to X$ are maps from essentially small types $A$ and $B$, respectively, to a locally small type $X$. Then $A\times_X B$ is again essentially small. 
-\end{cor}
-
-\begin{lem}
-Consider a type sequence
-\begin{equation*}
-\begin{tikzcd}
-A_0 \arrow[r,"f_0"] & A_1 \arrow[r,"f_1"] & A_2 \arrow[r,"f_2"] & \cdots
-\end{tikzcd}
-\end{equation*}
-where each $A_n$ is essentially small. Then its sequential colimit is again essentially small. 
-\end{lem}
-
-\begin{thm}
-For any map $f:A\to X$ from a small type $A$ into a locally small type $X$, the image $\im(f)$ is an essentially small type.
-\end{thm}
-
-Recall that in set theory, the replacement axiom asserts that for any family of sets $\{X_i\}_{i\in I}$ indexed by a set $I$, there is a set $X[I]$ consisting of precisely those sets $x$ for which there exists an $i\in I$ such that $x\in X_i$. In other words: the image of a set-indexed family of sets is again a set. Without the replacement axiom, $X[I]$ would be a class. In the following corollary we establish a type-theoretic analogue of the replacement axiom: the image of a family of small types indexed by a small type is again (essentially) small.
-
-\begin{cor}\label{cor:im_small}
-For any small type family $B:A\to\UU$, where $A$ is small, the image $\im(B)$ is essentially small. We call $\im(B)$ the \define{univalent completion} of $B$. 
-\end{cor}
-
-\subsection{Set truncation}
-
-\begin{lem}
-For each type $A$, the relation $I_{(-1)}:A\to (A\to\prop)$ given by
-\begin{equation*}
-I_{(-1)}(x,y)\defeq\brck{x=y}
-\end{equation*}
-is an equivalence relation.
-\end{lem}
-
-\begin{proof}
-For every $x:A$ we have $\bproj{\refl{x}}:\brck{x=x}$, so the relation is reflexive. To see that the relation is symmetric note that by the universal property of propositional truncation there is a unique map $\brck{\invfunc}:\brck{x=y}\to\brck{y=x}$ for which the square
-\begin{equation*}
-\begin{tikzcd}
-(x=y) \arrow[r,"\invfunc"] \arrow[d,swap,"\bproj{\blank}"] & (y=x) \arrow[d,"\bproj{\blank}"] \\
-\brck{x=y} \arrow[r,densely dotted,swap,"\brck{\invfunc}"] & \brck{y=x}
-\end{tikzcd}
-\end{equation*}
-commutes. This shows that the relation is symmetric. Similarly, we show by the universal property of propositional truncation that the relation is transitive.
-\end{proof}
-
-\begin{defn}
-For each type $A$ we define the \define{set truncation}
-\begin{equation*}
-\trunc{0}{A}\defeq A/I_{(-1)},
-\end{equation*}
-and the unit of the set truncation is defined to be the quotient map.
-\end{defn}
-
-\begin{thm}
-For each type $A$, the set truncation satisfies the universal property of the set truncation.
-\end{thm}
-
-\section{Elementary construction of the $k$-truncations}
-
-\subsection{Truncated types}
-\begin{defn}
-We define $\istrunc{} : \Z_{\geq-2}\to\UU\to\UU$ by induction on $k:\Z_{\geq -2}$, taking
-\begin{align*}
-\istrunc{-2}(A) & \defeq \iscontr(A) \\
-\istrunc{k+1}(A) & \defeq \prd{x,y:A}\istrunc{k}(\id{x}{y}).\qedhere
-\end{align*}
-For any type $A$, we say that $A$ is \define{$k$-truncated}, or a \define{$k$-type}, if there is a term of type $\istrunc{k}(A)$. We say that a map $f:A\to B$ is $k$-truncated if its fibers are $k$-truncated.
-\end{defn}
-
-\begin{lem}\label{cor:pb_trunc}
-Consider a pullback square
-\begin{equation*}
-\begin{tikzcd}
-C \arrow[r,"q"] \arrow[d,swap,"p"] & B \arrow[d,"g"] \\
-A \arrow[r,swap,"f"] & X.
-\end{tikzcd}
-\end{equation*}
-If $g$ is a $k$-truncated map, then so is $p$. In particular, if $g$ is an embedding then so is $p$.\index{truncated!map!pullbacks of truncated maps|textit}\index{embedding!pullbacks of embeddings|textit}
-\end{lem}
-
-\begin{proof}
-Since the square is assumed to be a pullback square, it follows from \cref{cor:pb_fibequiv} that for each $x:A$, the fiber $\fib{p}{x}$ is equivalent to the fiber $\fib{g}{f(x)}$, which is $k$-truncated. Since $k$-truncated types are closed under equivalences by \cref{thm:ktype_eqv}, it follows that $p$ is a $k$-truncated map.
-\end{proof}
-
-
-\begin{lem}\label{thm:istrunc_next}
-If $A$ is a $k$-type, then $A$ is also a $(k+1)$-type.
-\end{lem}
-
-\begin{thm}\label{thm:ktype_eqv}
-If $e:\eqv{A}{B}$ is an equivalence, and $B$ is a $k$-type, then so is $A$.
-\end{thm}
-
-\begin{proof}
-We have seen in \autoref{ex:contr_equiv} that if $B$ is contractible and $e:\eqv{A}{B}$ is an equivalence, then $A$ is also contractible. This proves the base case.
-
-For the inductive step, assume that the $k$-types are stable under equivalences, and consider $e:\eqv{A}{B}$ where $B$ is a $(k+1)$-type. In \autoref{cor:emb_equiv} we have seen that
-\begin{equation*}
-\apfunc{e}:(\id{x}{y})\to(\id{e(x)}{e(y)})
-\end{equation*}
-is an equivalence for any $x,y$. Note that $\id{e(x)}{e(y)}$ is a $k$-type, so by the induction hypothesis it follows that $\id{x}{y}$ is a $k$-type. This proves that $A$ is a $(k+1)$-type.
-\end{proof}
-
-\begin{cor}\label{cor:emb_into_ktype}
-If $f:A\to B$ is an embedding, and $B$ is a $(k+1)$-type, then so is $A$.
-\end{cor}
-
-\begin{proof}
-By the assumption that $f$ is an embedding, the action on paths
-\begin{equation*}
-\apfunc{f}:(\id{x}{y})\to (\id{f(x)}{f(y)})
-\end{equation*}
-is an equivalence for every $x,y:A$. Since $B$ is assumed to be a $(k+1)$-type, it follows that $f(x)=f(y)$ is a $k$-type for every $x,y:A$. Therefore we conclude by \cref{thm:ktype_eqv} that $\id{x}{y}$ is a $k$-type for every $x,y:A$. In other words, $A$ is a $(k+1)$-type.
-\end{proof}
-
-\begin{thm}\label{thm:trunc_pi}
-Assume function extensionality. Then for any type family $B$ over $A$ one has\index{truncated}
-\begin{equation*}
-\Big(\prd{x:A}\istrunc{k}(B(x))\Big)\to \istrunc{k}\Big(\prd{x:A}B(x)\Big).
-\end{equation*}
-\end{thm}
-
-\begin{proof}
-The theorem is proven by induction on $k\geq -2$, where the base case is just the weak function extensionality principle, which was shown to follow from function extensionality in \autoref{thm:funext_wkfunext}.
-\end{proof}
-
-\begin{cor}\label{cor:funtype_trunc}
-Suppose $B$ is a $k$-type. Then $A\to B$ is also a $k$-type, for any type $A$.
-\end{cor}
-
-\begin{thm}
-Let $B$ be a type family over $A$. Then the following are equivalent:
-\begin{enumerate}
-\item For each $x:A$ the type $B(x)$ is $k$-truncated.
-\item The projection map
-\begin{equation*}
-\proj 1 : \Big(\sm{x:A}B(x)\Big)\to A
-\end{equation*}
-is a $k$-truncated map.
-\end{enumerate}
-\end{thm}
-
-\begin{proof}
-By \cref{ex:fib_replacement,ex:fiber_trans} we obtain equivalences
-\begin{equation*}
-\eqv{B(x)}{\fib{\proj 1}{x}}
-\end{equation*}
-for every $x:A$. Therefore the claim follows from \cref{thm:ktype_eqv}.
-\end{proof}
-
-\begin{thm}\label{thm:trunc_ap}
-Let $f:A\to B$ be a map. The following are equivalent:
-\begin{enumerate}
-\item The map $f$ is $(k+1)$-truncated.
-\item For each $x,y:A$, the map
-\begin{equation*}
-\apfunc{f} : (x=y)\to (f(x)=f(y))
-\end{equation*}
-is $k$-truncated. 
-\end{enumerate}
-\end{thm}
-
-\begin{proof}
-First we show that for any $s,t:\fib{f}{b}$ there is an equivalence
-\begin{equation*}
-\eqv{(s=t)}{\fib{\apfunc{f}}{\ct{\proj 2(s)}{\proj 2(t)^{-1}}}}
-\end{equation*}
-We do this by $\Sigma$-induction on $s$ and $t$, and then we calculate using \cref{ex:trans_ap} and basic manipulations of identifications that
-\begin{align*}
-(\pairr{x,p}=\pairr{y,q}) & \eqvsym \sm{r:x=y} \mathsf{tr}_{f(\blank)=b}(r,p)=q \\
-& \eqvsym \sm{r:x=y} \ct{\ap{f}{r}^{-1}}{p}=q \\
-& \eqvsym \sm{r:x=y} \ap{f}{r}=\ct{p}{q^{-1}} \\
-& \jdeq \fib{\apfunc{f}}{\ct{p}{q^{-1}}}.
-\end{align*}
-By these equivalences, it follows that if $\apfunc{f}$ is $k$-truncated, then for each $s,t:\fib{f}{b}$ the identity type $s=t$ is equivalent to a $k$-truncated type, and therefore we obtain by \cref{thm:ktype_eqv} that $f$ is $(k+1)$-truncated.
-
-For the converse, note that we have equivalences
-\begin{align*}
-\fib{\apfunc{f}}{p} & \eqvsym ((x,p)=(y,\refl{f(y)})).
-\end{align*}
-Therefore it follows that if $f$ is $(k+1)$-truncated, then the identity type $(x,p)=(y,\refl{f(y)})$ in $\fib{f}{f(y)}$ is $k$-truncated for any $p:f(x)=f(y)$, and therefore $\fib{\apfunc{f}}{p}$ is $k$-truncated by \cref{thm:ktype_eqv}. 
-\end{proof}
-
-\begin{thm}
-Let $f:\prd{x:A}B(x)\to C(x)$ be a fiberwise transformation. Then the following are equivalent:
-\begin{enumerate}
-\item For each $x:A$ the map $f(x)$ is $k$-truncated.
-\item The induced map 
-\begin{equation*}
-\total{f}:\Big(\sm{x:A}B(x)\Big)\to\Big(\sm{x:A}C(x)\Big)
-\end{equation*}
-is $k$-truncated.
-\end{enumerate}
-\end{thm}
-
-\begin{proof}
-This follows directly from \cref{lem:fib_total,thm:ktype_eqv}.
-\end{proof}
-
-\subsection{The universal property of the $k$-truncations}
-
-\subsection{The join extension and connectivity theorems}
-
-Some basic results about the join of maps include a generalization of Lemma 8.6.1 of
-\cite{hottbook}, which we call the join extension theorem (\autoref{thm:join-extension}), and a closely
-related theorem which we call the join connectivity theorem (\autoref{thm:join-connectivity}).
-The idea of the join connectivity theorem came from Proposition 8.15 in 
-Rezk's notes on homotopy toposes \cite{Rezk2010toposes}.
-We use the join connectivity theorem in 
-\autoref{thm:joinconstruction-connectivity} to conclude that the connectivity 
-of the approximations of the image inclusion increases.
-In this sense, our approximating sequence of the image is very nice:
-after $n$ steps of the approximation, only stuff of homotopy level higher than
-$n$ is added.
-
-Lemma 8.6.1 of \cite{hottbook} states that if $f:A\to B$ is an $l$-connected map,
-and if $P:B\to\UU$ is a family of $(k+l+2)$-truncated types,
-then precomposing by $f$ gives an $k$-truncated map of type
-\begin{equation*}
-\Big(\prd{b:B}P(b)\Big)\to\Big(\prd{a:A}P(f(a))\Big).
-\end{equation*}
-The general join extension theorem states that if $f:A\to B$ is an $M$-connected
-map for some type $M$, and $P:B\to\UU$ is a family of $(\join{M}{N})$-local 
-types, then the mentioned precomposition is an $N$-local map 
-(we recall the terminology shortly). 
-Note that, if one takes spheres $\Sn^l$ and $\Sn^k$ for $M$ and $N$, 
-one retrieves Lemma 8.6.1 of \cite{hottbook} as a simple corollary.
-
-We conclude this section with \autoref{thm:joinconstruction-connectivity},
-asserting that $f^{\ast n}$ factors through an $(n-2)$-connected map to
-$\im(f)$, for each $n:\N$.
-
-\begin{defn}\label{defn:local}
-For a given type $M$, a type $A$ is said to be \define{$M$-local} if the map
-\begin{equation*}
-\lam{a}{m}a : A \to (M \to A)  
-\end{equation*}
-is an equivalence.
-\end{defn}
-
-In other words, the type $A$ is $M$-local if each $f:M\to A$ has a unique extension along the
-map $M\to\unit$, as indicated in the diagram
-\begin{equation*}
-\begin{tikzcd}
-M \arrow[r,"f"] \arrow[d] & A \\
-\unit. \arrow[ur,densely dotted]
-\end{tikzcd}
-\end{equation*}
-Note that being $M$-local in the above sense is a proposition, so that the
-type of all $M$-local types in $\UU$ is a subuniverse of $\UU$%
-\footnote{When $\UU$ is assumed to be closed under recursive higher inductive
-types, there exists an operation $\modal_M : \UU\to\UU$, 
-which maps a type $A$ to the universal $M$-local type $\modal_M(A)$
-with a map of type $A\to\modal_M(A)$. This operation is called 
-\define{localization at $M$}, and it is a modality. 
-This is just a special case of localization. There is a more general
-notion of localization at a family of maps, see%
-~\cite{RijkeShulmanSpitters}, for which the localization operation
-is a reflective subuniverse, but \emph{not generally} a modality.
-The survey article \cite{RijkeShulmanSpitters} contains much
-more information about local types and the operation of localization.%
-}. 
-Recall that a type is $\sphere{n+1}$-local precisely when it is $k$-truncated,
-for each $k\geq -2$ (taking the $(-1)$-sphere to be the empty type).
-
-Dually, a type $A$ is said to be \define{$M$-connected} if every $M$-local
-type is $A$-local. That is, if for every $M$-local type $B$, the map
-\begin{equation*}
-\lam{b}{a}{b} : B \to (A \to B)
-\end{equation*}
-is an equivalence. A map is said to be $M$-connected if its fibers are $M$-connected.
-Thus in particular, $M$ itself is $M$-connected, and the unit type $\unit$ is $M$-connected for every $M$. 
-Usually, a type $A$ is said to be $M$-connected if its localization
-$\modal_M(A)$ is contractible. 
-Since we have not assumed that the universe is closed under a general class of recursive higher inductive types, we cannot simply assume that the operation $\modal_M:\UU\to\UU$ of localizing at $M$ is available. For a detailed discussion on localization, see \cite{RijkeShulmanSpitters}.
-
-In the present article, we focus on the interaction
-of the join operation with the notions of being local and of connectedness.
-
-\begin{defn}
-Let $M$ be a type. We say that a type $X$ has the \define{$M$-extension property}
-with respect to a map $F:A\to B$, if the map
-\begin{equation*}
-\lam{g}{a} g(F(a)) : (B\to X)\to (A\to X)
-\end{equation*}
-is $M$-local. In the case $M\jdeq\unit$, we say that $X$ is $F$-local.
-\end{defn}
-
-\begin{lem}\label{lem:equivalent-extension-problems}
-For any three types $A$, $A'$ and $B$, the type $B$ is $(\join{A}{A'})$-local
-if and only if for any any $f:A\to B$, the type
-\begin{equation*}
-\sm{b:B}\prd{a:A}f(a)=b
-\end{equation*}
-is $A'$-local.
-\end{lem}
-
-\begin{proof}
-To give $f:A\to B$ and $(f',H):A'\to\sm{b:B}\prd{a:A}f(a)=b$ is equivalent to giving a map $g:\join{A}{A'}\to B$. Concretely, the equivalence is given by substituting in $g:\join{A}{A'}\to B$ the constructors of the join, to obtain $\pairr{g\circ\inl,g\circ\inr,\apfunc{g}\circ\glue}$. 
-
-Now observe that the fiber of precomposing with the unique map $!_{\join{A}{A'}} : \join{A}{A'}\to\unit$ at $g : \join{A}{A'}\to B$, is equivalent to
-\begin{equation*}
-\sm{b:B}\prd{t:\join{A}{A'}}g(t)=b.
-\end{equation*}
-Similarly, the fiber of precomposing with the unique map $!_{A'} : A'\to\unit$ at $\pairr{g\circ\inr,\apfunc{g}\circ\glue} : A'\to\sm{b:B}\prd{a:A}f(a)=b$ is equivalent to
-\begin{equation*}
-\sm{b:B}{h:\prd{a:A}g(\inl(a))=b}\prd{a':A'}\pairr{g(\inr(a')),\apfunc{g}(\glue(a,a'))}=\pairr{b,h}.
-\end{equation*}
-By the universal property of the join, these types are equivalent.
-\end{proof}
-
-\begin{lem}\label{lem:join-local}
-Suppose $A$ is an $M$-connected type, and that $B$ is an $(\join{M}{N})$-local type. Then $B$ is $(\join{A}{N})$-local.
-\end{lem}
-
-\begin{proof}
-Let $B$ be a $(\join{M}{N})$-local type. Our goal of showing that $B$ is
-$(\join{A}{N})$-local is equivalent to showing that for any $f:N\to B$, 
-the type 
-\begin{equation*}
-\sm{b:B}\prd{a:A}f(a)=b
-\end{equation*}
-is $A$-local. 
-Since $B$ is assumed to be $(\join{M}{N})$-local, we know that this type is 
-$M$-local. Since $A$ is $M$-connected, this type is also $A$-local.
-\end{proof}
-
-\begin{lem}\label{lem:N-extension-simple}
-Let $A$ be $M$-connected and let $B$ be $(\join{M}{N})$-local. Then the map
-\begin{equation*}
-\lam{b}{a}b:B\to B^A
-\end{equation*}
-is $N$-local. 
-\end{lem}
-
-\begin{proof}
-The fiber of $\lam{b}{a}b$ at a function $f:A\to B$ is equivalent to the type $\sm{b:B}\prd{a:A}f(a)=b$. Therefore, it suffices to show that this type is $N$-local. By \autoref{lem:equivalent-extension-problems}, it is equivalent to show that $B$ is $(\join{A}{N})$-local. This is solved in \autoref{lem:join-local}.
-\end{proof}
-
-\begin{thm}[Join extension theorem]\label{thm:join-extension}
-Suppose $f:X\to Y$ is $M$-connected, and let $P:Y\to\UU$ be a family of
-$(\join{M}{N})$-local types for some type $N$. Then precomposition by $f$, i.e.
-\begin{equation*}
-\lam{s}s\circ f : \Big(\prd{y:Y}P(y)\Big)\to\Big(\prd{x:X}P(f(x))\Big),
-\end{equation*}
-is an $N$-local map.
-\end{thm}
-
-\begin{proof}
-Let $g:\prd{x:X}P(f(x))$. Then we have the equivalences
-\begin{align*}
-\fib{(\blank\circ f)}{g} 
-& \eqvsym \sm{s:\prd{y:Y}P(y)}\prd{x:X}s(f(x))=g(x) \\
-& \eqvsym \sm{s:\prd{y:Y}P(y)}\prd{y:Y}{(x,p):\fib{f}{y}} s(y)= \tr({p},{g(x)}) \\
-& \eqvsym \prd{y:Y}\sm{z:P(y)}\prd{(x,p):\fib{f}{y}} \tr({p},{g(x)})=z \\
-& \eqvsym \prd{y:Y}\fib{\lam{z}{(x,p)}z}{\lam{(x,p)}\tr({p},{g(x)})}.
-\end{align*}
-Therefore, it suffices to show for every $y:Y$, that $P(y)$ has the $N$-extension property with respect to the unique map of type $\fib{f}{y}\to\unit$. This is a special case of \autoref{lem:N-extension-simple}.
-\end{proof}
-
-\begin{thm}\label{thm:simple-join}
-Suppose $X$ is an $M$-connected type and $Y$ is an $N$-connected type. Then $\join{X}{Y}$ is an $(\join{M}{N})$-connected type.
-\end{thm}
-
-\begin{proof}
-It suffices to show that any $(\join{M}{N})$-local type is $(\join{X}{Y})$-local.
-Let $Z$ be an $(\join{M}{N})$-local type.
-Since $Z$ is assumed to be $(\join{M}{N})$-local, it follows by \autoref{lem:join-local} that $Z$ is $(\join{X}{N})$-local. By symmetry of the join, it also follows that $Z$ is $(\join{X}{Y})$-local.
-\end{proof}
-
-\begin{thm}[Join connectivity theorem]\label{thm:join-connectivity}
-Consider an $M$-connected map $f:A\to X$ and an $N$-connected map $g:B\to X$. Then $\join{f}{g}$ is $(\join{M}{N})$-connected.
-\end{thm}
-
-\begin{proof}
-This follows from \autoref{thm:simple-join} and \cref{thm:join-fiber}.
-\end{proof}
-
-\begin{thm}\label{thm:joinconstruction-connectivity}
-Consider the factorization
-\begin{equation*}
-\begin{tikzcd}
-A_n \arrow[dr,swap,"f^{\ast n}"] \arrow[r,"q_n"] & \im(f) \arrow[d] \\
-& X
-\end{tikzcd}
-\end{equation*}
-of $f^{\ast n}$ through the image $\im(f)$. 
-Then the map $q_n$ is $(n-2)$-connected, for each $n:\N$.
-\end{thm}
-
-\begin{proof}
-We first show the assertion that, given a commuting diagram of the form
-\begin{equation*}
-\begin{tikzcd}
-A \arrow[r,"q"] \arrow[dr,swap,"f"] & Y \arrow[d,"m"] & A' \arrow[l,swap,"{q'}"] \arrow[dl,"{f'}"] \\
-& X
-\end{tikzcd}
-\end{equation*}
-in which $m$ is an embedding, then $\join{f}{f'}=\join{(m\circ q)}{(m\circ q')}=m\circ (\join{q}{q'})$.
-In other words, postcomposition with embeddings distributes over 
-the join operation.
-
-Note that, since $m$ is assumed to be an embedding, we have an equivalence of
-type $\eqv{f(a)=f'(a)}{q(a)=q'(a)}$, for every $a:A$. Hence the pullback of
-$f$ and $f'$ is equivalent to the pullback of $q$ along $q'$. Consequently, the
-two pushouts
-\begin{equation*}
-\begin{tikzcd}
-A\times_X A' \arrow[r,"\pi_2"] \arrow[d,swap,"\pi_1"] & A' \arrow[d] \\
-A \arrow[r] & \join[X]{A}{A'}
-\end{tikzcd}
-\qquad\text{and}\qquad
-\begin{tikzcd}
-A\times_Y A' \arrow[r,"\pi_2"] \arrow[d,swap,"\pi_1"] & A' \arrow[d] \\
-A \arrow[r] & \join[Y]{A}{A'}
-\end{tikzcd}
-\end{equation*}
-are equivalent. Hence the claim follows.
-
-As a corollary, we get that $q_n=q_f^{\ast n}$. Note that $q_f$ is surjective,
-in the sense that $q_f$ is $\bool$-connected, where $\bool$ is the type of booleans%
-\footnote{Recall that the $\bool$-local types are precisely the propositions.}.
-Hence it follows that $q_n$ is $\bool^{\ast n}$-connected. 
-
-Now recall that the $n$-th join power of $\bool$ is the $(n-1)$-sphere $\Sn^{n-1}$, and that
-a type is $(\Sn^{n-1})$-connected if and only if it is $(n-2)$-connected.
-\end{proof}
-
-\subsection{The construction of the $k$-truncation}\label{sec:truncation}
-
-In this section we will construct for any $k:\N$, the $k$-truncation on any univalent universe that contains
-a natural numbers object and is closed under graph quotients.
-We will do this via the modified join construction of \autoref{thm:modified-join}.
-Recall that a $(-2)$-truncated type is simply a contractible type, and that
-for $k\geq -2$ an $(n+1)$-truncated type is a type of which the identity types
-are $k$-truncated. The $(-2)$-truncation is easy to construct: it sends
-every type to the unit type $\unit$. Thus, we shall proceed by induction
-on the integers greater or equal to $-2$, and assume that the universe admits
-an $k$-truncation operation $\trunc{k}{\blank}:\UU\to\UU$ for a given $n$.
-
-A suggestive way to think of the type $\trunc{k+1}{A}$ is as the quotient of $A$ modulo the
-`$(n+1)$-equivalence relation' given by $\trunc{k}{a=b}$. 
-Indeed, by Theorem 7.3.12 of \cite{hottbook} we have that the canonical map
-\begin{equation*}
-\trunc{k}{a=b}\to(\tproj{n+1}{a}=\tproj{n+1}{b})
-\end{equation*}
-is an equivalence, and the unit $\tproj{k+1}{\blank}:A\to \trunc{k+1}{A}$ is
-a surjective map (it is in fact $(k+1)$-connected). 
-
-\begin{thm}\label{thm:truncation}
-In Martin-L\"of type theory with a univalent universe $\UU$ that is closed under
-graph quotients we can define, for every $k\geq -2$, an $k$-truncation operation
-\begin{equation*}
-\trunc{k}{\blank} : \UU\to\UU
-\end{equation*}
-and for every $A:\UU$ a map
-\begin{equation*}
-\tproj{k}{\blank}:A\to\trunc{k}{A},
-\end{equation*}
-such that for each $A:\UU$ the type $\trunc{k}{A}$ is an $k$-truncated type satisfying the (dependent) universal property of $k$-truncation, that for every $P:\trunc{k}{A}\to\UU$ such that every $P(x)$ is $k$-truncated,
-the canonical map
-\begin{equation*}
-\blank\circ\tproj{k}{\blank} : \Big(\prd{x:\trunc{k}{A}}P(x)\Big)\to\Big(\prd{a:A}P(\tproj{k}{a})\Big)
-\end{equation*}
-is an equivalence.
-\end{thm}
-
-\begin{proof}[Construction]
-As announced, we define the $k$-truncation operation by induction on $k\geq-2$,
-with the trivial operation as the base case. Let $k:\N$ and suppose we have
-a $k$-truncation operation as described in the statement of the theorem.
-
-We first define the reflexive relation $\mathscr{Y}_k(A) : A \to A \to \UU$ by
-\begin{equation*}
-\mathscr{Y}_k(A)(a,b) \defeq \trunc{k}{a=b}.
-\end{equation*}
-Note that the codomain $(A\to\UU)$ of $\mathscr{Y}_k(A)$ is locally small since it is the exponent of
-the locally small type $\UU$ by a small type $A$. Hence we we obtain the image
-of $\mathscr{Y}_k(A)$ from the modified join construction of \autoref{thm:modified-join}.
-This allows us to define
-\begin{align*}
-\trunc{k+1}{A} & \defeq \im'(\mathscr{Y}_k(A)) \\
-\tproj{k+1}{\blank} & \defeq q'_{\mathscr{Y}_k(A)}
-\end{align*}
-For notational reasons, we shall just write $\im(\mathscr{Y}_k(A))$ for $\im'(\mathscr{Y}_k(A))$. 
-
-We will show that $\trunc{k+1}{A}$ is indeed $(k+1)$-truncated in \autoref{cor:truncated} of \autoref{lem:modal_contr} below. Once this fact is established, it remains to verify the dependent universal property of $(k+1)$-truncation.
-By the join extension theorem \autoref{thm:join-extension} (using $N\defeq \emptyt$), it suffices to show that the map $\tproj{k+1}{\blank}:A\to\trunc{k+1}{A}$ is $\sphere{k+2}$-connected. Note that $\tproj{k+1}{\blank}$ is surjective, so the claim that $\tproj{k+1}{\blank}$ is $\sphere{k+2}$-connected follows from \autoref{lem:ap_connectivity}, where we show that for any surjective map $f:A\to X$, if the action on paths is $M$-connected for any two points in $A$, then $f$ is $\susp(M)$-connected. To apply this lemma, we also need to know that $\tproj{k}{\blank}:A\to\trunc{k}{A}$ is $\sphere{k+1}$-connected. This is shown in Corollary 7.5.8 of \cite{hottbook}.
-\end{proof}
-
-Before we prove that $\im(\mathscr{Y}_k(A))$ is $(k+1)$-truncated, we prove the stronger claim that $\im(\mathscr{Y}_k(A))$ has the desired identity types:
-
-\begin{lem}\label{lem:modal_contr}
-For every $a,b:A$, we have an equivalence
-\begin{equation*}
-\eqv{\trunc{k}{a=b}}{(\mathscr{Y}_k(A)(a)=\mathscr{Y}_k(A)(b))}.
-\end{equation*}
-\end{lem}
-
-\begin{proof}
-To characterize the identity type of $\im(\mathscr{Y}_k(A))$ we will apply
-the encode-decode method of \cite{LicataShulman}. Thus, we need to provide for every $b:A$ a type 
-family $Q_b:\im(\mathscr{Y}_k(A))\to\UU$ with a point $q_b:Q_b(\mathscr{Y}_k(A)(b))$,
-such that the total space
-\begin{equation*}
-\sm{P:\im(\mathscr{Y}_k(A))} Q_b(P)
-\end{equation*}
-is contractible. Moreover, it must be the case that $\eqv{Q_b(\mathscr{Y}_k(A)(a))}{\trunc{k}{a=b}}$ for any $a:A$. 
-
-To construct $Q_b$, note that for any $b:A$, the image inclusion $i:\im(\mathscr{Y}_k(A))\to (A\to\UU)$ defines 
-a type family $Q_b:\im(\mathscr{Y}_k(A))\to\UU$ by $Q_b(P)\defeq P(b)$. With this definition for $Q_b$ it follows that $Q_b(\mathscr{Y}_k(A)(a))\jdeq\mathscr{Y}_k(A)(a,b)\jdeq\trunc{k}{a=b}$, as desired. Moreover, we have a reflexivity term $\tproj{n}{\refl{b}}$ in $\trunc{k}{b=b}$, so it remains to prove that the total space 
-\begin{equation*}
-\sm{P:\im(\mathscr{Y}_k(A))}P(b)
-\end{equation*}
-of $Q_b$ is contractible. For the center of contraction we take the pair
-$\pairr{\mathscr{Y}_k(A)(b),\tproj{k}{\refl{b}}}$.
-Now we need to construct a term of type
-\begin{equation*}
-\prd{P:\im(\mathscr{Y}_k(A))}{y:P(b)} \pairr{\mathscr{Y}_k(A)(b),\tproj{k}{\refl{b}}}=\pairr{P,y}.
-\end{equation*}
-Since $\mathscr{Y}_k(A)(b,a)\jdeq\trunc{k}{b=a}$, it is equivalent to construct a term of type
-\begin{equation*}
-\prd{P:\im(\mathscr{Y}_k(A))}{y:P(b)}\sm{\alpha:\prd{a:A} \eqv{\trunc{k}{b=a}}{P(a)}} \alpha_b(\tproj{k}{\refl{b}})=y.
-\end{equation*}
-Let $P:\im(\mathscr{Y}_k(A))$ and $y:P(b)$. Then $P(a)$ is $k$-truncated for any $a:A$. Therefore, to construct a map
-$\alpha(P,y)_a:\trunc{k}{b=a}\to P(a)$, it suffices to construct a map of type $(b=a)\to P(a)$. This may be done by
-path induction, using $y:P(b)$. Since it follows that $\alpha(P,y)_b(\tproj{k}{\refl{b}})=y$, it only remains to show that each $\alpha(P,y)_a$ is an equivalence.  
-
-Note that the type of those $P:\im(\mathscr{Y}_k(A))$ such that for all $y:P(b)$ and all $a:A$ the map $\alpha(P,y)_a$ is an equivalence, is a subtype of $\im(\mathscr{Y}_k(A))$, we may use the universal property of the image of $\mathscr{Y}_k(A)$: it suffices to lift
-\begin{equation*}
-\begin{tikzcd}
-& \sm{P:\im(\mathscr{Y}_k(A))}\prd{y:P(b)}{a:A}\isequiv(\alpha(P,y)_a) \arrow[d] \\
-A \arrow[ur,densely dotted] \arrow[r,swap,"\mathscr{Y}_k(A)"] & \im(\mathscr{Y}_k(A)).
-\end{tikzcd}
-\end{equation*}
-In other words, it suffices to show that 
-\begin{equation*}
-\prd{x:A}{y:\mathscr{Y}_k(A)(x,b)}{a:A}\isequiv(\alpha(\mathscr{Y}_k(A)(x),y)_a).
-\end{equation*}
-Thus, we want to show that for any $y:\trunc{k}{x=b}$, the map $\trunc{k}{a=b}\to\trunc{k}{x=b}$ constructed above is an equivalence.
-Since the fibers of this map are $k$-truncated, and $\iscontr(X)$ of an $k$-truncated type $X$ is always $k$-truncated, we may assume that $y$ is of the form $\tproj{k}{p}$ for $p:x=b$. 
-Now it is easy to see that our map of type $\trunc{k}{b=a}\to\trunc{k}{x=a}$ is the unique map which
-extends the path concatenation $\ct{p}{\blank}$, as indicated in the diagram
-\begin{equation*}
-\begin{tikzcd}[column sep=8em]
-(b=a) \arrow[r,"\ct{p}{\blank}"] \arrow[d] & (x=a) \arrow[d] \\
-\trunc{k}{b=a} \arrow[r,densely dotted,swap,"{\alpha(\mathscr{Y}_k(A)(x),y)_a}"] & \trunc{k}{x=a}.
-\end{tikzcd}
-\end{equation*}
-Since the top map is an equivalence, it follows that the map $\alpha(\mathscr{Y}_k(A)(x),y)_a$ is an equivalence.
-\end{proof}
-
-\begin{cor}\label{cor:truncated}
-The image $\im(\mathscr{Y}_k(A))$ is an $(k+1)$-truncated type. 
-\end{cor}
-
-Before we are able to show that for any surjective map $f:A\to X$, if the action on paths is $M$-connected for any two points in $A$, then $f$ is $\susp(M)$-connected, we show that a type is $\susp(M)$-connected precisely when its identity types are $M$-connected.
-
-\begin{lem}\label{lem:local_id}
-Let $M$ be a type. Then a type $X$ is $(\join{\bool}{M})$-local
-if and only if all of its identity types are $M$-local. 
-\end{lem}
-
-\begin{proof}
-The map
-\begin{equation*}
-\lam{p}{m}p : (x=y)\to (M\to (x=y))
-\end{equation*}
-is an equivalence if and only if the induced map on total spaces
-\begin{equation*}
-\lam{\pairr{x,y,p}}\pairr{x,y,\lam{m}p} : \Big(\sm{x,y:X}x=y\Big)\to\Big(\sm{x,y:X}M\to (x=y)\Big)
-\end{equation*}
-is an equivalence. 
-Since the map $\lam{x}\pairr{x,x,\refl{x}}:X\to\sm{x,y:X}x=y$ is an equivalence,
-the above map is an equivalence if and only if the map
-\begin{equation*}
-\lam{x}\pairr{x,x,\lam{m}\refl{x}} : X\to\Big(\sm{x,y:X}M\to (x=y)\Big)
-\end{equation*}
-is an equivalence. For every $x:X$, the triple $\pairr{x,x,\lam{m}\refl{x}}$
-induces a map $\susp(M)\to X$. By uniqueness of the universal property,
-it follows that this map is the constant map $\lam{m}x$.
-Thus we see that $\lam{x}\pairr{x,x,\lam{m}\refl{x}}$ is an equivalence if
-and only if the map
-\begin{equation*}
-\lam{x}{m}x : X \to (\susp(M)\to X)
-\end{equation*}
-is an equivalence. 
-\end{proof}
-
-\begin{lem}\label{lem:ap_connectivity}
-Suppose $f:A\to X$ is a surjective map, with the property that for every
-$a,b:A$, the map
-\begin{equation*}
-\mapfunc{f}(a,b):(a=b)\to (f(a)=f(b))
-\end{equation*}
-is $M$-connected. Then $f$ is $\susp(M)$-connected. 
-\end{lem}
-
-\begin{proof}
-We have to show that $\fib{f}{x}$ is $\susp(M)$-connected for each $x:X$. 
-Since this is a proposition, and we assume that $f$ is surjective, it
-is equivalent to show that $\fib{f}{f(a)}$ is $\susp(M)$-connected for each $a:A$. 
-Let $Y$ be a $\susp(M)$-local type. 
-For every $g:\fib{f}{f(a)}\to Y$ be a map we have the point $\theta(g)\defeq g(a,\refl{f(a)})$ in $Y$,
-so we obtain a map
-\begin{equation*}
-\theta : (\fib{f}{f(a)}\to Y)\to Y
-\end{equation*}
-It is clear that $\theta(\lam{\pairr{b,p}}y)=y$, so it remains to show that
-for every $g:\fib{f}{f(a)}\to Y$ we have $\lam{\pairr{b,p}}\theta(g)=g$.
-That is, we must show that
-\begin{equation*}
-\prd{b:A}{p:f(a)=f(b)} g(a,\refl{f(a)})=g(b,p).
-\end{equation*}
-Using the assumption that $Y$ is $\susp(M)$-connected, it follows from
-\autoref{lem:local_id} that the type $g(a,\refl{f(a)})=g(b,p)$ is $M$-connected,
-for every $b:A$ and $p:f(a)=f(b)$.
-Therefore it follows, since the map $\mapfunc{f}(a,b):(a=b)\to(f(a)=f(b))$ is connected, that our goal is equivalent to
-\begin{equation*}
-\prd{b:A}{p:a=b} g(a,\refl{f(a)})=g(b,\mapfunc{f}(a,b,p)).
-\end{equation*}
-This follows by path induction. 
-\end{proof}
+\section{The Rezk completion}
