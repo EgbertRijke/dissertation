@@ -553,7 +553,7 @@ The reflexive graph quotient of $SX$ is the suspension of $X$.
 
 \subsection{Fibrations of reflexive graphs}
 
-\begin{defn}
+\begin{defn}\label{defn:graph_fibration}
 A morphism $f:\mathsf{rGph}(\mathcal{A},\mathcal{B})$ is said to be a \define{left fibration} of reflexive graphs if it is right orthogonal to the morphism $0:\mathsf{rGph}(\unit,\mathcal{I})$ in the sense that the commuting square
 \begin{equation*}
 \begin{tikzcd}
@@ -689,7 +689,7 @@ are pullback squares.
 Straightforward.
 \end{proof}
 
-\begin{prp}
+\begin{prp}\label{thm:fibration_pullback}
 Consider a pullback square\marginnote{Should be a general lemma about orthogonality}
 \begin{equation*}
 \begin{tikzcd}
@@ -713,7 +713,7 @@ Consider the commuting cube
 Note $\mathsf{rGph}(\mathcal{X},\blank)$ preserves pullbacks for any reflexive graph $\mathcal{X}$. Therefore it follows that the top and bottom squares are pullback squares. Moreover, the square on the front right is a pullback square by the assumption that $f$ is right orthogonal to $h:\mathsf{rGph}(\mathcal{Y},\mathcal{X})$. Now it follows by the pasting property of pullbacks that the square on the back left is a pullback square. In other words, $f'$ is right orthogonal to $h$. 
 \end{proof}
 
-\begin{prp}
+\begin{prp}\label{prp:fibration_discrete}
 For any map $f:X\to Y$, the morphism $\Delta f : \Delta X \to \Delta Y$ is a fibration.
 \end{prp}
 
@@ -728,7 +728,11 @@ The commuting square
 is a pullback square, since both horizontal maps are equivalences.
 \end{proof}
 
-It follows that any pullback of a morphism between discrete reflexive graphs is a fibration. We will see in \cref{thm:etale_fibration}\marginnote{This theorem is in a much later chapter!} that a morphism of reflexive graphs is a fibration if and only if the square
+\begin{cor}\label{cor:fibration_pullback}
+Any pullback of a morphism between discrete reflexive graphs is a fibration.
+\end{cor}
+
+We will see in \cref{thm:etale_fibration}\marginnote{This theorem is in a much later chapter!} that a morphism of reflexive graphs is a fibration if and only if the square
 \begin{equation*}
 \begin{tikzcd}
 \mathcal{A} \arrow[d,swap,"f"] \arrow[r] & \Delta(\rcoeq(\mathcal{A})) \arrow[d,"\Delta(\rcoeq(f))"] \\
@@ -794,7 +798,7 @@ of reflexive graphs. Then the following are equivalent:
 \mathsf{rcoeq}(\mathcal{A}) \arrow[r] & X 
 \end{tikzcd}
 \end{equation*}
-of types is a pullback square.\marginnote{To prove}
+of types is a pullback square.\marginnote{Write up proof}
 \end{enumerate}
 \end{thm}
 

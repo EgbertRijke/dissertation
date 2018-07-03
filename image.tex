@@ -1,6 +1,6 @@
 \chapter{Homotopy images}
 
-\marginnote{Cite Floris and Nicolai}We have observed in \cref{eg:rcoeq} that the reflexive coequalier of the pre-kernel of a map $f:A\to X$ is the fiberwise join $\join[X]{A}{A}$, i.e.~we have a reflexive coequalizer diagram
+\marginnote{Cite Floris and Nicolai}\marginnote{Surjectivity}We have observed in \cref{eg:rcoeq} that the reflexive coequalier of the pre-kernel of a map $f:A\to X$ is the fiberwise join $\join[X]{A}{A}$, i.e.~we have a reflexive coequalizer diagram
 \begin{equation*}
 \begin{tikzcd}
 A\times_X A \arrow[r,yshift=1ex] \arrow[r,yshift=-1ex] & A \arrow[l] \arrow[r] & \join[X]{A}{A}.
@@ -20,9 +20,7 @@ A \arrow[r] & \join[X]{A}{A} \arrow[r] & \join[X]{A}{(\join[X]{A}{A})} \arrow[r]
 \end{equation*}
 and its sequential colimit. However, we \emph{can} analyze this type sequence and its colimit in homotopy type theory, since it is constructed entirely in terms of known operations. We will show in \cref{thm:image} that for any map $f:A\to X$, the infinite fiberwise join-power $\join[X]{\cdots}{\join[X]{A}{\join[X]{A}{A}}}$ is the image of $f$. We conclude that the image of a map always exists in univalent type theory with homotopy pushouts. This construction of the image of $f$ is called the join construction, and first appeared in \cite{joinconstruction}. Moreover, we show in \cref{thm:image_small} that the image of an essentially small type mapping into a locally small type is again essentially small. In particular, the image of a map from a small type into the universe is essentially small. This corollary should be viewed as a type theoretic replacement axiom. This fact has the important consequence that any connected component of the universe is essentially small.
 
-The join construction leads to new constructions of set quotients and of Rezk completions. Set-quotients have been first constructed in \cite{UniMath2015,UniMath} using propositional resizing, and as higher inductive types in \cite{hottbook} in the case where $A$ is assumed to be a set. The Rezk completion of a pre-category is due to \cite{AhrensKapulkinShulman}, and is also explained in section 9.9 of \cite{hottbook}. In \cref{sec:set-quotient} we elaborate on set quotients, with the aim of generalizing the construction in \cref{chap:giraud} to quotients of type-valued equivalence relations.\marginnote{Cite Sets in HoTT}
-
-In the final section of this chapter we show that the $k$-truncation can be constructed, for any $k\geq -2$. This result is established in \cref{thm:truncation}. In our construction we use a generalization of the join extension and connectivity theorems, stated in \cref{thm:join-extension,thm:join-connectivity}.
+The join construction leads to new constructions of set quotients and of Rezk completions. Set-quotients have been first constructed in \cite{UniMath2015,UniMath} using propositional resizing, and as higher inductive types in \cite{hottbook} in the case where $A$ is assumed to be a set. The Rezk completion of a pre-category is due to \cite{AhrensKapulkinShulman}, and is also explained in section 9.9 of \cite{hottbook}. In \cref{sec:set-quotients} we elaborate on set quotients, with the aim of generalizing the construction in \cref{chap:giraud} to quotients of type-valued equivalence relations.\marginnote{Cite Sets in HoTT}
 
 \section{The join construction}
 
@@ -54,7 +52,7 @@ From \cref{cor:fib_triangle} we obtain that the type $\mathrm{hom}_X(f,m)$ is eq
 \end{equation*}
 so it suffices to show that this is a proposition. 
 Recall from \cref{thm:prop_emb} that a map is an embedding if and only if its fibers are propositions.
-Thus we see that the type $\prd{x:X}\fib{f}{x}\to\fib{m}{x}$ is a product of propositions, so it is a proposition by \cref{thm:trunc_pi}.
+Thus we see that the type $\prd{x:X}\fib{f}{x}\to\fib{m}{x}$ is a product of propositions, so it is a proposition by \cref{thm:prop_pi}.
 \end{proof}
 
 \begin{cor}\label{cor:image_up}
@@ -95,7 +93,7 @@ given by $h\mapsto h\circ \inr$ is an equivalence, for any type $B$.
 \end{lem}
 
 \begin{proof}
-Since both types are propositions by \cref{thm:trunc_pi} it suffices to construct a map
+Since both types are propositions by \cref{thm:prop_pi} it suffices to construct a map
 \begin{equation*}
 (B\to P)\to (\join{A}{B}\to P).
 \end{equation*}

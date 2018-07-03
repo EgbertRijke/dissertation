@@ -46,7 +46,7 @@ A reflective subuniverse $L$ is said to be \define{$\Sigma$-closed} if $\sm{x:X}
 \end{defn}
 
 Note that unlike \cref{defn:highermod,defn:modunique}, in \cref{defn:ssrs} the notion of ``modal type'' is part of the data.
-However, we will show in \cref{lem:subuniv-modal} that $\ismodal(A)$ if and only if $\modalunit[A]$ is an equivalence.
+However, we will show in \cref{thm:subuniv-modal} that $\ismodal(A)$ if and only if $\modalunit[A]$ is an equivalence.
 
 \begin{defn}\label{defn:sofs}
 An \define{orthogonal factorization system} consists of
@@ -91,9 +91,9 @@ We now consider a few examples.
 Since we will eventually prove all the definitions to be equivalent, we can use any one of them to describe any particular example.
 
 \begin{eg}
-  The prime example is the \textbf{$n$-truncation modality} $\truncf n$ as studied in~\cite[Chapter 7]{TheBook}.
+  The prime example is the \textbf{$n$-truncation modality} $\truncf n$ as studied in~\cite[Chapter 7]{hottbook}.
   This can be given as a higher modality, using its induction principle and the fact that $\trunc n A$ is an $n$-type and the identity types of an $n$-type are again $n$-types (indeed, $(n-1)$-types).
-  The corresponding stable orthogonal factorization system, consisting of $n$-connected and $n$-truncated maps, is also constructed in~\cite[Chapter 7]{TheBook}; our construction in \cref{thm:sofs_from_ssrs} will be a generalization of this.
+  The corresponding stable orthogonal factorization system, consisting of $n$-connected and $n$-truncated maps, is also constructed in~\cite[Chapter 7]{hottbook}; our construction in \cref{thm:sofs_from_ssrs} will be a generalization of this.
 \end{eg}
 
 \begin{eg}\label{eg:open}
@@ -172,7 +172,7 @@ Before \autoref{thm:sofs_from_ssrs} we take the opportunity to develop a bit mor
 Of these equivalences, the most surprising is that a stable factorization system is uniquely determined by its underlying reflective subuniverse of types.
 This is false for stable factorization systems on arbitrary categories; the reason it holds here is that we are talking \emph{in type theory} about factorization systems \emph{on the category of types}.
 An analogous fact is true in classical set-based mathematics for stable factorization systems on the category of sets (although in that case there are much fewer interesting examples).
-We will also see in \cref{sec:semantics} that when type theory is interpreted in a higher category, the data of a reflective subuniverse or modality has to be interpreted ``fiberwise'', giving a richer structure than a single reflective subcategory.
+We \cite{RijkeShulmanSpitters} we also observe that when type theory is interpreted in a higher category, the data of a reflective subuniverse or modality has to be interpreted ``fiberwise'', giving a richer structure than a single reflective subcategory.
 
 
 \subsection{Higher modalities}
@@ -398,7 +398,7 @@ show that left maps and right maps are closed under composition.
 
 
 
-\subsubsection{$\Sigma$-closed reflective subuniverses}
+\subsubsection{\texorpdfstring{$\Sigma$}{Σ}-closed reflective subuniverses}
 \label{sec:sigma-closed}
 
 \begin{defn}\label{defn:connected}
@@ -424,7 +424,7 @@ Note that a type $X$ is modal or $\modal$-connected just when the map $X\to\unit
   We will come back to this relationship in \cref{eg:artin}.
 \end{eg}
 
-The following theorem combines Lemma 7.5.7 and Theorem 7.7.4 of \cite{TheBook}.
+The following theorem combines Lemma 7.5.7 and Theorem 7.7.4 of \cite{hottbook}.
 
 \begin{thm}\label{thm:ssrs-characterize}
 Given a reflective universe with modal operator $\modal$,
@@ -1171,7 +1171,7 @@ We can construct them by nullifying any family of propositions (\autoref{thm:pro
   yielding~\ref{item:mu6}.
 
   For~\ref{item:mu4}, two-thirds of the 2-out-of-3 property holds for any modality, so it remains to show that for $f:A\to B$ and $g:B\to C$, if $g\circ f$ and $g$ are $\modal$-connected, so is $f$.
-  However, the unstable octahedral axiom~(\cite[ex4.4]{TheBook}) implies that for any $b:B$, the fiber $\fib f b$ is equivalent to the fiber of the induced map $\fib{g\circ f}{gb} \to \fib{g}{gb}$.
+  However, the unstable octahedral axiom~(\cite[ex4.4]{hottbook}) implies that for any $b:B$, the fiber $\fib f b$ is equivalent to the fiber of the induced map $\fib{g\circ f}{gb} \to \fib{g}{gb}$.
   These two types are $\modal$-connected since $g\circ f$ and $g$ are; thus~\ref{item:mu1a}$\Rightarrow$\ref{item:mu4}.
   Conversely,~\ref{item:mu1a} is clearly a special case of~\ref{item:mu4}.
 
@@ -1320,7 +1320,7 @@ But in fact, if we allow ourselves to assume rather than conclude lex-ness, then
 \begin{proof}
   We will prove that under the given hypotheses, if $n\ge 0$ then $\modal$ also has a presentation $D:C\to \UU$ for which each $D(c)$ is an $(n-1)$-type.
   By induction, this will prove the theorem.
-  The argument is a modification of~\cite[Lemma 7.5.11]{TheBook}.
+  The argument is a modification of~\cite[Lemma 7.5.11]{hottbook}.
 
   Let $C\defeq A + \sm{a:A} B(a)\times B(a)$, and define
   \begin{align*}
@@ -1390,7 +1390,7 @@ Moreover, \emph{every} lex modality is ``almost topological'' in the following s
 Thus, if an accessible lex modality is not topological, it must be generated by a family including $n$-types for arbitrarily high $n$ (or else at least one type that is not an $n$-type for any finite $n$), and moreover its failure to be topological will only be visible to types that are not $n$-types for any finite $n$.
 This means that it is rather hard to give examples of lex modalities that are not topological.
 
-Semantically, it is known that not all subtoposes of $(\infty,1)$-toposes are topological, so by the results of \cref{sec:semantics} non-topological lex modalities do exist in some models.
+Semantically, it is known that not all subtoposes of $(\infty,1)$-toposes are topological, so by the results of \cite{RijkeShulmanSpitters} non-topological lex modalities do exist in some models.
 The basic example is the \emph{hypercompletion}.
 We do not know how to construct hypercompletion inside type theory, but we can show that if it exists then it is lex, and not topological unless it is trivial.
 We begin with definitions.
@@ -1456,7 +1456,7 @@ But in type theory, the best we can do at present is show that \emph{if} such a 
   \begin{enumerate}
   \item $\modal$ is a lex modality.\label{item:hc1}
   \item The $\modal$-connected maps are precisely the $\infty$-connected ones.\label{item:hc2}
-  \item $\modal$ is topological if and only if every type is $\modal$-modal, i.e.\ every type is $\UU$-$\infty$-truncated, i.e.\ ``Whitehead's principle''~\cite[\S8.6]{TheBook} holds for $\UU$.\label{item:hc3}
+  \item $\modal$ is topological if and only if every type is $\modal$-modal, i.e.\ every type is $\UU$-$\infty$-truncated, i.e.\ ``Whitehead's principle''~\cite[\S 8.6]{hottbook} holds for $\UU$.\label{item:hc3}
   \end{enumerate}
   If such a modality exists, we call it \textbf{hypercompletion}.
 \end{thm}
@@ -1513,7 +1513,7 @@ More generally, we have the following analogue of~\cite[Proposition 6.5.2.16]{Lu
   Thus, the subtopos model inherits higher inductive types as well.
 
   In principle, this sort of construction could reduce the problem of modeling homotopy type theory with strict univalent universes in all $(\infty,1)$-toposes to the problem of modeling it in presheaf $(\infty,1)$-toposes, since every $(\infty,1)$-topos is (by one definition) an accessible left exact localization of a presheaf $(\infty,1)$-topos.
-  However, in order for this to work we need strict univalent universes that are strictly closed under the modality, and in general we do not know how to ensure this semantically; see \cref{rmk:universes}.
+  However, in order for this to work we need strict univalent universes that are strictly closed under the modality, and in general we do not know how to ensure this semantically; see \cite[Remark A.29]{RijkeShulmanSpitters}.
   A similar construction of a subtopos model, but using a strict monad, can be found in~\cite{Stacks,Coquand:stack}.
 \end{rmk}
 
@@ -1525,8 +1525,8 @@ Let $\rsu[\UU]$ denote the type of reflective subuniverses of a universe $\UU$, 
 Each of these is partially ordered by inclusion, i.e.\ $\modal \le \lozenge$ means that every $\modal$-modal type is $\lozenge$-modal, and we have full inclusions
 \[
 \begin{tikzcd}
-  \tpl \ar[r] \ar[dr] & \acclex \ar[r] \ar[d] & \accmdl \ar[r] \ar[d] & \accrsu \ar[d] \\
-  & \lex \ar[r] & \mdl \ar[r] & \rsu.
+  {\tpl} \arrow[r] \arrow[dr] & {\acclex} \arrow[r] \arrow[d] & {\accmdl} \arrow[r] \arrow[d] & {\accrsu} \arrow[d] \\
+  & {\lex} \arrow[r] & {\mdl} \arrow[r] & {\rsu}.
 \end{tikzcd}
 \]
 The poset $\rsu$ has both a bottom element (the zero modality, for which only $\unit$ is modal) and a top element (the trivial modality, for which all types are modal), which both happen to lie in $\tpl$ and hence all of these other posets.
@@ -1547,7 +1547,7 @@ We do not have a complete answer, but there are some things we can say.
   The second follows since $\Sigma$-closure of such universes is inherited by intersections.
 
   The other two statements are instances of a general fact about Galois connections.
-  Suppose $G: \mathcal{B}^{\mathrm{op}} \leftrightarrows \mathcal{A} : H$ is a contravariant adjunction between posets, i.e.\ $G$ and $H$ are contravariant functors and $b \le G a \iff a \le H b$.
+  Suppose $G: \mathcal{B}^{\mathrm{op}} \leftrightarrows \mathcal{A} : H$ is a contravariant adjunction between posets, i.e.\ $G$ and $H$ are contravariant functors and $b \leq G a \Longleftrightarrow a \leq H b$.
   Then $(G,H)$ restricts to a contravariant isomorphism between the posets of fixed points $\mathcal{A}^{GH}$ and $\mathcal{B}^{HG}$ for the monads $G H$ and $H G$.
   Moreover, any meets in $\mathcal{B}$ are inherited by $\mathcal{B}^{HG}$, hence also by $(\mathcal{A}^{GH})^{\mathrm{op}}$, i.e.\ are joins in $\mathcal{A}^{GH}$.
 

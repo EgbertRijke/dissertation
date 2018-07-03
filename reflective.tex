@@ -6,7 +6,7 @@ In \cref{sec:prop-rfsu} we establish the basic closure properties of reflective 
 
 In \cref{sec:accessible} we study accessible reflective subuniverses.
 
-In \cref{sec:separated} we introduce the notion of $L$-separated type, for any reflective subuniverse $L$, and we show that the subuniverse of $L$-separated types is again a reflective subuniverse. The contents of \cref{sec:separated} are joint work with Dan Christensen, Morgan Opie, and Luis Scoccola, 
+In \cref{sec:separated} we introduce the notion of $L$-separated type, for any reflective subuniverse $L$, and we show that the subuniverse of $L$-separated types is again a reflective subuniverse. The contents of \cref{sec:separated} are joint work with Dan Christensen, Morgan Opie, and Luis Scoccola. As a corollary we obtain in \cref{thm:truncation} that the $k$-truncation can be constructed, for any $k\geq -2$. A more elementary way of obtaining this result appears in \cite{joinconstruction}.
 
 \section{Localizations}
 \label{sec:prop-rfsu}
@@ -408,7 +408,7 @@ By contrast, localizations, and even modalities, do not generally preserve $n$-t
 For instance, the ``shape'' modality of~\cite{shulman2015brouwer} takes the topological circle, which is a 0-type, to the homotopical circle, which is a 1-type, and the topological 2-sphere, which is also a 0-type, to the homotopical 2-sphere, which is (conjecturally) not an $n$-type for any finite $n$.
 However, we will see in~\autoref{modaln-truncated} that lex modalities do preserve $n$-types for all $n$.
 
-\section{The reflective subuniverse of separated types}
+\section{The reflective subuniverse of separated types}\label{sec:separated}
 
 \begin{defn}
 Consider a subuniverse $P:\UU\to\prop$. We say that a type $X$ is \define{$P$-separated} if the identity types of $X$ are $P$-types. We write $P'$ for the subuniverse of $P$-separated types.
@@ -531,7 +531,7 @@ L'X & I \arrow[u,swap,"i"]
     This means that $I$ is an $L$-separated type, so we can extend $\hat{P}$ to $L' X$ 
     giving us the desired extension of $P$ by composing with $i$.
 
-    Since $X \to L'X$ is surjective (\cref{lemma:etasurjective}),
+    Since $X \to L'X$ is surjective (\cref{thm:separation_characterization}),
     any such extension must factor through the image $I$.
     So uniqueness follows from the universal property of $L'$-localization.
 \end{proof}
@@ -762,7 +762,7 @@ Therefore, this $f$ must also equal $\lam{z}\idfunc[L(x=z)]$,
 showing that $\alpha_{x,x}(\eta(\refl{x})) = \beta_{x,x}(\eta(\refl{x}))$.
 \end{proof}
 
-\begin{thm}
+\begin{thm}\label{thm:truncation}
 For each $k\geq -2$, the subuniverse of $k$-truncated types is reflective.
 \end{thm}
 
@@ -770,7 +770,7 @@ For each $k\geq -2$, the subuniverse of $k$-truncated types is reflective.
 The subuniverse of contractible types is obviously reflective, it's localization is just the constant function $\lam{X}\unit$ mapping every type to the unit type. Since the subuniverse of $(k+1)$-truncated types is precisely the subuniverse of $k$-separated types, the claim follows inductively by \cref{thm:Lsep}.
 \end{proof}
 
-\section{$L$-local maps}
+\section{\texorpdfstring{$L$}{L}-local maps}
 
 \begin{defn}
 A map $f:A\to B$ is said to be \define{$L$-local} if its fibers are $L$-local.
@@ -789,11 +789,7 @@ is an $L$-local map.
 \end{thm}
 
 \begin{proof}
-By \cref{ex:fib_replacement,ex:fiber_trans} we obtain equivalences
-\begin{equation*}
-\eqv{B(x)}{\fib{\proj 1}{x}}
-\end{equation*}
-for every $x:A$.
+Immediate from the equivalences $\eqv{B(x)}{\fib{\proj 1}{x}}$.
 \end{proof}
 
 \begin{thm}\label{thm:trunc_ap}
@@ -814,7 +810,7 @@ First we show that for any $s,t:\fib{f}{b}$ there is an equivalence
 \begin{equation*}
 \eqv{(s=t)}{\fib{\apfunc{f}}{\ct{\proj 2(s)}{\proj 2(t)^{-1}}}}
 \end{equation*}
-We do this by $\Sigma$-induction on $s$ and $t$, and then we calculate using \cref{ex:trans_ap} and basic manipulations of identifications that
+We do this by $\Sigma$-induction on $s$ and $t$, and then we calculate using basic manipulations of identifications that
 \begin{align*}
 (\pairr{x,p}=\pairr{y,q}) & \eqvsym \sm{r:x=y} \mathsf{tr}_{f(\blank)=b}(r,p)=q \\
 & \eqvsym \sm{r:x=y} \ct{\ap{f}{r}^{-1}}{p}=q \\
@@ -846,7 +842,7 @@ is $L$-local.
 This follows directly from \cref{lem:fib_total}.
 \end{proof}
 
-\section{Quasi-left-extactness of $L'$-localization}\label{ss:lex}
+\section{Quasi-left-extactness of \texorpdfstring{$L'$}{L'}-localization}\label{ss:lex}
 
 We now explain how $L$ and $L'$ together behave similarly to a \define{lex modality},
 i.e., a modality that preserves pullbacks.
@@ -981,6 +977,14 @@ In other words, we must show that the identity function $L(\fib{f}b) \to L(\fib{
 By the universal property of $L(\fib{f}b)$, it suffices to show that they become equal when precomposed with $\modalunit[\fib{f}b]$, i.e.\ we may assume that $w = \modalunit\pairr{a,p}$ for some $a:A$ and $p:f(a)=b$.
 But now path induction on $p$ reduces our goal to the given $c(f(a))=\modalunit{\pairr{a,\refl{f(a)}}}$.
 \end{proof}
+
+\begin{cor}\label{connectedtotruncated}
+A type $A$ is $L$-connected if and only if the ``constant functions'' map
+$
+  B \to (A\to B)
+$
+is an equivalence for every modal type $B$.\qed
+\end{cor}
 
 Dually, we will prove in \cref{thm:detect-right-by-fibers} that when $L$ is a modality, if this holds for all $L$-connected $A$ then $B$ is $L$-local.
 
@@ -1139,8 +1143,8 @@ For the first statement we observe that by \cref{thm:rsu-compose-cancel} $h$ is 
 For the second statement we observe that, since $i:X\to Y$ is assumed to be $L'$-connected, the map $g^\ast i:X\times_Y B\to B$. Now it follows by \cref{thm:rsu-compose-cancel} that the gap map is $L$-connected if and only if $h$ is $L'$-connected.
 \end{proof}
 
-\begin{cor}
-A map $f:A\to B$ is an $L'$-equivalence if and only if $f$ is surjective and $\delta_f:A\to A\times_B A$ is an $L$-equivalence.
+\begin{cor}\label{cor:L'connected_maps}
+A map $f:A\to B$ is a $L'$-connected if and only if $f$ is surjective and $\delta_f:A\to A\times_B A$ is a $L$-connected.
 \end{cor}
 
 \begin{proof}
@@ -1159,6 +1163,19 @@ Now suppose that $f$ is surjective and that $\delta_f$ is $L$-connected. Then th
 \end{equation*}
 for any $(x,p),(y,q):\fib{f}{b}$ it follows by \cref{lem:L'connected_types} that $\fib{f}{b}$ is $L'$-connected for every $b:B$. In other words: $f$ is $L'$-connected.
 \end{proof}
+
+A commuting square is said to be a \define{quasi-pullback} if its gap map is surjective. In other words, quasi-pullback squares are the same as $(-1)$-cartesian squares.
+
+\begin{cor}
+A map $f:A\to B$ is $n$-connected if and only if the gap map of the commuting square
+\begin{equation*}
+\begin{tikzcd}
+A \arrow[r,"f"] & B \arrow[d] \\
+A^{\sphere{k}} \arrow[r,swap,"f^{\sphere{k}}"] & B^{\sphere{k}}
+\end{tikzcd}
+\end{equation*}
+is a quasi-pullback square, for each $-1\leq k\leq n$.
+\end{cor}
 
 \begin{cor}
 A pointed connected type $A$ is $L'$-connected if and only if the map $\unit\to A$ is $L$-connected.
@@ -1292,7 +1309,7 @@ X_0 \arrow[r,"h_0"] & X_1 \arrow[r,"h_1"] & X_2 \arrow[r,"h_2"] & \cdots
 \end{lem}
 
 \begin{proof}
-    By \cref{lemma:characterizationorthogonal}, it is enough to check that
+    By \cref{lem:local_equivalence}, it is enough to check that
     $\precomp{\overline{h}} : (\colim_n X_n \to Z) \to (X_0 \to Z)$
     is an equivalence for every $L$-local type $Z$.
     By the induction principle of the sequential colimit,
@@ -1344,7 +1361,7 @@ We include the proof since it is straightforward.
 \end{lem}
 
 \begin{proof}
-(1) follows from \cref{lemma:characterizationorthogonal}, and (2) is clear.
+(1) follows from \cref{lem:local_equivalence}, and (2) is clear.
 For (3), one checks that the unit $\eta^L_X : X \to LX$ has the universal
 property of $K$-localization.
 \end{proof}
@@ -1386,7 +1403,7 @@ family $f$, the $f$-local types form a reflective subuniverse.
 The localization $L_f X$ is constructed as a higher inductive type,
 and we write $\eta_X : X \to L_f X$ for the unit.
 In the case of a family $A:I\to\UU$, localization at the unique family $u:\prd{i:I}A_i \to \unit$ is called \define{$A$-nullification}.
-By \cite[Theorem 2.17]{RijkeShulmanSpitters}, the reflective subuniverse of $A$-null types is stable under dependent sums and therefore $A$-nullification is a modality (\cref{modality}).
+By \cite[Theorem 2.17]{RijkeShulmanSpitters}, the reflective subuniverse of $A$-null types is stable under dependent sums and therefore $A$-nullification is a modality (\cref{thm:ssrs-characterize}).
 
 \begin{eg} We recall the following basic examples from~\cite{RijkeShulmanSpitters}.
 \begin{enumerate}
@@ -1574,7 +1591,7 @@ Then $\eta : X \to L_f X$ is a $K$-equivalence for every $X$.
 
 \begin{proof}
 Since each $f_i$ is a $K$-equivalence, every $K$-local type is $f$-local,
-by \cref{lemma:characterizationorthogonal}.
+by \cref{lem:local_equivalence}.
 Therefore, $\eta : X \to L_f X$ is a $K$-equivalence
 by \cref{lemma:comparelocalization}(1).
 \end{proof}

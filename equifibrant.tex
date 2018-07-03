@@ -660,12 +660,12 @@ by the universal property of pullbacks, as indicated in the following diagram
 The morphism $\mathsf{et}_\Delta(f)$ is called the \define{equifibrant replacement} of $f$, and the morphism $\eta_f$ is called the \define{unit} of the equifibrant replacement.
 \end{defn}
 
-\begin{lem}
+\begin{lem}\label{lem:D_equiv_pullback}
 For any morphism $f:\mathsf{rGph}(\mathcal{B},\mathcal{A})$, the unit $\eta_f$ of the equifibrant replacement of $f$ is a $\Delta$-equivalence. 
 \end{lem}
 
 \begin{proof}
-By \cref{lem:rcoeq_flattening}, it follows that the square
+By \cref{thm:rcoeq_cartesian}, it follows that the square
 \begin{equation*}
 \begin{tikzcd}
 \rcoeq(\mathcal{B}^{\eqvsym}) \arrow[d] \arrow[r] & \rcoeq(\Delta(\rcoeq(\mathcal{B}))) \arrow[d] \\
@@ -686,7 +686,7 @@ The pair $(\mathcal{L}^\Delta,\mathcal{R}^\Delta)$ forms an orthogonal factoriza
 \end{thm}
 
 \begin{proof}
-It follows from \cref{thm:fibration_pullback,lem:D_equiv_pullback} that every morphism of reflexive graphs factors as a $\Delta$-equivalence followed by a $\Delta$-\'etale map. Therefore it remains to show that the class of $\Delta$-equivalences is left orthogonal to the class of $\Delta$-\'etale maps.
+It follows from \cref{cor:fibration_pullback,lem:D_equiv_pullback} that every morphism of reflexive graphs factors as a $\Delta$-equivalence followed by a $\Delta$-\'etale map. Therefore it remains to show that the class of $\Delta$-equivalences is left orthogonal to the class of $\Delta$-\'etale maps.
 
 We have to show that for every $\Delta$-equivalence $i:\mathcal{A}\to\mathcal{B}$, and every $\Delta$-\'etale morphism $f:\mathcal{X}\to\mathcal{Y}$, the square
 \begin{equation*}
@@ -715,7 +715,7 @@ For any morphism $f:\mathsf{rGph}(\mathcal{B},\mathcal{A})$, the pre-composition
 is an equivalence for every $\Delta$-\'etale map $e:\mathcal{C}\to\mathcal{A}$.
 \end{thm}
 
-\subsection{Equifibrant replacement}
+\subsection{Equifibrant replacement}\label{sec:equifibrant_replacement}
 
 \begin{defn}
 Let $\mathcal{B}$ and $\mathcal{C}$ be families of reflexive graphs over $\mathcal{A}$. We define the type

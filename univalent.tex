@@ -698,7 +698,7 @@ K & : G\cdot f \htpy f\cdot H.
 We write $\halfadj(f)$\index{half_adj(f)@{$\halfadj(f)$}|textbf} for the type of such quadruples $(g,G,H,K)$.
 \end{defn}
 
-\begin{prp}\label{ex:equiv_precomp}
+\begin{prp}\label{prp:equiv_precomp}
 For any map $f:A\to B$, the following are equivalent:
 \begin{enumerate}
 \item $f$ is an equivalence.
@@ -802,7 +802,7 @@ A \arrow[dr,swap,"f"] \arrow[rr,"h"] & & B \arrow[dl,"g"] \\
 \end{equation*}
 
 \begin{prp}
-Let $P$ and $Q$ be two type families over $X$, and write $\proj 1^P$ and $\proj 1^Q$ for their first projections, respectively. Then there is an equivalence
+Let $P$ and $Q$ be two type families over $X$, and write $\proj 1^P$ and $\proj 1^Q$ for their first projections, respectively. Then the map
 \begin{equation*}
 \tottriangle:\Big(\prd{x:X} P(x)\to Q(x)\Big)\to \hom_X(\proj 1^P,\proj 1^Q)
 \end{equation*}
@@ -814,7 +814,31 @@ For any two maps $f:A\to X$ and $g:B\to X$, the map
 \begin{equation*}
 \fibtriangle : \hom_X(f,g) \to \prd{x:X}\fib{f}{x}\to \fib{g}{x}
 \end{equation*}
-given by $\lam{x}{(a,p)}(h(a),\ct{H(a)^{-1}}{p})$ is an equivalence.
+given by $\lam{(h,H)}{x}{(a,p)}(h(a),\ct{H(a)^{-1}}{p})$ is an equivalence.
+\end{cor}
+
+\begin{prp}
+Let $\alpha:I\to J$ be a map, and let $P:I\to\UU$ and $Q:J\to\UU$ be type families.
+Then the map
+\begin{equation*}
+\Big(\prd{i:I}P_i\to Q_{\alpha(i)}\Big) \eqvsym \mathsf{hom}_\alpha(\proj 1^P,\proj 1^Q). 
+\end{equation*}
+given by $\lam{f}(\total[i]{f},\lam{(x,y)}\refl{x})$ is an equivalence.
+\end{prp}
+
+\begin{cor}\label{cor:sq_fib}
+Consider a diagram of the form
+\begin{equation*}
+\begin{tikzcd}
+A \arrow[d,swap,"f"] & B \arrow[d,"g"] \\
+I \arrow[r,swap,"\alpha"] & J.
+\end{tikzcd}
+\end{equation*}
+Then the map
+\begin{equation*}
+\mathsf{hom}_\alpha(f,g)\to \Big(\prd{i:I}\fib{f}{i}\to\fib{g}{\alpha(i)}\Big)
+\end{equation*}
+given by $\lam{(h,H)}{i}{(a,p)}(h(a),\ct{H(a)^{-1}}{\ap{\alpha}{p}})$ is an equivalence.
 \end{cor}
 
 \section{Homotopy pullbacks}
@@ -1338,7 +1362,7 @@ For each function $f:A\to B$, the type $\esssmall(f)$ is a proposition, and for 
 \end{cor}
 
 \begin{proof}
-This follows from the fact that propositions are closed under dependent products, established in \cref{thm:trunc_pi}.
+This follows from the fact that propositions are closed under dependent products, established in \cref{thm:prop_pi}.
 \end{proof}
 
 \begin{prp}\label{thm:fam_proj}
@@ -1393,7 +1417,7 @@ is a pullback square, as witnessed by $p$. If $f$ comes equipped with a term of 
 \end{thm}
 
 \begin{proof}
-From \cref{ex:sq_fib} we obtain that the type of pairs $(\tilde{F},H)$ is equivalent to the type of fiberwise transformations
+From \cref{cor:sq_fib} we obtain that the type of pairs $(\tilde{F},H)$ is equivalent to the type of fiberwise transformations
 \begin{equation*}
 \prd{b:B}\fib{f}{b}\to F(b).
 \end{equation*}
@@ -1442,6 +1466,6 @@ is a pullback square.\index{diagonal!of a type|textit}
 \end{thm}
 
 \begin{proof}
-In \cref{ex:diagonal} we have established that the identity type $x=y$ is the fiber of $\delta_A$ at $(x,y):A\times A$. Therefore it follows that $A$ is locally small if and only if the diagonal $\delta_A$ is essentially small.
+The identity type $x=y$ is the fiber of $\delta_A$ at $(x,y):A\times A$. Therefore it follows that $A$ is locally small if and only if the diagonal $\delta_A$ is essentially small.
 Now the result follows from \cref{thm:classifier}.
 \end{proof}

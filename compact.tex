@@ -1,4 +1,4 @@
-\chapter{Compact types}
+\chapter{Compact types}\label{chap:compact}
 
 In this chapter we introduce the notion of compact type, and we show that the compact types are closed under finite coproducts, $\Sigma$-types, finite products, pushouts, reflexive coequalizers, and retracts. In particular it follows that the spheres are compact.
 
@@ -17,7 +17,7 @@ for each $i:I$. We show in \cref{prp:colim_local} that, provided that $F$ is a f
 X_0 \arrow[r,"l_0"] & X_1 \arrow[r,"l_1"] & X_2 \arrow[r,"l_2"] & \cdots
 \end{tikzcd}
 \end{equation*}
-is $F$-local if each $l_n$ has the structure of a quasi $F$-local extension. In \cref{lem:qflocal_initial} we show that there is an initial quasi $F$-local extension $l:X\to QL_F X$, for every type $X$, and in \cref{thm:localization} we show that the sequential colimit $X\to QL_F^\infty$ is an $F$-localization. Thus we establish that if $F$ is a family of maps between compact types, then the subuniverse of $F$-local types is a reflective subuniverse. Furthermore, if $A$ is a family of compact types, then the subuniverse of $A$-null types is a modality.
+is $F$-local if each $l_n$ has the structure of a quasi $F$-local extension. We show that there is an initial quasi $F$-local extension $l:X\to QL_F X$, for every type $X$, and in \cref{thm:localization} we show that the sequential colimit $X\to QL_F^\infty$ is an $F$-localization. We establish in \cref{thm:compact_localization} that if $F$ is a family of maps between compact types, then the subuniverse of $F$-local types is a reflective subuniverse. Furthermore, if $A$ is a family of compact types, then the subuniverse of $A$-null types is a modality.
 
 Dan Christensen pointed out that this construction of $F$-localization already appears in section 1.B of \cite{Farjoun}, where arbitrary localizations are constructed by iterating the initial quasi $F$-local extension transfinitely many times. We stick to the case $\omega$ since larger ordinals are not yet as well understood in homotopy type theory. A minor note is that in Theorem B.5 Dror Farjoun only establishes that the transfinite colimit $QL_F^\kappa X$ localizes the homotopy groups. Our proofs are therefore different than Dror Farjoun's.
 
@@ -469,7 +469,7 @@ If $X$ is $F$-local, then $l:X\to QL_F X$ is an equivalence.
 If $X$ is $F$-local, then each $F_i^\ast$ is an equivalence. It follows that the pushout-product $F_i^\ast\mathbin{\square} F_i$ is an equivalence. Since pushouts of equivalences are equivalences, the claim follows.
 \end{proof}
 
-\begin{thm}
+\begin{thm}\label{thm:compact_localization}
 For any type $X$ and any family $F:\prd{a:A}P(a)\to Q(a)$ of maps between
 compact types, the subuniverse of $F$-local types is reflective.
 \end{thm}
