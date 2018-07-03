@@ -1,5 +1,5 @@
 \chapter{Higher group theory}
-In this section I describe joint work with Ulrik Buchholtz and Floris van Doorn \cite{highergroups}.
+In this section I describe joint work with Ulrik Buchholtz and Floris van Doorn \cite{BuchholtzDoornRijke}.
 
 \subsection{From RPn to higher groups}
 \begin{defn}
@@ -60,7 +60,7 @@ perspective represented by their delooping $\mathop{\mathrm{B}\mathbb{Z}}=\bS^1$
 
 Of course, double loop spaces are even better behaved than mere loop
 spaces (e.g., they are commutative up to homotopy
-by the Eckmann-Hilton argument~\cite[Theorem~2.1.6]{TheBook}).
+by the Eckmann-Hilton argument~\cite[Theorem~2.1.6]{hottbook}).
 Say a type $G$ is
 \emph{$k$-tuply groupal} if we have a $k$-fold delooping,
 $B^kG : \UU_\pt^{\ge k}$, such that $G = \Omega^kB^kG$.
@@ -193,7 +193,7 @@ fibration of pointed types.
   be contractible. The center of contraction is the trivial section $s_0$.
   If $s$ is another section, then we get a pointed homotopy from $s$
   to $s_0$ from the elimination principle for pointed, connected
-  types~\cite[Lemma~7.5.7]{TheBook}, since the types $s\,x=s_0\,x$ are
+  types~\cite[Lemma~7.5.7]{hottbook}, since the types $s\,x=s_0\,x$ are
   $(k-2)$-truncated.
 
   To show the result for $n+1$, taking the $n$ case as the induction
@@ -228,7 +228,7 @@ This is equivalently the automorphism group of the pointed type $B^kG$.
 But we can also forget the basepoint and consider the
 automorphism group $\Aut^c G$ of $B^kG:\UU^{\ge k,\le n+k}$. This
 now allows for (higher) conjugations. We define the \emph{generalized
-  center} of $G$ to be $ZG := \Omega^k\!\Aut^c G : (n,k+1)\GType$
+  center} of $G$ to be $ZG := \Omega^k\Aut^c G : (n,k+1)\GType$
 (generalizing the center of a set-level group,
 see below in~\autoref{sec:center}).
 
@@ -404,7 +404,7 @@ type with a $G$-action by restriction along the inclusion $BG
 \hookrightarrow \mathcal{O}_G$. (Here we consider $BG$ as a (pointed
 and connected) topological groupoid on one object.)
 
-As remarked by Shulman~\cite{ShulmanEI}, when $G$ is a \emph{compact} Lie
+As remarked by Shulman~\cite{shulman:inverseEI}, when $G$ is a \emph{compact} Lie
 group, then $\mathcal{O}_G$ is an inverse EI $\infty$-category, and
 hence we know how to model type theory in the presheaf $\infty$-topos
 over $\mathcal{O}_G$. And in certain simple cases we can even define
@@ -413,7 +413,7 @@ of prime order, then a small $G$-equivariant type consists of a type with a
 $G$-action, $X : BG \to \UU$ together with another type family $X^G : X^{hG}
 \to \UU$, where $X^G$ gives for each homotopy fixed point a type of
 proofs or ``special reasons'' why that point should be considered
-fixed~\cite[7.6]{ShulmanEI}. Hence the total space of $X^G$ is the
+fixed~\cite[7.6]{shulman:inverseEI}. Hence the total space of $X^G$ is the
 type of actual fixed points,
 and the projection to $X^{hG}$ implements the map from actual fixed
 points to homotopy fixed points.
@@ -484,19 +484,13 @@ Since this theorem has been formalized we will not give all details of the proof
   $e_{\widetilde\phi}^{k-1}:K(G,k-1)\to_\pt \Omega X$. By the adjunction $\Sigma\dashv\Omega$ we get a pointed map $\Sigma K(G,k-1)\to_\pt X$, and by the elimination principle of the truncation we get a map $K(G,k)=\trunc{k}{\Sigma K(G,k-1)}\to_\pt X$. 
 
   We can now show that $\Omega^k e_\phi^k$ is the expected map, that is, the following diagram commutes, but we omit this proof here.
-  \begin{center}
-    \begin{tikzpicture}[auto,node distance=2cm,
-        thick,main node/.style={font=\sffamily\bfseries},text height=1.5ex]
-      \node[main node] (OK) at (0,0) {$\Omega^nK(G,k)$};
-      \node[main node] (G)  at (3,0) {$G$};
-      \node[main node] (OX) at (1.5,-1.5) {$\Omega^n X$};
-           \path[every node/.style={font=\sffamily\small}]
-           (OK) edge [->] node {$\sim$} (G)
-                edge [->] node [below left] {$\Omega^n e_\phi^k$} (OX)
-           (OX) edge [->] node [below right] {$\phi$} (G);
-    \end{tikzpicture}
-  \end{center}
-  Now if $\phi$ is a group isomorphism, by Whitehead's Theorem for truncated types \cite[Theorem 8.8.3]{TheBook} we know that $e_\phi^k$ is an equivalence, since it induces an equivalence on all homotopy groups (trivially on the levels other than $k$). We can also show that $e_\phi^k$ is natural in $\phi$.
+\begin{equation*}
+\begin{tikzcd}[column sep=0]
+\Omega^nK(G,k) \arrow[rr,"\eqvsym"] \arrow[dr,swap,"\Omega^n e_\phi^k"] & & G \\
+& \Omega^n X \arrow[ur,swap,"\phi"] & \phantom{\Omega^nK(G,k)}
+\end{tikzcd}
+\end{equation*}
+  Now if $\phi$ is a group isomorphism, by Whitehead's Theorem for truncated types \cite[Theorem 8.8.3]{hottbook} we know that $e_\phi^k$ is an equivalence, since it induces an equivalence on all homotopy groups (trivially on the levels other than $k$). We can also show that $e_\phi^k$ is natural in $\phi$.
 
   Note that if we have a group homomorphism $\psi:G\to G'$, we also get a group homomorphism $G\to\Omega^k K(G',k)$, and by the above construction we get a pointed map $K(\psi,k):K(G,k)\to_\pt K(G',k)$. This is functorial, which follows from naturality of $e_\phi^k$. 
 
@@ -565,7 +559,7 @@ We have the adjunction ${S} \dashv {F}$ which follows from the suspension-loop a
 The next main goal in this section is the stabilization theorem,
 stating that the ditto marks in~\autoref{tab:periodic} are justified.
 
-The following corollary is almost \cite[Lemma~8.6.2]{TheBook}, but
+The following corollary is almost \cite[Lemma~8.6.2]{hottbook}, but
 proving this in Book HoTT is a bit tricky. See the
 formalization for details.
 \begin{lem}[Wedge connectivity]
@@ -605,7 +599,7 @@ The second main tool we need for the stabilization theorem is:
   If $A : \UU_\pt^{>n}$ with $n\ge 0$, then the map
   $A \to \Omega\susp A$ is $2n$-connected.
 \end{thm}
-This is \cite[Theorem~8.6.4]{TheBook}.
+This is \cite[Theorem~8.6.4]{hottbook}.
 
 The final building block we need is:
 \begin{lem}

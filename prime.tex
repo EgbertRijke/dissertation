@@ -209,22 +209,12 @@ for any reflective subuniverse $L$.
     \]
     then $K(G,1)$ is $f$-local.
     Indeed, the $f$-localization map between the fiber sequences gives
-    \[
-        \begin{tikzpicture}
-          \matrix (m) [matrix of math nodes,row sep=2em,column sep=3em,minimum width=2em]
-          { G \strut & \unit \strut &  K(G,1) \strut \\
-           L_f G \strut & L_f \unit \strut & L_f K(G,1) , \strut \\};
-          \path[->]
-            (m-1-1) edge [right hook->] node [above] {} (m-1-2)
-                    edge node [left] {$\sim$} (m-2-1)
-            (m-1-2) edge node [above] {} (m-1-3)
-                    edge node [left] {$\sim$} (m-2-2)
-            (m-2-1) edge [right hook->] node [above] {} (m-2-2)
-            (m-2-2) edge node [above] {} (m-2-3)
-            (m-1-3) edge node [left] { } (m-2-3)
-            ;
-        \end{tikzpicture}
-    \]
+\begin{equation*}
+\begin{tikzcd}
+G \arrow[d,swap,"\eqvsym"] \arrow[r,hookrightarrow] & \unit \arrow[d,swap,"\eqvsym"] \arrow[r] & K(G,1) \arrow[d] \\
+L_f G \arrow[r,hookrightarrow] & L_f\unit \arrow[r] & L_f K(G,1).
+\end{tikzcd}
+\end{equation*}
     which implies that $K(G,1) \simeq L_f K(G,1)$, since $L_f K(G,1)$ is connected
     by \cref{cor:preserve-n-connected}.
     Now take $f$ to be the degree $k$ map.
@@ -433,22 +423,12 @@ simply connected.
     By \cref{theorem:localizationisnullification}, the $L$- and $L'$-localizations
     of these types agree, where $L \defeq L_{\degg(S)}$.
     Applying \cref{proposition:preservationfibersequences}, we get a diagram
-    \[
-        \begin{tikzpicture}
-          \matrix (m) [matrix of math nodes,row sep=2em,column sep=3em,minimum width=2em]
-          { F & E & X\\
-           L F \strut & E' \strut & L' X \mathrlap{\,\,=\, L X ,} \strut \\};
-          \path[->]
-            (m-1-1) edge [right hook->] node [above] {} (m-1-2)
-                    edge node [left] {$\eta$} (m-2-1)
-            (m-1-2) edge node [above] {} (m-1-3)
-                    edge node [left] {$l$} (m-2-2)
-            (m-2-1) edge [right hook->] node [above] {} (m-2-2)
-            (m-2-2) edge node [above] {} (m-2-3)
-            (m-1-3) edge node [right] {$\eta = \eta'$} (m-2-3)
-            ;
-        \end{tikzpicture}
-    \]
+\begin{equation*}
+\begin{tikzcd}
+F \arrow[d,swap,"\eta"] \arrow[r,hookrightarrow] & E \arrow[d,swap,"l"] \arrow[r] & X \arrow[d,"\eta=\eta'"] \\
+LF \arrow[r,hookrightarrow] & E' \arrow[r] & L'X \mathrlap{\,\,=\, L X ,}
+\end{tikzcd}
+\end{equation*}
     in which the rows are fiber sequences, with $L F$ the fiber over $\eta(x_0)$.
     To show that $l$ is an $L$-localization, it is enough to show that $E'$ is $L$-local.
     Since it is the total space of a fibration of simply connected spaces,
@@ -483,19 +463,12 @@ flavor and which will be used in \cref{ss:localization-of-homotopy-groups}.
     is the subuniverse of separated types for $(l-1)$-truncation (\cref{example:truncationisseparated}).
     Applying \cref{thm:separation_characterization} $n+1$ times gives the equivalences
     in the square
-\[
-        \begin{tikzpicture}
-          \matrix (m) [matrix of math nodes,row sep=2.5em,column sep=3em,minimum width=2em]
-          { \loopspacesym^{n+1} \trunc{l}X & \trunc{l-n-1}{\loopspacesym^{n+1} X}\hspace*{-3ex} \\
-            \loopspacesym^{n+1} \trunc{l} X & \trunc{l-n-1}{\loopspacesym^{n+1} X} . \hspace*{-3ex} \\};
-          \path[->]
-            (m-1-1) edge node [left] {$k$} (m-2-1)
-            (m-2-2) edge node [above] {$\sim$} (m-2-1)
-            (m-1-2) edge node [right]{$\trunc{l-n-1}{k}$} (m-2-2)
-                    edge node [above] {$\sim$} (m-1-1)
-            ;
-        \end{tikzpicture}
-    \]
+\begin{equation*}
+\begin{tikzcd}
+\trunc{l-n-1}{\loopspacesym^{n+1} X} \arrow[d,swap,"\trunc{l-n-1}{k}"] \arrow[r,"\eqvsym"] & \loopspacesym^{n+1} \trunc{l}X \arrow[d,"k"] \\
+\trunc{l-n-1}{\loopspacesym^{n+1} X}. \arrow[r,"\eqvsym"] & \loopspacesym^{n+1} \trunc{l} X
+\end{tikzcd}
+\end{equation*}
     To show that the square commutes, it suffices to check this after precomposing
     with the truncation map $\loopspacesym^{n+1} X \to \trunc{l-n-1}{\loopspacesym^{n+1} X}$.
     And this follows since the equivalences commute with the natural maps from
@@ -535,36 +508,22 @@ in which we take $T$ to be the subset of primes different from $p$.
 
 \begin{proof}
     We have the usual square
-    \[
-        \begin{tikzpicture}
-          \matrix (m) [matrix of math nodes,row sep=2.5em,column sep=3em,minimum width=2em]
-          { \loopspacesym X \strut & L_{\degg(k)} \loopspacesym X \strut \\
-            \loopspacesym X \strut & L_{\degg(k)} \loopspacesym X . \strut \\};
-          \path[->]
-            (m-1-1) edge node [above] {$\eta$} (m-1-2)
-                    edge node [left] {$k$} (m-2-1)
-            (m-2-1) edge node [above] {$\eta$} (m-2-2)
-            (m-1-2) edge node [right]{$L_{\degg(k)} k$} (m-2-2)
-            ;
-        \end{tikzpicture}
-    \]
+\begin{equation*}
+\begin{tikzcd}
+\loopspacesym X \arrow[d,swap,"k"] \arrow[r,"\eta"] & L_{\degg(k)} \loopspacesym X \arrow[d,"L_{\degg(k)} k"] \\
+\loopspacesym X \arrow[r,swap,"\eta"] & L_{\degg(k)} \loopspacesym X
+\end{tikzcd}
+\end{equation*}
     Recall that the right vertical map is the unique map that makes the square commute.
     Now, by \cref{corollary:commutativitylooplocalizationsimpconn}, we know that for pointed, simply connected types we have
     $L_{\degg(k)} \loopspacesym X \simeq \loopspacesym L_{\degg(k)} X$ so that,
     by the uniqueness of the right vertical map, the above square is equivalent to the square
-    \[
-        \begin{tikzpicture}
-          \matrix (m) [matrix of math nodes,row sep=2.5em,column sep=3em,minimum width=2em]
-          { \loopspacesym X \strut & \loopspacesym L_{\degg(k)} X \strut \\
-            \loopspacesym X \strut & \loopspacesym L_{\degg(k)} X , \strut \\};
-          \path[->]
-            (m-1-1) edge node [above] {$\loopspacesym \eta$} (m-1-2)
-                    edge node [left] {$k$} (m-2-1)
-            (m-2-1) edge node [above] {$\loopspacesym \eta$} (m-2-2)
-            (m-1-2) edge node [right]{$k$} (m-2-2)
-            ;
-        \end{tikzpicture}
-    \]
+\begin{equation*}
+\begin{tikzcd}
+\loopspacesym X \arrow[d,swap,"k"] \arrow[r,"\loopspacesym \eta"] & \loopspacesym L_{\degg(k)} X \arrow[d,"k"] \\
+\loopspacesym X \arrow[r,swap,"\loopspacesym \eta"] & \loopspacesym L_{\degg(k)} X
+\end{tikzcd}
+\end{equation*}
     where the map on the right is the usual $k$-fold map.
     But in this square the right vertical map is an equivalence, since $L_{\degg(k)} X$
     is $\degg(k)$-local.
@@ -726,22 +685,12 @@ We now give the main theorem of the paper.
     \]
     Notice that all of the types in the fiber sequence are simply connected.
     Applying $\degg(S)$-localization we obtain a map of fiber sequences
-    \[
-        \begin{tikzpicture}
-          \matrix (m) [matrix of math nodes,row sep=2em,column sep=3em,minimum width=2em]
-            { K(\pi_{n+1}(X),n+1) \strut & \ttrunc{n+1}{X} \strut & \ttrunc{n}{X} \strut \\
-            L_{\degg(S)} K(\pi_{n+1}(X),n+1) &  \ttrunc{n+1}{L_{\degg(S)}X} & \ttrunc{n}{L_{\degg(S)} X}\\};
-          \path[->]
-            (m-1-1) edge [right hook->] node [right] {} (m-1-2)
-                    edge node [right] {} (m-2-1)
-            (m-1-2) edge node [right] {} (m-1-3)
-                    edge node [right] {} (m-2-2)
-            (m-2-2) edge node [right] {} (m-2-3)
-            (m-2-1) edge [right hook->] node [right] {} (m-2-2)
-            (m-1-3) edge node [right] {} (m-2-3)
-            ;
-        \end{tikzpicture}
-    \]
+\begin{equation*}
+\begin{tikzcd}
+K(\pi_{n+1}(X),n+1) \arrow[d] \arrow[r,hookrightarrow] & \ttrunc{n+1}{X} \arrow[d] \arrow[r] & \ttrunc{n}{X} \arrow[d] \\
+L_{\degg(S)} K(\pi_{n+1}(X),n+1) \arrow[r,hookrightarrow] & \ttrunc{n+1}{L_{\degg(S)}X} \arrow[r] & \ttrunc{n}{L_{\degg(S)} X}
+\end{tikzcd}
+\end{equation*} 
     by \cref{lemma:lex} combined with the commutativity of truncation and
     $\degg(S)$-localization (\cref{corollary:localizationandtruncationcommute}).
     The result now follows from \cref{theorem:localizationKgn}.

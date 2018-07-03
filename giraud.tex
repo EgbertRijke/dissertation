@@ -1,11 +1,14 @@
 \chapter{Type-valued equivalence relations}\label{chap:giraud}
 
+The material in this chapter is joint work with Simon Boulier and Nicolas Tabareau. A large part of this material is formalized in the Coq-HoTT library.
+
 We discussed in \cref{sec:set-quotients} the notion of an ordinary equivalence relation on a type $A$, which is specified as a reflexive, symmetric, and transitive $\prop$-valued binary relation on $A$. In \cref{thm:quotient_up} we established that for an equivalence relation $\mathcal{R}$ in this sense, the quotient $A/\mathcal{R}$ can be specified as the image of $\mathcal{R}:A\to (A\to \prop)$. Since $A\to \prop$ is a set, it follows that the set quotient $A/\mathcal{R}$ is also a set. 
 
 Proposition-valued equivalence relations as described above are just one level in a hierarchy of equivalence relations. The next level up consists of `$1$-equivalence relations', or `pre-groupoid structures' on a type $A$, the data of which endows $A$ with the structure of a pre-groupoid in the sense of Ahrens, Kapulkin, Shulman \cite{AhrensKapulkinShulman}. In the case of pre-groupoid structures one also needs to account for associativity, unit laws, and inverse laws. Groupoid quotients have been defined as higher inductive types in homotopy type theory by Sojakova \cite{SojakovaPhD}.
 
 \begin{table}\label{tab:hierarchy}
 \caption{The truncation hierarchy of equivalence relations}
+\centering
 \begin{tabular}{cll}
 \toprule
 \emph{level} & \emph{equivalence structure} & \emph{quotient operation} \\
@@ -21,38 +24,23 @@ $\infty$ & `pre-$\infty$-groupoid structure' & $\infty$-quotient \\
 
 In order to formulate a notion of $2$-equivalence relations, one requires higher-dimensional structure analogous to that found in the notion of a bi-groupoid. As one goes higher up the hierarchy of general `$n$-equivalence relations we get a combinatorial explosion of data to be specified to account for all the higher coherences. In this work, we propose a way to bypass the problem of having to specify an infinite amount of coherence data by using a coinductive definition of $\infty$-equivalence relations involving involving homotopy pushouts.
 
-\section{Systems of equivalence relations}
-
-The identity type of any type is the initial reflexive type-valued binary relation on types.
-By virtue of their (homotopy) initiality, they obtain the structure
-of a higher groupoid. This can be made precise externally, as is done in the
-work of Van den Berg and Garner \cite{VanDenBergGarner}, and LeFanu Lumsdaine 
-\cite{Lumsdaine10}, but so far it has been an open problem to give in type theory
-a satisfactory, sufficiently explicit description for a reflexive relation
-to be an $\infty$-equivalence relation.
-
-A more general class of examples that possess higher groupoid structure consist of pre-kernels of maps.
-Recall that the pre-kernel $\prekersym_A(f)$ of a map $f:A\to B$ is the reflexive relation given by
+A class of reflexive relations that \emph{ought to be} $\infty$-equivalence relations are pre-kernels of maps. Recall that the pre-kernel $\prekersym_A(f)$ of a map $f:A\to B$ is the reflexive relation given by
 \begin{equation*}
 x,y\mapsto f(x)=f(y).
 \end{equation*}
 The proof of reflexivity is given by $\lam{x}\refl{f(x)}$.
-We call $\prekersym_A(f)$ the pre-kernel of $f$, since it is only the underlying reflexive relation of the kernel but it lacks an explicit structure of an equivalence relation. Note that the image of $f$ is a model for the $\infty$-quotient $A/\prekersym_A(f)$, because the identity types of $\im(f)$ coincides with those of $X$.
+Note that the image of $f$ is a model for the $\infty$-quotient $A/\prekersym_A(f)$, because the identity types of $\im(f)$ coincides with those of $X$.
 
-We turn to the question of specifying what it means to define a notion of homotopy coherent equivalence relations in homotopy type theory, and thus the formal specification of the problem we set out to solve. In the following, we write 
-$(A\mathbin{\downarrow_s}\UU)$ for the type of \emph{surjective} maps out of $A$, that is:
+The operation $k$ assigning a the pre-kernel to a map $f:A\to B$ has type
 \begin{equation*}
-(A\mathbin{\downarrow_s}\UU)\defeq \sm{B:\UU}{f:A\to B}\mathsf{isSurj}(f).
+(A\mathbin{\downarrow}\UU)\to\mathsf{rRel}(A).
 \end{equation*}
-The operation that associates to a surjective map $f:A\to B$ the pre-kernel of $f$, is an operation of type
-\begin{equation*}
-\prekersym_A(f):(A\mathbin{\downarrow_s}\UU)\to \mathsf{rRel}_A,
-\end{equation*}
-where $\mathsf{rRel}_A$ is the type of all type-valued reflexive relations on $A$ \cref{defn:rrel}.
-Our goal in this chapter is to define \emph{systems of equivalence relations}, which we are now able to define.
+Here $(A\mathbin{\downarrow}\UU)$ is the type of pairs $(B,f)$ consisting of a small type $B:\UU$ and a map $f:A\to B$.
+Thus we can say that a reflexive relation $\mathcal{R}$ on $A$ is an equivalence relation if there is a term of type $\fib{k}{\mathcal{R}}$. This is a straightforward, although uninformative, definition of what it means to be an $\infty$-equivalence relation. However, observe that $\fib{k}{\mathcal{R}}$ is by no means a small type, whereas the structure of an equivalence relation should consist of a composition operatin, an associator, homotopies for the higher associahedra, and coherences between them: this is information that should be expressible as a small type.
 
-\begin{defn}\label{defn:system}
-A \define{system of equivalence relations} consists of a structure
+Our main theorem of this chapter, \cref{thm:classified_preker}, establishes that the fibers of $k$ are essentially small. By \cref{thm:classifier} an equivalent conclusion is that the map $k:(A\mathbin{\downarrow}\UU)\to \mathsf{rRel}(A)$ is classified by the universal family $p:\tilde{\UU}\to\UU$. 
+
+More concretely, we define a family of small types
 \begin{equation*}
 \mathsf{isEqRel}_A:\mathsf{rRel}_A\to\UU
 \end{equation*}
@@ -61,14 +49,13 @@ for each type $A:\UU$, equipped with the following additional structure:
 \item A lift $\prekersym_A$ to an operation $\kersym_A$ as indicated in the diagram
 \begin{equation*}
 \begin{tikzcd}[column sep=large]
-& \sm{\mathcal{R}:\mathsf{rRel}(A)}\mathsf{isEqRel}_A(\mathcal{R}) \arrow[d,->>] \\
-(A \mathbin{{\downarrow}_s} U) \arrow[r,swap,"\prekersym_A"] \arrow[ur,densely dotted,"\kersym_A"] & \mathsf{rRel}(A)
+& \sm{\mathcal{R}:\mathsf{rRel}(A)}\mathsf{isEqRel}_A(\mathcal{R}) \arrow[d,->,"\proj 1"] \\
+(A \mathbin{{\downarrow}} U) \arrow[r,swap,"\prekersym_A"] \arrow[ur,densely dotted,"\kersym_A"] & \mathsf{rRel}(A)
 \end{tikzcd}
 \end{equation*}
 In other words, every pre-kernel needs to be given the structure of an equivalence relation so that it becomes a kernel.
-\item A term witnessing that the function $\kersym_A$ is an equivalence.
+\item The restriction of $\kersym_A$ to the type $(A\mathbin{\downarrow_s}\UU)$ of \emph{surjective} maps out of $A$ is an equivalence.
 \end{enumerate}
-\end{defn}
 
 The first requirement just means that any pre-kernel must possess (in a canonical way) the structure of a homotopy coherent equivalence relation. The second requirement involves finding for every equivalence relation $\mathcal{R}$ on $A$, the quotient $A/\mathcal{R}$ and a surjective map $q_{\mathcal{R}} : A\to A/\mathcal{R}$. This gives the inverse $\qsym_A$ of $\kersym_A$. Then, to show that $\qsym_A\circ \kersym_A=1$, you need to show that there is a commuting triangle
 \begin{equation*}
@@ -85,10 +72,39 @@ This involves first showing that, for any equivalence relation $\mathcal{R}:=(R,
 preserving reflexivity. This determines a path $p : \prekersym_A(q_{\mathcal{R}})=(R,\rho)$. To complete the proof of effectiveness, it needs to be shown that \[\trans{p}{\mathsf{pr}_2(\kersym_A(\qsym_A(\mathcal{R})))}= H.\] 
 In other words, that the canonical structure of being an equivalence relation that the pre-kernel $\prekersym_A(\qsym_A(\mathcal{R}))$ possesses, agrees with the assumed structure $H$, that $(R,\rho)$ is an equivalence relation.
 
-The problem of finding a structure $\mathsf{isEqRel}$ satisfying the described conditions, is in fact trivial when we drop the requirement that $\mathsf{isEqRel}_A$ is a family of \emph{small} types. The type of all such structures is contractible, with $\mathsf{fib}_{\prekersym_A}$ at the center of contraction. However, it should be noted that this is a completely uninformative solution, and our goal is to describe a \emph{small} structure equivalent to $\mathsf{fib}_{\prekersym_A}$. Another way of phrasing the main problem is therefore to show that $k_A$ is an essentially small map, and we recall from \cref{thm:classifier} that a map is essentially small if and only if it is classified by the universe.
+We note that in the special case where the base type $A$ is taken to be the unit type $\unit$, the problem reduces to specifying what it means for a pointed type to possess in a homotopy coherent way the structure of a \emph{loop space}. Indeed, a reflexive relation on the unit type is nothing else than a pointed type, and the type of surjective maps out of the unit type is nothing else than the type of \emph{pointed connected types}.
 
-As a final remark on \autoref{defn:system} we note that in the special case where the base type $A$ is taken to be the unit type $\unit$, the problem reduces to specifying what it means for a pointed type to possess in a homotopy coherent way the structure of a \emph{loop space}. Indeed, a reflexive relation on the unit type is nothing else than a pointed type, and the type of surjective maps out of the unit type is nothing else than the type of \emph{pointed connected types}.
+We also note that, in order to show that the pre-kernel operation is classified by the universe, we also establish in \cref{prp:embedding_preker} that $k$ is an embedding. In particular, it is a property for a pointed type to be a loop space.
 
+In our approach to showing that the pre-kernel is essentially small, we define a notion of `$n$-saturatedness' on reflexive relations. In fact, we define them on a slightly more general structure than a reflexive relation, but for the current exposition of ideas we don't need to bother with that. A reflexive relation $\mathcal{R}$ is said to be pre-saturated, or $1$-saturated, if it extends to a span $\mathcal{R}'$ from $A$ to $A'\defeq A\sqcup^{\mathcal{R}}A$. Now we can ask that this span extends yet again to a span $\mathcal{R}''$ from $A$ to $A\sqcup^{\mathcal{R}'} A'$, and so on. If $n$ such iterated extensions exist, we say that $\mathcal{R}$ is $n$-saturated, and if $\mathcal{R}$ can be extended indefinitely we say that $\mathcal{R}$ is saturated. The type $\mathsf{sat}(\mathcal{R})$ witnessing the saturatedness of $\mathcal{R}$ is equivalent to $\fib{k}{\mathcal{R}}$. Moreover, the relation $\mathcal{R}$ turns out to be pre-saturated if and only if it can be a composition structure
+\begin{equation*}
+\mu : \prd{a,x,y:A} R(x,y)\to (\eqv{R(a,x)}{R(a,y)})
+\end{equation*}
+that satisfies coherent unit laws. This equivalence of the structures of pre-saturatedness and composition structures establishes that the type $\mathsf{presat}(\mathcal{R})$ is essentially small, and it implies that $\mathsf{sat}(\mathcal{R})$, and therefore $\fib{k}{\mathcal{R}}$, is essentially small.
+
+By iteratively extending a reflexive relation we have found a way to generate uniformly the operations and coherence laws that an $\infty$-equivalence relation possesses. In \cref{lem:2presat_coh} we compute explicitly the operations and coherence laws that $\mathcal{R}$ possesses if it is a $2$-saturated relation: apart from the composition structure that it has by being $1$-saturated, it also has an associator
+\begin{equation*}
+\alpha : \prd{a,x,y,z:A}{r:R(y,z)}{q:R(x,y)}{p:R(a,x)} \mu(r,\mu(q,p))=\mu(\mu(r,q),p)
+\end{equation*}
+and a set of coherent unit laws. There are seven unit laws for the associator, since there are seven ways to evaluate $\alpha$ at a unit (i.e.~a reflexivity term): three unit laws describe $\alpha(\rho_y,q,p)$, $\alpha(r,\rho_x,p)$, and $\alpha(r,q,\rho_a)$, three coherences between them describe $\alpha(\rho_x,\rho_x,p)$, $\alpha(\rho_x,q,\rho_a)$, and $\alpha(r,\rho_a,\rho_a)$, and a final coherence of coherences describes $\alpha(\rho_a,\rho_a,\rho_a)$. Thus, the number of unit laws seems to be directly related to the `arity' of the associator. The `associator' at the level of $1$-saturatedness is just the composition operation, which has arity $2$ and comes equipped with $3=2^2-1$ unit laws; the associator at the level of $2$-saturatedness has arity $3$ and comes equipped with $7=2^3-1$ unit laws; the Mac Lane pentagon is an associator of arity $4$, and we expect there to be $15=2^4-1$ unit laws. Admittedly, we haven't verified this. Nevertheless, taking also into account the dimension of the cells produced by the unit laws, the following table emerges:
+
+\begin{center}
+\begin{tabular}{r|lllllll}
+\toprule
+& \multicolumn{7}{c}{Dimension} \\
+$n$-Saturatedness & $1$ & $2$ & $3$ & $4$ & $5$ & $6$ & $\cdots$ \\
+\midrule 
+$0$ & $1$ & $0$ & $0$ & $0$ & $0$ & $0$ & \\
+$1$ & $1$ & $2$ & $1$ & $0$ & $0$ & $0$ & \\
+$2$ & $0$ & $1$ & $3$ & $3$ & $1$ & $0$ & \\
+$3$ & $0$ & $0$ & $1$ & $4$ & $6$ & $4$ & \\
+$\vdots$ & & & & & & & $\ddots$
+\end{tabular}
+\end{center}
+
+In particular, we see that the structure of saturatedness only has finitely many cells of each dimension. More precisely, the sum of the integers in the $k$-th column is the $(k+2)$-nd Fibonacci number \cite[p.~7]{lucas}. In \cref{thm:sat_trunc} we will establish that if $\mathcal{R}$ is an $n$-truncated reflexive relation, then it is saturated as soon as it is $(n+2)$-saturated, in accordance with the expectation that no new cells of dimension $\leq n$ are added after saturation-level $n+2$. 
+
+\begin{comment}
 \section{Principal equivalence relations}
 
 \begin{defn}
@@ -147,7 +163,7 @@ By the contractibility condition of principal equivalence relations, this is equ
 Since $P:\im(R)$, we get to assume $x:X$ and $e:P=R(x)$. Now, since $R$ is reflexive, we obtain $\brck{\sm{x:X}P(x)}$. 
 \end{proof}
 
-\subsection{The quotient as a classifier}
+\section{The quotient as a classifier}
 
 Recall that a span from $Y$ to $X$ in dependent type theory is equivalently described as a binary relation of type $Y\to (X\to \UU)$. 
 
@@ -181,52 +197,9 @@ is an equivalence. By the contractibility condition of principal equivalence rel
 K'_{x,y} : S'(y,x)\to S(y,x).
 \end{equation*}
 The type of pairs consisting of $S'$ and the equivalences $K'$ is contractible with $S$ at the center of contraction, so the type of triples $\pairr{S',\gamma',K}$ is equivalent to the type of orientations of $S$.
-\begin{comment}
-\begin{equation*}
-\prd{y:Y}\mathcal{O}_R(S(y))
-\end{equation*}
-
-Let $\gamma$ be an $R$-orientation of $S$, and define $g\defeq\pairr{S,\gamma}:Y\to X/R$. 
-By the contractibility condition of principal equivalence relations, we obtain a fiberwise equivalence
-\begin{equation*}
-H^\gamma_{x,y}:\eqv{S(y,x)}{(g(y)=q_R(x))}
-\end{equation*}
-which serves at the same time as a homotopy of type $\pi_2\circ g\htpy \pi_1\circ q_X$. 
-From the fact that $H_{x,y}$ we see that the square is a pullback.
-
-Now we need to show that the map $\varphi\defeq\gamma\mapsto\pairr{\pairr{S,\gamma},H^\gamma}$ is an equivalence. Consider a map $g\defeq\pairr{S',\gamma'}:Y\to X/R$ and a homotopy
-$K:g\circ\pi_2\htpy q_X\circ \pi_1$ such that the square in \autoref{eq:classifier} is a pullback. An equivalent way of saying that the square in \autoref{eq:classifier} is a pullback, is that the map
-\begin{equation*}
-K_{x,y}: S'(y,x)\to (g(y)=q_R(x))
-\end{equation*}
-is an equivalence for each $x:X$ and $y:Y$.
-
-The fiber of $\varphi$ at a pair $\pairr{g,K}$ consisting of a map $g:Y\to X/R$ and a homotopy $K: g\circ\pi_2\htpy q_X\circ \pi_2$ for which the square in \autoref{eq:classifier} is a pullback, is equivalent to the type
-\begin{align*}
-\sm{\gamma:\prd{y:Y}\mathcal{O}_R(S(y))} \pairr{g,K}=\pairr{S,\gamma,H^\gamma}
-\end{align*}
-This type is equivalent to
-\begin{equation*}
-\sm{\gamma:\prd{y:Y}\mathcal{O}_R(S(y))}{\alpha:\pi_1\circ g=S}{\beta:\trans{\alpha}{\pi_2\circ g}=\gamma} \trans{\pairr{\alpha,\beta}}{K}=H^\gamma.
-\end{equation*}
-Since $\gamma$ appears free on one side of an equality, this type is equivalent to the type
-\begin{equation*}
-\sm{\alpha:\pi_1\circ g=S} \trans{\alpha}{K}=H^{\trans{\alpha}{\pi_2\circ g}}.
-\end{equation*}
-This is equivalent to the type
-\begin{equation*}
-\pairr{\pi_1\circ g,K}=
-\end{equation*}
-This is an identity type in the fiber 
-By type theoretic choice, this type is equivalent to the type
-\begin{align*}
-\prd{y:Y}\sm{\gamma(y):\mathcal{O}_R(S(y))} \pairr{S(y),\gamma(y)}=g(y)
-\end{align*}
-By the pullback square of \autoref{eq:classifier}, it follows that $\pi_1\circ g:Y\to \im(R)$ is equal to $S$. By transporting $\pi_2(g(y))$ along this equality, we see that the type $\pairr{S(y),\gamma(y)}=g(y)$ is equivalent to the type $\pairr{S(y),\gamma(y)}=\pairr{S(y),\beta(y)}$ for some orientation $\beta(y):\mathcal{O}_R(S(y))$. Hence we see that the fiber is contractible.
-\end{comment}
 \end{proof}
 
-\subsection{The quotient approximation construction}
+\section{The quotient approximation construction}
 
 The quotient $X/R$, as stated, is not in $\UU$. The goal of the current section is to give a resizing argument, showing that for any principal equivalence relation $R$ on $X$, there is a type in $\UU$ which is equivalent to the quotient $X/R$. We do this via the quotient approximation construction, which constructs a type sequence with an equivalence from its sequential colimit to $X/R$.
 
@@ -337,7 +310,7 @@ Of course, the type $\pairr{\tilde{R}_n(t),o_{\tilde{R}_n}(t)}=\pairr{R(x),o_R(x
 is contractible. This follows from the fact that $\sm{t:(X/R)_n}\tilde{R}_n(t,x)$ is equivalent to the $(n+1)$-fold join of $\sm{t:X}R(t,x)$ with itself.
 \end{proof}
 
-\subsection{Effectiveness of the quotient}
+\section{Effectiveness of the quotient}
 
 \begin{defn}
 The type of all principal equivalence relations on $X$ is denoted by $\mathrm{PrER}(X)$. 
@@ -452,11 +425,11 @@ Hence it must be the case that $c_{q_R}(P,o)=P$, as desired. Now note that
 \end{align*}
 and since the top triangle commutes this equivalence maps $o_R(x)$ to $o_{\mathcal{K}_X(q_R)}(x)$. 
 \end{proof}
+\end{comment}
 
 \section{Saturated relations}
 
-\subsection{Saturatedness of pre-kernels}
-In this subsection we introduce the concept of saturated relations by using the join construction (\cref{sec:join_stage2}) to analyze the pre-kernel of a map.
+In this section we introduce the concept of saturated relations by using the join construction (\cref{sec:join_stage2}) to analyze the pre-kernel of a map.
 
 Suppose we are given a map $f:A\to X$. The fiberwise join operation $g\mapsto \join{f}{g}$  can be used to define an operation
 \begin{equation*}
@@ -652,6 +625,10 @@ Let $\mathcal{R}$ be a graph extension of a map $h:A\to B$. We write $\mathsf{sa
 Moreover, a reflexive relation $\mathcal{R}$ on a type $A$ is said to be \define{saturated} if it is saturated in the previous sense as a graph extension of the identity function $\idfunc:A\to A$.
 \end{defn}
 
+\begin{rmk}
+The type $\mathsf{sat}(\mathcal{R})$ can also be presented as an indexed coinductive type; see \cite{AltenkirchGhaniHancock} for the theory of indexed coinductive types, and \cite{AhrensCapriottiSpadotti} for their implementation in homotopy type theory. 
+\end{rmk}
+
 \begin{thm}\label{thm:pb_sat}
 Consider a commuting triangle
 \begin{equation}\label{eq:pb_sat}
@@ -687,7 +664,7 @@ completing the construction of $t$.
 
 For any function $h:A\to B$, write 
 \begin{equation*}
-E: (B\,{\downarrow}\,\UU) \to \mathsf{gphExt}(h)
+E: (B\mathbin{\downarrow}\UU) \to \mathsf{gphExt}(h)
 \end{equation*}
 for the operation $(g:B\to X)\mapsto E_{g\circ h,g}$.
 
@@ -696,7 +673,7 @@ For any function $h:A\to B$, the operation $E$ taking $g:B\to X$ to the pullback
 \begin{equation*}
 \begin{tikzcd}
 & \sm{\mathcal{R}:\mathsf{gphExt}(h)}\mathsf{sat}(\mathcal{R}) \arrow[d,"\proj 1"] \\
-(B\,{\downarrow}\,\UU) \arrow[r,swap,"E"] \arrow[ur,densely dotted,"\mathcal{E}"] & \mathsf{gphExt}(h).
+(B\mathbin{\downarrow}\UU) \arrow[r,swap,"E"] \arrow[ur,densely dotted,"\mathcal{E}"] & \mathsf{gphExt}(h).
 \end{tikzcd}
 \end{equation*}
 \end{cor}
@@ -706,16 +683,16 @@ For any function $h:A\to B$, the operation $k$ taking $f:A\to X$ to its pre-kern
 \begin{equation*}
 \begin{tikzcd}
 & \sm{\mathcal{R}:\mathsf{rRel}}\mathsf{sat}(\mathcal{R}) \arrow[d,"\proj 1"] \\
-(A\,{\downarrow}\,\UU) \arrow[r,swap,"k"] \arrow[ur,densely dotted,"\mathcal{K}"] & \mathsf{rRel}(A).
+(A\mathbin{\downarrow}\UU) \arrow[r,swap,"k"] \arrow[ur,densely dotted,"\mathcal{K}"] & \mathsf{rRel}(A).
 \end{tikzcd}
 \end{equation*}
 \end{cor}
 
-\subsection{Quotients by saturated relations}
+\section{Quotients by saturated relations}
 
 In order to construct the quotient operation, it is useful to consider the type of abstract graph extensions and their morphisms.
 
-\begin{defn}\label{defn:seq_sat}
+\begin{defn}
 We define the category of graph extensions to consist of objects and morphisms as follows:
 \begin{center}
 \begin{tabular}{rlcrl}
@@ -755,7 +732,7 @@ I & \defeq \lam{a}\glue(H(a)) \\
 \end{align*}
 \end{eg}
 
-\begin{defn}\label{defn:seq_sat}
+\begin{defn}
 Given a saturated graph extension $\mathcal{R}$ of $h:A\to B$, we define a sequence of graph extensions
 \begin{equation*}
 \begin{tikzcd}
@@ -916,12 +893,12 @@ For any surjective map $h:A\to B$, the lift
 \begin{equation*}
 \begin{tikzcd}
 & \sm{\mathcal{R}:\mathsf{gphExt}(h)}\mathsf{sat}(\mathcal{R}) \arrow[d,"\proj 1"] \\
-(B\,{\downarrow_s}\,\UU) \arrow[r,swap,"E"] \arrow[ur,densely dotted,"\mathcal{E}"] & \mathsf{gphExt}(h)
+(B\mathbin{\downarrow_s}\UU) \arrow[r,swap,"E"] \arrow[ur,densely dotted,"\mathcal{E}"] & \mathsf{gphExt}(h)
 \end{tikzcd}
 \end{equation*}
 is a section of the quotient operation
 \begin{equation*}
-\mathcal{Q} : \Big(\sm{\mathcal{R}:\mathsf{gphExt}(h)}\mathsf{sat}(\mathcal{R})\Big)\to (B\,{\downarrow_s}\,\UU).
+\mathcal{Q} : \Big(\sm{\mathcal{R}:\mathsf{gphExt}(h)}\mathsf{sat}(\mathcal{R})\Big)\to (B\mathbin{\downarrow_s}\UU).
 \end{equation*}
 \end{thm}
 
@@ -930,16 +907,16 @@ The lift
 \begin{equation*}
 \begin{tikzcd}
 & \sm{\mathcal{R}:\mathsf{rRel}(A)}\mathsf{sat}(\mathcal{R}) \arrow[d,"\proj 1"] \\
-(A\,{\downarrow_s}\,\UU) \arrow[r,swap,"k"] \arrow[ur,densely dotted,"\mathcal{K}"] & \mathsf{rRel}(A)
+(A\mathbin{\downarrow_s}\UU) \arrow[r,swap,"k"] \arrow[ur,densely dotted,"\mathcal{K}"] & \mathsf{rRel}(A)
 \end{tikzcd}
 \end{equation*}
 is a section of the quotient operation
 \begin{equation*}
-\mathcal{Q} : \Big(\sm{\mathcal{R}:\mathsf{rRel}(A)}\mathsf{sat}(\mathcal{R})\Big)\to (A\,{\downarrow_s}\,\UU).
+\mathcal{Q} : \Big(\sm{\mathcal{R}:\mathsf{rRel}(A)}\mathsf{sat}(\mathcal{R})\Big)\to (A\mathbin{\downarrow_s}\UU).
 \end{equation*}
 \end{cor}
 
-\subsection{The relational Hopf construction}
+\section{The relational Hopf construction}
 
 \begin{defn}
 A \define{right H-structure} on a graph extension $\mathcal{R}$ of $h:A\to B$ consists of quadruples
@@ -1155,7 +1132,7 @@ Now we can show that $\mu(\blank,p)$ is an equivalence. Observe that $\mu(\blank
 \end{align*}
 \end{proof}
 
-\subsection{The coherence laws for $2$-saturated graph extensions}
+\section{The coherence laws for $2$-saturated graph extensions}
 
 In the following theorem we establish that a $2$-saturated graph extension $\mathcal{R}$ of $h:A\to B$ is an associative right H-relation $\mathcal{R}$ satisfying further coherence laws that correspond to the cases where the associator (which has three edges as arguments) is applied to $\rho$. Thus the coherence laws organize themselves as follows:
 \begin{enumerate}
@@ -1181,35 +1158,16 @@ Following this scheme, we will also write
 \end{align*}
 for the coherences of \autoref{thm:hrel}.
 
-\begin{defn}
-For any endomorphism $f:X\to X$ with $H:f\htpy \idfunc$, one has
+\begin{defn}[Corollary 2.4.4 of \cite{hottbook}]
+For any endomorphism $f:X\to X$ with $H:f\htpy \idfunc$, there is a homotopy
 \begin{equation*}
-\mathsf{htpy\usc{}endo}(f,H,x):H(f(x))=\mathsf{ap}_f(H(x))
+\mathsf{htpy\usc{}endo}(H): H\cdot f \htpy f\cdot H
 \end{equation*}
-for any $x:X$.
+for any $x:X$, equipped with a homotopy
+\begin{equation*}
+\prd{x:X} \ct{(\mathsf{htpy\usc{}endo}(H,x))_{\mathsf{ap}}}{H(x)}=\mathsf{htpy\usc{}nat}(H,H(x)).
+\end{equation*}
 \end{defn}
-
-One can readily construct this identification by induction on $H$ (thus, using function extensionality). However, one can also make this construction without function extensionality, as follows:
-
-\begin{proof}[Construction]
-First, recall that homotopies are automatically natural with respect to identifications: given any homotopy $H:f\htpy g$ between $f,g:A\to B$, and $p:x=y$ in $A$, the square
-\begin{equation*}
-\begin{tikzcd}[column sep=huge]
-f(x) \arrow[r,equals,"H(x)"] \arrow[d,equals,swap,"\mathsf{ap}_{f}(p)",""{name=A,right}] & g(x) \arrow[d,equals,"\ap{g}{p}",""{name=B,left}] \arrow[draw=none,from=A,to=B,"{\mathsf{htpy\usc{}nat}(H,p)}" description] \\
-f(y) \arrow[r,equals,swap,"H(y)"] & g(y)
-\end{tikzcd}
-\end{equation*}
-commutes (by path induction). 
-
-Thus, in the situation at hand it follows by the naturality of homotopies that the square
-\begin{equation*}
-\begin{tikzcd}[column sep=large]
-ff(x) \arrow[d,swap,equals,"\mathsf{ap}_{f}(H(x))"] \arrow[r,equals,"H(f(x))"] & f(x) \arrow[d,equals,"H(x)"] \\
-f(x) \arrow[r,swap,equals,"H(x)"] & x
-\end{tikzcd}
-\end{equation*}
-commutes. By cancelling $H(x)$ on the right, this gives the desired identification $H(f(x))=\ap{f}{H(x)}$.
-\end{proof}
 
 \begin{rmk}
 For functions taking more than one argument, or for functions written in infix notation, we write the action on paths of a function as $f(p)_{\mathsf{ap}}$. For example, we write $\mu((p)_{\mathsf{ap}},r)$ for $\mathsf{ap}_{\mu(\blank,r)}(p)$, and $\ct{(s)_{\mathsf{ap}}}{q}$ for the `whiskering' operation on $s:p=p'$ and $q:y=z$. 
@@ -1267,10 +1225,10 @@ for every $t:R(y,z)$, $s:R(x,h(y))$, and $r:R(a,h(x))$ (of which we will usually
 \end{equation*}
 witnessing that the prism 
 \begin{equation*}
-\begin{tikzcd}[column sep=-2em]
-\mu_{01}(\mu(\rho_a,\rho_a)) \arrow[rrr,equals] \arrow[dd,equals] \arrow[dr,equals] & & & \ct{\alpha(\rho_a,\rho_a,\rho_a)}{\mu((\mu_{01}(\rho_a))_{\mathsf{ap}},\rho_a)} \arrow[dr,equals] \arrow[dd,equals] \\
-& \mu(\rho_a,(\mu_{01}(\rho_a))_{\mathsf{ap}}) \arrow[dl,equals] & & & \ct{\alpha(\rho_a,\rho_a,\rho_a)}{\mu((\mu_{10}(\rho_a))_{\mathsf{ap}},\rho_a)} \arrow[dl,equals] \arrow[from=lll,crossing over,equals] \\
-\mu(\rho_a,(\mu_{10}(\rho_a))_{\mathsf{ap}}) \arrow[rrr,equals] & & & \ct{\alpha(\rho_a,\rho_a,\rho_a)}{\mu_{10}(\mu(\rho_a,\rho_a))}
+\begin{tikzcd}[column sep=-4.5em]
+\mu_{01}(\mu(\rho_a,\rho_a)) \arrow[rrr,equals] \arrow[dd,equals] \arrow[dr,equals] &[-1em] & & \ct{\alpha(\rho_a,\rho_a,\rho_a)}{\mu((\mu_{01}(\rho_a))_{\mathsf{ap}},\rho_a)} \arrow[dr,equals] \arrow[dd,equals] &[-1em] \\
+\phantom{\ct{\alpha(\rho_a,\rho_a,\rho_a)}{\mu((\mu_{01}(\rho_a))_{\mathsf{ap}},\rho_a)}} & \mu(\rho_a,(\mu_{01}(\rho_a))_{\mathsf{ap}}) \arrow[dl,equals] & & & \ct{\alpha(\rho_a,\rho_a,\rho_a)}{\mu((\mu_{10}(\rho_a))_{\mathsf{ap}},\rho_a)} \arrow[dl,equals] \arrow[from=lll,crossing over,equals] \\
+\mu(\rho_a,(\mu_{10}(\rho_a))_{\mathsf{ap}}) \arrow[rrr,equals] & \phantom{\ct{\alpha(\rho_a,\rho_a,\rho_a)}{\mu((\mu_{10}(\rho_a))_{\mathsf{ap}},\rho_a)}} & & \ct{\alpha(\rho_a,\rho_a,\rho_a)}{\mu_{10}(\mu(\rho_a,\rho_a))}
 \end{tikzcd}
 \end{equation*}
 commutes.
@@ -1391,7 +1349,7 @@ satisfying the following groupoidal laws:
 Let $\mathcal{R}$ be reflexive relation, considered as a graph extension of $\idfunc[A]:A\to A$. If $\mathcal{R}$ is $2$-saturated, then $\mathcal{R}$ can be given a pre-groupoidal structure, and therefore the relation $x,y\mapsto \trunc{0}{R(x,y)}$ can be given the structure of a pre-groupoid on $A$, in the sense of \cite{AhrensKapulkinShulman}.
 \end{prp}
 
-\subsection{Effectiveness of saturated graph extensions}
+\section{Effectiveness of saturated graph extensions}
 
 \begin{comment}
 Since we are working with general graph extensions of a function $h:A\to B$, we will generalize \autoref{defn:system}, and our goal in this section is to solve it.
@@ -1508,16 +1466,12 @@ is a pullback square, for any $a:A$. In particular, we obtain a fiberwise equiva
 equipped with an identification $\alpha_a:\varphi_a(\rho(a))=\refl{q_{\mathcal{R}}(h(a))}$.
 \end{cor}
 
-\begin{prp}
-Let $h:A\to B$ be a function, and let $\mathcal{R}$ be a saturated graph extension of $h$, with quotient
-\begin{equation*}
-q_{\mathcal{R}}:B\to B/\mathcal{R}.
-\end{equation*}
-Then the right extension $\mathcal{S}$ of $\mathcal{R}$ is $E_{q\circ h,\mathsf{seq\usc{}in}_1}$. 
+\begin{prp}\label{lem:sat_prop}
+The type $\mathsf{sat}(\mathcal{R})$ is a proposition for each $A:\UU$.
 \end{prp}
 
 \begin{proof}
-Since $\mathcal{R}$ is saturated, it comes equipped with a right extension $\mathcal{S}$ which is again saturated. 
+If $\mathcal{R}$ is saturated, it comes equipped with a right extension $\mathcal{S}$ which is again saturated. 
 By \cref{lem:colim_shift}, it follows that the canonical map
 \begin{equation*}
 \begin{tikzcd}
@@ -1529,61 +1483,59 @@ is an equivalence such that the square commutes. Therefore it follows that the s
 \begin{equation*}
 \begin{tikzcd}
 \sm{y:A\sqcup^{\mathcal{R}} B} S(a,y) \arrow[d] \arrow[r] & \unit \arrow[d,"\mathsf{const}_{q(a)}"] \\
-A\sqcup^{\mathcal{R}} B \arrow[r,"\mathsf{seq\usc{}in}_1"] & B/\mathcal{R}
+A\sqcup^{\mathcal{R}} B \arrow[r,swap,"\mathsf{seq\usc{}in}_1"] & B/\mathcal{R}
 \end{tikzcd}
 \end{equation*}
-is again a pulback square.
+is again a pulback square. We conclude that the right extension $\mathcal{S}$ of $\mathcal{R}$ is the pullback relation $E_{q\circ h,\mathsf{seq\usc{}in}_1}$. This shows that $\mathsf{presat}(\mathcal{R})$ is contractible. 
+
+Since we've shown that $\mathsf{sat}(\mathcal{R})\to\iscontr(\mathsf{presat}(\mathcal{R}))$ for each $\mathcal{R}$, it follows that $\mathsf{sat}(\mathcal{R})\to\mathsf{iscontr}(\mathsf{sat}_n(\mathcal{R}))$, and therefore $\mathsf{sat}(\mathcal{R})$ must be a proposition.
 \end{proof}
 
-\begin{cor}
-Let $h:A\to B$ be a surjective function, and let $\mathcal{R}$ be a saturated graph extension of $h$, with quotient
-\begin{equation*}
-q_{\mathcal{R}}:B\to B/\mathcal{R}.
-\end{equation*}
-Then there is for any $r:R(x,y)$ a homotopy $\beta_r$ witnessing that the square
-\begin{equation*}
-\begin{tikzcd}
-R(a,h(x)) \arrow[d,swap,"\mu(r)"] \arrow[r,"\varphi_{h(x)}"] & q(h(a))=q(h(x)) \arrow[d,"\ct{\blank}{\varphi_y(r)}"] \\
-R(a,y) \arrow[r,swap,"\varphi_y"] & q(h(a))=q(y)
-\end{tikzcd}
-\end{equation*}
-commutes. Moreover, the family $\beta$ of homotopies comes equipped with
-\begin{align*}
-\mathsf{left\usc{}unit}_\beta & : \\
-\mathsf{right\usc{}unit}_\beta & : \\
-\mathsf{coh\usc{}unit}_\beta & : 
-\end{align*}
-\end{cor}
-
-\begin{thm}
+\begin{prp}
 For any surjective map $h:A\to B$, the lift
 \begin{equation*}
 \begin{tikzcd}
 & \sm{\mathcal{R}:\mathsf{gphExt}(h)}\mathsf{sat}(\mathcal{R}) \arrow[d,"\proj 1"] \\
-(B\,{\downarrow_s}\,\UU) \arrow[r,swap,"E"] \arrow[ur,densely dotted,"\mathcal{E}"] & \mathsf{gphExt}(h)
+(B\mathbin{\downarrow_s}\UU) \arrow[r,swap,"E"] \arrow[ur,densely dotted,"\mathcal{E}"] & \mathsf{gphExt}(h)
 \end{tikzcd}
 \end{equation*}
 is an equivalence.
-\end{thm}
+\end{prp}
 
 \begin{proof}
 We have already established that $\mathcal{Q}\circ\mathcal{E}\htpy \idfunc$. Therefore it remains to show that $\mathcal{E}\circ \mathcal{Q}\htpy\idfunc$. In other words: if $\mathcal{R}$ is a saturated graph extension of a surjective map $h:A\to B$, then $\mathcal{R}=\mathcal{E}_{q_{\mathcal{R}}\circ h,q_{\mathcal{R}}}$. 
 
-We have seen that as presaturated relations, we have an identification
+We have seen that as presaturated relations, we have an identification\marginnote{finish up}
 \end{proof}
 
-\begin{cor}
+As a corollary, we obtain:
+
+\begin{thm}\label{thm:classified_preker}
 For any type $A$, the lift
 \begin{equation*}
 \begin{tikzcd}
 & \sm{\mathcal{R}:\mathsf{rRel}(A)}\mathsf{sat}(\mathcal{R}) \arrow[d,"\proj 1"] \\
-(A\,{\downarrow_s}\,\UU) \arrow[r,swap,"k"] \arrow[ur,densely dotted,"\mathcal{K}"] & \mathsf{rRel}(A)
+(A\mathbin{\downarrow_s}\UU) \arrow[r,swap,"k"] \arrow[ur,densely dotted,"\mathcal{K}"] & \mathsf{rRel}(A)
 \end{tikzcd}
 \end{equation*}
-is an equivalence. In other words, the saturated reflexive relations form a system of equivalence relations, as defined in \cref{defn:system}.
+is an equivalence. In particular, the map $k:(A\mathbin{\downarrow}\UU)\to\mathsf{rRel}(A)$ is classified by the universal fibration $p:\tilde{\UU}\to\UU$.
+\end{thm}
+
+\begin{cor}\label{prp:embedding_preker}
+The map $k:(A\mathbin{\downarrow}\UU)\to\mathsf{rRel}(A)$ is an embedding for each $A:\UU$.
 \end{cor}
 
-\subsection{Truncated saturated graph extensions}
+\begin{proof}
+Immediate by \cref{lem:sat_prop}.
+\end{proof}
+
+\section{Truncated saturated graph extensions}
+
+\begin{comment}
+Recall that for any span $A \leftarrow S \rightarrow B$, if the map $S\to A$ is $n$-connected, then the map $\inr:B\to A\sqcup^S B$ is also $n$-connected.
+
+Therefore, it follows that if $\mathcal{R}$ is a graph extension of $h:A\to B$, such that each $R(x,y)$ is $n$-truncated and $\sm{y:B}R(a,y)$ is $(n+1)$-connected, then $\mathcal{R}$ extends uniquely to a graph extension of $\inl:A\to A\sqcup^{\mathcal{R}} B$.
+\end{comment}
 
 \begin{lem}
 Suppose $\mathcal{R}$ is a graph extension of $h:A\to B$, satisfying the following conditions:
@@ -1608,11 +1560,21 @@ In particular, we have a unique extension of $R(a)\circ \pi_2$, as indicated in 
 \begin{equation*}
 \begin{tikzcd}
 \sm{x:A}{y:B}R(x,y) \arrow[r,"\pi_2"] \arrow[d,swap,"\pi_1"] & B \arrow[d,"R(a)"] \\
-A \arrow[r,densely dotted] & \UU_{\leq n}
+A \arrow[r,densely dotted,swap,"P_a"] & \UU_{\leq n}
 \end{tikzcd}
 \end{equation*}
+with a homotopy $H:P_a\circ \pi_1\htpy R(a)\circ\pi_2$. We obtain fiberwise equivalences
+\begin{equation*}
+\prd{x:A}\eqv{P_a(x)}{R(a,h(x))}
+\end{equation*}
+by $\lam{x}\mathsf{equiv\usc{}eq}(H(x,h(x),\rho_x))$, so we see that in fact $R(a,h(\blank))$ is the unique extension, and that $\mathcal{R}$ is presaturated. Writing $\mathcal{R}'$ for the right extension of $\mathcal{R}$, we note that the total space\marginnote{Can we prove a generalization of this for $L'$-connected maps?}
+\begin{equation*}
+\sm{y:A\sqcup^{\mathcal{R}} B}R'(a,y)
+\end{equation*}
+is again $(n+1)$-connected, so it follows that $\mathcal{R}$ is saturated.
 \end{proof}
 
+\begin{comment}
 \begin{lem}
 Suppose $\mathcal{R}$ is a graph extension of $h:A\to B$ for which $\sm{y:B}R(a,b)$ is $n$-connected for each $a:A$. If $\mathcal{R}$ is presaturated with right extension $\mathcal{S}$, then $\sm{z:A\sqcup^{\mathcal{R}} B}S(a,z)$ is also $n$-connected.
 \end{lem}
@@ -1624,24 +1586,22 @@ If $\mathcal{R}$ is an $(n+2)$-saturated graph extension of $h:A\to B$, then the
 \end{equation*}
 is $(n+1)$-connected for each $a:A$.
 \end{lem}
+\end{comment}
 
-\begin{thm}
+\begin{thm}\label{thm:sat_trunc}
 Suppose $\mathcal{R}$ is a graph extension of $h:A\to B$ for which $R(x,y)$ is $n$-truncated. If $\mathcal{R}$ is $(n+2)$-saturated, then $\mathcal{R}$ is saturated.
 \end{thm}
 
 \begin{proof}
 First, we observe that the type
 \begin{equation*}
-\sm{y:B_n}R_{n}(x,y)
+\sm{y:B_{n+2}}R_{n+2}(a,y)
 \end{equation*}
 is $(n+1)$-connected. This holds since we have an equivalence
 \begin{equation*}
-\eqv{\Big(\Big)}{\Big(\Big)}
+\eqv{\Big(\sm{y:B_{n+2}}R_{n+2}(a,y)\Big)}{\join{\Big(\sm{x:A}R(a,h(x))\Big)^{\ast n+1}}{\Big(\sm{y:B}R(a,y)\Big)}}
 \end{equation*}
-
-Recall that for any span $A \leftarrow S \rightarrow B$, if the map $S\to A$ is $n$-connected, then the map $\inr:B\to A\sqcup^S B$ is also $n$-connected.
-
-Therefore, it follows that if $\mathcal{R}$ is a graph extension of $h:A\to B$, such that each $R(x,y)$ is $n$-truncated and $\sm{y:B}R(a,y)$ is $(n+1)$-connected, then $\mathcal{R}$ extends uniquely to a graph extension of $\inl:A\to A\sqcup^{\mathcal{R}} B$.
+Since the join of an $n$-connected type with an $m$-connected type is $(n+m+2)$-connected, it follows $\sm{y:B_{n+2}}R_{n+2}n(a,y)$ is $n+1$-connected as claimed. Furthermore, each $R_{n+2}(a,y)$ is $n$-truncated. Thus we see that $\mathcal{R}_n$ is saturated. It follows that $\mathcal{R}$ is saturated.
 \end{proof}
 
 \begin{conj}
@@ -1652,7 +1612,8 @@ Suppose $\mathcal{R}$ is an $n$-truncated graph extension of $h:A\to B$. Then th
 is $(k-2)$-truncated.
 \end{conj}
 
-\subsection{Coherence laws for presaturated reflexive relations}
+\begin{comment}
+\section{Coherence laws for presaturated reflexive relations}
 Consider the type of \define{bi-extensions} of $\mathcal{R}$, consisting of
 \begin{align*}
 S & : A\sqcup^{\mathcal{R}}A \to A\sqcup^{\mathcal{R}} A \to \UU \\
@@ -1713,3 +1674,11 @@ H_r & : \prd{x:A}{y:A} H_1(x,\rho(y)) \cdots \\
 \sigma_r & : \prd{x:A} \sigma_1(\rho(x))= H_0(x,x) \\
 K_0 & : \prd{x,x':A}{p:R(x,x')} Q_0(r,\sigma_0(x))\htpy \idfunc
 \end{align*}
+\end{comment}
+
+\section{Localized equivalence relations}
+
+\marginnote{These obvious observations are hardly worth a section, but still need to be made}
+\begin{prp}
+Let $L$ be a reflective subuniverse. If $\mathcal{R}$ is ($n$-)saturated, then so is $L\mathcal{R}$, which is the graph extension given by $LR(x,y)$. If $\mathcal{R}$ is saturated, then $B/L\mathcal{R}=L'(B/\mathcal{R})$. 
+\end{prp}

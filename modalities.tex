@@ -1190,7 +1190,7 @@ We can construct them by nullifying any family of propositions (\autoref{thm:pro
   \begin{equation}
   \begin{tikzcd}
   \sm{a:A} P(a) \arrow[r,"{\total g}"] \arrow[dr,swap,"{\modalunit}"]
-    & \sm{a:A} Q \mathrlap{\;\jdeq A\times Q} \arrow[d,"\proj2"] \\
+    & \sm{a:A} Q \mathrlap{\,\jdeq A\times Q} \arrow[d,"\proj2"] \\
   & Q
   \end{tikzcd}
   \end{equation}
@@ -1247,7 +1247,7 @@ A particularly useful corollary of \cref{thm:lex-modalities} is the following.
 
 Not every modality satisfying \cref{modaln-truncated} is lex.
 For instance, the $m$-truncation modality preserves $n$-types for all $n$, but is not lex for $m\ge -1$.
-(To see that it is not lex, consider an Eilenberg--MacLane space $K(G,m+1)$~\cite{lf:emspaces}; this is $m$-connected, but its loop space is $K(G,m)$ which is not $m$-connected.
+(To see that it is not lex, consider an Eilenberg--MacLane space $K(G,m+1)$~\cite{FinsterLicata}; this is $m$-connected, but its loop space is $K(G,m)$ which is not $m$-connected.
 Alternatively, we can use \cref{thm:acc-lex} below together with the fact that the universe of $m$-types in the $m^{\mathrm{th}}$ universe is not an $m$-type~\cite{ks:u-not-ntype}.)
 
 We do know at least one example of a lex modality.
@@ -1447,7 +1447,7 @@ The closure of $\infty$-connectedness under fibers also implies:
 
 Now, we can certainly localize at all the $\infty$-connected maps in $\UU$ to obtain a reflective subuniverse of any \emph{larger} universe $\UU'$ whose modal types are the $\UU$-$\infty$-truncated ones.
 However, hypercompletion should really be a modality on $\UU$ \emph{itself} whose modal types are the $\UU$-$\infty$-truncated ones.
-A local presentability argument in~\cite[Prop.~6.5.2.8]{lurie2009higher} shows that in any Grothendieck $\infty$-topos there exists a small family that generates such a modality by localization.
+A local presentability argument in~\cite[Prop.~6.5.2.8]{Lurie09} shows that in any Grothendieck $\infty$-topos there exists a small family that generates such a modality by localization.
 But in type theory, the best we can do at present is show that \emph{if} such a modality exists, then it behaves as expected.
 
 \begin{thm}\label{thm:hypercompletion}
@@ -1478,7 +1478,7 @@ But in type theory, the best we can do at present is show that \emph{if} such a 
   Thus each $B(a)$ is contractible, so that every type is $\modal$-modal.
 \end{proof}
 
-More generally, we have the following analogue of~\cite[Proposition 6.5.2.16]{lurie2009higher}:
+More generally, we have the following analogue of~\cite[Proposition 6.5.2.16]{Lurie09}:
 
 \begin{thm}\label{thm:cotop}
   For a lex modality $\modal$, the following are equivalent:
@@ -1508,7 +1508,7 @@ More generally, we have the following analogue of~\cite[Proposition 6.5.2.16]{lu
 
   These modal types are not closed under other type formers like $\emptyt$, $A+B$, the natural numbers, and more general inductive and higher inductive types.
   However, if $F$ is a presentation of $\modal$, then we can construct a version of any higher inductive type $\mathsf{H}$ that is $\modal$-modal and satisfies the induction principle with respect to other modal types, by adding the second two constructors of $\localization{F}$ to the given constructors of $\mathsf{H}$, yielding a new higher inductive type that is ``$F$-local by definition''.
-  (This is a sort of internal version of the algebraic fibrant replacement used semantically in~\cite{ls:hits}.)
+  (This is a sort of internal version of the algebraic fibrant replacement used semantically in~\cite{LumsdaineShulman}.)
   The fact that localization modalities have judgmental computation rules ensures that these ``local higher inductive types'' do too.
   Thus, the subtopos model inherits higher inductive types as well.
 
@@ -1766,7 +1766,7 @@ In classical 1-topos theory every lex modality is topological; in higher topos t
 
 At the other extreme, if $\modal$ is cotopological, then $\shmod{j_\modal}$ is the trivial modality.
 For a general lex $\modal$, the restriction of $\modal$ to $\shmod{j_\modal}$ is cotopological, in the sense that any $\modal$-connected $\shmod{j_\modal}$-modal mere proposition is contractible.
-That is, any lex modality ``decomposes'' into a topological part and a cotopological part, as in~\cite[Proposition 6.5.2.19]{lurie2009higher}.
+That is, any lex modality ``decomposes'' into a topological part and a cotopological part, as in~\cite[Proposition 6.5.2.19]{Lurie09}.
 
 \cref{thm:tpl-extend} also supplies additional structure on $\tpl$; the following proof is that of~\cite{wilson:frames}, as reproduced in~\cite[C1.1.15]{johnstone:elephant}.
 

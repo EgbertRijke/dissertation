@@ -29,8 +29,8 @@ is a pullback square, and we show that the class of $\Delta$-\'etale morphisms i
 
 In the case of sequential colimits, another way of obtaining a cartesian transformation from an arbitrary one is to take the sequential colimit fiberwise. We establish this result in \cref{thm:colim_fib}. It has many important consequences. First of all, we show in \cref{thm:colim_id} that sequential colimits commute with identity types. Second, we show in \cref{thm:colim_fiberseq} that the sequential colimit of a fiber sequence is again a fiber sequence. Third, we show in \cref{thm:colim_hlevel} that truncation levels are closed under sequential colimits, and that sequential colimits commute with truncations. Finally, we show in \cref{thm:colim_hgroup} that sequential colimits commute with homotopy groups. 
 
-The idea of a modal version of the descent theorem first arose in my unpublished work on reflexive graphs with Bas Spitters, in the spring of 2016. However, I only learned about $\modal$-\'etale maps much later from Felix Wellen, and many of the results presented in \cref{seq:modal_descent} came out of a discussion I had with Felix Wellen and Mike Shulman. 
-The material in \cref{seq:equifibrant_replacement} on the equifibrant replacement operation on reflexive graphs is joint work with Bas Spitters. 
+The idea of a modal version of the descent theorem first arose in my unpublished work on reflexive graphs with Bas Spitters, in the spring of 2016. However, I only learned about $\modal$-\'etale maps much later from Felix Wellen, and many of the results presented in \cref{sec:modal_descent} came out of a discussion I had with Felix Wellen and Mike Shulman. 
+The material in \cref{sec:equifibrant_replacement} on the equifibrant replacement operation on reflexive graphs is joint work with Bas Spitters. 
 The material in \cref{sec:seqcolim_eqf} on sequential colimits is joint work with Floris van Doorn and Kristina Sojakova, and all our results are formalized in the proof assistant Lean. 
 
 \section{Modal descent}\label{sec:modal_descent}
@@ -681,7 +681,7 @@ is a pullback square. Since the bottom map is an equivalence of reflexive graphs
 is a $\Delta$-equivalence. Of course, the morphism $\mathsf{constr}:\mathcal{B}\to\Delta(\rcoeq(\mathcal{B}))$ is also a $\Delta$-equivalence, so the claim follows by the 3-for-2 property of $\Delta$-equivalences.
 \end{proof}
 
-\begin{thm}
+\begin{thm}\label{thm:modal_rofs}
 The pair $(\mathcal{L}^\Delta,\mathcal{R}^\Delta)$ forms an orthogonal factorization system of reflexive graphs.
 \end{thm}
 
@@ -1278,7 +1278,7 @@ is an equivalence.
 
 The following theorem is a descent theorem for sequential colimits.
 
-\begin{thm}\label{thm:descent}
+\begin{thm}\label{thm:sequential_descent}
 Consider a sequence $\sequence{A}{f}$. The type $A_\infty\to\UU$ is equivalent to the type of equifibered type sequences over $\sequence{A}{f}$.
 \end{thm}
 
@@ -1324,7 +1324,7 @@ By the universal property of $A_\infty$ and by univalence we have
   \end{enumerate}
 \end{proof}
 
-\begin{lem}\label{lem:colim_shift_one}
+\begin{lem}\label{lem:colim_shift}
 For any type sequence $(A,f)$, the colimits of $(A,f)$ and $S(A,f)$ are equivalent.
 \end{lem}
 
@@ -1399,7 +1399,7 @@ Now note that
   & \simeq \tfcolim_m(B_{n+m}(f^m(x))\\
   & \jdeq (\square B)_n(x)
 \end{align*}
-The first equivalence $u_{n,m}$ is given by transporting along the dependent path in \autoref{lem:iterate_succ} in the family $B$. This forms a natural equivalence, because $\mathsf{transport}$ is natural. The second equivalence is given by applying \autoref{lem:colim_shift_one}. We call the composite equivalence $F$, which shows that $\square B$ is an equifibered sequence.
+The first equivalence $u_{n,m}$ is given by transporting along the dependent path in \autoref{lem:iterate_succ} in the family $B$. This forms a natural equivalence, because $\mathsf{transport}$ is natural. The second equivalence is given by applying \autoref{lem:colim_shift}. We call the composite equivalence $F$, which shows that $\square B$ is an equifibered sequence.
 \end{constr}
 
 \begin{defn}
@@ -1407,7 +1407,7 @@ Let $\sequence{B}{g}$ be a sequence over $\sequence{A}{f}$. Then we define
 \begin{equation*}
 B_\infty : A_\infty\to\UU
 \end{equation*}
-to be the family over $A_\infty$ associated to the equifibered sequence $(\square B,\square g)$ via the equivalence of \autoref{thm:descent}.
+to be the family over $A_\infty$ associated to the equifibered sequence $(\square B,\square g)$ via the equivalence of \autoref{thm:sequential_descent}.
 \end{defn}
 
 By construction of $B_\infty$ we get the equality

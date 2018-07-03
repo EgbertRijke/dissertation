@@ -519,19 +519,13 @@ Y' \arrow[ur,densely dotted]
     can be taken to be a small type $I$ in $\UU$, so there is a factorization
     of $P$ into a surjection $\hat{P} : X \to I$ followed by
     an embedding $i : I \to \UU_L$:
-    \[
-        \begin{tikzpicture}
-          \matrix (m) [matrix of math nodes,row sep=2em,column sep=3em,minimum width=2em]
-          { X & \UU_L \\
-            L' X & I. \\};
-          \path[->]
-            (m-1-1) edge node [above] {$P$} (m-1-2)
-                    edge node [left] {} (m-2-1)
-                    edge node [above] {$\hat{P}$} (m-2-2)
-            (m-2-2) edge node [right] {$i$} (m-1-2)
-            ;
-        \end{tikzpicture}
-    \]
+\begin{equation*}
+\begin{tikzcd}
+X \arrow[d,swap,"\modalunit'"] \arrow[r,"P"] \arrow[dr,swap,"\hat{P}"] & \UU_L \\
+L'X & I \arrow[u,swap,"i"] 
+\end{tikzcd}
+\end{equation*}
+
     Since the identity types of $I$ are equivalent to identity types
     of $\UU_L$, and $I$ is small, it follows that the identity types of $I$ are actually $L$-local.
     This means that $I$ is an $L$-separated type, so we can extend $\hat{P}$ to $L' X$ 
@@ -560,7 +554,7 @@ Then $f$ extends uniquely along $g$.
 \begin{proof}
 By assumption we have
 \[
-  \prd{b:B}\mathsf{isContr}\Big(\sm{c:C}\prd{a:A}{p:g(a)=b} f(a)=c\Big).
+  \prd{b:B}\iscontr\Big(\sm{c:C}\prd{a:A}{p:g(a)=b} f(a)=c\Big).
 \]
 The center of contraction gives us an extension
 \[
@@ -1269,7 +1263,7 @@ To see this, note that $\modalunit[X] : X \to (P\to X)$ is the same as the map i
     of the functions by $\susp{f} : \prd{i:I} \susp{A_i} \to \susp{B_i}$.
     A type $X$ is $\suspsym f$-local if and only if for every $x,y : X$, the type
     $x =_X y$ is $f$-local.
-    In other words, $L_{\susp{f}} = (L_{\!f})'$.
+    In other words, $L_{\susp{f}} = (L_{f})'$.
 \end{lem}
 
 \begin{proof}
@@ -1363,7 +1357,7 @@ In this section, we discuss localization with respect to a family of maps.
 %present some examples, and prove some basic properties.
 Our primary examples are localization at the degree $k$ map from $\sphere{1}$ to $\sphere{1}$
 and localization at a family of such maps.
-%We quote a result of~\cite{RSS} showing that in the special case when $B$ is $1$,
+%We quote a result of~\cite{RijkeShulmanSpitters} showing that in the special case when $B$ is $1$,
 %the localization one obtains is a modality.
 
 In \cref{ss:basic-properties}, we prove some basic properties and study some consequences
@@ -1377,7 +1371,7 @@ of the paper.
 
 \subsection{Local types and their properties}\label{ss:basic-properties}
 
-We recall the following definitions from~\cite{RSS}.
+We recall the following definitions from~\cite{RijkeShulmanSpitters}.
 \begin{defn}\ 
 \begin{enumerate}
 \item    Let $f: \prd{i:I} A_i \to B_i$ be a family of maps indexed by a type $I$.
@@ -1387,14 +1381,14 @@ We recall the following definitions from~\cite{RSS}.
 \end{enumerate}
 \end{defn} 
 
-As previously noted, \cite[Theorem 2.16]{RSS} shows that for every
+As previously noted, \cite[Theorem 2.16]{RijkeShulmanSpitters} shows that for every
 family $f$, the $f$-local types form a reflective subuniverse.
 The localization $L_f X$ is constructed as a higher inductive type,
 and we write $\eta_X : X \to L_f X$ for the unit.
 In the case of a family $A:I\to\UU$, localization at the unique family $u:\prd{i:I}A_i \to \unit$ is called \define{$A$-nullification}.
-By \cite[Theorem 2.17]{RSS}, the reflective subuniverse of $A$-null types is stable under dependent sums and therefore $A$-nullification is a modality (\cref{modality}).
+By \cite[Theorem 2.17]{RijkeShulmanSpitters}, the reflective subuniverse of $A$-null types is stable under dependent sums and therefore $A$-nullification is a modality (\cref{modality}).
 
-\begin{eg} We recall the following basic examples from~\cite{RSS}.
+\begin{eg} We recall the following basic examples from~\cite{RijkeShulmanSpitters}.
 \begin{enumerate}
 \item The unit type is $f$-local for any map $f$.
 \item A type $X$ is $(\emptyt\to\unit)$-local if and only if $X$ is contractible.
@@ -1415,24 +1409,14 @@ a type $X$ is local using the pointed mapping types.
 
 \begin{proof}
     The second claim follows from the first one, since
-    $\mathsf{isEquiv}$ is a mere proposition.
+    $\isequiv$ is a mere proposition.
     For the first claim, fix $i : I$ and consider the diagram
-    \[
-        \begin{tikzpicture}
-          \matrix (m) [matrix of math nodes,row sep=2em,column sep=3em,minimum width=2em]
-          { (B_i \pto X) & (B_i \to X) & X \\
-            (A_i \pto X) & (A_i \to X) & X , \\};
-          \path[->]
-            (m-1-1) edge [right hook->] node [above] {} (m-1-2)
-                    edge node [left] {} (m-2-1)
-            (m-1-2) edge node [above] {} (m-1-3)
-                    edge node [left] {} (m-2-2)
-            (m-2-1) edge [right hook->] node [above] {} (m-2-2)
-            (m-2-2) edge node [above] {} (m-2-3)
-            (m-1-3) edge [double equal sign distance,-] node [left] { } (m-2-3)
-            ;
-        \end{tikzpicture}
-    \]
+\begin{equation*}
+\begin{tikzcd}
+(B_i \to_\ast X) \arrow[d] \arrow[r,hookrightarrow] & (B_i\to X) \arrow[d] \arrow[r,"\evpt"] & X \arrow[d,equals] \\
+(A_i \to_\ast X) \arrow[r,hookrightarrow] & (A_i \to X) \arrow[r,swap,"\evpt"] & X
+\end{tikzcd}
+\end{equation*}
     where the horizontal sequences are fiber sequences with the fiber taken over
     some $x : X$. Since fiberwise maps are equivalences exactly when they are fiberwise
     equivalences, the vertical map in the middle is an equivalence if and
@@ -1457,7 +1441,7 @@ and \cref{thm:separation_characterization}.
     $\loopspacesym L_{\susp{f}} X \simeq L_f \loopspacesym X$. \qed
 \end{cor}
 
-This result is a type theoretic analog of \cite[Theorem 3.1]{Bousfield} and \cite[3.A.1]{DrorFarjoun}.
+This result is a type theoretic analog of \cite[Theorem 3.1]{Bousfield} and \cite[3.A.1]{Farjoun}.
 Interestingly, the classical proofs use delooping techniques which are not yet available in type theory.
 Our proof instead makes essential use of a universe.
 
@@ -1486,23 +1470,13 @@ So, without loss of generality we consider a single map $f : A \to B$.
 By \cref{lemma:pointed}, it suffices to consider pointed mapping
 spaces for each $x : X$.
 With $x$ chosen, we have a long fiber sequence
-\[
-  \begin{tikzpicture}[descr/.style={fill=white,inner sep=1.5pt}]
-        \matrix (m) [matrix of math nodes,row sep=2em,column sep=3em,minimum width=2em]
-        {   &  (A\pto X) & {(B\pto X)} & (C_f \pto X) \\
-            & (\suspsym A \pto X) & (\suspsym B \pto X)& (\suspsym C_f \pto X) \\
-            & \hspace*{2em}\cdots\hspace*{2em} \\
-        };
-
-        \path[overlay,->, font=\scriptsize]
-        (m-1-3) edge (m-1-2)
-        (m-1-4) edge (m-1-3)
-        (m-2-2) edge[out=175,in=355] node[descr,yshift=0.3ex]{}(m-1-4)
-        (m-2-3) edge (m-2-2)
-        (m-2-4) edge (m-2-3)
-        (m-3-2) edge[out=175,in=355] node[descr,yshift=0.3ex] {} (m-2-4);
-  \end{tikzpicture}
-\]
+\begin{equation*}
+\begin{tikzcd}
+& & \cdots \arrow[dll,out=352,in=172] \\
+(\suspsym C_f \pto X) \arrow[r] & (\suspsym B \pto X) \arrow[r] & (\suspsym A \pto X) \arrow[dll,out=352,in=172] \\
+(C_f \pto X) \arrow[r] & (B\pto X) \arrow[r] & (A\pto X)
+\end{tikzcd}
+\end{equation*}
 
 Assuming (1), from the first fiber sequence in the diagram above
 it follows that $(C_f \pto X)$ is contractible. This means that $X$ is $C_f$-null and
@@ -1627,7 +1601,7 @@ the stronger results will likely be of independent interest.
 Roughly speaking, an \define{orthogonal factorization system} consists of
 classes $\LLL$ and $\RRR$ of maps such that every map factors uniquely as
 $r \circ l$, with $l$ in $\LLL$ and $r$ in $\RRR$.
-See~\cite{RSS} for more information.
+See~\cite{RijkeShulmanSpitters} for more information.
 The reader not familiar with orthogonal factorization systems can assume
 that $\LLL$ is the class of $n$-connected maps
 and $\RRR$ is the class of $n$-truncated maps for some $n \geq -2$;
@@ -1648,20 +1622,13 @@ and $\RRR$ consists of the embeddings.)
     and that $r : S \to X$ is in $\RRR$.
     Fix $i : I$.
     Since $f_i$ is in $\LLL$ and $r$ is in $\RRR$, the following square is a pullback:
-    \[
-        \begin{tikzpicture}
-          \matrix (m) [matrix of math nodes,row sep=2em,column sep=3em,minimum width=2em]
-          { (B_i \sto S) & (A_i \sto S) \\
-            (B_i \sto X) & (A_i \sto X) . \\};
-          \path[->]
-            (m-1-1) edge node [above] {$\precomp{f_i}$} (m-1-2)
-                    edge node [left] {$r \circ \blank$} (m-2-1)
-            (m-1-2) edge node [right] {$r \circ \blank$} (m-2-2)
-            (m-2-1) edge node [below] {$\precomp{f_i}$} (m-2-2)
-            ;
-        \end{tikzpicture}
-    \]
-    This follows from~\cite[Lemma~1.44]{RSS}, which says that the fibers of
+\begin{equation*}
+\begin{tikzcd}
+S^{B_i} \arrow[r,"\precomp{f_i}"] \arrow[d,swap,"r^{B_i}"] & S^{A_i} \arrow[d,"r^{A_i}"] \\
+X^{B_i} \arrow[r,swap,"\precomp{f_i}"] & X^{A_i}
+\end{tikzcd}
+\end{equation*}
+    This follows from~\cite[Lemma~1.44]{RijkeShulmanSpitters}, which says that the fibers of
     the map comparing $S^{B_i}$ to the pullback are contractible.
     The bottom arrow is an equivalence since $X$ is $f$-local,
     so the top arrow is an equivalence, as required.

@@ -26,7 +26,7 @@ is a pullback square if and only if the induced fiberwise transformation
 \prd{x:X} \fib{f}{x}\to\fib{g}{h(x)}
 \end{equation*}
 is a fiberwise equivalence. Our main reference \cite{hottbook} does not present many results of homotopy pullbacks, although the material we presend about homotopy pullbacks is surely well-known. The connection between pullbacks and fiberwise equivalences has an important role in the descent theorem\index{descent} in \cref{chap:descent}, which is why we devote a section to this result.
-\item \cref{thm:classifier}, in which we establish that the universe is an object classifier. This result appears in \cite{rijkespitters} as Theorem 2.31, and in \cite{hottbook} as Theorem 4.8.4
+\item \cref{thm:classifier}, in which we establish that the universe is an object classifier. This result appears in \cite{RijkeSpitters} as Theorem 2.31, and in \cite{hottbook} as Theorem 4.8.4
 \end{enumerate}
 
 \section{Notation and preliminary results}
@@ -207,7 +207,7 @@ H\cdot f\defeq\lam{x}H(f(x)):h\circ f\htpy g\circ f.
 We will frequently make use of commuting cubes. The commutativity of a cube is stated using the whiskering operations on homotopies.
 
 \begin{defn}\label{defn:cube}
-A \define{commuting cube}\label{defn:cube}\index{commuting cube|textbf}
+A \define{commuting cube}\index{commuting cube|textbf}
 \begin{equation*}
 \begin{tikzcd}
 & A_{111} \arrow[dl] \arrow[dr] \arrow[d] \\
@@ -968,11 +968,10 @@ If any two of the following three properties hold, so does the third:
 \end{lem}
 
 \begin{proof}
-By the characterization of the identity type of $\cone(C')$ given in \cref{lem:id_cone} we obtain an identification
+The type of triples $(K,L,M)$ is equivalent to the type of identifications
 \begin{equation*}
-\conemap((p,q,H),h)=(p',q',H')
+\conemap((p,q,H),h)=(p',q',H').
 \end{equation*}
-from the triple $(K,L,M)$. 
 Let $D$ be a type, and let $k:D\to C'$ be a map. We observe that
 \begin{align*}
 \conemap((p,q,H),(h\circ k)) & \jdeq (p\circ (h\circ k),q\circ (h\circ k),H\circ (h\circ k)) \\
