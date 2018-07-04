@@ -17,7 +17,7 @@ for each $i:I$. We show in \cref{prp:colim_local} that, provided that $F$ is a f
 X_0 \arrow[r,"l_0"] & X_1 \arrow[r,"l_1"] & X_2 \arrow[r,"l_2"] & \cdots
 \end{tikzcd}
 \end{equation*}
-is $F$-local if each $l_n$ has the structure of a quasi $F$-local extension. We show that there is an initial quasi $F$-local extension $l:X\to QL_F X$, for every type $X$, and in \cref{thm:localization} we show that the sequential colimit $X\to QL_F^\infty$ is an $F$-localization. We establish in \cref{thm:compact_localization} that if $F$ is a family of maps between compact types, then the subuniverse of $F$-local types is a reflective subuniverse. Furthermore, if $A$ is a family of compact types, then the subuniverse of $A$-null types is a modality.
+is $F$-local if each $l_n$ has the structure of a quasi $F$-local extension. We show that there is an initial quasi $F$-local extension $l:X\to QL_F X$, for every type $X$, and in \cref{thm:localization} we show that the sequential colimit $X\to QL_F^\infty$ is an $F$-localization. We establish in \cref{thm:localization} that if $F$ is a family of maps between compact types, then the subuniverse of $F$-local types is a reflective subuniverse. Furthermore, if $A$ is a family of compact types, then the subuniverse of $A$-null types is a modality.
 
 Dan Christensen pointed out that this construction of $F$-localization already appears in section 1.B of \cite{Farjoun}, where arbitrary localizations are constructed by iterating the initial quasi $F$-local extension transfinitely many times. We stick to the case $\omega$ since larger ordinals are not yet as well understood in homotopy type theory. A minor note is that in Theorem B.5 Dror Farjoun only establishes that the transfinite colimit $QL_F^\kappa X$ localizes the homotopy groups. Our proofs are therefore different than Dror Farjoun's.
 
@@ -387,7 +387,7 @@ X \arrow[r] & Y
 \end{equation*}
 commutes. The type $X^{P_i}\to Y^{Q_i}$ is equivalent to the type $X^{P_i}\times Q_i\to Y$ by adjointness. 
 
-By the dependent universal property of pushouts established in \cref{thm:pushout_dup}, the type $l\circ \varepsilon_i \htpy j\circ (F_i^\ast\mathbin{\square} F_i)$ is equivalent to the type of triples $(K,L,M)$ consisting of
+By the dependent universal property of pushouts established in \cref{thm:pushout_up}, the type $l\circ \varepsilon_i \htpy j\circ (F_i^\ast\mathbin{\square} F_i)$ is equivalent to the type of triples $(K,L,M)$ consisting of
 \begin{align*}
 K & : \prd{f:P_i\to X}{p:P_i} l(f(p))=j(f,F_i(p)) \\ 
 L & : \prd{g:Q_i\to X}{q:Q_i} l(g(q))=j(g\circ F_i,q) \\
@@ -469,7 +469,7 @@ If $X$ is $F$-local, then $l:X\to QL_F X$ is an equivalence.
 If $X$ is $F$-local, then each $F_i^\ast$ is an equivalence. It follows that the pushout-product $F_i^\ast\mathbin{\square} F_i$ is an equivalence. Since pushouts of equivalences are equivalences, the claim follows.
 \end{proof}
 
-\begin{thm}\label{thm:compact_localization}
+\begin{thm}\label{thm:localization}
 For any type $X$ and any family $F:\prd{a:A}P(a)\to Q(a)$ of maps between
 compact types, the subuniverse of $F$-local types is reflective.
 \end{thm}

@@ -3,7 +3,7 @@
 \section{The real projective spaces}
 In this section I describe joint work with Ulrik Buchholtz \cite{realprojective}, in which we defined the real projective spaces $\rprojective{n}$ in homotopy type theory. Furthermore, I answer a question posed by André Joyal during his visit of CMU in February 2018, regarding the complement of the tautological bundle on $\rprojective{n}$.
 
-\subsection{The type of \texorpdfstring{$2$}{2}-element sets}
+\subsection{The type of \texorpdfstring{$2$}{2}-element sets}\label{sec:UUS0}
 
 We write $\UU_{\sphere{0}}$ for the connected component at $\sphere{0}$ of the universe. 
 
@@ -114,7 +114,7 @@ Classically, the $(n+1)$-st real projective space can be obtained by attaching a
 and we have to somehow find a way to define the attaching map $\alpha_{n+1}:\sphere{n+1}\to\rprojective{n}$ to continue the inductive procedure.
 However, it is somewhat tricky to obtain these attaching maps directly, and we have chosen to follow a closely related path towards the definition of the real projective spaces that takes advantage of the machinery of dependent type theory. 
 
-Observe that the attaching map $\alpha_n:\sphere{n}\to\rprojective{n}$ is just the tautological bundle (or the quotient map that identifies the antipodal points). This suggests that we may proceed by defining simultaneously the real projective space $\rprojective{n}$ and its tautological bundle $\tautfam[\R]{n}$. The tautological bundle on $\rprojective{n}$ is an $\sphere{0}$-bundle, so it can be described as a map $\rprojective{n}\to\UU_{\sphere{0}}$. We perform this construction in \autoref{defn:realprojective} using the properties of the type of 2-element types developed in \autoref{sec:UUS0}, and in \autoref{thm:Sn_totalcov} we show that the total space of the tautological bundle on $\rprojective{n}$ is the $n$-sphere. 
+Observe that the attaching map $\alpha_n:\sphere{n}\to\rprojective{n}$ is just the tautological bundle (or the quotient map that identifies the antipodal points). This suggests that we may proceed by defining simultaneously the real projective space $\rprojective{n}$ and its tautological bundle $\tautfam[\R]{n}$. The tautological bundle on $\rprojective{n}$ is an $\sphere{0}$-bundle, so it can be described as a map $\rprojective{n}\to\UU_{\sphere{0}}$. We perform this construction in \cref{defn:realprojective} using the properties of the type of 2-element types developed in \cref{sec:UUS0}, and in \cref{thm:Sn_totalcov} we show that the total space of the tautological bundle on $\rprojective{n}$ is the $n$-sphere. 
 
 \begin{defn}\label{defn:realprojective}
 We define simultaneously for each $n:\N_{-1}$, 
@@ -151,7 +151,7 @@ Therefore, it suffices to show that the outer square in the diagram
 & & \UU_{\sphere{0}}
 \end{tikzcd}
 \end{equation}
-commutes. Indeed, in \autoref{lem:classifyer_U2} we have constructed a homotopy 
+commutes. Indeed, in \cref{lem:classifyer_U2} we have constructed a homotopy 
 \begin{equation*}
 R_n\defeq R_{\rprojective{n},\tautfam[\R]{n}}:\prd{x:\rprojective{n}}{y:\tautfam[\R]{n}} \eqv{\tautfam[\R]{n}(x)}{\sphere{0}},
 \end{equation*}
@@ -205,7 +205,7 @@ such that the bottom triangle in the diagram
 \end{tikzcd}
 \end{equation*}
 commutes.
-We construct this equivalence using the flattening lemma, \autoref{lem:flattening}, from which we get a pushout square:
+We construct this equivalence using the flattening lemma, \cref{lem:flattening}, from which we get a pushout square:
 \begin{equation*}
 \begin{tikzcd}[column sep=0.5em]
 \sm{x:\rprojective{n}}{y:\tautfam[\R]{n}(x)}\tautfam[\R]{n}(x) \arrow[r] \arrow[d] & \sm{t:\unit}\sphere{0} \arrow[d] \\
@@ -297,7 +297,7 @@ is connected, it suffices to show that the fiber
 \sm{x:\rprojective{\infty}}\sphere{0}=\tautfam[\R]{\infty}(x)
 \end{equation*}
 of $\tautfam[\R]{\infty}$ at $\sphere{0}:\UU_{\sphere{0}}$ is contractible.
-By \autoref{cor:id_U2} we have an equivalence of type
+By \cref{cor:id_U2} we have an equivalence of type
 \begin{equation*}
 \eqv{({\sphere{0}}=\tautfam[\R]{\infty}(x))}{\tautfam[\R]{\infty}(x)},
 \end{equation*}
@@ -313,7 +313,7 @@ we can pull the colimit out: it suffices to prove that
 \tfcolim_n\bigl(\sm{x:\rprojective{n}}\tautfam[\R]{n}(x)\bigr)
 \end{equation*}
 is contractible. 
-To do this, observe that the equivalences of \autoref{thm:Sn_totalcov} form
+To do this, observe that the equivalences of \cref{thm:Sn_totalcov} form
 a natural equivalence of type sequences as shown in Fig.~\ref{fig:type-sequences}.
 \begin{figure*}
   \centering
@@ -330,7 +330,7 @@ a natural equivalence of type sequences as shown in Fig.~\ref{fig:type-sequences
 \caption{Natural equivalence of type sequences for Thm~\ref{thm:RPoo_US0}.}
 \label{fig:type-sequences}
 \end{figure*}
-Indeed, the naturality follows from \autoref{eq:Sn_totalcov_natural}.
+Indeed, the naturality follows from \cref{eq:Sn_totalcov_natural}.
 
 Thus, the argument comes down to showing that $\sphere{\infty}\defeq\tfcolim_n(\sphere{n})$
 is contractible. This was first shown in homotopy type theory by Brunerie, and
@@ -345,7 +345,7 @@ Since the universe contains a natural numbers object $\N$,
 it also follows that the universe is closed under sequential colimits,
 and therefore we have $\rprojective{\infty}:\UU$. 
 Whereas a priori it is not clear that $\UU_{\sphere{0}}$ is equivalent to a 
-$\UU$-small type, this fact is contained in \autoref{thm:RPoo_US0}.
+$\UU$-small type, this fact is contained in \cref{thm:RPoo_US0}.
 \end{rmk}
 
 \subsection{The real projective spaces as classifying spaces}

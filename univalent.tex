@@ -31,7 +31,7 @@ is a fiberwise equivalence. Our main reference \cite{hottbook} does not present 
 
 \section{Notation and preliminary results}
 
-\marginpar{Make sure $\evpair$ is introduced, and shown to be an equivalence}
+\marginnote{Make sure $\evpair$ is introduced, and shown to be an equivalence}
 We work in Martin-L\"of dependent type theory with $\Pi$-types, $\Sigma$-types and cartesian products, coproducts $A+B$ equipped with $\inl:A\to A+B$ and $\inr:B\to A+B$ for any two types $A$ and $B$, an empty type $\emptyt$, a unit type $\unit$ equipped with $\ttt:\unit$, a type $\bool$ of booleans equipped with $\btrue,\bfalse:\bool$, a type $\N$ of natural numbers equipped with $0:\N$ and $\suc:\N\to\N$, and identity types. 
 
 \begin{rmk}
@@ -668,7 +668,7 @@ given by $\lam{(f,g)}{x}(f(x),g(x))$ is an equivalence.
 
 \subsection{Composing with equivalences}
 
-We show in this section that a map $f:A\to B$ is an equivalence if and only if for any type family $P$ over $B$, the precomposition map\marginpar{I do not find this result in \cite{hottbook}}
+We show in this section that a map $f:A\to B$ is an equivalence if and only if for any type family $P$ over $B$, the precomposition map\marginnote{I do not find this result in \cite{hottbook}}
 \begin{equation*}
 \blank\circ f: \Big(\prd{y:B}P(y)\Big)\to\Big(\prd{x:A}P(f(x))\Big)
 \end{equation*}
