@@ -27,7 +27,7 @@ by inductively defining the $(n+1)$-sphere $\sphere{n+1}$ to be the pushout
 of the span $\unit \leftarrow\sphere{n}\rightarrow\unit$. 
 Then we can attach $(n+1)$-cells to a type $X$.
 Let $f:(\sm{a:A}B(a))\to X$ be a family of attaching maps
-for some $\sphere{n}$-bundle $B:A\to\mathrm{BAut}(\sphere{n})$. We
+for some $\sphere{n}$-bundle $B:A\to\mathrm{BAut}(\sphere{n})$, where $\mathrm{BAut}(\sphere{n})$ is the type $\sm{X:\UU}\brck{\eqv{\sphere{n}}{X}}$ of types merely equivalent to the $n$-sphere. We
 attach the $(n+1)$-disks indexed by $A$ to $X$ by taking the homotopy pushout
 \begin{equation*}
 \begin{tikzcd}
@@ -35,12 +35,7 @@ attach the $(n+1)$-disks indexed by $A$ to $X$ by taking the homotopy pushout
 A \arrow[r,swap,"\inl"] & P. \arrow[ul,phantom,very near start,"\ulcorner"]
 \end{tikzcd}
 \end{equation*}
-
-Unless otherwise specified, we shall assume a univalent universe that is closed
-under the usual type constructors, including a natural numbers object, and
-homotopy pushouts. The model in cubical sets by Coquand et al. \cite{BezemCoquandHuber} is a
-constructive model for this setup, although the fact that it is closed under
-homotopy pushouts is currently unpublished.
+In this thesis we study dependent type theory with univalent universes that are closed under homotopy pushouts, further developing the program set out in \cite{hottbook} on synthetic homotopy theory. We will assume in this dissertation that every type family is classified by a univalent universe, and that all universes are closed under homotopy pushouts, as well as under the usual type constructors including identity types, $\Pi$- and $\Sigma$-types, and a natural numbers object. The model in cubical sets by Coquand et al. \cite{BezemCoquandHuber} is a constructive model for this setup, although the fact that it is closed under homotopy pushouts is currently unpublished. Furthermore, we will exclusively work with objects that can be described either as (dependent) types, or as their terms. In other words, the objects of our study are all `formalizeable' in the sense that they can be encoded in computer implementations of our setup of dependent type theory. Existing implementations of dependent type theory, supporting univalent universes and homotopy pushouts, with libraries developing synthetic homotopy theory, include the proof assistants Agda \cite{agda}, Coq \cite{coq}, and Lean \cite{lean}, and parts of the material in this theses are formalized in each of them. 
 
 We will mostly follow the notation of \cite{hottbook}.
 Also, it is worth pointing out that when we give two equivalent descriptions
