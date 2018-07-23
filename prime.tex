@@ -1,12 +1,8 @@
 \chapter{Localization at a prime}\label{chap:prime}
 
-In this section we first show that for any family of maps between compact types in our setting of a univalent universe that is closed under pushouts, the subuniverse of $f$-local types is reflective. 
+This chapter contains results by my MRC group, consisting of Dan Christensen, Morgan Opie, Luis Scoccola, and me.
 
-Then we proceed to study the $S$-local types for a set $S$ of integers. We say that a type $X$ is $S$-local if it is $\mathsf{deg}(k)$-local for any $k:S$. We show that for a simply connected type $X$, $S$-localization localizes the homotopy groups of$X$. 
-
-\section{Localization away from sets of numbers}\label{section:localizationaway}
-
-In this section, we focus on localization with respect to the \define{degree $k$
+In this chapter we focus on localization with respect to the \define{degree $k$
 map} $\degg(k) : \sphere{1} \to \sphere{1}$, for $k : \N$, and with respect to
 families of such maps.
 The degree $k$ map is defined by circle induction by mapping $\base$ to $\base$
@@ -14,7 +10,7 @@ and $\lloop$ to $\lloop^k$.
 Using suggestive language that mirrors the algebraic case, we call $L_{\degg(k)}$
 ``localization away from $k$'' and say that we are ``inverting $k$.''
 We note that, for many applications, one considers localization away from $k$ for $k$ prime.
-However, for the results of this section, $k$ can be any natural number.
+However, for the results of this chapter, $k$ can be any natural number.
 
 As might be expected, $\degg(k)$-localizations can be combined to localize a type \emph{at}
 a prime $p$, by localizing with respect to the family of maps $\degg(q)$ indexed by all
@@ -24,11 +20,20 @@ indexed by a map $S : A \to \N$ for some type $A$.
 In other words, we localize with respect to the family $\degg\circ S : A \to \sphere{1} \to \sphere{1}$.
 We denote the family $\degg\circ S$ by $\degg(S)$.
 
-The main goal of this section is to show that, for simply connected types,
+The main goal of this chapter is to show that, for simply connected types,
 $\degg(S)$-localization localizes the homotopy groups away from $S$ (as long as $S$ indexed by $\N$),
 as is true in the classical setting.
 
-We begin with a discussion of localization of groups in \cref{ss:localizationofgroups}, which we need in order to describe the effect of localization on homotopy groups.
+We begin in \cref{ss:localizationofgroups} by introducin uniquely $k$-divisible groups, and their localizations in the category of groups/abelian groups. \marginnote{edit}
+It will follow from \cref{lemma:localizationlocalizesfirst} that every group $G$ has a localization $G \to G'$
+away from $S$, obtained by applying $\pi_1$ to the $\deg(S)$-localization of $K(G, 1)$.
+Similarly, if $G$ is abelian, its localization in the category of abelian groups is obtained
+by applying $\pi_2$ to the $\deg(S)$-localization of $K(G,2)$.
+Moreover, by \cref{theorem:localizationKgn}, these algebraic localizations agree
+when restricted to abelian groups.
+In \cref{ss:abelian}, we give an independent, purely algebraic construction of
+the localization of an abelian group away from $S$ which also shows that the
+two localizations agree.
 
 In \cref{ss:n-conn}, we give characterizations of $\degg(S)$-localization for highly connected types. In particular, we show that the localization of a simply connected type can be computed as the nullification with respect to $M_S$, the family of cofibers of the maps $\degg(S(a))$, or as the localization with respect to $\susp \degg(S)$, the family of suspensions of these maps.
 We prove that the $\degg(S)$-localization of a pointed, $(n-1)$-connected type inverts $S$ in $\pi_n$,
@@ -45,248 +50,11 @@ Finally, in \cref{ss:abelian} we give a direct proof of the fact that
 the localization of an abelian group in the category of groups coincides with
 its localization in the category of abelian groups, which also follows from
 \cref{theorem:localizationKgn}.
-This section is not needed in the rest of the paper.
 
-\subsection{Localization of groups}\label{ss:localizationofgroups}
-
-We fix a family $S : A \to \N$ of natural numbers and consider the family
-of maps $\degg(S) : A \to S^1 \to S^1$ sending $a$ to $\degg(S(a))$.
-
-We begin by defining the collection of groups that will be the
-``local'' groups for our algebraic localization.
-We make the standard assumption that the underlying type of a group is a set.
-
-\begin{defn}
-    For $k : \N$, a group $G$ is \define{uniquely $k$-divisible} if the $k$-th power map
-    $g \mapsto g^k$ is a bijection.
-    A group $G$ is \define{uniquely $S$-divisible} if it is uniquely $S(a)$-divisible for every $a : A$.
-\end{defn}
-
-When the group is additive, the $k$-th power map is usually called the ``multiplication by $k$ map.''
-Notice that for non-abelian groups the map is not a group homomorphism in general.
-
-Our first goal is to show that the homotopy groups of a $\degg(S)$-local type
-are uniquely $S$-divisible.
-In order to do this, we begin by characterizing the $\degg(S)$-local types.
-
-\begin{lem}
-A type $X$ is $\degg(S)$-local if and only if, for each $x:X$ and $a:A$, the map
-$S(a) : \loopspace{X,x} \to \loopspace{X,x}$ sending 
-$\omega$ to $\omega^{S(a)}$ is an equivalence.
-\end{lem}
-
-\begin{proof}
-We apply \cref{lemma:pointed}.
-Let $x:X$ and $a:A$.
-By the universal property of the circle, we have an equivalence
-$(\sphere{1} \pto X) \eqvsym \loopspace{X,x}$,
-and it is easy to see that the square
-\[
-  \begin{tikzcd}
-    (\sphere{1} \pto X) \arrow[r,"\simeq"] \arrow[d,swap,"\precomp{\degg(S(a))}"] & \loopspace{X,x} \arrow[d,"S(a)"] \\
-    (\sphere{1} \pto X) \arrow[r,swap,"\simeq"] & \loopspace{X,x}
-  \end{tikzcd}
-\]
-commutes.
-So we conclude that $\precomp{\degg(S(a))}$ is an equivalence if and only if $S(a)$ is an equivalence.
-\end{proof}
-
-\begin{prp}\label{prop:homotopygroupsoflocalarelocal}
-    If $X$ is a pointed, $\degg(S)$-local type, then $\pi_{m+1}(X)$ is uniquely $S$-divisible
-    for each $m : \N$.
-    Conversely, if for some $n \geq 0$, $X$ is a pointed, simply connected $n$-type
-    such that $\pi_{m+1}(X)$ is uniquely $S$-divisible for each $m : \N$,
-    then $X$ is $\degg(S)$-local.
-\end{prp}
-
-For the converse, the requirement that $X$ be truncated is needed because
-we need to use Whitehead's theorem.
-
-\begin{proof}
-    Let $X$ be a pointed, $\degg(S)$-local type and let $a : A$.
-    In this proof, we write $\degg(k, Y)$ for the degree $k$ map on $\loopspacesym Y$,
-    where $k = S(a)$.
-    For every $m : \N$,
-    the map $\degg(k, X) : \loopspacesym X \to \loopspacesym X$ induces
-    the map $\degg(k, \loopspacesym^m X) : \loopspacesym^m \loopspacesym X \to \loopspacesym^m \loopspacesym X$,
-    by the Eckmann-Hilton argument~\cite[Theorem~2.1.6]{hottbook}.
-    That is, $\loopspacesym^m \degg(k, X) = \degg(k, \loopspacesym^m X)$.
-    It follows that $\loopspacesym^m \degg(k, X)$ induces the $k$-th power map on $\pi_{m+1}( X )$.
-    Since $\degg(k, X)$ is an equivalence, the $k$-th power map on $\pi_{m+1}( X )$
-    must be an equivalence for each $m$.
-    In other words, $\pi_{m+1}( X )$ is uniquely $S$-divisible for each $m$.
-
-    Conversely, suppose that, for some $n \geq 0$, $X$ is a pointed,
-    simply connected $n$-type such that $\pi_{m+1}(X)$ is uniquely $S$-divisible
-    for each $m : \N$.
-    Let $a : A$ and let $k = S(a)$.
-    Since $X$ is pointed and connected, it suffices to show that
-    $\degg(k, X) : \loopspacesym X \to \loopspacesym X$ is an equivalence.
-    By the above argument, $\degg(k, X)$ induces the $k$-th power map on each
-    $\pi_{m+1}(X) = \pi_m(\loopspacesym X)$.
-    By assumption, these $k$-th power maps are bijections.
-    Since $\loopspacesym X$ is a pointed, connected $(n-1)$-type, it follows from the
-    truncated Whitehead theorem~\cite[Theorem~8.8.3]{hottbook} that 
-    $\degg(k, X)$ is an equivalence.
-    % This last step is where we use that X is simply connected.  Otherwise,
-    % we'd need to study pi_m(\loopspacesym X) at other base points.
-\end{proof}
-
-Our next goal is to show that a group $G$ is uniquely $S$-divisible if and only
-if the Eilenberg--Mac Lane space $K(G, 1)$ is $\degg(S)$-local.
-For this, we use the following theorem.
-
-%\note{Update Theorem number when BDR is published.}
-\begin{thm}[{\cite[Theorem 4]{BuchholtzDoornRijke}}]\label{theorem:catofgroups}
-    Given $n>1$, the pointed, $(n-1)$-connected, $n$-truncated types together with pointed maps
-    form a univalent category, and this category is equivalent to the category of abelian groups
-    and group homomorphisms.
-    Similarly, when $n=1$ we have an equivalence between the category of pointed, $0$-connected,
-    $1$-truncated types and the category of groups. \qed
-\end{thm}
-
-The equivalence in \cref{theorem:catofgroups} is given by mapping a pointed,
-$(n-1)$-connected, $n$-truncated type $X$ to $\pi_n( X )$,
-and the inverse is given by mapping a group $G$ to the Eilenberg--Mac Lane
-space $K(G,n)$, as constructed in~\cite{FinsterLicata}.
-Moreover,~\cite{BuchholtzDoornRijke} shows that the inverse equivalence maps
-short exact sequences of groups to fiber sequences of types.
-
-\begin{cor}\label{corollary:characterizationpdivisible}
-    For any $n > 1$, an abelian group $G$ is uniquely $S$-divisible if and only if its classifying space $K(G,n)$
-    is $\degg(S)$-local. An arbitrary group $G$ is uniquely $S$-divisible if and only if $K(G,1)$ is $\degg(S)$-local.
-\end{cor}
-
-\begin{proof}
-    As argued in the proof of \cref{prop:homotopygroupsoflocalarelocal}, $\degg(k)$ induces the $k$-th power map under the equivalence of categories, so one morphism is an equivalence if and only if the other is.
-\end{proof}
-
-Note that the $n > 1$ case of \cref{corollary:characterizationpdivisible} also follows
-immediately from \cref{prop:homotopygroupsoflocalarelocal}.
-
-Now we define what it means to localize a group away from $S$.
-This concept is needed to state our main result, \cref{theorem:localizationlocalizes}.
-
-\begin{defn}\label{def:localizationofgroups}
-    Given a group $G$, a homomorphism $\eta : G \to G'$ is a \define{localization of $G$ away from $S$
-    in the category of groups} if $G'$ is uniquely $S$-divisible and for every group $H$
-    which is uniquely $S$-divisible, the precomposition map $\precomp{\eta} : \Hom(G', H) \to \Hom(G, H)$ is an equivalence.
-    If $G$ is abelian and $\eta : G \to G'$ has the universal property only with respect to uniquely
-    $S$-divisible abelian groups, we say $\eta$ is a \define{localization of $G$ away from $S$ in the category
-    of abelian groups}.
-\end{defn}
-
-\begin{rmk}\label{rmk:localizationofgroups}
-It will follow from \cref{lemma:localizationlocalizesfirst} that every group $G$ has a localization $G \to G'$
-away from $S$, obtained by applying $\pi_1$ to the $\deg(S)$-localization of $K(G, 1)$.
-Similarly, if $G$ is abelian, its localization in the category of abelian groups is obtained
-by applying $\pi_2$ to the $\deg(S)$-localization of $K(G,2)$.
-Moreover, by \cref{theorem:localizationKgn}, these algebraic localizations agree
-when restricted to abelian groups.
-In \cref{ss:abelian}, we give an independent, purely algebraic construction of
-the localization of an abelian group away from $S$ which also shows that the
-two localizations agree.
-\end{rmk}
-
-We conclude this section with three examples.
-The first one shows that $\degg(k)$-localization does not preserve fiber sequences in general.
-The second one shows the stronger statement that $\degg(k)$-localization is not a modality,
-by giving an example showing that uniquely $k$-divisible groups are not closed under extensions.
-(It is an easy exercise that if a localization $L$ preserves fiber sequences,
-then $L$ is a modality.)
-The third one shows that the $\degg(k)$-local types are not the separated types
-for any reflective subuniverse $L$.
-
-\begin{eg}\label{example:notlex}
-    We show that for $k > 1$, $\degg(k)$-localization
-    does not preserve all fiber sequences.
-    We first make some general observations.
-    By \cref{lemma:setsarelocal}, we know that if $f$ is a map between pointed,
-    connected types, then sets are $f$-local.
-    It follows that if $L_f$ preserves the fiber sequence
-    \[
-        G \longhookrightarrow \unit \lra K(G,1),
-    \]
-    then $K(G,1)$ is $f$-local.
-    Indeed, the $f$-localization map between the fiber sequences gives
-\begin{equation*}
-\begin{tikzcd}
-G \arrow[d,swap,"\eqvsym"] \arrow[r,hookrightarrow] & \unit \arrow[d,swap,"\eqvsym"] \arrow[r] & K(G,1) \arrow[d] \\
-L_f G \arrow[r,hookrightarrow] & L_f\unit \arrow[r] & L_f K(G,1).
-\end{tikzcd}
-\end{equation*}
-    which implies that $K(G,1) \simeq L_f K(G,1)$, since $L_f K(G,1)$ is connected
-    by \cref{cor:preserve-n-connected}.
-    Now take $f$ to be the degree $k$ map.
-    By \cref{corollary:characterizationpdivisible}, $K(G,1)$ is $\degg(k)$-local if and only if
-    $G$ is uniquely $k$-divisible.
-    In particular, if $G = \Z/k\Z$, then $K(G,1)$ is not $\degg(k)$-local.
-    So $\degg(k)$-localization does not preserve all fiber sequences.
-\end{eg}
-
-\note{Added the following example. It is much simpler than the next one. Should we keep both?}
-\note{Haven't modified the intro to these examples.}
-
-\begin{eg}\label{example:nonlocalfib2}
-    Consider the map $K(\Z,1) \to K(\Q,1)$, induced by the inclusion of groups $\Z \to \Q$.
-    Using the long exact sequence of homotopy groups, one sees that the fiber over any point is
-    (merely) equivalent to the set $\Q/\Z$. Recall that sets are $\degg(k)$-local for any $k : \N$,
-    so as long as $k > 0$, the type $K(\Z,1)$ is the total space of a fibration with $\degg(k)$-local fibers and $\degg(k)$-local base.
-    On the other hand, if $k > 1$, $K(\Z,1)$ is not $\degg(k)$-local, so we see that $\degg(k)$-localization
-    is not a modality in general.
-\end{eg}
-
-\begin{eg}\label{example:nonlocalfib}
-    Let $B$ be the subtype of $\Q \to \Q$ consisting of functions with bounded support.
-    We can define this type constructively as the type of functions together with
-    a mere bound for their support:
-    \[
-         B \defeq \sm{f : \Q \to \Q} \, \ttrunc{-1}{\sm{b : \Q} \prd{x : \Q} (x > b) \to (f(x) = 0) \times (f(-x) = 0)}.
-    \]
-    The group operation is given by $(f + g)(x) = f(x) + g(x)$.
-    Notice that both $\Q$ and $B$ are uniquely $k$-divisible for any $k > 0$.
-
-    Consider the semidirect product $P \defeq B \rtimes \Q$, where $\Q$ acts by translation:
-    \[
-        (r \cdot f)(x) = f(x+r).
-    \]
-    We claim that $(\delta_0, 2) : P$ does not have a square root. To see
-    this, assume we have $(f,r)$ such that $(f,r)^2 = (f + r\cdot f,2r) = (\delta_0, 2)$.
-    Then it must be the case that $r = 1$ and thus $f(x) + f(x+1) = \delta_0(x)$ for all $x : \Q$.
-    But then $f(x) = - f(x+1)$ if $x \neq 0$.
-    We can now contradict our assumption by proving that $f(x) = 0$ for all $x$.
-    To do this, notice that this fact is a mere proposition, so we
-    can use the mere bound for the support of $f$ to conclude that $f(x+1)$ is $0$ if $x>0$ is large enough,
-    and then induct backwards using $f(x) = - f(x+1)$ if $x>0$. The case $x<0$ is analogous.
-    Thus we have obtained a short exact sequence of groups
-    \[
-        1 \lra B \lra P \lra \Q \lra 1
-    \]
-    in which the kernel and cokernel are uniquely $2$-divisible, but the middle group is not.
-
-    It follows that if we apply the functor $K(\blank, 1)$ to this short exact sequence of groups,
-    we obtain a fiber sequence with connected, $\degg(2)$-local base and fiber,
-    but for which the total space is not $\degg(2)$-local.
-    Phrased differently, a dependent sum of $\degg(2)$-local types, indexed by 
-    a $\degg(2)$-local type, is not necessarily $\degg(2)$-local.
-    So $\degg(2)$-localization is not a modality.
-
-    A similar argument shows that for any $k > 1$, $P$ is not uniquely $k$-divisible
-    and therefore that $\degg(k)$-localization is also not a modality.
-\end{eg}
-
-\begin{eg}
-As a final example in a similar spirit, we show that for $k > 1$, $L_{\degg(k)}$ is not
-of the form $L'$ for any reflective subuniverse $L$.
-For any $L$, the $L$-separated types are determined by their identity types.
-However, the identity types of $K(\Q,1)$ and $K(\Z,1)$ are equivalent,
-and the former is $L_{\degg(k)}$-local while the latter is not.
-\end{eg}
-
-\subsection{Localizing highly connected types}\label{ss:n-conn}
+\section{Localizing highly connected types}\label{ss:n-conn}
 
 We continue to fix a family $S : A \to \N$ of natural numbers and the associated family
-of maps $\degg(S) : A \to S^1 \to S^1$ sending $a$ to $\degg(S(a))$.
+of maps $\degg(S) : A \to \sphere{1} \to \sphere{1}$ sending $a$ to $\degg(S(a))$.
 We write $M_S$ for the family of cofibers, which sends $a$ to the cofiber
 of $\degg(S(a))$, a ``Moore space.''
 We write $\susp{\degg(S)}$ for the family of suspensions of the maps $\degg(S(a))$,
@@ -478,7 +246,204 @@ flavor and which will be used in \cref{ss:localization-of-homotopy-groups}.
     so the result follows.
 \end{proof}
 
-\subsection{Localization of Eilenberg--Mac Lane spaces}\label{ss:localizingKgn}
+\section{Localization of groups}\label{ss:localizationofgroups}
+
+We fix a family $S : A \to \N$ of natural numbers and consider the family
+of maps $\degg(S) : A \to \sphere{1} \to \sphere{1}$ sending $a$ to $\degg(S(a))$.
+
+\begin{defn}
+    For $k : \N$, a group $G$ is \define{uniquely $k$-divisible} if the $k$-th power map
+    $g \mapsto g^k$ is a bijection.
+    A group $G$ is \define{uniquely $S$-divisible} if it is uniquely $S(a)$-divisible for every $a : A$.
+
+    Given a group $G$, a group homomorphism $\eta : G \to G'$ is said to be a \define{localization of $G$ away from $S$
+    in the category of groups} if $G'$ is uniquely $S$-divisible, and for every group $H$
+    which is uniquely $S$-divisible the precomposition map $\precomp{\eta} : \mathsf{Grp}(G', H) \to \mathsf{Grp}(G, H)$ is an equivalence.
+    If $G$ is abelian and $\eta : G \to G'$ has the universal property only with respect to uniquely
+    $S$-divisible abelian groups, we say $\eta$ is a \define{localization of $G$ away from $S$ in the category
+    of abelian groups}.
+\end{defn}
+
+\begin{rmk}
+When the group is additive, the $k$-th power map is usually called the \define{multiplication-by-$k$ map}.
+Notice that for non-abelian groups the $k$-th power map is not in general a group homomorphism.
+\end{rmk}
+
+Our first goal is to show that the homotopy groups of a $\degg(S)$-local type
+are uniquely $S$-divisible.
+In order to do this, we begin by characterizing the $\degg(S)$-local types.
+
+\begin{lem}\label{lem:deglocal_char}
+A type $X$ is $\degg(S)$-local if and only if, for each $x:X$ and $a:A$, the map
+$S(a) : \loopspace{X,x} \to \loopspace{X,x}$ sending 
+$\omega$ to $\omega^{S(a)}$ is an equivalence.
+\end{lem}
+
+\begin{proof}
+We apply \cref{lemma:pointed}.
+Let $x:X$ and $a:A$.
+By the universal property of the circle, we have an equivalence
+$(\sphere{1} \pto X) \eqvsym \loopspace{X,x}$.
+Moreover, the square
+\[
+  \begin{tikzcd}
+    (\sphere{1} \pto X) \arrow[r,"\simeq"] \arrow[d,swap,"\precomp{\degg(S(a))}"] & \loopspace{X,x} \arrow[d,"S(a)"] \\
+    (\sphere{1} \pto X) \arrow[r,swap,"\simeq"] & \loopspace{X,x}
+  \end{tikzcd}
+\]
+commutes, so we conclude that $\precomp{\degg(S(a))}$ is an equivalence if and only if $S(a)$ is an equivalence.
+\end{proof}
+
+\begin{prp}\label{prop:homotopygroupsoflocalarelocal}
+    If $X$ is a pointed, $\degg(S)$-local type, then $\pi_{m+1}(X)$ is uniquely $S$-divisible
+    for each $m : \N$.
+    Conversely, if for some $n \geq 0$, $X$ is a pointed, simply connected $n$-type
+    such that $\pi_{m+1}(X)$ is uniquely $S$-divisible for each $m : \N$,
+    then $X$ is $\degg(S)$-local.
+\end{prp}
+
+For the converse, the requirement that $X$ be truncated is needed because
+we need to use Whitehead's theorem.
+
+\begin{proof}
+If $X$ is a pointed, $\degg(S)$-local type, then it follows immediately from \cref{lem:deglocal_char} that $\pi_1(X)$ is uniquely $S$-divisible. Moreover, since the loop space of a pointed $\degg(S)$-local type is again $\degg(S)$-local, it follows that $\pi_m(X)$ is uniquely $S$-divisible for all $m\geq 1$.
+\end{proof}
+
+\begin{proof}
+    Let $X$ be a pointed, $\degg(S)$-local type and let $a : A$.
+    In this proof, we write $\degg(k, Y)$ for the degree $k$ map on $\loopspacesym Y$,
+    where $k = S(a)$.
+    For every $m : \N$,
+    the map $\degg(k, X) : \loopspacesym X \to \loopspacesym X$ induces
+    the map $\degg(k, \loopspacesym^m X) : \loopspacesym^m \loopspacesym X \to \loopspacesym^m \loopspacesym X$,
+    by the Eckmann-Hilton argument~\cite[Theorem~2.1.6]{hottbook}.
+    That is, $\loopspacesym^m \degg(k, X) = \degg(k, \loopspacesym^m X)$.
+    It follows that $\loopspacesym^m \degg(k, X)$ induces the $k$-th power map on $\pi_{m+1}( X )$.
+    Since $\degg(k, X)$ is an equivalence, the $k$-th power map on $\pi_{m+1}( X )$
+    must be an equivalence for each $m$.
+    In other words, $\pi_{m+1}( X )$ is uniquely $S$-divisible for each $m$.
+
+    Conversely, suppose that, for some $n \geq 0$, $X$ is a pointed,
+    simply connected $n$-type such that $\pi_{m+1}(X)$ is uniquely $S$-divisible
+    for each $m : \N$.
+    Let $a : A$ and let $k = S(a)$.
+    Since $X$ is pointed and connected, it suffices to show that
+    $\degg(k, X) : \loopspacesym X \to \loopspacesym X$ is an equivalence.
+    By the above argument, $\degg(k, X)$ induces the $k$-th power map on each
+    $\pi_{m+1}(X) = \pi_m(\loopspacesym X)$.
+    By assumption, these $k$-th power maps are bijections.
+    Since $\loopspacesym X$ is a pointed, connected $(n-1)$-type, it follows from the
+    truncated Whitehead theorem~\cite[Theorem~8.8.3]{hottbook} that 
+    $\degg(k, X)$ is an equivalence.
+    % This last step is where we use that X is simply connected.  Otherwise,
+    % we'd need to study pi_m(\loopspacesym X) at other base points.
+\end{proof}
+
+\begin{cor}\label{corollary:characterizationpdivisible}
+    For any $n > 1$, an abelian group $G$ is uniquely $S$-divisible if and only if its classifying space $K(G,n)$
+    is $\degg(S)$-local. An arbitrary group $G$ is uniquely $S$-divisible if and only if $K(G,1)$ is $\degg(S)$-local.
+\end{cor}
+
+\begin{proof}
+    As argued in the proof of \cref{prop:homotopygroupsoflocalarelocal}, $\degg(k)$ induces the $k$-th power map under the equivalence of categories, so one morphism is an equivalence if and only if the other is.
+\end{proof}
+
+We conclude this section with three examples.
+The first one shows that $\degg(k)$-localization does not preserve fiber sequences in general.
+The second one shows the stronger statement that $\degg(k)$-localization is not a modality,
+by giving an example showing that uniquely $k$-divisible groups are not closed under extensions.
+(It is an easy exercise that if a localization $L$ preserves fiber sequences,
+then $L$ is a modality.)
+The third one shows that the $\degg(k)$-local types are not the separated types
+for any reflective subuniverse $L$.
+
+\begin{eg}\label{example:notlex}
+    We show that for $k > 1$, $\degg(k)$-localization
+    does not preserve all fiber sequences.
+    We first make some general observations.
+    By \cref{lemma:setsarelocal}, we know that if $f$ is a map between pointed,
+    connected types, then sets are $f$-local.
+    It follows that if $L_f$ preserves the fiber sequence
+    \[
+        G \longhookrightarrow \unit \lra K(G,1),
+    \]
+    then $K(G,1)$ is $f$-local.
+    Indeed, the $f$-localization map between the fiber sequences gives
+\begin{equation*}
+\begin{tikzcd}
+G \arrow[d,swap,"\eqvsym"] \arrow[r,hookrightarrow] & \unit \arrow[d,swap,"\eqvsym"] \arrow[r] & K(G,1) \arrow[d] \\
+L_f G \arrow[r,hookrightarrow] & L_f\unit \arrow[r] & L_f K(G,1).
+\end{tikzcd}
+\end{equation*}
+    which implies that $K(G,1) \simeq L_f K(G,1)$, since $L_f K(G,1)$ is connected
+    by \cref{cor:preserve-n-connected}.
+    Now take $f$ to be the degree $k$ map.
+    By \cref{corollary:characterizationpdivisible}, $K(G,1)$ is $\degg(k)$-local if and only if
+    $G$ is uniquely $k$-divisible.
+    In particular, if $G = \Z/k\Z$, then $K(G,1)$ is not $\degg(k)$-local.
+    So $\degg(k)$-localization does not preserve all fiber sequences.
+\end{eg}
+
+\note{Added the following example. It is much simpler than the next one. Should we keep both?}
+\note{Haven't modified the intro to these examples.}
+
+\begin{eg}\label{example:nonlocalfib2}
+    Consider the map $K(\Z,1) \to K(\Q,1)$, induced by the inclusion of groups $\Z \to \Q$.
+    Using the long exact sequence of homotopy groups, one sees that the fiber over any point is
+    (merely) equivalent to the set $\Q/\Z$. Recall that sets are $\degg(k)$-local for any $k : \N$,
+    so as long as $k > 0$, the type $K(\Z,1)$ is the total space of a fibration with $\degg(k)$-local fibers and $\degg(k)$-local base.
+    On the other hand, if $k > 1$, $K(\Z,1)$ is not $\degg(k)$-local, so we see that $\degg(k)$-localization
+    is not a modality in general.
+\end{eg}
+
+\begin{eg}\label{example:nonlocalfib}
+    Let $B$ be the subtype of $\Q \to \Q$ consisting of functions with bounded support.
+    We can define this type constructively as the type of functions together with
+    a mere bound for their support:
+    \[
+         B \defeq \sm{f : \Q \to \Q} \, \ttrunc{-1}{\sm{b : \Q} \prd{x : \Q} (x > b) \to (f(x) = 0) \times (f(-x) = 0)}.
+    \]
+    The group operation is given by $(f + g)(x) = f(x) + g(x)$.
+    Notice that both $\Q$ and $B$ are uniquely $k$-divisible for any $k > 0$.
+
+    Consider the semidirect product $P \defeq B \rtimes \Q$, where $\Q$ acts by translation:
+    \[
+        (r \cdot f)(x) = f(x+r).
+    \]
+    We claim that $(\delta_0, 2) : P$ does not have a square root. To see
+    this, assume we have $(f,r)$ such that $(f,r)^2 = (f + r\cdot f,2r) = (\delta_0, 2)$.
+    Then it must be the case that $r = 1$ and thus $f(x) + f(x+1) = \delta_0(x)$ for all $x : \Q$.
+    But then $f(x) = - f(x+1)$ if $x \neq 0$.
+    We can now contradict our assumption by proving that $f(x) = 0$ for all $x$.
+    To do this, notice that this fact is a mere proposition, so we
+    can use the mere bound for the support of $f$ to conclude that $f(x+1)$ is $0$ if $x>0$ is large enough,
+    and then induct backwards using $f(x) = - f(x+1)$ if $x>0$. The case $x<0$ is analogous.
+    Thus we have obtained a short exact sequence of groups
+    \[
+        1 \lra B \lra P \lra \Q \lra 1
+    \]
+    in which the kernel and cokernel are uniquely $2$-divisible, but the middle group is not.
+
+    It follows that if we apply the functor $K(\blank, 1)$ to this short exact sequence of groups,
+    we obtain a fiber sequence with connected, $\degg(2)$-local base and fiber,
+    but for which the total space is not $\degg(2)$-local.
+    Phrased differently, a dependent sum of $\degg(2)$-local types, indexed by 
+    a $\degg(2)$-local type, is not necessarily $\degg(2)$-local.
+    So $\degg(2)$-localization is not a modality.
+
+    A similar argument shows that for any $k > 1$, $P$ is not uniquely $k$-divisible
+    and therefore that $\degg(k)$-localization is also not a modality.
+\end{eg}
+
+\begin{eg}
+As a final example in a similar spirit, we show that for $k > 1$, $L_{\degg(k)}$ is not
+of the form $L'$ for any reflective subuniverse $L$.
+For any $L$, the $L$-separated types are determined by their identity types.
+However, the identity types of $K(\Q,1)$ and $K(\Z,1)$ are equivalent,
+and the former is $L_{\degg(k)}$-local while the latter is not.
+\end{eg}
+
+\section{Localization of Eilenberg--Mac Lane spaces}\label{ss:localizingKgn}
 
 In this section, we compute the localization of a loop space as a mapping telescope,
 in a way that is familiar from classical topology.
@@ -514,7 +479,7 @@ in which we take $T$ to be the subset of primes different from $p$.
 \loopspacesym X \arrow[r,swap,"\eta"] & L_{\degg(k)} \loopspacesym X
 \end{tikzcd}
 \end{equation*}
-    Recall that the right vertical map is the unique map that makes the square commute.
+    Recall that the right vertical map is the unique map equipped with a homotopy witnessing that the square commutes.
     Now, by \cref{corollary:commutativitylooplocalizationsimpconn}, we know that for pointed, simply connected types we have
     $L_{\degg(k)} \loopspacesym X \simeq \loopspacesym L_{\degg(k)} X$ so that,
     by the uniqueness of the right vertical map, the above square is equivalent to the square
@@ -534,28 +499,34 @@ Before doing this we need a general fact about sequential colimits.
 
 \begin{rmk}\label{remark:equivalenceofseqcolim}
 Given a sequential diagram $X$:
-\[
-    X_0 \xrightarrow{h_0} X_1 \xrightarrow{h_1} \cdots
-\]
-we can consider the shifted sequential diagram $X_1 \to X_2 \to \cdots$, which we denote $X[1]$.
+\begin{equation*}
+\begin{tikzcd}
+X_0 \arrow[r,"h_0"] & X_1 \arrow[r,"h_1"] & X_2 \arrow[r,"h_2"] & \cdots
+\end{tikzcd}
+\end{equation*}
+we can consider the shifted sequential diagram $\mathsf{shift}(X)$ given by $X_1 \to X_2 \to \cdots$.
 Analogously, we can shift a natural transformation $f : X \to Y$ between sequential
-diagrams to obtain a natural transformation $f[1] : X[1] \to Y[1]$.
-Notice that the transition maps $h_n$ induce a natural transformation $h : X \to X[1]$, and that moreover, the
-induced map $\colim\, h : \colim X \to \colim X[1]$ is an equivalence.
-It then follows that if $f : X \to X$ is a natural transformation such that there exist $g, g' : X \to X[1]$
-with $g \circ f = h$ and $f[1] \circ g' = h$, then $f$ induces an equivalence $\colim\, f : \colim X \xrightarrow{\sim} \colim X$.
+diagrams to obtain a natural transformation $\mathsf{shift}(f):\mathsf{shift}(X)\to\mathsf{shift}(Y)$.
+Notice that the transition maps $h_n$ induce a natural transformation $h : X \to \mathsf{shift}(X)$, and that moreover, the
+induced map $\colim(h) : \colim(X) \to \colim(\mathsf{shift}(X))$ is an equivalence.
+It then follows that if $f : X \to X$ is a natural transformation such that there exist $g, g' : X \to \mathsf{shift}(X)$
+with $g \circ f = h$ and $\mathsf{shift}(f) \circ g' = h$, then $f$ induces an self-equivalence $\colim(f) : \colim(X) \eqvsym \colim(X)$.
 \end{rmk}
 
-\begin{thm}\label{theorem:localizationastelescope}
+\begin{prp}\label{theorem:localizationastelescope}
     Let $X$ be pointed and simply connected, and
     define $s : \N \to \N$ by $s(n) = \prod_{i=0}^n S(i)$.
     Then the $\degg(S)$-localization of $\loopspacesym X$ is equivalent to the colimit of the sequence
-    \[\loopspacesym X \xrightarrow{s(0)}\loopspacesym X \xrightarrow{s(1)} \loopspacesym X \xrightarrow{s(2)} \cdots, \]
+\begin{equation*}
+\begin{tikzcd}
+\loopspacesym X \arrow[r,"s(0)"] & \loopspacesym X \arrow[r,"s(1)"] & \loopspacesym X \arrow[r,"s(2)"] & \cdots,
+\end{tikzcd}
+\end{equation*}
     where as usual a natural number $k$ is used to denote the $k$-fold map.
-\end{thm}
+\end{prp}
 
 \begin{proof}
-    We must show that the colimit is $\degg(S)$-local and that
+    We will show that the colimit is $\degg(S)$-local and that
     the map $\loopspacesym X \to \colim\, \loopspacesym X$ is an $L_{\degg(S)}$-equivalence.
     % Being a deg(S)-equivalence is not the same as being a deg(S(k))-equivalence
     % for every k.
@@ -623,7 +594,7 @@ We deduce:
 It follows that the two types of algebraic localization agree for abelian groups,
 so we do not need to distinguish between them in what follows.
 
-\subsection{Localization of homotopy groups}\label{ss:localization-of-homotopy-groups}
+\section{Localization of homotopy groups}\label{ss:localization-of-homotopy-groups}
 
 In this section we prove the main theorem of the paper:
 for simply connected types, $\degg(S)$-localization localizes all homotopy groups away from $S$.
@@ -725,7 +696,7 @@ We also have a partial converse to \cref{theorem:localizationlocalizes}.
   $\pi_m(f')$ is a bijection.
 \end{proof}
 
-\subsection{Algebraic localization of abelian groups}\label{ss:abelian}
+\section{Algebraic localization of abelian groups}\label{ss:abelian}
 
 As observed in \cref{rmk:localizationofgroups},
 \cref{theorem:localizationKgn} implies that the localization of an abelian group

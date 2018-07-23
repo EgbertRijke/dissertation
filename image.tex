@@ -511,3 +511,62 @@ Therefore it is not clear that the quotient $A/R$ is essentially small\index{ess
 \end{rmk}
 
 \section{The Rezk completion}
+
+We recall from \cite{AhrensKapulkinShulman} that a pre-category $\mathcal{A}$ consists of a type $A$ of objects, a $\set$-valued binary relation $\mathsf{hom}:A\to A\to\set$ of morphisms, equipped with identity morphisms
+\begin{equation*}
+\mathsf{id} : \prd{x:A} \mathsf{hom}(x,x)
+\end{equation*}
+and a composition operation
+\begin{equation*}
+\mathsf{comp} : \prd{x,y,z:A} \mathsf{hom}(y,z)\to \mathsf{hom}(x,y)\to \mathsf{hom}(x,z),
+\end{equation*}
+which is associative and satisfies the unit laws. The isomorphisms $x \cong y$ from $x$ to $y$ in a pre-category are defined in the expected way, and the pre-category $\mathcal{A}$ is said to be \define{Rezk-complete} if the canonical map
+\begin{equation*}
+\prd{x,y:A} (x=y)\to (x\cong y)
+\end{equation*}
+is an equivalence. Rezk-complete pre-categories are also called \define{categories}. By the univalence axiom, the pre-category $\mathbf{Set}$ of small sets is Rezk-complete. 
+
+A pre-category is said to be \define{(essentially) small} if its types of objects and morphisms are (essentially) small, and a pre-category is said to be \define{locally small} if its hom-types are essentially small. Thus, the category $\mathbf{Set}$ is locally small. 
+
+\begin{defn}
+Let $\mathcal{A}$ be a pre-category. A functor $\mathcal{F}:\mathcal{A}\to\mathcal{B}$ into a (Rezk-complete) category $\mathcal{B}$ is said to be a \define{Rezk-completion} if the pre-composition map
+\begin{equation*}
+\mathsf{Functor}(\mathcal{B},\mathcal{C})\to\mathsf{Functor}(\mathcal{A},\mathcal{C})
+\end{equation*}
+is an equivalence, for every (Rezk-complete) category $\mathcal{C}$. 
+\end{defn}
+
+\begin{thm}\label{cor:rezkcompletion}
+The Rezk completion $\hat{A}$ of any small pre-category $A$ can be constructed in any 
+univalent universe that is closed under graph quotients,
+and $\hat{A}$ is again a small category. 
+\end{thm}
+
+\begin{proof}
+In the first proof of Theorem 9.9.5 of \cite{hottbook}, the Rezk completion of
+a precategory $A$ is constructed as the image of the action on objects of the
+Yoneda embedding $\mathbf{y}:A\to\mathbf{Set}^{\op{A}}$.
+
+The hom-set $\mathbf{Set}^{\op{A}}(F,G)$ is the type of natural transformations
+from $F$ to $G$. It is clear from Definition 9.9.2 of \cite{hottbook}, that the
+type $\mathbf{Set}^{\op{A}}(F,G)$ is in $\UU$ for any two presheaves $F$ and $G$
+on $A$. In particular, the type $F\cong G$ of isomorphisms from $F$ to $G$
+is small for any two presheaves on $A$.
+
+Since $\mathbf{Set}$ is a category, it follows from Theorem 9.2.5 of
+\cite{hottbook} that the presheaf pre-category $\mathbf{Set}^{\op{A}}$ is a category.
+Since the type of isomorphisms between any two objects is
+small, it follows that the type of objects of
+$\mathbf{Set}^{\op{A}}$ is locally small. 
+
+Hence we can use \autoref{thm:modified-join} to construct the image of the
+action on objects of the Yoneda-embedding. The image constructed in this way
+is of course equivalent to the type $\hat{A}_0$ defined in the first proof of
+Theorem 9.9.5. Hence the arguments presented in the rest of that proof apply
+as well to our construction of the image. We therefore conclude that the Rezk completion
+of any small precategory is a small category.
+\end{proof}
+
+\begin{eg}\label{eg:emspaces}
+Any group $G$ can be seen as a pre-category $\mathcal{G}$ with a single object and the group $G$ as morphisms. The Rezk-completion of $\mathcal{G}$ is the Eilenberg-Mac Lane space $K(G,1)$. Thus we conclude that any univalent universe closed under pushouts contains the Eilenberg-Mac Lane spaces $K(G,1)$ for any small group $G$. 
+\end{eg}

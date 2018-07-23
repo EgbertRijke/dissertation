@@ -1,99 +1,6 @@
 \chapter{Higher group theory}\label{chap:higher_groups}
-In this section I describe joint work with Ulrik Buchholtz and Floris van Doorn \cite{BuchholtzDoornRijke}.\marginnote{Notation does not agree with previously used notation}
 
-\section{Preliminaries}
-\label{sec:preliminaries}
-
-In this paper we will work in the type theory of the HoTT book~\cite{hottbook}, although all arguments will also hold in a cubical type theory, such as \cite{CCHM2016,chtt}. In this section we briefly introduce the concepts we need for the rest of the paper.
-
-The type theory contains dependent function types $(x : A) \to B(x)$, which are more traditionally denoted as $\Pi_{x : A}B(x)$ and dependent pair types $(x : A) \times B(x)$, which are traditionally denoted as $\Sigma_{x : A}B(x)$. We choose to use this Agda-inspired notation because we often deal with deeply nested dependent sum types.
-
-The type of pointed types is
-$\UU_\pt := (A : \UU) \times (\pt : A)$. The type of $n$-truncated types is
-$\UU^{\le n} := (A : \UU) \times \istrunc{n}{A}$ and for $n$-connected types it is
-$\UU^{>n} := (A : \UU) \times \mathsf{is\usc{}conn}_n A$. We will combine these notations as needed.
-
-Given $A:\UU_\pt$ we define the \emph{loop space} $\Omega
-A:=(\pt=_A\pt)$, which is pointed with basepoint $1_\pt$. The
-\emph{homotopy groups} of $A$ are defined to be $\pi_k A:=
-\trunc{0}{\Omega^k A}$. These are groups in the usual sense when
-$k\ge1$, with neutral element $\tr{1}$ and group
-operation induced by path concatenation.
-
-Given $A,B:\UU_\pt$ the type of \emph{pointed maps} from $A$ to $B$
-is $(A\to_\pt B):=(f : A \to B)\times (f(\pt)=_B\pt)$. Given $f:A\to_\pt
-B$ we write $f:A\to B$ for the first projection (i.e.~the underlying map) and $f_0:f(\pt)=\pt$ for
-the second projection. The \emph{fiber} of a pointed map is defined by
-$\fib(f):=(a:A)\times (f(a)=_B\pt)$, which is pointed with basepoint $(\pt,f_0)$.
-
-In HoTT we can use \emph{higher inductive types} to construct Eilenberg-MacLane spaces $K(G,n)$~\cite{FinsterLicata}. For a group $G$ we define $K(G,1)$ as the following HIT.\\
-\indent \texttt{HIT} $K(G,1) :=$ \\
-\indent $\bullet\ \star : K(G,1)$; \\
-\indent $\bullet\ p : G \to \star=\star$; \\
-\indent $\bullet\ q : (g,h : G) \to p(gh) = p(g) \cdot p(h)$; \\
-\indent $\bullet\ \epsilon : \istrunc{1}{K(G,1)}$. \\
-(Using the univalent universe $\UU$, other direct definitions are
-also possible, for instance, $K(G,1)$ is equivalent to the type of
-small $G$-torsors.)
-Let $\Sigma X$ denote the suspension of $X$, i.e., the homotopy pushout of $1\leftarrow X\to 1$. For an abelian group $A$ can now inductively define $K(A,n+1):=\trunc{n+1}{\Sigma K(A,n)}$. Then we have the following result~\cite{FinsterLicata}.
-
-\begin{thm}\label{thm:EM-spaces}
-  Let $G$ be a group and $n\geq 1$, and assume that $G$ is abelian
-  when $n>1$. The space $K(G,n)$ is $(n-1)$-connected and
-  $n$-truncated and there is a group isomorphism $\pi_nK(G,n) \equiv G$.
-\end{thm}
-
-% possible other things to mention: 
-% - loop-suspension adjunction
-
-In some of our informal arguments we use the descent theorem for
-pushouts,\footnote{Recall from~\cite[\S6.1.3]{Lurie09}, following
-  ideas from Charles Rezk, that we can
-  \emph{define} the $\infty$-toposes among locally cartesian closed
-  $\infty$-categories as those whose colimits are \emph{van Kampen},
-  viz., satisfying descent.}
-which states that for a commuting cube of types
-\begin{equation}\label{eq:cube_higher_groups}
-\begin{tikzcd}
-& A_{11} \arrow[dl] \arrow[dr] \arrow[d] \\
-A_{10} \arrow[d] & B_{11} \arrow[dl] \arrow[dr] & A_{01} \arrow[dl,crossing over] \arrow[d] \\
-B_{10} \arrow[dr] & A_{00} \arrow[d] \arrow[from=ul,crossing over] & B_{01} \arrow[dl] \\
-& B_{00},
-\end{tikzcd}
-\end{equation}
-if the bottom square is a pushout and the vertical squares are pullbacks, then the top square is also a pushout. We will use the following slight generalization.
-
-\begin{thm}
-Consider a commuting cube of types as in~\eqref{eq:cube_higher_groups}, and suppose the vertical squares are pullback squares.
-Then the square
-\begin{equation*}
-\begin{tikzcd}
-A_{10}\sqcup^{A_{11}} A_{01} \arrow[r] \arrow[d] & A_{00} \arrow[d] \\
-B_{10}\sqcup^{B_{11}} B_{01} \arrow[r] & B_{00}
-\end{tikzcd}
-\end{equation*}
-is a pullback square.
-\end{thm}
-
-\begin{proof}
-It suffices to show that the pullback 
-\begin{equation*}
-(B_{10}\sqcup^{B_{11}} B_{01})\times_{B_{00}}A_{00}
-\end{equation*}
-has the universal property of the pushout. This follows by the descent theorem, since by the pasting lemma for pullbacks we also have that the vertical squares in the cube
-\begin{equation*}
-\begin{tikzcd}
-& A_{11} \arrow[dl] \arrow[dr] \arrow[d] \\
-A_{10} \arrow[d] & B_{11} \arrow[dl] \arrow[dr] & A_{01} \arrow[dl,crossing over] \arrow[d] \\
-B_{10} \arrow[dr] & (B_{10}\sqcup^{B_{11}} B_{01})\times_{B_{00}}A_{00} \arrow[d] \arrow[from=ul,crossing over] & B_{01} \arrow[dl] \\
-& B_{10}\sqcup^{B_{11}} B_{01}
-\end{tikzcd}
-\end{equation*}
-are pullback squares.
-\end{proof}
-In the formalization, arguments using descent are more conveniently
-done via the equivalent principle captured formally as the flattening
-lemma~\cite[\S6.12]{hottbook}.
+In this section I describe joint work with Ulrik Buchholtz and Floris van Doorn \cite{BuchholtzDoornRijke}.
 
 \section{Higher groups}
 \label{sec:higher-groups}
@@ -103,7 +10,7 @@ elements are objects, paths are morphisms, higher paths are higher
 morphisms, etc.
 
 It follows that \emph{pointed connected} types $B$ may be viewed as higher
-groups, with \emph{carrier} $\Omega B := (\pt =_B \pt)$.
+groups, with \define{carrier} $\loopspacesym B$.
 The neutral element is the identity path,
 the group operation is given by path composition,
 and higher paths witness the unit and associativity laws.
@@ -111,83 +18,122 @@ Of course, these higher paths are themselves subject to further laws,
 etc., but the beauty of the type-theoretic definition is
 that we don't have to worry about that:
 all the (higher) laws follow from the rules of the identity types.
-Writing $G$ for the carrier $\Omega B$, it is common to write $BG$ for the pointed
-connected type $B$, which comes equipped with an identification $G = \Omega BG$.
-We call $BG$ the \emph{delooping} of $G$.
+Writing $G$ for the carrier $\loopspacesym B$, it is common to write $BG$ for the pointed
+connected type $B$, which comes equipped with an identification $G = \loopspacesym BG$.
+We call $BG$ the \define{delooping} of $G$.
 
-Let us write
+The type of pointed types is
+$\UU_\pt \defeq  \sm{A:\UU} A$. The type of $n$-truncated types is
+$\UU^{\le n} \defeq  \sm{A:\UU}\istrunc{n}{A}$ and for $n$-connected types it is
+$\UU^{>n} \defeq  \sm{A:\UU}\mathsf{is\usc{}conn}_n(A)$. We will combine these notations as needed.
+
+\begin{defn}
+We define the type of \define{higher groups}, or \define{$\infty$-groups}, to be
+\begin{equation*}
+\infty\mathsf{Grp}\defeq \sm{G:\UU}{BG:\UU_\pt^{>0}} \eqv{G}{\loopspacesym BG}.
+\end{equation*}
+When $G$ is an $\infty$-group, we also write $G$ for its first projection, called the \define{carrier} of $G$.
+\end{defn}
+
+\begin{rmk}
+Note that we have equivalences
 \begin{align*}
   \infty\mathsf{Grp}
-  &:= (G : \UU) \times (BG : \UU_\pt^{>0}) \times (G \equiv \Omega BG) \\
-  &\phantom{:}\equiv (G : \UU_\pt) \times (BG : \UU_\pt^{>0}) \times (G \equiv_\pt \Omega BG) \\
-  &\phantom{:}\equiv \UU_\pt^{>0}
+  &\jdeq   \sm{G:\UU}{BG:\UU_\pt^{>0}} \eqv{G}{\loopspacesym BG} \\
+  &\eqvsym \sm{G:\UU_\pt}{BG:\UU_\pt^{>0}} G \eqvsym_\pt \loopspacesym BG \\
+  &\eqvsym \UU_\pt^{>0}
 \end{align*}
-for the type of higher groups, or \emph{$\infty$-groups}.
-Note that for $G:\infty\mathsf{Grp}$
-we also have $G:\UU$ using the first projection as a coercion. Using
-the last definition, this is the loop space map, and not the usual coercion!
+for the type of higher groups. 
+\end{rmk}
 
-We recover the ordinary set-level
-groups by requiring that $G$ is a $0$-type, or equivalently, that $BG$
-is a $1$-type. This leads us to introduce
-\begin{align*}
-  n\mathsf{Grp}
-  &:= (G : \UU_\pt^{<n}) \times (BG : \UU_\pt^{>0})
-    \times (G \equiv_\pt \Omega BG) \\
-  &\phantom{:}\equiv \UU_\pt^{>0,\le n}
-\end{align*}
-for the type of \emph{groupal} (group-like) $(n-1)$-groupoids, also known
-as \emph{$n$-groups}. For $G:1\mathsf{Grp}$
-a set-level group, we have $BG = K(G,1)$.
+Automorphism groups form a major class of examples of $\infty$-groups.
+Given \emph{any} type $A$ and any object $a : A$, the automorphism group at $a$ is defined as
+\define{automorphism group} $\Aut a\defeq (a=a)$. 
+This is indeed an $\infty$-group, because it is the loop space of the connected component of $A$ at $a$, i.e. we define~$\BAut a \defeq  \im(a : 1 \to A) = (x : A) \times \trunc{-1}{a=x}$.
+From this definition it is immediate that $\Aut a=\loopspacesym\BAut a$, so we see that $\Aut a$ is indeed an example of an $\infty$-group. 
+
+If we take $A = \mathsf{Set}$, we get the usual symmetric groups
+$\Sym_n \defeq  \Aut(\Fin(n))$, where $\Fin(n)$ is a set with $n$
+elements. (Note that $\BS_n = \BAut(\Fin (n))$ is the type of all
+$n$-element sets.)
+
+We recover the ordinary set-level groups by requiring that $G$ is a $0$-type, or equivalently, that $BG$
+is a $1$-type. This leads us to introduce:
+
+\begin{defn}
+We define the type of \define{groupal $(n-1)$-gropuoids}, or \define{$n$-groups}, to be
+\begin{equation*}
+n\mathsf{Grp} \defeq \sm{G:\UU_\pt^{<n}}{BG :\UU_\pt^{>0}} G \eqvsym_\pt \loopspacesym BG.
+\end{equation*}
+We write $\mathsf{Grp}$ for the type of $1$-groups.
+\end{defn}
+
+The type of $n$-groups is therefore equivalent to the type of pointed connected $(n+1)$-types. Note that if $A$ is an $(n+1)$-type, then $\Aut a$ is an $(n+1)$-group because $\Aut a$ is $n$-truncated.
 
 For example, the integers $\mathbb{Z}$ as an additive group are from this
 perspective represented by their delooping $\mathop{\mathrm{B}\mathbb{Z}}=\bS^1$, i.e., the circle.
+Indeed, any set-level group $G$ is represented as its delooping $BG\defeq K(G,1)$.
 
-Of course, double loop spaces are even better behaved than mere loop
-spaces (e.g., they are commutative up to homotopy
-by the Eckmann-Hilton argument~\cite[Theorem~2.1.6]{hottbook}).
-Say a type $G$ is
-\emph{$k$-tuply groupal} if we have a $k$-fold delooping,
-$B^kG : \UU_\pt^{\ge k}$, such that $G = \Omega^kB^kG$.
+Moving across the homotopy hypothesis, for every pointed type $(X,x)$
+we have the \define{fundamental $\infty$-group of $X$},
+$\Pi_\infty(X,x)\defeq \Aut x$. Its $(n-1)$-truncation (an instance of
+decategorification, see \cref{sec:stabilization}) is the
+\define{fundamental $n$-group of $X$}, $\Pi_n(X,x)$,
+with corresponding delooping $\mathrm{B}\Pi_n(X,x) = \trunc{n}{\BAut x}$.
 
-Mixing the two directions, let us introduce the type
+Double loop spaces are more well-behaved than mere loop
+spaces. For example, they are commutative up to homotopy
+by the Eckmann-Hilton argument~\cite[Theorem~2.1.6]{hottbook}.
+Triple loop spaces are even better behaved than double loop spaces, and so on.
+
+\begin{defn}
+A type $G$ is said to be \define{$k$-tuply groupal} if it comes equipped with a \define{$k$-fold delooping}, i.e.~ a pointed $k$-connected
+$B^kG : \UU_\pt^{\ge k}$ and an equivalence $G \eqvsym \loopspacesym^kB^kG$.
+
+Mixing the two directions, we also define
 \begin{align*}
   (n,k)\GType
-  &:= (G : \UU_\pt^{\le n}) \times (B^kG : \UU_\pt^{\ge k})
-    \times (G \equiv_\pt \Omega^kB^kG) \\
-  &\omit$\phantom{:}\equiv \UU_\pt^{\ge k,\le n+k}$
+  &\defeq  \sm{G : \UU_\pt^{\le n}}{B^kG : \UU_\pt^{\ge k}}
+    G \eqvsym_\pt \loopspacesym^kB^kG \\
+  & \phantom{:}\eqvsym \UU_\pt^{\ge k,\le n+k}
 \end{align*}
-for the type of \emph{$k$-tuply groupal $n$-groupoids}.\footnote{This
+for the type of \define{$k$-tuply groupal $n$-groupoids}\footnote{This
   is called $n\UU_k$ in \cite{BaezDolan1998}, but here we give equal
   billing to $n$ and $k$,
-  and we add the ``G'' to indicate group-structure.}
-(We allow taking $n=\infty$ in which case the truncation requirement
-is simply dropped.)
+  and we add the ``G'' to indicate group-structure.}.
+We allow taking $n=\infty$, in which case the truncation requirement
+is simply dropped.
+\end{defn}
+
 Note that $n\mathsf{Grp} = (n-1,1)\GType$. This shift in indexing is slightly
 annoying, but we keep it to stay consistent with the literature.
 
-Since there are forgetful maps
+Note that for each $k\geq 0$ there is a forgetful map
 \begin{equation*}
-(n,k+1)\GType \to (n,k)\GType
+(n,k+1)\GType \to (n,k)\GType,
 \end{equation*}
-given by $B^{k+1}G\mapsto \Omega B^{k+1}G$
-we can also allow $k$ to be infinite, $k=\omega$ by setting
+given by $B^{k+1}G\mapsto \loopspacesym B^{k+1}G$, defining a sequence
+\begin{equation*}
+\begin{tikzcd}
+\cdots \arrow[r] & (n,2)\GType \arrow[r] & (n,1)\GType \arrow[r] & (n,0)\GType.
+\end{tikzcd}
+\end{equation*}
+Thus we define $(n,\infty)\GType$ as the limit of this sequence:
 \begin{align*}
-(n,\omega)\GType & := \lim_k{}(n,k)\GType \\
-&\phantom{:}\equiv \bigl(B^{-}G : (k : \bN) \to \UU_\pt^{\ge k,\le n+k}\bigr) \\
-  &\qquad \times \bigl((k : \bN) \to B^kG \equiv_\pt \Omega B^{k+1}G \bigr).
+(n,\infty)\GType & \defeq  \lim_k{}(n,k)\GType \\
+&\phantom{:}\eqvsym \sm{B^{\blank}G : \prd{k : \bN}\UU_\pt^{\ge k,\le n+k}}\prd{k : \bN} B^kG \eqvsym_\pt \loopspacesym B^{k+1}G.
 \end{align*}
 In \cref{sec:stabilization} we prove the stabilization theorem
 (\cref{thm:stabilization}), from which it follows that
-$(n,\omega)\GType=(n,k)\GType$ for $k\geq n+2$.
+$(n,\infty)\GType=(n,k)\GType$ for $k\geq n+2$.
 
-When $(n,k)=(\infty,\omega)$, this is the type of stably groupal $\infty$-groups,
-also known as \emph{connective spectra}. If we also relax the
+The type $(\infty,\infty)\GType$ is the type of \define{stably groupal $\infty$-groups},
+also known as \define{connective spectra}. If we also relax the
 connectivity requirement, we get the type of all spectra, and we can
 think of a spectrum as a kind of $\infty$-groupoid with $k$-morphisms
 for all $k\in\mathbb{Z}$.
 
-The class of higher groups is summarized in~\cref{tab:periodic}.
+The double hierarchy of higher groups is summarized in~\cref{tab:periodic}.
 We shall prove the correctness of the $n=0$ column in~\cref{sec:n=0}.
 \begin{table}
   \caption{\label{tab:periodic}Periodic table of $k$-tuply groupal $n$-groupoids.}
@@ -201,120 +147,95 @@ We shall prove the correctness of the $n=0$ column in~\cref{sec:n=0}.
     $3$ & \ditto & symmetric $2$-group & sylleptic $3$-group & $\cdots$ & sylleptic $\infty$-group \\
     $4$ & \ditto & \ditto & symmetric $3$-group & $\cdots$ & ?? $\infty$-group \\
     $\vdots$ & \mbox{}\quad$\vdots$ & \mbox{}\quad$\vdots$ & \mbox{}\quad$\vdots$ & $\ddots$ & \mbox{}\quad$\vdots$ \\
-    $\omega$ & \ditto & \ditto & \ditto & $\cdots$ & connective spectrum \\
+    $\loopspacesym$ & \ditto & \ditto & \ditto & $\cdots$ & connective spectrum \\
     \bottomrule
   \end{tabular}
 \end{table}
 
-\section{Elementary observations}
-\label{sec:elementary-theory}
-
-\subsection{Automorphism groups}
-Automorphism groups form a major class of examples of $\infty$-groups.
-Given \emph{any} type $A$ and any object $a : A$, the automorphism group at $a$ is defined as
-\emph{automorphism group} $\Aut a:=(a=a)$. 
-This is indeed an $\infty$-group, because it is the loop space of the connected component of $A$ at $a$, i.e. we define~$\BAut a := \im(a : 1 \to A) = (x : A) \times \trunc{-1}{a=x}$.
-From this definition it is immediate that $\Aut a=\Omega\BAut a$, so we see that $\Aut a$ is indeed an example of an $\infty$-group. 
-Furthermore, if $A$ is $(n+1)$-truncated, then $\Aut a$ is an $(n+1)$-group because $\Aut a$ is $n$-truncated.
-
-%Why do we change A to X in this paragraph?
-Moving across the homotopy hypothesis, for every pointed type $(X,x)$
-we have the \emph{fundamental $\infty$-group of $X$},
-$\Pi_\infty(X,x):=\Aut x$. Its $(n-1)$-truncation (an instance of
-decategorification, see \cref{sec:stabilization}) is the
-\emph{fundamental $n$-group of $X$}, $\Pi_n(X,x)$,
-with corresponding delooping $\mathrm{B}\Pi_n(X,x) = \trunc{n}{\BAut x}$.
-
-If we take $A = \mathsf{Set}$, we get the usual symmetric groups
-$\Sym_n := \Aut(\Fin n)$, where $\Fin n$ is a set with $n$
-elements. (Note that $\BS_n = \BAut(\Fin n)$ is the type of all
-$n$-element sets.)
-We give further constructions related to ordinary groups
-in \cref{sec:perspectives}.
-
-\subsection{Homomorphisms and conjugation}
-\label{sec:homomorphisms}
-
 A homomorphism between higher groups is any
 function that can be suitably delooped.
+
+\begin{defn}
 For $G,H : (n,k)\GType$, we define
 \begin{align*}
-\hom_{(n,k)}(G,H) & := 
-(h: G \to_\pt H)\times (B^k h: B^kG \to_\pt B^kH) \\
-& \qquad \times (\Omega^k(B^k h) \sim_\pt h) \\
-&\phantom{:}\equiv (B^k h: B^kG \to_\pt B^kH).
+\hom_{(n,k)}(G,H) & \defeq  
+\sm{h: G \to_\pt H}{B^k h: B^kG \to_\pt B^kH} \loopspacesym^k(B^k h) \sim_\pt h \\
+&\phantom{:}\eqvsym (B^k h: B^kG \to_\pt B^kH).
 \end{align*}
 For (connective) spectra we need
 pointed maps between all the deloopings and pointed homotopies showing
 they cohere.
+\end{defn}
 
 Note that if $h,k : G \to H$ are homomorphisms between set-level
-groups, then $h$ and $k$ are \emph{conjugate} if $Bh, Bk : BG \to_\pt BH$ are
-\emph{freely} homotopic (i.e., equal as maps $BG \to BH$).
+groups, then $h$ and $k$ are \define{conjugate} if $Bh, Bk : BG \to_\pt BH$ are
+\define{freely} homotopic (i.e., equal as maps $BG \to BH$).
 
-Also observe that $\pi_j(B^kG \to_\pt B^kH) \equiv
-\trunc{0}{B^kG \to_\pt \Omega^jB^kH} \equiv
-\trunc{0}{\Sigma^jB^kG \to_\pt B^kH} = 0$ for $j+k-1 \ge n+k$,
-that is, for $j>n$, so
-this suggests that $\hom_{(n,k)}(G,H)$ is $n$-truncated.
-(The calculation verifies this for the identity component.)
-To prove
-this, we need to use an induction using the definition of
-$n$-truncated. If $f:\hom_{(n,k)}(G,H)$, then its self-identity type is
-equivalent to $\bigl(\alpha : (z : B^kG) \to (f\,z = f\,z)\bigr) \times
-\bigl(\alpha\,\pt \cdot g_\pt = f_\pt\bigr)$. This type is no longer a
-type of pointed maps, but rather a type of pointed sections of a
-fibration of pointed types.
+Also observe that 
+\begin{align*}
+\pi_j(B^kG \to_\pt B^kH) & \eqvsym \trunc{0}{B^kG \to_\pt \loopspacesym^jB^kH} \\
+& \eqvsym \trunc{0}{\Sigma^jB^kG \to_\pt B^kH} \\
+& \eqvsym 0
+\end{align*}
+for $j>n$, which suggests that $\hom_{(n,k)}(G,H)$ is $n$-truncated. To prove this, we deviate slightly from the approach in \cite{BuchholtzDoornRijke} and use the following intermediate result.
+
+\begin{prp}
+Consider a pointed $(k+1)$-connected type $X$, and a family $Y:X\to\UU^{\le n+k}$ of $(n+k)$-truncated types over $X$. Then the map
+\begin{equation*}
+\evpt : \Big(\prd{x:X}Y(x)\Big) \to Y(\pt)
+\end{equation*}
+induced by the point inclusion $\unit\to X$, is an $(n-2)$-truncated map.
+\end{prp}
+
+\begin{proof}
+Note that we have a commuting triangle
+\begin{equation*}
+\begin{tikzcd}[column sep=-1em]
+& \Big(\prd{x:X}Y(x)\Big) \arrow[dl,swap,"\blank\circ \mathsf{const}_\pt"] \arrow[dr,"\evpt"] & \phantom{\Big(\prd{t:\unit} Y(\pt)\Big)} \\
+\Big(\prd{t:\unit} Y(\pt)\Big) \arrow[rr,swap,"\evpt","\eqvsym"'] & & Y(\pt),
+\end{tikzcd}
+\end{equation*}
+so the map on the left is an $(n-2)$-truncated map if and only if the map on the right is. For the map on the left, the claim follows immediately from Lemma 8.6.1 of \cite{hottbook}, since the point inclusion $\mathsf{const}_\pt:\unit\to X$ is a $k$-connected map by \cref{cor:ptd_connected}.
+\end{proof}
+
 \begin{defn}
   If $X : \UU_\pt$ and $Y : X \to \UU_\pt$, then we introduce the
-  type of \emph{pointed sections},
-  \[
-    (x : X) \to_\pt Y\,x
-    := \bigl(s : (x : X) \to Y\,x\bigr)
-    \times \bigl(s\,\pt = \pt\bigr).
-  \]
-  This type is itself pointed by the trivial section $\lambda x, \pt$.
+  type of \define{pointed sections},
+\begin{equation*}
+\textstyle{\prod_{(x:X)}^\ast Y(x)} \defeq \sm{s:\prd{x:X}Y(x)}s(\pt)=\pt
+\end{equation*}
+  This type is itself pointed by the trivial section $\lam{x}\pt$.
 \end{defn}
-% Compared to is_trunc_ppi_of_is_conn we have
-% k := n+2
-% n := k+1
-% hence n+3+k there is n+k for us
-\begin{thm}
-  Let $X : \UU_\pt^{\ge k}$ be an $(k-1)$-connected, pointed type for
-  some $k\ge0$, and
-  let $Y : X \to \UU_\pt^{\le n+k}$ be a fibration of
-  $(n+k)$-truncated, pointed types for some $n\ge -1$. Then the type
-  of pointed sections, $(x : X) \to_\pt Y\,x$, is $n$-truncated.
-\end{thm}
-\begin{proof}
-  The proof is by induction on $n$.
 
-  For the base case $n=-1$ we have to show that the type of pointed
-  sections is a mere proposition. Since it is pointed, it must in fact
-  be contractible. The center of contraction is the trivial section $s_0$.
-  If $s$ is another section, then we get a pointed homotopy from $s$
-  to $s_0$ from the elimination principle for pointed, connected
-  types~\cite[Lemma~7.5.7]{hottbook}, since the types $s\,x=s_0\,x$ are
-  $(k-2)$-truncated.
-
-  To show the result for $n+1$, taking the $n$ case as the induction
-  hypothesis, it suffices to show for any pointed section $s$ that its
-  self-identity type is $n$-truncated. But this type is equivalent to
-  $(x : X) \to_\pt \Omega(Y\,x, s\,x)$, which is again a type of
-  pointed sections, and here we can apply the induction hypothesis.
-\end{proof}
 \begin{cor}
-  Let $k\ge0$ and $n\ge-1$. If $X$ is $(k-1)$-connected, and $Y$ is
-  $(n+k)$-truncated, then the type of pointed maps $X \to_\pt Y$ is
-  $n$-truncated. In particular, $\hom_{(n,k)}(G,H)$ is an $n$-type for
-  $G,H:(n,k)\GType$.
+Consider a pointed $k$-connected type $X$, and a family $Y:X\to\UU_\pt^{\le n+k}$ of pointed $(n+k)$-truncated types over $X$. Then the type $\prod_{(x:X)}^\ast Y(x)$ is $(n-1)$-truncated.
 \end{cor}
+
+\begin{proof}
+Note that we have a pullback square
+\begin{equation*}
+\begin{tikzcd}
+\textstyle{\prod_{(x:X)}^\ast Y(x)} \arrow[r] \arrow[d] & \unit \arrow[d] \\
+\prd{x:X}Y(x) \arrow[r,swap,"\evpt"] & Y(\ast),
+\end{tikzcd}
+\end{equation*}
+so the claim follows from the fact that $\evpt$ is an $(n-1)$-truncated map.
+\end{proof}
+
+\begin{thm}
+  The type $\hom_{(n,k)}(G,H)$ is an $n$-type for any $G,H:(n,k)\GType$.
+\end{thm}
+
+\begin{proof}
+  If $X$ is $(k-1)$-connected, and $Y$ is $(n+k)$-truncated, then the type of pointed maps $X \to_\pt Y$ is $n$-truncated.
+\end{proof}
+
 \begin{cor}
   The type $(n,k)\GType$ is $(n+1)$-truncated.
 \end{cor}
 \begin{proof}
   This follows immediately from the preceding corollary, as the type
-  of equivalences $G \equiv H$ is a subtype of the homomorphisms from
+  of equivalences $G \eqvsym H$ is a subtype of the homomorphisms from
   $G$ to $H$.
 \end{proof}
 
@@ -323,42 +244,218 @@ becomes a stably groupal $n$-groupoid. This generalizes the
 fact that the homomorphisms between abelian groups form an abelian
 group.
 
-The automorphism group $\Aut G$ of a higher group $G:(n,k)\GType$ is in
-$(n,1)\GType$.
-This is equivalently the automorphism group of the pointed type $B^kG$.
-But we can also forget the basepoint and consider the
-automorphism group $\Aut^c G$ of $B^kG:\UU^{\ge k,\le n+k}$. This
-now allows for (higher) conjugations. We define the \emph{generalized
-  center} of $G$ to be $ZG := \Omega^k\Aut^c G : (n,k+1)\GType$
-(generalizing the center of a set-level group,
-see below in~\cref{sec:center}).
+\begin{cor}
+The automorphism group $\Aut G$ of a higher group $G:(n,k)\GType$ is a $1$-groupal $(n+1)$-group, equivalent to the automorphism group of the pointed type $B^kG$.
+\end{cor}
 
-\subsection{Group actions}
+\section{Stabilization}
+\label{sec:stabilization}
+
+\begin{defn}
+The \define{decategorification} $\Decat G$ of a $k$-tuply groupal $(n+1)$-group is defined to be the $k$-tuply groupal $n$-group $\trunc{n-1}{G}$, which has delooping $\trunc{n+k-1}{B^kG}$. Thus, decategorification is an operation
+\begin{equation*}
+\Decat : (n,k)\GType \to (n-1,k)\GType.
+\end{equation*}
+The functorial action of $\Decat$ is defined in the expected way. We also define the \define{$\infty$-decategorification} $\iDecat G$ of a $k$-tuply groupal $\infty$-group as the $k$-tuply groupal $n$-group $\trunc{n}{G}$, which has delooping $\trunc{n+k}{B^k G}$. 
+\end{defn}
+
+\begin{defn}
+The \define{discrete categorification} $\Disc G$ of a $k$-tuply-groupal $(n+1)$-group is defined to be the same $\infty$-group $G$, now considered as a $k$-tuply groupal $(n+2)$-group. Thus, the discrete categorification is an operation
+\begin{equation*}
+\Disc : (n,k)\GType \to (n+1,k)\GType.
+\end{equation*}
+Similarly, the \define{discrete $\infty$-decategorification} $\iDisc G$ of a $k$-tuply groupal $(n+1)$-group is defined to be the same group, now considered as a $k$-tuply groupal $\infty$-group.
+\end{defn}
+
+\begin{rmk}
+The decategorification and discrete categorification functors make the $(n+1)$-category $(n,k)\GType$ a reflective sub-$(\infty,1)$-category of $(n+1,k)\GType$. That is, there is an adjunction ${\Decat} \dashv {\Disc}$. These properties are straightforward consequences of the universal property of truncation.
+Similarly, we have ${\iDecat} \dashv {\iDisc}$ such that the counit induces an isomorphism ${\iDecat} \circ {\iDisc} = \idfunc$.
+\end{rmk}
+
+For the next constructions, we need the following properties.
+\begin{defn}
+  For $A : \UU_\pt$ we define the \define{$n$-connected cover} of $A$ to be 
+  $A{\angled n} \defeq  \fibf{A \to \trunc{n}{A}}$. We have the projection $p_1: A{\angled n} \to_\pt A$.
+\end{defn}
+
+\begin{lem} \label{lem:connected-cover-univ}
+  The universal property of the $n$-connected cover states the following. For any $n$-connected pointed type $B$, the pointed map
+  $$(B \to_\pt A{\angled n}) \to_\pt (B \to_\pt A),$$
+  given by postcomposition with $p_1$, is an equivalence.\\
+\end{lem}
+
+\begin{proof}
+  Given a map $f:B\to_\pt A$, we can form a map $\widetilde f: B \to A{\angled n}$. First note that for $b:B$ the type $\truncunit{fb}_n=_{\trunc{n}{A}}\truncunit{\pt}_n$ is $(n-1)$-truncated and inhabited for $b=\pt$. Since $B$ is $n$-connected, the universal property for connected types shows that we can construct a $qb:\truncunit{fb}_n=\truncunit{\pt}_n$ for all $b$ such that $q_0:qb_0\cdot\mathsf{ap}_{\truncunit{\blank}_n}(f_0)=1$. Then we can define the map $\widetilde f(b)\defeq (fb, qb)$. Now $\widetilde f$ is pointed, because $(f_0,q_0):(fb_0,qb_0)=(a_0,1)$.
+
+  Now we show that this is indeed an inverse to the given map. On the one hand, we need to show that if $f: B \to_\pt A$, then $\proj 1 \circ \widetilde f=f$. The underlying functions are equal because they both send $b$ to $f(b)$. They respect points in the same way, because
+  $\mathsf{ap}{p_1}(\widetilde f_0)=f_0$. The proof that the other composite is the identity follows from a computation using fibers and connectivity, which we omit here, but can be found in the formalization.
+\end{proof}
+
+The next reflective sub-$(\infty,1)$-category is formed by looping and delooping.
+\begin{description}
+\item[looping] $\loopspacesym : (n,k)\GType \to (n-1,k+1)\GType$ \\
+  $\angled{G,B^kG} \mapsto \angled{\loopspacesym G,B^kG{\angled k}}$
+\item[delooping] $\B : (n,k)\GType \to (n+1,k-1)\GType$ \\
+  $\angled{G,B^kG} \mapsto \angled{\loopspacesym^{k-1}B^kG,B^kG}$
+\end{description}
+We have ${\B} \dashv {\loopspacesym}$, which follows from Lemma \ref{lem:connected-cover-univ} %note: autoref writes "Theorem"
+and $\loopspacesym\circ{\B} = \idfunc$, which follows from the fact that $A{\angled n}=A$ if $A$ is $n$-connected.
+
+The last adjoint pair of functors is given by stabilization and forgetting. This does not form a reflective sub-$(\infty,1)$-category.
+\begin{description}
+\item[forgetting] $F : (n,k)\GType \to (n,k-1)\GType$ \\
+  $\angled{G,B^kG} \mapsto \angled{G,\loopspacesym B^kG}$
+\item[stabilization] $S : (n,k)\GType \to (n,k+1)\GType$ \\
+  $\angled{G,B^kG} \mapsto \angled{SG,\trunc{n+k+1}{\susp B^kG}}$,\\
+  where $SG = \trunc{n}{\loopspacesym^{k+1}\susp B^kG}$
+\end{description}
+We have the adjunction ${S} \dashv {F}$ which follows from the suspension-loop adjunction $\Sigma\dashv\loopspacesym$ on pointed types.
+
+The next main goal in this section is the stabilization theorem,
+stating that the ditto marks in~\cref{tab:periodic} are justified.
+
+The following corollary is almost \cite[Lemma~8.6.2]{hottbook}, but
+proving this in Book HoTT is a bit tricky. See the
+formalization for details.
+\begin{lem}[Wedge connectivity]
+  \label{lem:wedge-connectivity}
+  If $A : \UU_\pt$ is $n$-connected and $B: \UU_\pt$ is
+  $m$-connected, then the map $A \vee B \to A \times B$ is
+  $(n+m)$-connected.
+\end{lem}
+
+Let us mention that there is an alternative way to prove the wedge
+connectivity lemma: Recall that if $A$ is $n$-connected and $B$ is
+$m$-connected, then $A \ast B$ is
+$(n+m+2)$-connected~\cite[Theorem~6.8]{joinconstruction}. Hence the
+wedge connectivity lemma is also a direct consequence of the following lemma.
+\begin{lem}
+Let $A$ and $B$ be pointed types.
+The fiber of the wedge inclusion $A\vee B\to A\times B$ is equivalent to
+$\loopspacesym{A}\ast\loopspacesym{B}$. 
+\end{lem}
+\begin{proof}
+Note that the fiber of $A\to A\times B$ is $\loopspacesym B$, the fiber of $B\to A\times B$ is $\loopspacesym A$, and of course the fiber of $1\to A\times B$ is $\loopspacesym A\times \loopspacesym B$. We get a commuting cube
+\begin{equation*}
+\begin{tikzcd}
+& \loopspacesym A\times \loopspacesym B \arrow[dl] \arrow[d] \arrow[dr] \\
+\loopspacesym B \arrow[d] & 1 \arrow[dl] \arrow[dr] & \loopspacesym A \arrow[dl,crossing over] \arrow[d] \\
+A \arrow[dr] & 1 \arrow[d] \arrow[from=ul,crossing over] & B \arrow[dl] \\
+& A\times B
+\end{tikzcd}
+\end{equation*}
+in which the vertical squares are pullback squares. 
+
+By the descent theorem for pushouts it now follows that $\loopspacesym A\ast \loopspacesym B$ is the fiber of the wedge inclusion.
+\end{proof}
+
+The second main tool we need for the stabilization theorem is:
+\begin{thm}[Freudenthal]
+  If $A : \UU_\pt^{>n}$ with $n\ge 0$, then the map
+  $A \to \loopspacesym\susp A$ is $2n$-connected.
+\end{thm}
+This is \cite[Theorem~8.6.4]{hottbook}.
+
+The final building block we need is:
+\begin{lem}
+  There is a pullback square
+  \[
+    \begin{tikzcd}
+      \susp\loopspacesym A \ar[d,"\varepsilon_A"']\ar[r] & A \vee A \ar[d] \\
+      A \ar[r,"\Delta"'] & A \times A
+    \end{tikzcd}
+  \]
+  for any $A : \UU_\pt$.
+\end{lem}
+
+\begin{proof}
+Note that the pullback of $\Delta:A\to A\times A$ along either inclusion $A\to A\times A$ is contractible. So we have a cube
+\begin{equation*}
+\begin{tikzcd}
+& \loopspacesym A \arrow[dl] \arrow[d] \arrow[dr] \\
+1 \arrow[d] & 1 \arrow[dl] \arrow[dr] & 1 \arrow[dl,crossing over] \arrow[d] \\
+A \arrow[dr] & A \arrow[d,"\Delta"] \arrow[from=ul,crossing over] & A \arrow[dl] \\
+& A\times A
+\end{tikzcd}
+\end{equation*}
+in which the vertical squares are all pullback squares. Therefore, if we pull back along the wedge inclusion, we obtain by the descent theorem for pushouts that the square in the statement is indeed a pullback square.
+\end{proof}
+
+\begin{thm}[Stabilization]
+  \label{thm:stabilization}
+  If $k\ge n+2$, then $S : (n,k)\GType \to (n,k+1)\GType$ is an
+  equivalence, and any $G : (n,k)\GType$ is an infinite loop space.
+\end{thm}
+\begin{proof}
+  We show that $F\circ S=\idfunc=S\circ F : (n,k)\GType \to (n,k)\GType$
+  whenever $k\ge n+2$.
+
+  For the first, the unit map of the adjunction factors as
+  \[
+    B^kG \to \loopspacesym\susp B^kG \to \loopspacesym\trunc{n+k+1}{\susp B^kG}
+  \]
+  where the first map is $2k-2$-connected by Freudenthal, and the
+  second map is $n+k$-connected. Since the domain is $n+k$-truncated,
+  the composite is an equivalence whenever $2k-2 \ge n+k$.
+
+  For the second, the counit map of the adjunction factors as
+  \[
+    \trunc{n+k}{\susp\loopspacesym B^kG} \to \trunc{n+k}{B^kG} \to B^kG,
+  \]
+  where the second map is an equivalence. By the two lemmas above, the
+  first map is $2k-2$-connected.
+\end{proof}
+For example, for $G : (0,2)\GType$ an abelian group, we have
+$B^nG = K(G,n)$, an Eilenberg-MacLane space.
+
+The adjunction ${S} \dashv {F}$ implies that the free group on a
+pointed set $X$ is $\loopspacesym\trunc{1}{\susp X}=\pi_1(\susp X)$.  If $X$
+has decidable equality, $\susp X$ is already $1$-truncated. It is an
+open problem whether this is true in general.
+
+Also, the abelianization of a set-level group $G : 1\mathsf{Grp}$ is
+$\pi_2(\susp BG)$. If $G : (n,k)\GType$ is in the stable range ($k \ge
+n+2$), then $SFG=G$.
+
+\section{Group actions}
 \label{sec:actions}
 
 In this section we consider a fixed group $G : \GType$ with delooping
-$BG$. An \emph{action} of $G$ on some object of type $A$ is simply
-a function $X : BG \to A$. The object of the action is $X(\pt) : A$,
-and it can be convenient to consider evaluation at $\pt : BG$ to be a
-coercion from actions of type $A$ to $A$. To equip $a : A$ with a
-$G$-action is to give an action $X : BG \to A$ with $X(\pt)=a$. The
-\emph{trivial action} is the constant function at $a$. Clearly, an
-action of $G$ on $a:A$ is the same as a homomorphism $G \to \Aut a$.
+$BG$. 
 
-In the case where we take $A:=\UU$, we arrive at the notion of an action $X$ of $G$ on a type:
-it is a function $X:BG\to\UU$. 
-In other words, a \emph{$G$-type} is a type family over $BG$.
-Then a \emph{map of $G$-types} from $X$ to $Y$ is just a function $\alpha :
-(z : BG) \to X(z) \to Y(z)$.
+\begin{defn}
+Consider a type $A$. A \define{$G$-action} on $a:A$ is simply a function $X : BG \to A$ such that $X(\pt)=a$. If $a$ comes equipped with a $G$-action, we also say that $a$ is a \define{$G$-object}. 
 
-If $X$ is a $G$-type, then we can form the
-\begin{description}
-\item[invariants] $X^{hG} := (z : BG) \to X(z)$, also known as the
-  \emph{homotopy fixed points}, and the
-\item[coinvariants] $X_{hG} := (z : BG) \times X(z)$, which is also known as
-  \emph{homotopy orbit space} or the \emph{homotopy quotient}
-  $X \dblslash G$.
-\end{description}
+For any $a:A$, the $G$-object $a^{\mathrm{triv}}$ consists of $a$ equipped with the \define{trivial action}, i.e. the constant function $\mathsf{const}_a:BG\to A$.
+\end{defn}
+
+\begin{rmk}
+Clearly, an action of $G$ on $a:A$ is the same as a homomorphism $G \to \Aut a$.
+\end{rmk}
+
+\begin{defn}
+A \define{$G$-type} is a type $X:\UU$ equipped with a $G$-action, and a \define{map of $G$-types} from $X$ to $Y$ is just a fiberwise transformation
+\begin{equation*}
+\alpha : \prd{t:BG} X(t)\to Y(t).
+\end{equation*}
+\end{defn}
+
+\begin{defn}
+Consider a type $X$ equipped with the structure of a $G$-type. The type of \define{invariants} of $X$ is defined to be
+\begin{equation*}
+X^{hG} \defeq  \prd{t:BG} X(t).
+\end{equation*}
+The type of \define{coinvariants} of $X$ is defined to be
+\begin{equation*}
+X_{hG} \defeq \sm{t:BG}X(t)
+\end{equation*}
+We also write $X \dblslash G$ for the type of coinvariants of $X$.
+\end{defn}
+
+\begin{rmk}
+The type of invariants of a $G$-type $X$ is also known as the type of \define{homotopy fixed points}. The type of coinvariants is also known as the \define{homotopy orbit space}, or the \define{homotopy quotient}.
+\end{rmk}
+
 It is easy to see that these constructions are respectively the right and left
 adjoints of the functor that sends a type $X$ to the trivial
 $G$-action on $X$, $X^{\mathrm{triv}} : BG \to \UU$, which is just
@@ -366,13 +463,13 @@ the constant family at $X$. Indeed, the adjunctions are just the usual argument
 swap and (un)currying equivalences, for $Y:\UU$,
 \begin{align*}
   \hom(Y, X^{hG})
-  &= X \to (z : BG) \to Y(z)
-    \equiv (z : BG) \to X \to Y(z) \\
-  &\equiv \hom(X^{\mathrm{triv}}, Y), \\
+  & \jdeq  X \to \prd{z:BG}Y(z) \\
+  & \eqvsym \prd{z:BG} X \to Y(z) \\
+  & \jdeq \hom(X^{\mathrm{triv}}, Y), \\
   \hom(X_{hG}, Y)
-  &= \big((z : BG) \times X(z)\bigr) \to Y
-    \equiv (z : BG) \to X(z) \to Y \\
-  &\equiv \hom(X, Y^{\mathrm{triv}}).
+  & \jdeq \Big(\sm{z:BG}X(z)\Big) \to Y \\
+  & \eqvsym \prd{z:BG} X(z) \to Y \\
+  & \jdeq \hom(X, Y^{\mathrm{triv}}).
 \end{align*}
 If we think of an action $X : BG\to \UU$
 as a type-valued diagram on $BG$, this means that the homotopy fixed
@@ -394,13 +491,13 @@ homotopy colimit of this diagram, respectively.
 \end{prp}
 \begin{proof}
   The vertical maps are induced by $Bf$, and the horizontal maps are
-  induced by $\alpha$. The homotopy pullback corner type $C$ is calculated as
+  induced by $\alpha$. The homotopy pullback corner type $C$ is calculated as\index{fix this notation}
   \begin{align*}
     C
-    &\equiv (z : BG) \times (x : X\,z)
+    &\eqvsym (z : BG) \times (x : X\,z)
       \times (w : BH) \times (y : Y(Bf\,w)) \\
     &\qquad \times (z = Bf\,w) \times (y = \alpha\,z\,x) \\
-    &\equiv (w : BH) \times (x : X(Bf\,w))
+    &\eqvsym (w : BH) \times (x : X(Bf\,w))
       = X_{hH},
   \end{align*}
   and under this equivalence the top and the left maps are the
@@ -415,7 +512,7 @@ Every group $G$ carries two canonical actions on itself:
 \end{description}
 
 We have $1 \dblslash G = BG$,
-$G \dblslash G = 1$ and $G^{\mathrm{ad}} \dblslash G = LBG :=
+$G \dblslash G = 1$ and $G^{\mathrm{ad}} \dblslash G = LBG \defeq 
 (\bS^1 \to BG)$, the free loop space of $BG$. Recalling that $\mathop{\mathrm{B}\mathbb{Z}} =
 \bS^1$, we see that $G^{\mathrm{ad}} = (\mathop{\mathrm{B}\mathbb{Z}} \to BG)$, i.e., the
 conjugacy classes of homomorphisms from $\mathbb{Z}$ to $G$. Since the
@@ -444,10 +541,10 @@ The above proposition has an interesting corollary:
   \]
 \end{proof}
 
-By definition, $BG$ classifies \emph{principal $G$-bundles}: pullbacks
+By definition, $BG$ classifies \define{principal $G$-bundles}: pullbacks
 of the right action of $G$. That is, a principal $G$-bundle over a
 type $A$ is a family $F : A \to \UU$ represented by a map $\chi:A
-\to BG$ such that $F(x) \equiv (\pt = \chi(x))$ for all $x : A$.
+\to BG$ such that $F(x) \eqvsym (\pt = \chi(x))$ for all $x : A$.
 
 For example, for every higher group $G$ we have the corresponding Hopf
 fibration $\Sigma G \to \UU$ represented by the map $\chi_H : \Sigma
@@ -459,21 +556,27 @@ This perspective underlies the construction of the first and the third
 named author of the real projective spaces in homotopy type
 theory~\cite{realprojective}. The fiber sequences $\bS^0 \to \bS^n \to
 \RP^n$ are principal bundles for the $2$-elements group
-$\bS^0=\Sym_2$ with delooping $\BS_2\equiv \RP^\infty$,
+$\bS^0=\Sym_2$ with delooping $\BS_2\eqvsym \RP^\infty$,
 the type of $2$-element types.
 
-\subsection{Back to the center}
+\subsection{The center of a group}
 \label{sec:center}
 
-We mentioned the generalized center above and claimed that it
-generalized the usual notion of the center of a group.
+Given a $k$-tuply groupal $(n+1)$-group $G$, we can also consider the automorphism group
+$\aut_c G$ of $B^kG:\UU^{\ge k,\le n+k}$ at an arbitrary base point $c:B^kG$. 
+
+\begin{defn}
+We define the \define{generalized
+  center} of $G$ to be $ZG \defeq  \loopspacesym^k\aut_c G : (n,k+1)\GType$. Thus, $G$ acts on the center by \define{conjugation}.
+\end{defn}
+
 Indeed, if $G:1\mathsf{Grp}$ is a set-level group, then an element of
-$ZG$ corresponds to an element of $\Omega^2\BAut^cG$, or equivalently,
+$ZG$ corresponds to an element of $\loopspacesym^2\BAut_cG$, or equivalently,
 a map from the $2$-sphere $\bS^2$ to $\UU$
 sending the basepoint to $BG$.
 By the universal property of
 $\bS^2$ as a HIT, this again corresponds to a homotopy from the
-identity on $BG$ to itself, $c : (z : BG) \to z = z$.
+identity on $BG$ to itself, $c : \prd{z:BG} z=z$.
 This is precisely a homotopy fixed point of the adjoint action of
 $G$ on itself, i.e., a central element.
 
@@ -494,7 +597,7 @@ homotopy equivalence. But this is not so.
 
 By Elmendorf's theorem~\cite{Elmendorf1983}, this homotopy theory is
 rather that of presheaves of (ordinary) homotopy types on the
-\emph{orbit category} $\mathcal{O}_G$ of $G$. This is the full
+\define{orbit category} $\mathcal{O}_G$ of $G$. This is the full
 subcategory of the category of $G$-spaces spanned by the homogeneous
 spaces $G/H$, where $H$ ranges over the closed subgroups of $G$.
 
@@ -534,7 +637,7 @@ then $BK \to BG \to BH$ is a fibration sequence,
 i.e., we can recover the delooping $BK$ of $K$ as the homotopy fiber
 of the map $BG \to BH$.
 
-\subsection{Some elementary constructions}
+\subsection{The semi-direct product and the wreath product}
 \label{sec:elementary-constructions}
 
 If we are given a homomorphism $\varphi : H \to \Aut(N)$, represented
@@ -542,240 +645,89 @@ by a pointed map
 $B\varphi : BH \to_\pt \BAut_\pt(BN)$ where $\BAut_\pt(BN)$ is the
 type of pointed types merely equivalent to $BN$,
 we can build a new group, the
-\emph{semidirect product}, $G := H \ltimes_\varphi N$
-with classifying type $BG := (z : BH) \times (B\varphi\,z)$.
+\define{semidirect product}, $G \defeq  N \mathbin{\rtimes_\varphi} H$
+with classifying type $BG \defeq  (z : BH) \times (B\varphi\,z)$.
 The type $BG$ is indeed pointed (by the pair of the basepoint $\pt$ in $BG$
 and the basepoint in the pointed type $B\varphi(\pt)$), and
 connected, and hence presents a higher group $G$.
 An element of $g$ is given by a pair of an element $h : H$ and an
-identification $g\cdot\pt = \pt$ in $B\varphi(\pt) \equiv_\pt BN$. But
+identification $g\cdot\pt = \pt$ in $B\varphi(\pt) \eqvsym_\pt BN$. But
 since the action is via pointed maps, the second component is
 equivalently an identification $\pt = \pt$ in $BN$, i.e., an element of
 $N$. Under this equivalence, the product of $(h,n)$ and $(h',n')$ is
 indeed $(h\cdot h', n\cdot \varphi(h)(n'))$.
 
-As a special case we obtain the \emph{direct product} when $\varphi$
-is the trivial action. Here, $B(H \times N) \equiv BH \times BN$.
+As a special case we obtain the \define{direct product} when $\varphi$
+is the trivial action. Here, $B(H \times N) \eqvsym BH \times BN$.
 
-As another special case we obtain the \emph{wreath products} $N \wr
+As another special case we obtain the \define{wreath products} $N \wr
 \Sym_n$ of a group $N$ and a symmetric group $\Sym_n$. Here,
 $\Sym_n$ acts on the direct power $N^{\Fin n}$ by permuting the
 factors. Indeed, using the representation of $\BS_n$ as the type of
 $n$-element types, the map $B\varphi$ is simply $A \mapsto (A \to
-BN)$. Hence the delooping of the wreath product $G := N \wr \Sym_n$
-is just $BG:=(A:BS_n) \times (A \to BN)$.
+BN)$. Hence the delooping of the wreath product $G \defeq  N \wr \Sym_n$
+is just $BG\defeq (A:BS_n) \times (A \to BN)$.
 
-\section{Set-level groups}
+\section{\texorpdfstring{$1$}{1}-groups}
 \label{sec:n=0}
+
+\begin{defn}
+A \define{$1$-group} $G$ is a set $G$ equipped with a unit $1:G$, a multiplication $x,y\mapsto xy$ on $G$, and an inverse operation $x\mapsto x^{-1}$, satisfying the usual group laws.
+\end{defn}
+
+We recall that the \define{homotopy groups} of a pointed type $A$ are defined to be $\pi_k A\defeq 
+\trunc{0}{\loopspacesym^k A}$. These are groups in the usual sense when
+$k\ge 1$, with neutral element $\truncunit{\refl{\ast}}$ and group
+operation induced by path concatenation.
+
+Since the subuniverse of $n$-types is a reflective subuniverse for any univalent universe closed under homotopy pushouts, it follows from Theorem 5.4 of \cite{FinsterLicata} that the Eilenberg-Mac Lane spaces $K(G,n)$ can be constructed for any abelian group $G$, and any $g\geq 1$, and moreover $K(G,n)$ is essentially small whenever $G$ is. Following \cite{FinsterLicata}, we define $K(A,n+1)\defeq \trunc{n+1}{\Sigma K(A,n)}$ inductively. Then we have the following result.
+
+\begin{prp}[Theorem 5.4 of \cite{FinsterLicata}]\label{thm:EM-spaces}
+  Let $G$ be a group and $n\geq 1$, and assume that $G$ is abelian
+  when $n>1$. The space $K(G,n)$ is $(n-1)$-connected and
+  $n$-truncated and there is a group isomorphism $\pi_nK(G,n) \cong G$.\qed
+\end{prp}
+
 In this section we give a proof that the $n=0$ column of~\cref{tab:periodic} is correct. 
 Note that for $n=0$ the hom-types $\hom_{(0,k)}(G,H)$ are sets, which means that $(0,k)\GType$ forms a 1-category. % (F) should we define precategory/category here? I use the word "category" for a not necessarily univalent category.
 Let $\Group$ be the category of ordinary set-level groups (a set with multiplication, inverse and unit satisfying the group laws) and $\AbGroup$ the category of abelian groups.
-\begin{thm}
+\begin{thm}\label{theorem:catofgroups}
   We have the following equivalences of categories
   {\normalfont(}\/for $k\geq2${\normalfont):}
   \begin{align*}
-    % (0,0)\GType &\equiv \mathsf{Set}_\pt\\
-    (0,1)\GType &\equiv \Group;&&\\
-    (0,k)\GType &\equiv \AbGroup.&&
+    % (0,0)\GType &\eqvsym \mathsf{Set}_\pt\\
+    (0,1)\GType &\eqvsym \Group;&&\\
+    (0,k)\GType &\eqvsym \AbGroup.&&
   \end{align*}
 \end{thm}
 Since this theorem has been formalized we will not give all details of the proof.
 \begin{proof}
-  Let $k\ge1$ and $G$ be a group which is abelian if $k>1$ and let $X:\UU_\pt^{\ge k,\le k}$. If we have a group homomorphism $\phi : G \to \Omega^k X$ we get a map $e_\phi^k:K(G,k)\to_\pt X$. For $k=1$ this follows directly from the induction principle of $K(G,1)$. For $k>1$ we can define the group homomorphism $\widetilde\phi$ as the composite $G \xrightarrow{\phi} \Omega^k X \equiv \Omega^{k-1}(\Omega X)$, and apply the induction hypothesis to get a map
-  $e_{\widetilde\phi}^{k-1}:K(G,k-1)\to_\pt \Omega X$. By the adjunction $\Sigma\dashv\Omega$ we get a pointed map $\Sigma K(G,k-1)\to_\pt X$, and by the elimination principle of the truncation we get a map $K(G,k)=\trunc{k}{\Sigma K(G,k-1)}\to_\pt X$. 
+  Let $k\ge1$ and $G$ be a group which is abelian if $k>1$ and let $X:\UU_\pt^{\ge k,\le k}$. If we have a group homomorphism $\phi : G \to \loopspacesym^k X$ we get a map $e_\phi^k:K(G,k)\to_\pt X$. For $k=1$ this follows directly from the induction principle of $K(G,1)$. For $k>1$ we can define the group homomorphism $\widetilde\phi$ as the composite $G \xrightarrow{\phi} \loopspacesym^k X \eqvsym \loopspacesym^{k-1}(\loopspacesym X)$, and apply the induction hypothesis to get a map
+  $e_{\widetilde\phi}^{k-1}:K(G,k-1)\to_\pt \loopspacesym X$. By the adjunction $\Sigma\dashv\loopspacesym$ we get a pointed map $\Sigma K(G,k-1)\to_\pt X$, and by the elimination principle of the truncation we get a map $K(G,k)=\trunc{k}{\Sigma K(G,k-1)}\to_\pt X$. 
 
-  We can now show that $\Omega^k e_\phi^k$ is the expected map, that is, the following diagram commutes, but we omit this proof here.
+  We can now show that $\loopspacesym^k e_\phi^k$ is the expected map, that is, the following diagram commutes, but we omit this proof here.
 \begin{equation*}
 \begin{tikzcd}[column sep=0]
-\Omega^nK(G,k) \arrow[rr,"\eqvsym"] \arrow[dr,swap,"\Omega^n e_\phi^k"] & & G \\
-& \Omega^n X \arrow[ur,swap,"\phi"] & \phantom{\Omega^nK(G,k)}
+\loopspacesym^nK(G,k) \arrow[rr,"\eqvsym"] \arrow[dr,swap,"\loopspacesym^n e_\phi^k"] & & G \\
+& \loopspacesym^n X \arrow[ur,swap,"\phi"] & \phantom{\loopspacesym^nK(G,k)}
 \end{tikzcd}
 \end{equation*}
   Now if $\phi$ is a group isomorphism, by Whitehead's Theorem for truncated types \cite[Theorem 8.8.3]{hottbook} we know that $e_\phi^k$ is an equivalence, since it induces an equivalence on all homotopy groups (trivially on the levels other than $k$). We can also show that $e_\phi^k$ is natural in $\phi$.
 
-  Note that if we have a group homomorphism $\psi:G\to G'$, we also get a group homomorphism $G\to\Omega^k K(G',k)$, and by the above construction we get a pointed map $K(\psi,k):K(G,k)\to_\pt K(G',k)$. This is functorial, which follows from naturality of $e_\phi^k$. 
+  Note that if we have a group homomorphism $\psi:G\to G'$, we also get a group homomorphism $G\to\loopspacesym^k K(G',k)$, and by the above construction we get a pointed map $K(\psi,k):K(G,k)\to_\pt K(G',k)$. This is functorial, which follows from naturality of $e_\phi^k$. 
 
   Finally, we can construct the equivalence explicitly. We have a functor
   $\pi_k:(0,k)\GType \to \AbGroup$ which sends $G$ to $\pi_k BG$. Conversely, we have the functor $K({-},k):\AbGroup\to (0,k)\GType$. We have natural isomorphisms
-  $\pi_k K(G,k)\equiv G$ by~\cref{thm:EM-spaces} and $K(\pi_k X,k)\equiv_\pt X$ by the application of Whitehead described above. The construction is exactly the same for $k=1$ after replacing $\AbGroup$ by $\Group$.
+  $\pi_k K(G,k)\eqvsym G$ by~\cref{thm:EM-spaces} and $K(\pi_k X,k)\eqvsym_\pt X$ by the application of Whitehead described above. The construction is exactly the same for $k=1$ after replacing $\AbGroup$ by $\Group$.
 \end{proof}
-
-\section{Stabilization}
-\label{sec:stabilization}
-
-In this section we discuss some constructions with higher groups~\cite{BaezDolan1998}. We will give the actions on the carriers and the deloopings, but we omit the third component, the pointed equivalence, for readability. We recommend keeping \cref{tab:periodic} in mind during these constructions.
-\begin{description}
-\item[decategorification] $\Decat : (n,k)\GType \to (n-1,k)\GType$\\
-  $\angled{G,B^kG} \mapsto \angled{\trunc{n-1}{G}, \trunc{n+k-1}{B^kG}}$
-\item[discrete categorification] $\Disc : (n,k)\GType \to (n+1,k)\GType$ \\
-  $\angled{G,B^kG} \mapsto \angled{G,B^kG}$
-\end{description}
-These functors make $(n,k)\GType$ a reflective sub-$(\infty,1)$-category of $(n+1,k)\GType$. That is, there is an adjunction ${\Decat} \dashv {\Disc}$. These properties are straightforward consequences of the universal property of truncation.
-
-There are also iterated versions of these functors.
-\begin{description}
-  \item[$\infty$-decategorification] $\iDecat : (\infty,k)\GType \to (n,k)\GType$\\
-    $\angled{G,B^kG} \mapsto \angled{\trunc{n}{G}, \trunc{n+k}{B^kG}}$
-  \item[discrete $\infty$-categorification] $\iDisc : (n,k)\GType \to (\infty,k)\GType$ \\
-    $\angled{G,B^kG} \mapsto \angled{G,B^kG}$
-\end{description}
-These functors satisfy the same properties: ${\iDecat} \dashv {\iDisc}$ such that the counit induces an isomorphism ${\iDecat} \circ {\iDisc} = \idfunc$.
-
-For the next constructions, we need the following properties.
-\begin{defn}
-  For $A : \UU_\pt$ we define the \emph{$n$-connected cover} of $A$ to be 
-  $A{\angled n} := \fib(A \to \trunc{n}{A})$. We have the projection $p_1: A{\angled n} \to_\pt A$.
-\end{defn}
-\begin{lem} \label{lem:connected-cover-univ}
-  The universal property of the $n$-connected cover states the following. For any $n$-connected pointed type $B$, the pointed map
-  $$(B \to_\pt A{\angled n}) \to_\pt (B \to_\pt A),$$
-  given by postcomposition with $p_1$, is an equivalence.\\
-\end{lem}
-\begin{proof}
-  Given a map $f:B\to_\pt A$, we can form a map $\widetilde f: B \to A{\angled n}$. First note that for $b:B$ the type $\tr{fb}_n=_{\trunc{n}{A}}\tr{\pt}_n$ is $(n-1)$-truncated and inhabited for $b=\pt$. Since $B$ is $n$-connected, the universal property for connected types shows that we can construct a $qb:\tr{fb}_n=\tr{\pt}_n$ for all $b$ such that $q_0:qb_0\cdot\mathsf{ap}_{\tr{\blank}_n}(f_0)=1$. Then we can define the map $\widetilde f(b):=(fb, qb)$. Now $\widetilde f$ is pointed, because $(f_0,q_0):(fb_0,qb_0)=(a_0,1)$.
-
-  Now we show that this is indeed an inverse to the given map. On the one hand, we need to show that if $f: B \to_\pt A$, then $\proj 1 \circ \widetilde f=f$. The underlying functions are equal because they both send $b$ to $f(b)$. They respect points in the same way, because
-  $\mathsf{ap}{p_1}(\widetilde f_0)=f_0$. The proof that the other composite is the identity follows from a computation using fibers and connectivity, which we omit here, but can be found in the formalization.
-\end{proof}
-The next reflective sub-$(\infty,1)$-category is formed by looping and delooping.
-\begin{description}
-\item[looping] $\Omega : (n,k)\GType \to (n-1,k+1)\GType$ \\
-  $\angled{G,B^kG} \mapsto \angled{\Omega G,B^kG{\angled k}}$
-\item[delooping] $\B : (n,k)\GType \to (n+1,k-1)\GType$ \\
-  $\angled{G,B^kG} \mapsto \angled{\Omega^{k-1}B^kG,B^kG}$
-\end{description}
-We have ${\B} \dashv {\Omega}$, which follows from Lemma \ref{lem:connected-cover-univ} %note: autoref writes "Theorem"
-and $\Omega\circ{\B} = \idfunc$, which follows from the fact that $A{\angled n}=A$ if $A$ is $n$-connected.
-
-The last adjoint pair of functors is given by stabilization and forgetting. This does not form a reflective sub-$(\infty,1)$-category.
-\begin{description}
-\item[forgetting] $F : (n,k)\GType \to (n,k-1)\GType$ \\
-  $\angled{G,B^kG} \mapsto \angled{G,\Omega B^kG}$
-\item[stabilization] $S : (n,k)\GType \to (n,k+1)\GType$ \\
-  $\angled{G,B^kG} \mapsto \angled{SG,\trunc{n+k+1}{\susp B^kG}}$,\\
-  where $SG = \trunc{n}{\Omega^{k+1}\susp B^kG}$
-\end{description}
-We have the adjunction ${S} \dashv {F}$ which follows from the suspension-loop adjunction $\Sigma\dashv\Omega$ on pointed types.
-
-The next main goal in this section is the stabilization theorem,
-stating that the ditto marks in~\cref{tab:periodic} are justified.
-
-The following corollary is almost \cite[Lemma~8.6.2]{hottbook}, but
-proving this in Book HoTT is a bit tricky. See the
-formalization for details.
-\begin{lem}[Wedge connectivity]
-  \label{lem:wedge-connectivity}
-  If $A : \UU_\pt$ is $n$-connected and $B: \UU_\pt$ is
-  $m$-connected, then the map $A \vee B \to A \times B$ is
-  $(n+m)$-connected.
-\end{lem}
-
-Let us mention that there is an alternative way to prove the wedge
-connectivity lemma: Recall that if $A$ is $n$-connected and $B$ is
-$m$-connected, then $A \ast B$ is
-$(n+m+2)$-connected~\cite[Theorem~6.8]{joinconstruction}. Hence the
-wedge connectivity lemma is also a direct consequence of the following lemma.
-\begin{lem}
-Let $A$ and $B$ be pointed types.
-The fiber of the wedge inclusion $A\vee B\to A\times B$ is equivalent to
-$\Omega{A}\ast\Omega{B}$. 
-\end{lem}
-\begin{proof}
-Note that the fiber of $A\to A\times B$ is $\Omega B$, the fiber of $B\to A\times B$ is $\Omega A$, and of course the fiber of $1\to A\times B$ is $\Omega A\times \Omega B$. We get a commuting cube
-\begin{equation*}
-\begin{tikzcd}
-& \Omega A\times \Omega B \arrow[dl] \arrow[d] \arrow[dr] \\
-\Omega B \arrow[d] & 1 \arrow[dl] \arrow[dr] & \Omega A \arrow[dl,crossing over] \arrow[d] \\
-A \arrow[dr] & 1 \arrow[d] \arrow[from=ul,crossing over] & B \arrow[dl] \\
-& A\times B
-\end{tikzcd}
-\end{equation*}
-in which the vertical squares are pullback squares. 
-
-By the descent theorem for pushouts it now follows that $\Omega A\ast \Omega B$ is the fiber of the wedge inclusion.
-\end{proof}
-
-The second main tool we need for the stabilization theorem is:
-\begin{thm}[Freudenthal]
-  If $A : \UU_\pt^{>n}$ with $n\ge 0$, then the map
-  $A \to \Omega\susp A$ is $2n$-connected.
-\end{thm}
-This is \cite[Theorem~8.6.4]{hottbook}.
-
-The final building block we need is:
-\begin{lem}
-  There is a pullback square
-  \[
-    \begin{tikzcd}
-      \susp\Omega A \ar[d,"\varepsilon_A"']\ar[r] & A \vee A \ar[d] \\
-      A \ar[r,"\Delta"'] & A \times A
-    \end{tikzcd}
-  \]
-  for any $A : \UU_\pt$.
-\end{lem}
-
-\begin{proof}
-Note that the pullback of $\Delta:A\to A\times A$ along either inclusion $A\to A\times A$ is contractible. So we have a cube
-\begin{equation*}
-\begin{tikzcd}
-& \Omega A \arrow[dl] \arrow[d] \arrow[dr] \\
-1 \arrow[d] & 1 \arrow[dl] \arrow[dr] & 1 \arrow[dl,crossing over] \arrow[d] \\
-A \arrow[dr] & A \arrow[d,"\Delta"] \arrow[from=ul,crossing over] & A \arrow[dl] \\
-& A\times A
-\end{tikzcd}
-\end{equation*}
-in which the vertical squares are all pullback squares. Therefore, if we pull back along the wedge inclusion, we obtain by the descent theorem for pushouts that the square in the statement is indeed a pullback square.
-\end{proof}
-
-\begin{thm}[Stabilization]
-  \label{thm:stabilization}
-  If $k\ge n+2$, then $S : (n,k)\GType \to (n,k+1)\GType$ is an
-  equivalence, and any $G : (n,k)\GType$ is an infinite loop space.
-\end{thm}
-\begin{proof}
-  We show that $F\circ S=\idfunc=S\circ F : (n,k)\GType \to (n,k)\GType$
-  whenever $k\ge n+2$.
-
-  For the first, the unit map of the adjunction factors as
-  \[
-    B^kG \to \Omega\susp B^kG \to \Omega\trunc{n+k+1}{\susp B^kG}
-  \]
-  where the first map is $2k-2$-connected by Freudenthal, and the
-  second map is $n+k$-connected. Since the domain is $n+k$-truncated,
-  the composite is an equivalence whenever $2k-2 \ge n+k$.
-
-  For the second, the counit map of the adjunction factors as
-  \[
-    \trunc{n+k}{\susp\Omega B^kG} \to \trunc{n+k}{B^kG} \to B^kG,
-  \]
-  where the second map is an equivalence. By the two lemmas above, the
-  first map is $2k-2$-connected.
-\end{proof}
-For example, for $G : (0,2)\GType$ an abelian group, we have
-$B^nG = K(G,n)$, an Eilenberg-MacLane space.
-
-The adjunction ${S} \dashv {F}$ implies that the free group on a
-pointed set $X$ is $\Omega\trunc{1}{\susp X}=\pi_1(\susp X)$.  If $X$
-has decidable equality, $\susp X$ is already $1$-truncated. It is an
-open problem whether this is true in general.
-
-Also, the abelianization of a set-level group $G : 1\mathsf{Grp}$ is
-$\pi_2(\susp BG)$. If $G : (n,k)\GType$ is in the stable range ($k \ge
-n+2$), then $SFG=G$.
-
-\section{Perspectives on ordinary group theory}
-\label{sec:perspectives}
-
-In this section we shall indicate how the theory of higher groups can
-yield a new perspective even on ordinary group theory.
 
 From the symmetric groups $\Sym_n$, we can get other finite groups using
 the constructions of~\cref{sec:elementary-constructions}. Other
 groups can be constructed more directly. For example,
 $BA_n$, the classifying type of the alternating group, can be taken to
-be the type of $n$-element sets $X$ equipped with a \emph{sign
+be the type of $n$-element sets $X$ equipped with a \define{sign
   ordering}: this is an equivalence class of an ordering
-$\Fin n \equiv X$ modulo even permutations. Indeed, there are only two
+$\Fin n \eqvsym X$ modulo even permutations. Indeed, there are only two
 possible sign orderings, so this definition corresponds to
 first considering the short exact sequence
 \[
@@ -788,14 +740,14 @@ letting $BA_n$ be the homotopy fiber of $\mathrm{Bsgn}$.
 
 Similarly, $BC_n$, the classifying type of the cyclic group on $n$
 elements, can be taken to be the type of $n$-elements sets $X$
-equipped with a \emph{cyclic ordering}: an equivalence class of an
-ordering $\Fin n \equiv X$ modulo cyclic permutations. But unlike
-the above, where we had the coincidence that $\Aut(\Sym_2) \equiv
+equipped with a \define{cyclic ordering}: an equivalence class of an
+ordering $\Fin n \eqvsym X$ modulo cyclic permutations. But unlike
+the above, where we had the coincidence that $\Aut(\Sym_2) \eqvsym
 \Sym_2$,
 this doesn't correspond to a short exact sequence. Rather,
 it corresponds to a sequence
 \[
-  1 \to C_n \to \Sym_n \to \Aut(\Fin(n-1)) \equiv \Sym_{(n-1)!}
+  1 \to C_n \to \Sym_n \to \Aut(\Fin(n-1)) \eqvsym \Sym_{(n-1)!}
 \]
 where the delooping of the last map is the map from $\BS_n$ to
 $\BS_{(n-1)!}$ that maps an $n$-element set to the set of cyclic
@@ -807,9 +759,9 @@ As another example,
 consider the map $p : \BS_4 \to_\pt \BS_3$ that maps a 4-element set
 $X$ to its set of 2-by-2 partitions, of which there $3$. Using this
 construction, we can realize some famous semidirect and wreath product identities,
-such as $A_4 \equiv S_2^2 \rtimes A_3$, $S_4 \equiv S_2^2 \rtimes
-S_3$, and, for the octahedral group, $O_h \equiv S_2^3 \rtimes S_3
-\equiv S_2 \wr S_3$.
+such as $A_4 \cong S_2^2 \rtimes A_3$, $S_4 \cong S_2^2 \rtimes
+S_3$, and, for the octahedral group, $O_h \cong S_2^3 \rtimes S_3
+\cong S_2 \wr S_3$.
 
 \smallskip
 
@@ -827,7 +779,7 @@ expand a bit upon it.
 
 For us, a pointed connected type $X$ is equivalently
 an $\infty$-group $G:\infty\mathsf{Grp}$
-with delooping $BG := X$.
+with delooping $BG \defeq  X$.
 A covering space over $BG$ is simply a type family $C : BG \to \mathsf{Set}$
 that lands in the universe of sets.
 Hence by our discussion of actions in~\cref{sec:actions}
@@ -845,7 +797,7 @@ The universal covering space is the simply connected cover of $BG$,
 \]
 Note that the total space of $\widetilde{BG}$ is indeed the
 $1$-connected cover $BG\angled1$,
-since $\trunc{0}{\pt =_{BG} \pt} \equiv (\tr{\pt} =_{\trunc{1}{BG}} \tr{\pt})$.
+since $\trunc{0}{\pt =_{BG} \pt} \eqvsym (\truncunit{\pt} =_{\trunc{1}{BG}} \truncunit{\pt})$.
 Also note that if $G$ is already a 1-group, then this is just the right
 action of $G$ on itself, and in general, it is the right action of $G$
 on the fundamental group
@@ -871,7 +823,7 @@ once a point $\pt : C'(\pt)$ has been chosen.
     $\widetilde{BG}$ is isomorphic to
     the $1$-group decategorification of $G$,
     \[
-      \Aut(\widetilde{BG}) \equiv \Decat_1(G) \equiv \pi_1(BG).
+      \Aut(\widetilde{BG}) \eqvsym \Decat_1(G) \eqvsym \pi_1(BG).
     \]
   \item Furthermore, there is a contravariant correspondence between
     conjugacy classes of subgroups of $\Decat_1(G)$ and connected
@@ -901,7 +853,7 @@ higher groups:
   of $BG$ is
   isomorphic to the $(n+1)$-group decategorification of $G$,
   \[
-    \Aut(U_n(BG)) \equiv \Decat_{n+1}(G) \equiv \Pi_{n+1}(BG).
+    \Aut(U_n(BG)) \eqvsym \Decat_{n+1}(G) \eqvsym \Pi_{n+1}(BG).
   \]
 \end{thm}
 \begin{proof}
@@ -910,14 +862,14 @@ higher groups:
     n})$ that sends the canonical element to $U_n(BG)$. Since $BG$ is
   connected, this image is exactly $\trunc{n+1}{BG}$ by
   \cite[Theorem~7.1]{joinconstruction}. Then we are done,
-  since $\B\Pi_{n+1}(BG) \equiv \trunc{n+1}{BG}$, by definition.
+  since $\B\Pi_{n+1}(BG) \eqvsym \trunc{n+1}{BG}$, by definition.
 \end{proof}
 It is possible to use the other parts
 of~\cref{thm:galois-zero} in order to \emph{define} the notions of
 subgroup and normal subgroup for $n$-groups, which then become
 \emph{structure on} rather than a \emph{property of} a homomorphism $f
 : K \to G$.
-Explicitly, the structure of a \emph{normal subgroup} on such an $f$
+Explicitly, the structure of a \define{normal subgroup} on such an $f$
 is a delooping $B(G \dblslash K)$ of the type $G \dblslash K$
 together with a map $Bq : BG \to_\pt B(G \dblslash K)$ giving rise to a
 fiber sequence
@@ -932,14 +884,14 @@ fiber sequence
 The cohomology of a higher group $G$ is simply the cohomology of its
 delooping $BG$. Indeed, for any spectrum $A$, we define
 \[
-  H_{\mathrm{Grp}}^k(G, A) := \trunc{0}{BG \to_\pt B^kA}.
+  H_{\mathrm{Grp}}^k(G, A) \defeq  \trunc{0}{BG \to_\pt B^kA}.
 \]
 Of course, to define the $k$'th cohomology group, we only need the
 $k$-fold delooping $B^kA$.
 
 If $A:(\infty,2)\GType$ is a braided $\infty$-group, then
 we have the second cohomology group $H_{\mathrm{Grp}}^2(G, A)$, and an
-element $c:BG \to_\pt B^2A$ gives rise to a \emph{central extension}
+element $c:BG \to_\pt B^2A$ gives rise to a \define{central extension}
 \[
   BA \to BH \to BG \xrightarrow{c}{} B^2A,
 \]
@@ -960,7 +912,7 @@ spectral sequence with $E_2$-page
 \]
 and converging to $H_{\mathrm{Grp}}^n(G, A)$, where $A$ is any
 truncated, connective spectrum, which could even be a left $G$-module,
-in which case we reproduce the \emph{Hochschild-Serre spectral
+in which case we reproduce the \define{Hochschild-Serre spectral
   sequence}.
 
 \section{From RPn to higher groups}

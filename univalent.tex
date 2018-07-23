@@ -476,7 +476,7 @@ Let $f:\prd{x:A}B(x)\to C(x)$ be a fiberwise transformation. The following are l
 The following theorem is the key to many results about identity types, which we will use instead of the \emph{encode-decode method}\index{encode-decode method} of \cite{LicataShulman}. We refer to it as the \define{fundamental theorem of identity types}.
 
 \begin{thm}[Theorem 5.8.2 of \cite{hottbook}]\label{thm:id_fundamental}
-Let $A$ be a type with $a:A$, and let $B$ be be a type family over $A$ with $b:B(a)$.
+Let $A$ be a type with $a:A$, and let $B$ be a type family over $A$ with $b:B(a)$.
 Then  the following are logically equivalent:
 \begin{enumerate}
 \item The canonical family of maps
@@ -1317,7 +1317,7 @@ given by $f\mapsto f(A,\idfunc[A])$ has a section.\qedhere
 
 It is a trivial observation, but nevertheless of fundamental importance, that by the univalence axiom the identity types of $\UU$ are equivalent to types in $\UU$, because it provides an equivalence $\eqv{(A=B)}{(\eqv{A}{B})}$, and the type $\eqv{A}{B}$ is in $\UU$ for any $A,B:\UU$. Since the identity types of $\UU$ are equivalent to types in $\UU$, we also say that the universe is \emph{locally small}.
 
-\begin{defn}
+\begin{defn}\label{defn:ess_small}
 \begin{enumerate}
 \item A type $A$ is said to be \define{essentially small}\index{essentially small!type|textbf} if there is a type $X:\UU$ and an equivalence $\eqv{A}{X}$. We write\index{ess_small(A)@{$\esssmall(A)$}|textbf}
 \begin{equation*}
