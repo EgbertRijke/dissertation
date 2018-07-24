@@ -204,7 +204,7 @@ E' \arrow[d,swap,"{p'}"] \arrow[r,"g"] & E \arrow[d,"p"] \\
 B' \arrow[r,swap,"f"] & B
 \end{tikzcd}
 \end{equation*}
-with $H:f\circ p'\htpy p\circ g$, where $X$ and $Y$ are modal types. Then the square
+with $H:f\circ p'\htpy p\circ g$, where $E$ and $B$ are modal types. Then the square
 \begin{equation*}
 \begin{tikzcd}
 \modal E' \arrow[r,"\tilde{g}"] \arrow[d,swap,"{\modal p'}"] & E \arrow[d,"p"] \\
@@ -328,9 +328,9 @@ is a pullback square. Therefore $g:Y\to X$ is in the fiber of $\etmap$ at $\moda
 
 It remains to show that for any map $f:A\to\modal X$ with modal domain, there is an equivalence $\eqv{A}{\modal (X\times_{\modal X} A)}$ such that the triangle
 \begin{equation*}
-\begin{tikzcd}
+\begin{tikzcd}[column sep=tiny]
 A \arrow[dr,swap,"f"] \arrow[rr,"\eqvsym"] & & \modal (X\times_{\modal X} A) \arrow[dl,"\modal(\etmap(f))"] \\
-& \modal X
+\phantom{\modal (X\times_{\modal X} A)} & \modal X
 \end{tikzcd}
 \end{equation*}
 commutes. To see this, note that both $f\circ \pi_2$ and $\modal(\etmap(f))\circ \modalunit$ factor the same map as a $\modal$-connected map followed by a modal map, so the claim follows from uniqueness of factorizations.
@@ -383,7 +383,7 @@ Our goal in this section is to show that the reflective factorization system ass
 \begin{lem}\label{lem:3for2_mequiv}
 The $\modal$-equivalences satisfy the 3-for-2 property: given a commuting triangle
 \begin{equation*}
-\begin{tikzcd}
+\begin{tikzcd}[column sep=tiny]
 A \arrow[rr,"h"] \arrow[dr,swap,"f"] & & B \arrow[dl,"g"] \\
 & C,
 \end{tikzcd}
