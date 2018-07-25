@@ -528,6 +528,7 @@ For any family $N:I\to \UU$ of compact types, the subuniverse of $N$-null types 
 \sectionmark{An orthogonal factorization system}
 \label{sec:nonstable-factsys}
 
+\marginnote{This section corresponds to section 2.4 in \cite{RijkeShulmanSpitters}}
 We have seen in \cref{sec:modal-refl-subun} that $\Sigma$-closed reflective subuniverses are equivalent to stable orthogonal factorization systems.
 Without $\Sigma$-closedness and stability, this equivalence fails.
 However, we can still say:
@@ -549,7 +550,12 @@ However, we can still say:
 \end{proof}
 
 Conversely, in classical category theory there are various ways of extending a reflective subcategory to a factorization system.
-One canonical one is considered in~\cite{chk:reflocfact}, but this is harder to reproduce homotopy-theoretically.
+One canonical one is considered in~\cite{chk:reflocfact}\marginnote{Mike:But the "canonical"
+factorization system from~\cite{chk:reflocfact} is, I believe,
+precisely the one that you *have* constructed for a modality in
+chapter 8!  Does this construction definitely fail for an arbitrary
+reflective subuniverse?  In any case, this sentence should probably be
+modified.}, but this is harder to reproduce homotopy-theoretically.
 Instead, if we have an \emph{accessible} reflective subuniverse presented by localization at a family of maps, we can generalize the construction of localization to produce a factorization system (though in general the result will depend on the choice of presentation, not just on the reflective subuniverse we started with). We present here a construction of an orthogonal factorization associated to a family of maps, analogous to the construction in 2.4 of \cite{RijkeShulmanSpitters}, which used recursive higher inductive types.  
 
 For simplicity we work with only one map $f:A\to B$ instead of a family of maps $f:\prd{i:I}A_i\to B_i$.
