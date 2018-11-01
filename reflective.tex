@@ -11,6 +11,7 @@ In \cref{sec:separated} we introduce the notion of $L$-separated type, for any r
 \section{Localizations}
 \label{sec:prop-rfsu}
 
+A \define{subuniverse} is simply a subtype of the universe. Note that we do not require that subuniverses are closed under any type constructors\footnote{In particular, we will see that reflective subuniverses aren't necessarily closed under $\Sigma$.}
 For any subuniverse $P:\UU\to\prop$, we write $\UU_P\defeq \sm{X:\UU}P(X)$, and we say that $X:\UU$ is a $P$-type if $X$ is in $\UU_P$, i.e.~if $P(X)$ holds.
 
 \begin{defn}
@@ -353,7 +354,7 @@ Consider the commuting square
 \Big(\prd{x:X} L\Big(\prd{y:X}P(y)\Big)\to P(x)\Big) \arrow[r,"\eqvsym"] & \Big(\prd{x:X}\Big(\prd{y:X}P(y)\Big)\to P(x)\Big)
 \end{tikzcd}
 \end{equation*}
-The vertical maps swap the order of the arguments, and are therefore equivalences. The bottom map is an equivalence by the assumption that each $P(x)$ is $L$-local. By \cref{thm:subuniv-modal}(iii) this sufices to show that $\prd{x:X}P(x)$ is $L$-local.
+The vertical maps swap the order of the arguments, and are therefore equivalences. The bottom map is an equivalence by the assumption that each $P(x)$ is $L$-local. By \cref{thm:subuniv-modal}(iii) this suffices to show that $\prd{x:X}P(x)$ is $L$-local.
 \end{proof}
 
 \begin{cor}\label{cor:local_equiv}
@@ -406,7 +407,6 @@ Given any reflective subuniverse, the modal operator preserves propositions.
 
 By contrast, localizations, and even modalities, do not generally preserve $n$-types for any $n\ge 0$.
 For instance, the ``shape'' modality of~\cite{shulman2015brouwer} takes the topological circle, which is a 0-type, to the homotopical circle, which is a 1-type, and the topological 2-sphere, which is also a 0-type, to the homotopical 2-sphere, which is (conjecturally) not an $n$-type for any finite $n$.
-However, we will see in~\autoref{modaln-truncated} that lex modalities do preserve $n$-types for all $n$.
 
 \section{The reflective subuniverse of separated types}\label{sec:separated}
 
@@ -451,7 +451,7 @@ Any small subtype of an $L$-separated type is again $L$-separated. In particular
 The following lemma can be proven directly. However, it also follows once we have shown that the subuniverse of $L$-separated types is a reflective subuniverse, so we will omit the proof.
 
 \begin{lem}
-The subuniverse of $L$-seprated types is closed under pullbacks, retracts, and dependent products of families of $L$-separated types.
+The subuniverse of $L$-separated types is closed under pullbacks, retracts, and dependent products of families of $L$-separated types.
 \end{lem}
 
 \begin{rmk}[Move to modalities]
@@ -536,7 +536,7 @@ L'X & I \arrow[u,swap,"i"]
     So uniqueness follows from the universal property of $L'$-localization.
 \end{proof}
 
-Before we show that $L'$-localizations extist for any type $X$, we characterize them.
+Before we show that $L'$-localizations exist for any type $X$, we characterize them.
 To establish our characterization of $L'$-localizations, we need the following simple lemma, that allows us to construct unique extensions.
 
 \begin{lem}\label{lem:unique_extension}
@@ -626,10 +626,10 @@ constructing a term of type
 
 Furthermore, for $y : X$ we have equivalences
 \begin{align*}
-    \left(\sm{p:L(x=y)}(l'(x),\eta(\refl{x}))=(l'(y),p)\right)
- & \eqvsym \left(\sm{p:L(x=y)}{\alpha:l'(x)=l'(y)} \trans{\alpha}{\eta(\refl{x})} = p \right) \\
+    \Big(\sm{p:L(x=y)}(l'(x),\eta(\refl{x}))=(l'(y),p)\Big)
+ & \eqvsym \Big(\sm{p:L(x=y)}{\alpha:l'(x)=l'(y)} \trans{\alpha}{\eta(\refl{x})} = p \Big) \\
  & \eqvsym \sm{\alpha:l'(x) = l'(y)} \unit \\
- & \eqvsym \left( l'(x) = l'(y) \right),
+ & \eqvsym l'(x) = l'(y),
 \end{align*}
 where the last type is clearly $L$-local.
 So we can apply \cref{theorem:generalized-induction} to reduce the problem to
@@ -842,7 +842,7 @@ is $L$-local.
 This follows directly from \cref{lem:fib_total}.
 \end{proof}
 
-\section{Quasi-left-extactness of \texorpdfstring{$L'$}{L'}-localization}\label{ss:lex}
+\section{Quasi-left-exactness of \texorpdfstring{$L'$}{L'}-localization}\label{ss:lex}
 
 We now explain how $L$ and $L'$ together behave similarly to a \define{lex modality},
 i.e., a modality that preserves pullbacks.
@@ -919,7 +919,6 @@ F' \arrow[r,hookrightarrow] & L'E \arrow[r,->>,swap,"L'p"] & L'B
 \section{Connected maps}
 \label{sec:connected-maps}
 
-\marginnote{Some results in this section come from section 1.3.3 of \cite{RijkeShulmanSpitters}, some come from my MRC group, and some I came up with as I edited my dissertation. In terms of crediting it is a mess, but the results are so closely related that they really should be in one section}
 \begin{defn}
 A map $f:A\to B$ is said to be \define{$L$-connected} if $L(\fib{f}{b})$ is contractible for every $b:B$. In particular, a type $A$ is $L$-connected if and only if $LA$ is contractible.
 \end{defn}
@@ -966,7 +965,7 @@ Therefore we obtain a commuting square
 \prd{b:B}\big(\fib{f}{b}\to P(b)\big) \arrow[r,swap,"\mathsf{evpair}"] & \prd{b:B}{a:A}(f(a)=b)\to P(b) \arrow[u,swap,"\evrefl"]
 \end{tikzcd}
 \end{equation*}
-in which three out of four maps are known equivalences. The remainin map must therefore also be an equivalence.
+in which three out of four maps are known equivalences. The remaining map must therefore also be an equivalence.
 
 Thus,~\ref{item:conntest1}$\Rightarrow$\ref{item:conntest2}, and clearly~\ref{item:conntest2}$\Rightarrow$\ref{item:conntest3}.
 To show~\ref{item:conntest3}$\Rightarrow$\ref{item:conntest1}, let
@@ -999,8 +998,6 @@ Consider a map $f:A\to B$.
 \item If $f$ is $L$-connected, then $f$ is an $L$-equivalence.
 \end{enumerate}
 \end{prp}
-
-The converses of both statements in \cref{cor:L'equivalenceisLconnected} are false in general, even for modalities; we will see in \cref{thm:lex-modalities} that the converse of (ii) holds precisely when $\modal$ is lex.
 
 \begin{proof}
 The first statement is a direct consequence of \cref{corollary:preservationfibersequences2}, since we get for each $b:B$ a map of fiber sequences
@@ -1066,7 +1063,7 @@ For the second statement, suppose that $f$ is $L'$-connected.
 
     For the converse, notice that taking fibers over each $x:X$ reduces the problem
     to showing that given an $L$-connected map $h : A \to B$
-    such that $A$ is $L'$-connected, it follows that $B$ is $L'$-connected. \marginnote{refer to lemma that says that fibers of $h$ are equivalent to fibers of the induced map $\fib{f}{x}\to\fib{g}{x}$.}
+    such that $A$ is $L'$-connected, it follows that $B$ is $L'$-connected.
 
     Since $L'A$ is contractible, it follows that $L'B$ is contractible if and only if $L'h:L'A\to L'B$ is an equivalence.
     Therefore it suffices to show that the fibers of $L'h$ are contractible. Moreover, since $\eta':B\to L'B$ is a surjective map by \cref{thm:separation_characterization}, it is enough to show that $\fib{L'h}{\eta'(b)}$ is contractible for every $b:B$.
@@ -1086,7 +1083,7 @@ is an $L$-localization. Now it follows by our assumption that $h$ is $L$-connect
 \end{proof}
 
 \begin{rmk}
-In general it is not true that if $g$ and $g\circ h$ are $\modal$-connected then $h$ is; this is one of the equivalent characterizations of lex modalities (\cref{thm:lex-modalities}).
+In general it is not true that if $g$ and $g\circ h$ are $\modal$-connected then $h$ is; this is one of the equivalent characterizations of lex modalities (Theorem 3.1 of \cite{RijkeShulmanSpitters}).
 
 The above proposition almost gives us a 3-for-2 property that combines $L$ and $L'$.
 However the map $\emptyt \to \unit$ is $(-2)$-connected, and $\unit$ is $(-1)$-connected,
@@ -1174,7 +1171,7 @@ A \arrow[r,"f"] & B \arrow[d] \\
 A^{\sphere{k}} \arrow[r,swap,"f^{\sphere{k}}"] & B^{\sphere{k}}
 \end{tikzcd}
 \end{equation*}
-is a quasi-pullback square, for each $-1\leq k\leq n$.\marginnote{Therefore, a map is $\infty$-connected if this square is a quasi-pullback for all $k$}
+is a quasi-pullback square, for each $-1\leq k\leq n$. A map is therefore $\infty$-connected if this square is a quasi-pullback for all $k$
 \end{cor}
 
 \begin{cor}\label{cor:ptd_connected}
@@ -1230,73 +1227,8 @@ $L(\fib{f(x)}v)$ is contractible.
 
 Of course, the ``if'' direction of \cref{prop:nconn_fiber_to_total} is a special case of \cref{lem:nconnected_postcomp_variation}.
 This suggests a similar generalization of the ``only if'' direction of \cref{prop:nconn_fiber_to_total}, which would be a version of \cref{lem:nconnected_postcomp_variation} asserting that if $f$ and $\varphi$ are $L$-connected then so is each $g_a$.
-However, this is not true in general; we will see in \cref{thm:lex-modalities} that it holds if and only if the modality is lex.
 
-\section{Accessible reflective subuniverses}\label{sec:accessible}
-
-\begin{defn}
-Given a family $f:\prd{i:I}A_i\to B_i$ of maps, a type $X$ is said to be \define{$f$-local} if the precompostion map
-\begin{equation*}
-\precomp{f_i}:(B_i\to X)\to (A_i\to X)
-\end{equation*}
-is an equivalence, for each $i:I$. The family $f$ is said to be a \define{presentation} of a reflective subuniverse $L$ if the subuniverses of $f$-local types and $L$-local types coincide. A reflective subuniverse is said to be \define{accessible} if there exists a presentation for it. 
-\end{defn}
-
-In \cite{RijkeShulmanSpitters} it is shown that the subuniverse of $f$-local types is always a reflective subuniverse. However, it is not clear whether their construction is possible in our current setting, where the only higher inductive types that are assumed to exist are homotopy pushouts. In this section we will establish general properties of accessible reflective subuniverses. We will show in \cref{chap:compact} that for any family $f$ of maps between \emph{compact} types, the subuniverse of $f$ is indeed reflective. 
-
-\begin{rmk}
-Note that being accessible is structure; different families can present the same reflective subuniverse or modality.
-As a trivial example, note that localizing at the empty
-type, and localizing at the type family on $\bool$ defined by
-$\bfalse\mapsto \emptyt$ and $\btrue\mapsto \unit$ both map all types to contractible types.
-
-However, we are usually only interested in properties of presentations insofar as they determine properties of subuniverses.
-For instance, by \cref{thm:acc-modal}, a reflective subuniverse is a modality exactly when it has a presentation in which each $C(a)=\unit$.
-Similarly, in \cref{sec:lex-top-cotop} we will define a modality to be ``topological'' if it has a presentation in which each $C(a)=\unit$ and each $B(a)$ is a mere proposition.
-\end{rmk}
-
-\begin{eg}\label{thm:trunc-acc}
-The trivial modality $\truncf{(-2)}$ is presented by $\emptyt$, while the propositional truncation modality $\truncf{(-1)}$ is presented by $\bool$.  More generally, the
-$n$-truncation modality $\truncf{n}$ is presented by the $(n+1)$-sphere $\Sn^{n+1}$.
-\end{eg}
-
-\begin{eg}\label{thm:open-acc}
-For every mere proposition $P$, the open modality $\open P (X) \defeq (P\to X)$ from \cref{eg:open} is 
-presented by the singleton type family $P$.
-To see this, note that $\modalunit[X] : X \to (P\to X)$ is the same as the map in the definition of locality, so that $X$ is modal for the open modality on $P$ if and only if it is $P$-local.
-(If $P$ is not a mere proposition, however, then $X\mapsto (P\to X)$ is not a modality, and in particular does not coincide with localization at $P$.)
-\end{eg}
-
-\begin{eg}\label{thm:closed-acc}
-  The closed modality $\closed P$ from \cref{eg:closed} associated to a mere proposition $P$ is presented by the type family $\lam{x} \emptyt : P \to \UU$.
-  For by definition, $A$ is null for this family if and only if for any $p:P$ the map $A \to (\emptyt \to A)$ is an equivalence.
-  But $\emptyt \to P$ is contractible, so this says that $P\to\iscontr(A)$, which was the definition of $\closed P$-modal types from \cref{eg:closed}.
-\end{eg}
-
-
-
-\begin{lem}\label{lemma:characterizationsigmaflocal}
-    Let $f:\prd{i:I}A_i\to B_i$ be a family of maps. Denote the family consisting of the suspensions
-    of the functions by $\susp{f} : \prd{i:I} \susp{A_i} \to \susp{B_i}$.
-    A type $X$ is $\suspsym f$-local if and only if for every $x,y : X$, the type
-    $x =_X y$ is $f$-local.
-    In other words, $L_{\susp{f}} = (L_{f})'$.
-\end{lem}
-
-\begin{proof}
-    By the induction principle for suspension and naturality, we obtain for each $i : I$ a commutative square
-\[
-  \begin{tikzcd}
-    (\susp{B_i} \to X) \arrow[r,"\simeq"] \arrow[d] & \left( \sm{x,y:X} (B_i \to x = y) \right) \arrow[d] \\
-    (\susp{A_i} \to X) \arrow[r,"\simeq"] & \left( \sm{x,y:X} (A_i \to x = y) \right)
-  \end{tikzcd}
-\]
-in which the horizontal maps are equivalences.
-So $X$ is $\suspsym f$-local if and only if the right vertical map is an equivalence
-for every $i : I$, if and only if for each $x,y : X$, the type $x = y$ is $f_i$-local
-for every $i : I$.
-\end{proof}
-
+\endinput
 \section{These results should go to where they are first needed}
 \begin{lem}\label{lemma:orthogonalcomposition}
     If the maps in a type sequence
@@ -1536,7 +1468,7 @@ it follows that $\precomp{f} : (B \pto X) \to (A \pto X)$ is an equivalence.
 
 We begin this section by studying conditions under which
 $f$-localization preserves coproducts. 
-By a coproduct, we mean a set-indexed $\sum$-type.
+By a coproduct, we mean a set-indexed $\Sigma$-type.
 We first prove a lemma, which will also be used in \cref{example:notlex}.
 
 \begin{lem}\label{lemma:setsarelocal}
@@ -1550,15 +1482,15 @@ We first prove a lemma, which will also be used in \cref{example:notlex}.
     It suffices to prove the lemma for each $f_i$, so we assume
     that we are given a single map $f : A \to B$.
     Let $J$ be a set and let $T : J \to \UU$ be a type family.
-    Since $A$ is pointed and connected, any map $A \to \sum_{j:J} T_j$ factors through a well-defined summand
-    $T_j$, so we have $(A \to \sum_j T_j) \simeq \sum_j (A \to T_j)$. The same is true for $B$, so
-    we can factor the map $\precomp{f} : (B \to \sum_j T_j) \to (A \to \sum_j T_j)$ as
+    Since $A$ is pointed and connected, any map $A \to \sm{j:J} T_j$ factors through a well-defined summand
+    $T_j$, so we have $(A \to \sm{j:J} T_j) \simeq \sm{j:J} (A \to T_j)$. The same is true for $B$, so
+    we can factor the map $\precomp{f} : (B \to \sm{j:J} T_j) \to (A \to \sm{j:J} T_j)$ as
     \[
-        \left(B \to \sum_j T_j \right) \simeq \sum_j (B \to T_j) \simeq \sum_j (A \to T_j) \simeq \left(A \to \sum_j T_j\right),
+        \Big(B \to \sm{j:J} T_j \Big) \simeq \sm{j:J} (B \to T_j) \simeq \sm{j:J} (A \to T_j) \simeq \Big(A \to \sm{j:J} T_j\Big),
     \]
-    which shows that $\sum_j T_j$ is $f$-local.
+    which shows that $\sm{j:J} T_j$ is $f$-local.
 
-    Since $\unit$ is $f$-local, a special case is that $\sum_j \unit \simeq J$ is $f$-local.
+    Since $\unit$ is $f$-local, a special case is that $\sm{j:J} \unit \simeq J$ is $f$-local.
 \end{proof}
 
 \begin{cor}
@@ -1569,13 +1501,13 @@ We first prove a lemma, which will also be used in \cref{example:notlex}.
 
 \begin{proof}
     Let $J$ be a set and let $S : J \to \UU$ be a type family.
-    Consider the coproduct $\sum_j S_j$.
-    By \cref{lemma:setsarelocal}, $\sum_j L_f S_j$ is $f$-local. We claim that the natural
-    map $\sum_j S_j \to \sum_j L_f S_j$ is a localization.
+    Consider the coproduct $\sm{j:J} S_j$.
+    By \cref{lemma:setsarelocal}, $\sm{j:J} L_f S_j$ is $f$-local. We claim that the natural
+    map $\sm{j:J} S_j \to \sm{j:J} L_f S_j$ is a localization.
     Let $Y$ be $f$-local. Then we have
     \[
-        \Bigg( \bigg( \sum_j S_j \bigg) \to Y \Bigg) \simeq \prod_j (S_j \to Y) \simeq
-        \prod_j (L_f S_j \to Y) \simeq \Bigg( \bigg( \sum_j L_f S_j \bigg) \to Y \Bigg).\qedhere
+        \Bigg( \bigg( \sm{j:J} S_j \bigg) \to Y \Bigg) \simeq \prd{j:J} (S_j \to Y) \simeq
+        \prd{j:J} (L_f S_j \to Y) \simeq \Bigg( \bigg( \sm{j:J} L_f S_j \bigg) \to Y \Bigg).\qedhere
     \]
 \end{proof}
 

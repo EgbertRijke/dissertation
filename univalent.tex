@@ -1,9 +1,9 @@
 \chapter{The object classifier}\label{chap:univalent}
 
-In this chapter we establish notation, and we highlight the basic results concerning fiberwise transformations and fiberwise equivalences, which we will use for the descent theorems. Of particular importance are the following theorems:
+In this chapter we establish notation, and we highlight the basic results concerning fiberwise transformations and fiberwise equivalences, which we will use for the descent theorems \cref{thm:descent,thm:rcoeq_cartesian}. Of particular importance are the following theorems:
 \begin{enumerate}
-\item The fundamental theorem of identity types (\cref{thm:id_fundamental}), which establishes that a type family $B$ over $A$ with $b:B(a)$ for a given $a:A$ is fiberwise equivalent to the identity type $a=x$ if and only if its total space is contractible. This result appears in \cite{hottbook} as Theorem 5.8.2, which contains other equivalent conditions as well.
-\item \cref{thm:pb_fibequiv}\marginnote{is this reference right?}, in which we establish that for any fiberwise map
+\item The Fundamental Theorem of Identity Types (\cref{thm:id_fundamental}), which establishes that a type family $B$ over $A$ with $b:B(a)$ for a given $a:A$ is fiberwise equivalent to the identity type $a=x$ if and only if its total space is contractible. This result appears in \cite{hottbook} as Theorem 5.8.2, which contains other equivalent conditions as well.
+\item \cref{thm:pb_fibequiv}, in which we establish that for any fiberwise map
 \begin{equation*}
 g:\prd{x:A}P(x)\to Q(f(x)),
 \end{equation*}
@@ -25,13 +25,12 @@ is a pullback square if and only if the induced fiberwise transformation
 \begin{equation*}
 \prd{x:X} \fib{f}{x}\to\fib{g}{h(x)}
 \end{equation*}
-is a fiberwise equivalence. Our main reference \cite{hottbook} does not present many results of homotopy pullbacks, although the material we presend about homotopy pullbacks is surely well-known. The connection between pullbacks and fiberwise equivalences has an important role in the descent theorem\index{descent} in \cref{chap:descent}, which is why we devote a section to this result.
+is a fiberwise equivalence. Our main reference \cite{hottbook} does not present many results of homotopy pullbacks, although the material we present about homotopy pullbacks is surely well-known. The connection between pullbacks and fiberwise equivalences has an important role in the descent theorem\index{descent} in \cref{chap:descent}, which is why we devote a section to this result.
 \item \cref{thm:classifier}, in which we establish that the universe is an object classifier. This result appears in \cite{RijkeSpitters} as Theorem 2.31, and in \cite{hottbook} as Theorem 4.8.4
 \end{enumerate}
 
 \section{Notation and preliminary results}
 
-\marginnote{Make sure $\evpair$ is introduced, and shown to be an equivalence}
 We work in Martin-L\"of dependent type theory with $\Pi$-types, $\Sigma$-types and cartesian products, coproducts $A+B$ equipped with $\inl:A\to A+B$ and $\inr:B\to A+B$ for any two types $A$ and $B$, an empty type $\emptyt$, a unit type $\unit$ equipped with $\ttt:\unit$, a type $\bool$ of booleans equipped with $\btrue,\bfalse:\bool$, a type $\N$ of natural numbers equipped with $0:\N$ and $\suc:\N\to\N$, and identity types. 
 
 \begin{rmk}
@@ -44,7 +43,6 @@ for the \define{constant function} $\lam{x}b$. Sometimes we also write $\lam{\na
 In the case of $\Sigma$-types, the empty type $\emptyt$, and the unit type, we use the following notation to define functions by pattern-matching:
 \begin{align*}
 \lam{(x,y)}f(x,y) & : \prd{t:\sm{x:A}B(x)} P(t) \\
-\lambda & : \prd{t:\emptyt} P(t)\marginnote{do we use this?} \\
 \lam{\ttt}y & : \prd{t:\unit}P(t).
 \end{align*}
 For instance, the first and second projection maps 
@@ -53,7 +51,7 @@ For instance, the first and second projection maps
 \proj 2 & : \prd{p:\sm{x:A}B(x)}B(\proj 1)
 \end{align*}
 are defined as $\proj 1\defeq \lam{(x,y)}x$ and $\proj 2\defeq\lam{(x,y)}y$.
-We use similar notation for definitions by iterated pattern-matching. For instance, given a function $f:\prd{x:A}{y:B(x)}{z:C(x,y)} P((x,y),z)$ we obtain the function
+We use similar notation for definitions by iterated pattern-matching. For instance, given a dependent function $f:\prd{x:A}{y:B(x)}{z:C(x,y)} P((x,y),z)$ we obtain the function
 \begin{equation*}
 \lam{((x,y),z)} f(x,y,z): \prd{t:\sm{s:\sm{x:A}B(x)}C(s)}P(t).
 \end{equation*}
@@ -79,7 +77,6 @@ in context $\Gamma$, satisfying the computation rule
 \begin{equation*}
 \ind{a=}(p,a,\refl{a})\jdeq p.
 \end{equation*}
-We also use pattern-matching notation $\lam{\,\refl{a}}p$ for $\ind{a=}(p)$.\marginnote{do we use this?}
 
 A term of type $a=_A x$ is also called an \define{identification} of $a$ with $x$, or a \define{path} from $a$ to $x$.
 The induction principle for identity types is sometimes called \define{identification elimination} or \define{path induction}. Occasionally, we also write $\idtypevar{A}$ for the identity type on $A$. 
@@ -90,7 +87,7 @@ Moreover, we assume that there is a universe $\UU$ with a universal family $\mat
 \end{equation*}
 satisfying
 \begin{equation*}
-\mathrm{El}(\check{\idtypevar{}}(A,x,y))\jdeq x=_{\mathrm{El}(A)} y,
+\mathrm{El}(\check{\idtypevar{}}(A,x,y))\jdeq (x=_{\mathrm{El}(A)} y),
 \end{equation*}
 establishing that the universe is closed under identity types.
 
@@ -102,11 +99,8 @@ is defined by $\concat(\refl{x},q)\defeq q$. We will usually write $\ct{p}{q}$ f
 The concatenation operation satisfies the unit laws
 \begin{align*}
 \leftunit(p) & : \ct{\refl{x}}{p}=p \\
-\rightunit(p) & : \ct{p}{\refl{y}}=p,
-\intertext{with a cohererence}
-\cohunit(x) & : \leftunit(\refl{x})=\rightunit(\refl{x})
+\rightunit(p) & : \ct{p}{\refl{y}}=p.
 \end{align*}
-that will come into play in \cref{chap:simplicial} where we study $2$-simplicial types, and in \cref{chap:giraud} where we study type-valued equivalence relations.
 
 The \define{inverse operation} 
 \begin{equation*}
@@ -116,16 +110,14 @@ is defined by $\invfunc(\refl{x})\defeq\refl{x}$. We will usually write $p^{-1}$
 The inverse operation satisfies the inverse laws
 \begin{align*}
 \leftinv(p) & : \ct{p^{-1}}{p} = \refl{y} \\
-\rightinv(p) & : \ct{p}{p^{-1}} = \refl{x},
-\intertext{with a coherence}
-\cohinv(x) & \defeq \leftinv(\refl{x})=\rightinv(\refl{x}).
+\rightinv(p) & : \ct{p}{p^{-1}} = \refl{x}.
 \end{align*}
 
 The \define{associativity operation}, which assigns to each $p:x=y$, $q:y=z$, and $r:z=w$ the \define{associator}
 \begin{equation*}
 \assoc(p,q,r) : \ct{(\ct{p}{q})}{r}=\ct{p}{(\ct{q}{r})}
 \end{equation*}
-is defined by $\assoc(\refl{x},q,r)\defeq \refl{\ct{q}{r}}$. The associator again satisfies unit laws, which we will encounter when we study type-valued equivalence relations.
+is defined by $\assoc(\refl{x},q,r)\defeq \refl{\ct{q}{r}}$.
 
 Given a map $f:A\to B$, the \define{action on paths} of $f$ is an operation
 \begin{equation*}
@@ -138,14 +130,7 @@ Moreover, there are operations
 \apcomp(f,g) & : \prd{x,y:A}{p:\id{x}{y}} \id{\ap{g}{\ap{f}{p}}}{\ap{g\circ f}{p}}
 \end{align*}
 defined by $\apid_A(\refl{x})\defeq \refl{\refl{x}}$ and $\apcomp(f,g,\refl{x})\jdeq \refl{\refl{g(f(x))}}$, respectively.
-
-The action on paths of a map preserves the groupoid operations, i.e.~we can construct
-\begin{align*}
-\aprefl(f,x) & : \id{\ap{f}{\refl{x}}}{\refl{f}(x)} \marginnote{are these used?}\\
-\apinv(f,p) & : \id{\ap{f}{p^{-1}}}{\ap{f}{p}^{-1}} \\
-\apconcat(f,p,q) & : \id{\ap{f}{\ct{p}{q}}}{\ct{\ap{f}{p}}{\ap{f}{q}}}
-\end{align*}
-by identification elimination. The groupoid laws are also preserved.
+It can be shown easily that the action on paths of a map preserves the groupoid operations, and that the groupoid laws are also preserved.
 
 \begin{defn}
 Let $A$ be a type, and let $B$ be a type family over $A$. The \define{transport} operation
@@ -248,23 +233,6 @@ filling the cube.
 \end{enumerate}
 \end{defn}
 
-\begin{comment}
-\begin{defn}\label{defn:htpy_nat}\index{homotopy!naturality|textbf}
-Let $f,g:A\to B$ be functions, and consider a homotopy $H:f\htpy g$. We define identification
-\begin{align*}
-\mathsf{nat\usc{}htpy}(H,p) & : \prd{y:A}{p:x=y}\ct{H(x)}{\ap{g}{p}}=\ct{\ap{f}{p}}{H(y)}
-\end{align*}
-witnessing that the square
-\begin{equation*}
-\begin{tikzcd}
-f(x) \arrow[r,equals,"H(x)"] \arrow[d,equals,swap,"\ap{f}{p}"] & g(x) \arrow[d,equals,"\ap{g}{p}"] \\
-f(y) \arrow[r,equals,swap,"H(y)"] & g(y)
-\end{tikzcd}
-\end{equation*}
-commutes for every $p:x=y$, as $\lam{\,\refl{x}} \rightunit(H(x))$. This square is also called the \define{naturality square} of the homotopy $H$ at $p$.
-\end{defn}
-\end{comment}
-
 \begin{defn}
 Let $f:A\to B$ be a function. We say that $f$ has a \define{section}\index{section!of a map|textbf} if there is a term of type\index{sec(f)@{$\sections(f)$}|textbf}
 \begin{equation*}
@@ -276,16 +244,6 @@ Dually, we say that $f$ has a \define{retraction}\index{retraction} if there is 
 \end{equation*}
 If $f$ has a retraction, we also say that $A$ is a \define{retract}\index{retract!of a type} of $B$.
 \end{defn}
-
-\begin{eg}
-\marginnote{Find a better place for this}The induction principles for $\Sigma$-types, $\emptyt$, $\unit$, and $\bool$ provide sections for the functions
-\begin{align*}
-\evpair & : \Big(\prd{t:\sm{x:A}B(x)}P(t)\Big)\to \prd{x:A}{y:B(x)}P((x,y)) \\
-\const_\ttt & : \Big(\prd{t:\emptyt}P(t)\Big)\to \unit \\
-\evpt & : \Big(\prd{t:\unit}P(t)\Big) \to P(\ttt) \\
-\evtruefalse & : \Big(\prd{t:\bool}P(t)\Big) \to P(\btrue)\times P(\bfalse) \\
-\end{align*}
-\end{eg}
 
 \begin{defn}
 We say that a function $f:A\to B$ is an \define{equivalence}\index{equivalence|textbf}\index{bi-invertible map|see {equivalence}} if it has both a section and a retraction, i.e.~if it comes equipped with a term of type\index{is_equiv@{$\isequiv$}|textbf}
@@ -371,12 +329,26 @@ given by $f\mapsto f(a)$ has a section.
 \end{defn}
 
 \begin{prp}\label{thm:contractible}
-A type $A$ is contractible if and only if it satisfies signleton induction.
+A type $A$ is contractible if and only if it satisfies singleton induction.
 \end{prp}
 
 \begin{eg}
 By definition the unit type\index{unit type!contractibility} $\unit$ satisfies singleton induction, so it is contractible.
 \end{eg}
+
+\begin{rmk}
+For any family $P:\Big(\sm{x:A}B(x)\Big)\to\UU$ there is a map
+\begin{equation*}
+\evpair : \Big(\prd{t:\sm{x:A}B(x)}P(t)\Big)\to \prd{x:A}{y:B(x)}P(x,y)
+\end{equation*}
+that evaluates $f:\prd{t:\sm{x:A}B(x)}P(t)$ at pairs $(x,y)$. In other words, $\evpair$ is defined by $\lam{f}{x}{y}f(x,y)$. By the induction principle for $\Sigma$-types, this map has a section. It is easy to show that $\evpair$ is in fact an equivalence. 
+
+Similarly, there is a map
+\begin{equation*}
+\evrefl : \Big(\prd{x:A}{p:a=x}B(x,p)\Big)\to B(a,\refl{a})
+\end{equation*}
+given by $\lam{f}f(a,\refl{a})$, for any type family $B:\prd{x:A} (a=x)\to\UU$. By path induction, this map has a section, and again it is easy to show that this map is in fact an equivalence. 
+\end{rmk}
 
 \begin{prp}[Lemma 3.11.8 in \cite{hottbook}]\label{thm:total_path}
 For any $x:A$, the type
@@ -424,11 +396,7 @@ We cite Chapter 4 of \cite{hottbook} for the following result, although it is we
 A function is an equivalence if and only if it is contractible.\index{contractible!map!is an equivalence|textit}
 \end{prp}
 
-\begin{proof}
-Since the identity function is an equivalence, the fibers of the identity function are contractible by \autoref{thm:contr_equiv}. Note that $\sm{x:A}x=a$ is exactly the fiber of $\idfunc[A]$ at $a:A$.
-\end{proof}
-
-\section{The fundamental theorem of identity types}
+\section{The Fundamental Theorem of Identity Types}
 Consider a family
 \begin{equation*}
 f : \prd{x:A}B(x)\to C(x)
@@ -473,7 +441,7 @@ Let $f:\prd{x:A}B(x)\to C(x)$ be a fiberwise transformation. The following are l
 \end{enumerate}
 \end{prp}
 
-The following theorem is the key to many results about identity types, which we will use instead of the \emph{encode-decode method}\index{encode-decode method} of \cite{LicataShulman}. We refer to it as the \define{fundamental theorem of identity types}.
+The following theorem is the key to many results about identity types, which we will use instead of the \emph{encode-decode method}\index{encode-decode method} of \cite{LicataShulman}. We refer to it as the \define{Fundamental Theorem of Identity Types}.
 
 \begin{thm}[Theorem 5.8.2 of \cite{hottbook}]\label{thm:id_fundamental}
 Let $A$ be a type with $a:A$, and let $B$ be a type family over $A$ with $b:B(a)$.
@@ -619,15 +587,6 @@ Immediate by \cref{eg:fib_proj,thm:prop_emb}.
 \begin{prp}[Theorem 4.9.5 of \cite{hottbook}]\label{thm:funext_wkfunext}
 The following are equivalent:
 \begin{enumerate}
-%\item The principle of \define{homotopy induction}\index{homotopy induction}: for every $f:\prd{x:A}B(x)$ and every type family
-%\begin{equation*}
-%\Gamma,g:\prd{x:A}B(x), H:f\htpy g \vdash P(g,H)~\mathrm{type},
-%\end{equation*}
-%the map
-%\begin{equation*}
-%\Big(\prd{g:\prd{x:A}B(x)}{H:f\htpy g}P(g,H)\Big)\to P(f,\htpyrefl_f)
-%\end{equation*}
-%given by $s\mapsto s(f,\htpyrefl_f)$ has a section.
 \item The \define{function extensionality principle}\index{function extensionality}: For every type family $B$ over $A$, and any two dependent functions $f,g:\prd{x:A}B(x)$, the canonical map\index{htpy_eq@{$\htpyeq$}|textbf}
 \begin{equation*}
 \htpyeq(f,g) : (\id{f}{g})\to (f\htpy g)
@@ -650,29 +609,12 @@ For any type family $B$ over $A$ one has
 In particular, if $B$ is a proposition, then $A\to B$ is a proposition for any type $A$.
 \end{cor}
 
-\begin{prp}[Theorem 2.15.7 of \cite{hottbook}]\label{thm:choice}
-Let $C(x,y)$ be a type in context $\Gamma,x:A,y:B(x)$. Then the map
-\begin{equation*}
-\varphi:\Big(\prd{x:A}\sm{y:B(x)}C(x,y)\Big)\to \Big(\sm{f:\prd{x:A}B(x)}\prd{x:A}C(x,f(x))\Big)
-\end{equation*}
-given by $\lam{h}(\lam{x}\proj 1(h(x)),\lam{x}\proj 2(h(x)))$ is an equivalence.
-\end{prp}
-
-\begin{cor}
-For type $A$ and any type family $C$ over $B$, the map
-\begin{equation*}
-\Big(\sm{f:A\to B} \prd{x:A}C(f(x))\Big)\to\Big(A\to\sm{y:B}C(x)\Big)
-\end{equation*}
-given by $\lam{(f,g)}{x}(f(x),g(x))$ is an equivalence.
-\end{cor}
-
-\subsection{Composing with equivalences}
-
-We show in this section that a map $f:A\to B$ is an equivalence if and only if for any type family $P$ over $B$, the precomposition map\marginnote{I do not find this result in \cite{hottbook}}
+We show in this section that a map $f:A\to B$ is an equivalence if and only if for any type family $P$ over $B$, the precomposition map
 \begin{equation*}
 \blank\circ f: \Big(\prd{y:B}P(y)\Big)\to\Big(\prd{x:A}P(f(x))\Big)
 \end{equation*}
-is an equivalence. In the proof we use the notion of \emph{path-split} maps, which were introduced by Rijke, Shulman, and Spitters in \cite{RijkeShulmanSpitters}.
+is an equivalence. 
+In the proof we use the notion of \emph{path-split} maps, which was introduced in \cite{RijkeShulmanSpitters}.
 
 \begin{defn}
 We say that a map $f:A\to B$ is \define{path-split}\index{path-split|textbf} if $f$ has a section, and for each $x,y:A$ the map
@@ -697,6 +639,24 @@ K & : G\cdot f \htpy f\cdot H.
 \end{align*}
 We write $\halfadj(f)$\index{half_adj(f)@{$\halfadj(f)$}|textbf} for the type of such quadruples $(g,G,H,K)$.
 \end{defn}
+
+Furthermore, we will need `type theoretic choice'. 
+
+\begin{prp}[Theorem 2.15.7 of \cite{hottbook}]\label{thm:choice}
+Let $C(x,y)$ be a type in context $\Gamma,x:A,y:B(x)$. Then the map
+\begin{equation*}
+\varphi:\Big(\prd{x:A}\sm{y:B(x)}C(x,y)\Big)\to \Big(\sm{f:\prd{x:A}B(x)}\prd{x:A}C(x,f(x))\Big)
+\end{equation*}
+given by $\lam{h}(\lam{x}\proj 1(h(x)),\lam{x}\proj 2(h(x)))$ is an equivalence.
+\end{prp}
+
+\begin{cor}
+For type $A$ and any type family $C$ over $B$, the map
+\begin{equation*}
+\Big(\sm{f:A\to B} \prd{x:A}C(f(x))\Big)\to\Big(A\to\sm{y:B}C(x)\Big)
+\end{equation*}
+given by $\lam{(f,g)}{x}(f(x),g(x))$ is an equivalence.
+\end{cor}
 
 \begin{prp}\label{prp:equiv_precomp}
 For any map $f:A\to B$, the following are equivalent:
@@ -783,63 +743,6 @@ Of course we have $(\idfunc[B],\refl{f})$ in this fiber. However we claim that t
 \end{align*}
 Now we conclude by the contractibility of the fiber that there is an identification $(\idfunc[B],\refl{f})=(f\circ h,p)$. In particular we obtain that $\idfunc[B]=f\circ h$, showing that $h$ is a section of $f$.
 \end{proof}
-
-\subsection{Characterizing fiberwise transformations}
-\marginnote{Needs work}
-\begin{defn}
-Consider two functions $f:A\to X$ and $g:B\to X$. We define the type 
-\begin{equation*}
-\hom_X(f,g)\defeq \sm{h:A\to B} f\htpy g\circ h.
-\end{equation*}
-\end{defn}
-
-In other words, the type $\hom_X(f,g)$ is the type of functions $h:A\to B$ equipped with a homotopy witnessing that the triangle
-\begin{equation*}
-\begin{tikzcd}[column sep=tiny]
-A \arrow[dr,swap,"f"] \arrow[rr,"h"] & & B \arrow[dl,"g"] \\
-& X
-\end{tikzcd}
-\end{equation*}
-
-\begin{prp}
-Let $P$ and $Q$ be two type families over $X$, and write $\proj 1^P$ and $\proj 1^Q$ for their first projections, respectively. Then the map
-\begin{equation*}
-\tottriangle:\Big(\prd{x:X} P(x)\to Q(x)\Big)\to \hom_X(\proj 1^P,\proj 1^Q)
-\end{equation*}
-given by $\tottriangle(f)\defeq (\total{f},\lam{(x,y)}\refl{x})$, is an equivalence.
-\end{prp}
-
-\begin{cor}\label{cor:fib_triangle}
-For any two maps $f:A\to X$ and $g:B\to X$, the map
-\begin{equation*}
-\fibtriangle : \hom_X(f,g) \to \prd{x:X}\fib{f}{x}\to \fib{g}{x}
-\end{equation*}
-given by $\lam{(h,H)}{x}{(a,p)}(h(a),\ct{H(a)^{-1}}{p})$ is an equivalence.
-\end{cor}
-
-\begin{prp}
-Let $\alpha:I\to J$ be a map, and let $P:I\to\UU$ and $Q:J\to\UU$ be type families.
-Then the map
-\begin{equation*}
-\Big(\prd{i:I}P_i\to Q_{\alpha(i)}\Big) \eqvsym \mathsf{hom}_\alpha(\proj 1^P,\proj 1^Q). 
-\end{equation*}
-given by $\lam{f}(\total[i]{f},\lam{(x,y)}\refl{x})$ is an equivalence.
-\end{prp}
-
-\begin{cor}\label{cor:sq_fib}
-Consider a diagram of the form
-\begin{equation*}
-\begin{tikzcd}
-A \arrow[d,swap,"f"] & B \arrow[d,"g"] \\
-I \arrow[r,swap,"\alpha"] & J.
-\end{tikzcd}
-\end{equation*}
-Then the map
-\begin{equation*}
-\mathsf{hom}_\alpha(f,g)\to \Big(\prd{i:I}\fib{f}{i}\to\fib{g}{\alpha(i)}\Big)
-\end{equation*}
-given by $\lam{(h,H)}{i}{(a,p)}(h(a),\ct{H(a)^{-1}}{\ap{\alpha}{p}})$ is an equivalence.
-\end{cor}
 
 \section{Homotopy pullbacks}
 \subsection{Cartesian squares}
@@ -1168,128 +1071,12 @@ If the square is a pullback square, then by \cref{thm:pb_fibequiv} the fibers of
 If $p$ is an equivalence, then by \cref{thm:contr_equiv} both $\fib{p}{x}$ and $\fib{g}{f(x)}$ are contractible for any $x:X$. It follows that the induced map $\fib{p}{x}\to\fib{g}{f(x)}$ is an equivalence. Thus we apply \cref{cor:pb_fibequiv} to conclude that the square is a pullback.
 \end{proof}
 
-\begin{prp}\label{thm:pb_fibequiv_complete}
-Consider a diagram of the form
-\begin{equation*}
-\begin{tikzcd}
-A \arrow[d,swap,"f"] & B \arrow[d,"g"] \\
-X \arrow[r,swap,"h"] & Y.
-\end{tikzcd}
-\end{equation*}
-Then the type of triples $(i,H,p)$ consisting of a map $i:A\to B$, a homotopy $H:h\circ f\htpy g\circ i$, and a term $p$ witnessing that the square
-\begin{equation*}
-\begin{tikzcd}
-A \arrow[d,swap,"f"] \arrow[r,"i"] & B \arrow[d,"g"] \\
-X \arrow[r,swap,"h"] & Y.
-\end{tikzcd}
-\end{equation*}
-is a pullback square, is equivalent to the type of fiberwise equivalences
-\begin{equation*}
-\prd{x:X}\eqv{\fib{f}{x}}{\fib{g}{h(x)}}.
-\end{equation*}
-\end{prp}
-
-\begin{cor}\label{cor:pb_fibequiv_complete}
-Let $h:X\to Y$ be a map, and let $P$ and $Q$ be families over $X$ and $Y$, respectively.
-Then the type of triples $(i,H,p)$ consisting of a map 
-\begin{equation*}
-i:\Big(\sm{x:X}P(x)\Big)\to \Big(\sm{y:Y}Q(y)\Big),
-\end{equation*}
-a homotopy $H:h\circ \proj 1\htpy \proj 1\circ i$, and a term $p:\ispullback(f,i,H)$ witnessing that the square
-\begin{equation*}
-\begin{tikzcd}
-\sm{x:X}P(x) \arrow[d,swap,"\proj 1"] \arrow[r,"i"] & \sm{y:Y}Q(y) \arrow[d,"\proj 1"] \\
-X \arrow[r,swap,"h"] & Y.
-\end{tikzcd}
-\end{equation*}
-is a pullback square, is equivalent to the type of fiberwise equivalences
-\begin{equation*}
-\prd{x:X}\eqv{P(x)}{Q(h(x))}.
-\end{equation*}
-\end{cor}
-
-The following corollary is also called the \define{pasting property} of pullbacks.\index{pasting property!of pullbacks|textit}
-
-\begin{cor}\label{thm:pb_pasting}
-Consider a commuting diagram of the form
-\begin{equation*}
-\begin{tikzcd}
-A \arrow[r,"k"] \arrow[d,swap,"f"] & B \arrow[r,"l"] \arrow[d,"g"] & C \arrow[d,"h"] \\
-X \arrow[r,swap,"i"] & Y \arrow[r,swap,"j"] & Z
-\end{tikzcd}
-\end{equation*}
-with homotopies $H:i\circ f\htpy g\circ k$ and $K:j\circ g\htpy h\circ l$, and the homotopy
-\begin{equation*}
-\ct{(j\cdot H)}{(K\cdot k)}:j\circ i\circ f\htpy h\circ l\circ k
-\end{equation*}
-witnessing that the outer rectangle commutes. Furthermore, suppose that the square on the right is a pullback square. Then the following are equivalent:
-\begin{samepage}%
-\begin{enumerate}
-\item The square on the left is a pullback square.
-\item The outer rectangle is a pullback square.
-\end{enumerate}%
-\end{samepage}%
-\end{cor}
-
-\begin{proof}
-The commutativity of the two squares induces fiberwise transformations
-\begin{align*}
-& \prd{x:X}\fib{f}{x}\to \fib{g}{i(x)} \\
-& \prd{y:Y}\fib{g}{y}\to \fib{h}{j(y)}.
-\end{align*}
-By the assumption that the square on the right is a pullback square, it follows from \cref{cor:pb_fibequiv} that the fiberwise transformation
-\begin{equation*}
-\prd{y:Y}\fib{g}{y}\to\fib{h}{j(y)}
-\end{equation*}
-is a fiberwise equivalence. Therefore it follows from 3-for-2 property of equivalences that the fiberwise transformation
-\begin{equation*}
-\prd{x:X}\fib{f}{x}\to\fib{g}{i(x)}
-\end{equation*}
-is a fiberwise equivalence if and only if the fiberwise transformation
-\begin{equation*}
-\prd{x:X}\fib{f}{x}\to\fib{h}{j(i(x))}
-\end{equation*}
-is a fiberwise equivalence. Now the claim follows from one more application of \cref{cor:pb_fibequiv}.
-\end{proof}
-
-\begin{cor}
-Consider a commuting cube
-\begin{equation*}
-\begin{tikzcd}
-& S' \arrow[dl] \arrow[dr] \arrow[d] \\
-A' \arrow[d] & S \arrow[dl] \arrow[dr] & B' \arrow[dl,crossing over] \arrow[d] \\
-A \arrow[dr] & X' \arrow[d] \arrow[from=ul,crossing over] & B \arrow[dl] \\
-& X,
-\end{tikzcd}
-\end{equation*}
-of which the two front squares are pullback squares. Then the back left square is a pullback square if and only if the back right square is a pullback square.
-\end{cor}
-
-\begin{prp}
-Consider a commuting square\marginnote{move to where first needed?}
-\begin{equation*}
-\begin{tikzcd}
-A \arrow[d,swap,"f"] \arrow[r,"i"] & B \arrow[d,"g"] \\
-X \arrow[r,swap,"j"] & Y
-\end{tikzcd}
-\end{equation*}
-with homotopy $H:j\circ f\htpy g\circ i$, and let $h:A \to X\times_Y B$ be the gap map.
-Then the commuting square
-\begin{equation*}
-\begin{tikzcd}
-\fib{h}{(x,b,p)} \arrow[d] \arrow[r] & \unit \arrow[d] \\
-\fib{f}{x} \arrow[r] & \fib{g}{j(x)}
-\end{tikzcd}
-\end{equation*}
-is a pullback square. We call $\fib{h}{(x,b,p)}$ the \define{fiber} of the square.
-\end{prp}
-
 \section{The univalence axiom}
 
 The univalence axiom characterizes the identity type of the universe. It is considered to be an \emph{extensionality principle}\index{extensionality principle!types} for types. In the following theorem we introduce the univalence axiom and give two more equivalent ways of stating this.
 
 \begin{prp}\label{thm:univalence}
-The following are equivalent:\marginnote{Do we need these?}
+The following are equivalent:
 \begin{enumerate}
 \item The \define{univalence axiom}\index{univalence axiom|textbf}: for any $A:\UU$ the map\index{equiv_eq@{$\equiveq$}|textbf}
 \begin{equation*}
@@ -1365,12 +1152,47 @@ For each function $f:A\to B$, the type $\esssmall(f)$ is a proposition, and for 
 This follows from the fact that propositions are closed under dependent products, established in \cref{thm:prop_pi}.
 \end{proof}
 
-\begin{prp}\label{thm:fam_proj}
+\begin{rmk}
+The property of essentially smallness is preserved by $\Pi$, $\Sigma$, and $\mathsf{Id}$. Of course, any contractible type is essentially small, and so is any small type. The property of essentially smallness is preserved by $\Sigma$ and $\mathsf{Id}$, and the exponent $X^A$ of a locally small type $X$ by an essentially small type $A$ is again locally small. Furthermore, any proposition is locally small, and any universe is locally small with respect to itself. 
+\end{rmk}
+
+\begin{defn}
+Consider two functions $f:A\to X$ and $g:B\to X$. We define the type 
+\begin{equation*}
+\hom_X(f,g)\defeq \sm{h:A\to B} f\htpy g\circ h.
+\end{equation*}
+\end{defn}
+
+In other words, the type $\hom_X(f,g)$ is the type of functions $h:A\to B$ equipped with a homotopy witnessing that the triangle
+\begin{equation*}
+\begin{tikzcd}[column sep=tiny]
+A \arrow[dr,swap,"f"] \arrow[rr,"h"] & & B \arrow[dl,"g"] \\
+& X
+\end{tikzcd}
+\end{equation*}
+
+\begin{lem}
+Let $P$ and $Q$ be two type families over $X$, and write $\proj 1^P$ and $\proj 1^Q$ for their first projections, respectively. Then the map
+\begin{equation*}
+\tottriangle:\Big(\prd{x:X} P(x)\to Q(x)\Big)\to \hom_X(\proj 1^P,\proj 1^Q)
+\end{equation*}
+given by $\tottriangle(f)\defeq (\total{f},\lam{(x,y)}\refl{x})$, is an equivalence.
+\end{lem}
+
+\begin{cor}\label{cor:fib_triangle}
+For any two maps $f:A\to X$ and $g:B\to X$, the map
+\begin{equation*}
+\fibtriangle : \hom_X(f,g) \to \prd{x:X}\fib{f}{x}\to \fib{g}{x}
+\end{equation*}
+given by $\lam{(h,H)}{x}{(a,p)}(h(a),\ct{H(a)^{-1}}{p})$ is an equivalence.
+\end{cor}
+
+\begin{thm}\label{thm:fam_proj}
 For any small type $A:\UU$ there is an equivalence
 \begin{equation*}
 \eqv{(A\to \UU)}{\Big(\sm{X:\UU} X\to A\Big)}.
 \end{equation*}
-\end{prp}
+\end{thm}
 
 \begin{proof}
 Note that we have the function
@@ -1400,20 +1222,74 @@ The inverse of the map
 constructed in \cref{thm:fam_proj} is the map $(X,f)\mapsto \fibf{f}$.
 \end{rmk}
 
-\begin{thm}\label{thm:classifier}
-Let $f:A\to B$ be a map. Then there is an equivalence
+\section{The object classifier}
+
+\begin{defn}
+Let $p:E\to B$ and $p':E'\to B'$ be maps. A morphism from $p'$ to $p$ is a triple $(f,g,H)$ consisting of maps $f:B'\to B$ and $g:E'\to E$ and a homotophy $H:f\circ p'\htpy p\circ g$ witnessing that the square
+\begin{equation}\label{eq:morphism_arrow}
+\begin{tikzcd}
+E' \arrow[r,"g"] \arrow[d,swap,"p'"] & E \arrow[d,"p"] \\
+B' \arrow[r,"f"] & B
+\end{tikzcd}
+\end{equation}
+commutes. We write $\mathsf{hom}(p',p)$ for the type of such triples $(f,g,H)$, and sometimes we write $\mathsf{hom}_f(p',p)$ for the type of pairs $(g,H)$. A morphism $(f,g,H)$ is said to be \define{cartesian} if the square in \cref{eq:morphism_arrow} is cartesian. We write $\mathsf{cart}(p',p)$ for the type of cartesian morphisms from $p'$ to $p$, and we write $\mathsf{cart}_f(p',p)$ for the type of triples $(g,H,t)$ for the type of triples, where $t:\ispullback(p',g,H)$.  
+\end{defn}
+
+\begin{defn}\label{defn:object_classifier}
+A morphism $p:E\to B$ is said to be an \define{object classifier} if the type $\mathsf{cart}(p',p)$ is a proposition for each $p':E'\to B'$. If $p:E\to B$ is an object classifier, we also write 
 \begin{equation*}
-\eqv{\esssmall(f)}{\isclassified(f)},
+\mathsf{is\usc{}classified}(p')\defeq \mathsf{hom}(p',p).
 \end{equation*}
-where $\isclassified(f)$\index{is_classified(f)@{$\isclassified(f)$}|textbf} is the type of quadruples $(F,\tilde{F},H,p)$ consisting of maps
-$F:B\to \UU$ and $\tilde{F}:A\to \sm{X:\UU}X$, a homotopy $H:F\circ f\htpy \proj 1\circ \tilde{F}$,  such that the commuting square
+\end{defn}
+
+Our goal in this section is to show that a univalent universe is an object classifier. 
+
+\begin{prp}\label{thm:pb_fibequiv_complete}
+Let $\alpha:I\to J$ be a map, and let $A:I\to\UU$ and $B:J\to\UU$ be type families.
+Then the map
+\begin{equation*}
+\Big(\prd{i:I}A_i\to B_{\alpha(i)}\Big) \to \mathsf{hom}_\alpha(\proj 1^A,\proj 1^B)
+\end{equation*}
+given by $\lam{f}(\total[\alpha]{f},\lam{(x,y)}\refl{x})$ is an equivalence. Furthermore, the map
+\begin{equation*}
+\Big(\prd{i:I}A_i\eqvsym B_{\alpha(i)}\Big) \to \mathsf{cart}_\alpha(\proj 1^A,\proj 1^B)
+\end{equation*}
+given by $\lam{e}(\total[\alpha]{e},\lam{(x,y)}\refl{x},t)$ where $t$ is the term constructed in \cref{thm:pb_fibequiv}, is an equivalence. 
+\end{prp}
+
+\begin{proof}
+We have the equivalences
+\begin{align*}
+\prd{i:I}A_i\to B_{\alpha(i)} & \eqvsym \prd{i:I}{a:A_i}\sm{j:J}{\gamma : \alpha(i)=j} B_j \\
+& \eqvsym \prd{i:I}{a:A_i}\sm{j:J}{b:B_j}\alpha(i)=j \\
+& \eqvsym \prd{(i,a):\sm{i:I}A_i}\sm{(j,b):\sm{j:J}B_j}\alpha(i)=j \\
+& \eqvsym \sm{f:\big(\sm{i:I}A_i\big)\to\big(\sm{j:J}B_j\big)}\alpha\circ \proj 1^A\htpy \proj 1^B\circ f \\
+& \jdeq \mathsf{hom}_\alpha(\proj 1^A,\proj 1^B).
+\end{align*}
+It is easy to check that this composite is the asserted map. The second claim follows from \cref{thm:pb_fibequiv}.
+\end{proof}
+
+\begin{cor}\label{cor:sq_fib}
+Consider a diagram of the form
 \begin{equation*}
 \begin{tikzcd}
-A \arrow[r,"\tilde{F}"] \arrow[d,swap,"f"] & \sm{X:\UU}X \arrow[d,"\proj 1"] \\
-B \arrow[r,swap,"F"] & \UU
+A \arrow[d,swap,"f"] & B \arrow[d,"g"] \\
+I \arrow[r,swap,"\alpha"] & J.
 \end{tikzcd}
 \end{equation*}
-is a pullback square, as witnessed by $p$. If $f$ comes equipped with a term of type $\isclassified(f)$, we also say that $f$ is \define{classified}\index{classified by the universal family|textbf} by the universal family. 
+Then the map
+\begin{equation*}
+\mathsf{hom}_\alpha(f,g)\to \Big(\prd{i:I}\fib{f}{i}\to\fib{g}{\alpha(i)}\Big)
+\end{equation*}
+given by $\lam{(h,H)}{i}{(a,p)}(h(a),\ct{H(a)^{-1}}{\ap{\alpha}{p}})$ is an equivalence.
+\end{cor}
+
+\begin{thm}\label{thm:classifier}
+Let $f:A\to B$ be a map, and let $\UU$ be a univalent universe with universal family $\mathrm{El}$ over $\UU$. Then there is an equivalence
+\begin{equation*}
+\eqv{\esssmall(f)}{\mathsf{cart}(f,\proj 1^{\mathrm{El}})}.
+\end{equation*}
+In particular, the type $\mathsf{cart}(f,\proj 1^{\mathrm{El}})$ is a proposition for each map $f$, so the universe is an object classifier in the sense of \cref{defn:object_classifier}.
 \end{thm}
 
 \begin{proof}
@@ -1439,11 +1315,10 @@ A \arrow[r,swap,"B"] & \UU
 is a pullback square. Therefore it follows that for any family $B:A\to\UU$ of small types, the projection map $\proj 1:\sm{x:A}B(x)\to A$ is an essentially small map.
 To see that the claim is a direct consequence of \cref{thm:pb_fibequiv} we write the asserted square in its rudimentary form:
 \begin{equation*}
-%\begin{gathered}[b]
 \begin{tikzcd}[column sep=6em]
 \sm{x:A}\mathrm{El}(B(x)) \arrow[d,swap,"\proj 1"] \arrow[r,"{\lam{(x,y)}(B(x),y)}"] & \sm{X:\UU}\mathrm{El}(X) \arrow[d,"\proj 1"] \\
 A \arrow[r,swap,"B"] & \UU.
-\end{tikzcd}%\\[-\dp\strutbox]\end{gathered}\qedhere
+\end{tikzcd}
 \end{equation*}
 \end{rmk}
 
@@ -1453,15 +1328,7 @@ In the following theorem we show that a type is locally small if and only if its
 Let $A$ be a type. The following are equivalent:
 \begin{enumerate}
 \item $A$ is locally small.\index{locally small|textit}
-\item There are maps $I:A\times A\to\UU$ and $\tilde{I}:A\to\sm{X:\UU}X$, and a homotopy $H:I\circ \delta_A\htpy \proj 1\circ\tilde{I}$
-such that the commuting square
-\begin{equation*}
-\begin{tikzcd}
-A \arrow[r,"\tilde{I}"] \arrow[d,swap,"\delta_A"] & \sm{X:\UU}X \arrow[d,"\proj 1"] \\
-A\times A \arrow[r,swap,"{I}"] & \UU
-\end{tikzcd}
-\end{equation*}
-is a pullback square.\index{diagonal!of a type|textit}
+\item The diagonal $\delta_A : A\to A\times A$ is classified by $\UU$.\index{diagonal!of a type|textit}
 \end{enumerate}
 \end{thm}
 

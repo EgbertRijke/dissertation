@@ -1,29 +1,27 @@
 \chapter{Homotopy images}\label{chap:image}
 
-\marginnote{Cite Floris and Nicolai}\marginnote{Surjectivity}We have observed in \cref{eg:rcoeq} that the reflexive coequalier of the pre-kernel of a map $f:A\to X$ is the fiberwise join $\join[X]{A}{A}$, i.e.~we have a reflexive coequalizer diagram
+We have observed in \cref{eg:rcoeq} that the reflexive coequalizer of the pre-kernel of a map $f:A\to X$ is the fiberwise join $\join[X]{A}{A}$, i.e.~we have a reflexive coequalizer diagram
 \begin{equation*}
 \begin{tikzcd}
 A\times_X A \arrow[r,yshift=1ex] \arrow[r,yshift=-1ex] & A \arrow[l] \arrow[r] & \join[X]{A}{A}.
 \end{tikzcd}
 \end{equation*}
-Furthermore, we have observed in \cref{cor:2-pre-kernel} that the geometric realization of the 2-pre-kernel of a map $f:A\to X$ is the triple fiberwise join $\join[X]{A}{\join[X]{A}{A}}$, i.e.~we have a colimiting 
+It can also be shown that the colimit of the 2-pre-kernel of a map $f:A\to X$ is the triple fiberwise join $\join[X]{A}{\join[X]{A}{A}}$, i.e.~we have a colimiting 
 \begin{equation*}
 \begin{tikzcd}
-A\times_{X} A \times_{X} A \arrow[r,yshift=2ex] \arrow[r] \arrow[r,yshift=-2ex] & A \times_X A \arrow[l,yshift=1ex] \arrow[l,yshift=-1ex] \arrow[r,yshift=1ex] \arrow[r,yshift=-1ex] & A \arrow[l] \arrow[r] & \join[X]{A}{\join[X]{A}{A}}.
+A\times_{X} A \times_{X} A \arrow[r,yshift=2ex] \arrow[r] \arrow[r,yshift=-2ex] & A \times_X A \arrow[l,yshift=1ex] \arrow[l,yshift=-1ex] \arrow[r,yshift=1ex] \arrow[r,yshift=-1ex] & A \arrow[l] \arrow[r] & \join[X]{A}{\join[X]{A}{A}},
 \end{tikzcd}
 \end{equation*}
-These results suggest that if we were to continue this process ad infinitum, in order to construct the Czech nerve of a map (which requires one to solve the currently open problem of defining in homotopy type theory the type of simplicial types) then one might expect that its geometric realization is the sequential colimit of the type sequence
+although one has to take care to use the right amount of coherence data.
+These results suggest that geometric realization of the Cech nerve of a map $f:A\to X$, i.e.~the homotopy image of $f$, is the sequential colimit of the type sequence
 \begin{equation*}
 \begin{tikzcd}
 A \arrow[r] & \join[X]{A}{A} \arrow[r] & \join[X]{A}{(\join[X]{A}{A})} \arrow[r] & \cdots
 \end{tikzcd}
 \end{equation*}
-and its sequential colimit. However, we \emph{can} analyze this type sequence and its colimit in homotopy type theory, since it is constructed entirely in terms of known operations. We will show in \cref{thm:image} that for any map $f:A\to X$, the infinite fiberwise join-power $\join[X]{\cdots}{\join[X]{A}{\join[X]{A}{A}}}$ is the image of $f$. We conclude that the image of a map always exists in univalent type theory with homotopy pushouts. This construction of the image of $f$ is called the join construction, and first appeared in \cite{joinconstruction}. Moreover, we show in \cref{thm:image_small} that the image of an essentially small type mapping into a locally small type is again essentially small. In particular, the image of a map from a small type into the universe is essentially small. This corollary should be viewed as a type theoretic replacement axiom. This fact has the important consequence that any connected component of the universe is essentially small.
+and its sequential colimit. We do not have a way of presenting the Cech nerve of a map in type theory, due to the infinite coherence problem of presenting simplicial types in type theory. Nevertheless, we \emph{can} analyze this type sequence and its colimit in homotopy type theory, since it is constructed entirely in terms of known operations. We will show in \cref{thm:image} that for any map $f:A\to X$, the infinite fiberwise join-power $\join[X]{\cdots}{\join[X]{A}{\join[X]{A}{A}}}$ is the image of $f$. We conclude that the image of a map always exists in univalent type theory with homotopy pushouts. We note that an earlier construction of the propositional truncation in a similar setting is due to van Doorn \cite{vanDoorn2016}, and another one is due to Kraus \cite{Kraus2016}. The present construction of the image of $f$ is called the join construction implies, as we show in \cref{thm:image_small}, that the image of an essentially small type mapping into a locally small type is again essentially small. In particular, the image of a map from a small type into the universe is essentially small. This corollary should be viewed as a type theoretic replacement axiom. This fact has the important consequence that any connected component of the universe is essentially small. We also note that the join construction leads to new constructions of set quotients and of Rezk completions, see \cite{joinconstruction}, where also a construction of the $n$-truncations is given as an application of the join construction.
 
-The join construction leads to new constructions of set quotients and of Rezk completions. Set-quotients have been first constructed in \cite{UniMath2015,UniMath} using propositional resizing, and as higher inductive types in \cite{hottbook} in the case where $A$ is assumed to be a set. The Rezk completion of a pre-category is due to \cite{AhrensKapulkinShulman}, and is also explained in section 9.9 of \cite{hottbook}. In \cref{sec:set-quotients} we elaborate on set quotients, with the aim of generalizing the construction in \cref{chap:giraud} to quotients of type-valued equivalence relations.\marginnote{Cite Sets in HoTT}
-
-\section{The join construction}
-
+\section{The universal property of the image}
 \begin{defn}\label{defn:image_up}
 Consider a commuting triangle
 \begin{equation*}
@@ -74,14 +72,15 @@ Recall that embeddings into the unit type are just propositions.
 Therefore, the universal property of the image of the map $A\to\unit$ is a proposition $P$ satisfying the universal property of the propositional truncation:
 
 \begin{defn}
-Let $A$ be a type, and let $P$ be a proposition that comes equipped with a map $f:A\to P$. We say that $f:A\to P$ satisfies the \define{universal property of propositional truncation}\index{univeral property!of propositional truncation|textit} if for every proposition $Q$, the precomposition map
+Let $A$ be a type, and let $P$ be a proposition that comes equipped with a map $f:A\to P$. We say that $f:A\to P$ satisfies the \define{universal property of propositional truncation}\index{universal property!of propositional truncation|textit} if for every proposition $Q$, the precomposition map
 \begin{equation*}
 \blank\circ f:(P\to Q)\to (A\to Q)
 \end{equation*}
 is an equivalence.
 \end{defn}
 
-\subsection{Stage one: constructing the propositional truncation}
+\section{The join construction}
+\subsection{Step one: constructing the propositional truncation}
 
 \begin{lem}\label{lem:extend_join_prop}
 Suppose $f:A\to P$, where $A$ is any type, and $P$ is a proposition.
@@ -216,7 +215,7 @@ For any type $A:\UU$ there is a proposition $\brck{A}:\UU$ that comes equipped w
 Let $A$ be a type. Then we define $\brck{A}\defeq A^{\ast\infty}$, and we define $\eta\defeq \seqin_0:A\to A^{\ast\infty}$. Then $\brck{A}$ is a proposition by \cref{lem:isprop_infjp}, and $\eta:A\to \brck{A}$ satisfies the universal property of propositional truncation by \cref{lem:infjp_up}.
 \end{proof}
 
-\subsection{Stage two: constructing the image of a map}\label{sec:join_stage2}
+\subsection{Step two: constructing the image of a map}\label{sec:join_stage2}
 Following Definition 7.6.3 of \cite{hottbook}, we recall that the image of a map $f:A\to X$ can be defined using the propositional truncation:
 \begin{defn}
 For any map $f:A\to X$ we define the \define{image}\index{image|textbf} of $f$ to be the type
@@ -306,7 +305,10 @@ is an equivalence.
 For any map $f:A\to X$, the map $f^{\ast\infty}:A_X^{\ast\infty}\to X$ is an embedding that satisfies the universal property of the image inclusion of $f$.
 \end{thm}
 
-\subsection{Stage three: establishing the smallness of the image}
+\subsection{Step three: establishing the smallness of the image}
+
+Recall from \cref{defn:ess_small} that a type is said to be locally small if its identity types are equivalent to small types.
+
 \begin{lem}
 Consider a commuting square
 \begin{equation*}
@@ -344,6 +346,8 @@ Recall that in set theory, the replacement axiom asserts that for any family of 
 \begin{cor}\label{cor:im_small}
 For any small type family $B:A\to\UU$, where $A$ is small, the image $\im(B)$ is essentially small. We call $\im(B)$ the \define{univalent completion} of $B$. 
 \end{cor}
+
+\endinput
 
 \section{Set quotients}\label{sec:set-quotients}
 

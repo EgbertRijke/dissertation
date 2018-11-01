@@ -1,16 +1,16 @@
 \chapter{The equifibrant replacement operation}\label{chap:equifibrant}
 
-We begin this chapter with a vast generalization of the descent theorems: modal descent.
-Any modality $\modal$ gives rise to a class of maps $f:A\to B$ satisfying the condition that the naturality square
+We begin this chapter with a generalization of the descent theorem for reflexive coequalizers \cref{thm:rcoeq_cartesian}: the \emph{modal descent theorem}.
+Any modality $\modal$ gives rise to a class of maps $f:A\to B$ satisfying the condition, due to Wellen \cite{WellenPhD}, that the naturality square
 \begin{equation*}
 \begin{tikzcd}
 A \arrow[r,"f"] \arrow[d,swap,"\eta"] & B \arrow[d,"\eta"] \\
 \modal A \arrow[r,swap,"\modal f"] & \modal B
 \end{tikzcd}
 \end{equation*}
-is a pullback square. We call such maps $\modal$-\'etale maps. The modal descent theorem asserts that a $\modal$-\'etale map into $A$ is equivalently described as a modal map into $\modal A$. Every $\modal$-\'etale map is certainly modal, but the conditioin of beign $\modal$-\'etale is slightly stronger than the condition of being modal. 
+is a pullback square. Following \cite{WellenPhD} we call such maps $\modal$-\'etale maps. The modal descent theorem asserts that a $\modal$-\'etale map into $A$ is equivalently described as a modal map into $\modal A$. Every $\modal$-\'etale map is certainly modal, but the condition of being $\modal$-\'etale is slightly stronger than the condition of being modal. 
 
-The difference between the notions of $\modal$-\'etale maps and modal maps becomes perhaps most visible when we look at the left orthogonal classes of the $\modal$-\'etale maps and modal maps. The $\modal$-connected maps are left orthogonal to the modal maps, whereas a map is left orthogonal to the $\modal$-\'etale maps if and only if it is a $\modal$-equivalence (i.e.~a map $f$ such that $\modal f$ is an equivalence). In the case of the $n$-truncation there is a clear difference: a map $f:X\to Y$ is an $n$-equivalence if and only if it induces an isomorphism of homotopy groups $\pi_i(X)\to \pi_i(Y)$ for any $i\leq n$, whereas an $n$-connected map is an $n$-equivalence satisfying the further condition that it $\pi_{n+1}(X)\to\pi_{n+1}(Y)$ is surjective.
+The difference between the notions of $\modal$-\'etale maps and modal maps becomes perhaps most visible when we look at the left orthogonal classes of the $\modal$-\'etale maps and modal maps. The $\modal$-connected maps are left orthogonal to the modal maps, whereas a map is left orthogonal to the $\modal$-\'etale maps if and only if it is a $\modal$-equivalence (i.e.~a map $f$ such that $\modal f$ is an equivalence). In the case of the $n$-truncation there is a clear difference: a map $f:X\to Y$ is an $n$-equivalence if and only if it induces an isomorphism of homotopy groups $\pi_i(X)\to \pi_i(Y)$ for any $i\leq n$, whereas an $n$-connected map is an $n$-equivalence satisfying the further condition that $\pi_{n+1}(X)\to\pi_{n+1}(Y)$ is surjective.
 
 In \cref{thm:modal_rofs} we show that the $\modal$-equivalences and the $\modal$-\'etale maps form an orthogonal factorization system. We call this factorization system the \emph{reflective} factorization system of a modality. The reflective factorization system is not stable, so it does not form a new modality. What does follow is that for the unique factorization $f=f_r\circ f_l$ of $f:A\to X$ as a $\modal$-equivalence $f_l$ followed by a $\modal$-\'etale map $f_r$, the canonical map
 \begin{equation*}
@@ -25,28 +25,24 @@ We then proceed to apply these ideas to the case of reflexive graphs and the ref
 \Delta(\mathsf{rcoeq}(\mathcal{B})) \arrow[r,swap,"\Delta(\mathsf{rcoeq}(f))"] & \Delta(\mathsf{rcoeq}(\mathcal{A}))
 \end{tikzcd}
 \end{equation*}
-is a pullback square, and we show that the class of $\Delta$-\'etale morphisms is precisely the class of fibrations of reflexive graphs. 
+is a pullback square, and we show that the class of $\Delta$-\'etale morphisms is precisely the class of fibrations of reflexive graphs, as defined in \cref{defn:graph_fibration}. 
 
 In the case of sequential colimits, another way of obtaining a cartesian transformation from an arbitrary one is to take the sequential colimit fiberwise. We establish this result in \cref{thm:colim_fib}. It has many important consequences. First of all, we show in \cref{thm:colim_id} that sequential colimits commute with identity types. Second, we show in \cref{thm:colim_fiberseq} that the sequential colimit of a fiber sequence is again a fiber sequence. Third, we show in \cref{thm:colim_hlevel} that truncation levels are closed under sequential colimits, and that sequential colimits commute with truncations. Finally, we show in \cref{thm:colim_hgroup} that sequential colimits commute with homotopy groups. 
-
-The idea of a modal version of the descent theorem first arose in my unpublished work on reflexive graphs with Bas Spitters, in the spring of 2016. However, I only learned about $\modal$-\'etale maps much later from Felix Wellen, and many of the results presented in \cref{sec:modal_descent} came out of a discussion I had with Felix Wellen and Mike Shulman. 
-The material in \cref{sec:equifibrant_replacement} on the equifibrant replacement operation on reflexive graphs is joint work with Bas Spitters. 
-The material in \cref{sec:seqcolim_eqf} on sequential colimits is joint work with Floris van Doorn and Kristina Sojakova, and all our results are formalized in the proof assistant Lean. 
 
 \section{Modal descent}\label{sec:modal_descent}
 \subsection{\texorpdfstring{$\modal$}{○}-\'etale maps}
 
-\begin{defn}
+\begin{defn}[Definition 4.4.1 of \cite{WellenPhD}]
 We say that a map $f:A\to B$ is \define{$\modal$-\'etale} if the square
 \begin{equation*}
 \begin{tikzcd}
-A \arrow[r,"f"] \arrow[d,swap,"\eta"] & B \arrow[d,"\eta"] \\
-\modal A \arrow[r,swap,"\modal f"] & \modal B
+A \arrow[r,"\eta"] \arrow[d,swap,"f"] & \modal A \arrow[d,"\modal f"] \\
+B \arrow[r,swap,"\eta"] & \modal B
 \end{tikzcd}
 \end{equation*}
 is a pullback square. We will write
 \begin{equation*}
-\isetale(f)\defeq\ispullback(f,\eta_A,\natunit_\modal(f)).
+\isetale(f)\defeq\ispullback(\eta,f,\natunit_\modal(f)).
 \end{equation*}
 \end{defn}
 
@@ -86,7 +82,9 @@ Y \arrow[r] & \modal Y
 are equivalences. Therefore this square is a pullback square, so $f$ is $\modal$-\'etale.
 \end{proof}
 
-In this section our goal is to characterize the $\modal$-\'etale maps for the $n$-truncations. We call such maps \define{$n$-\'etale}. Note that the case of propositional truncation has already been addressed in \cref{eg:etale_prop}.
+%In this section our goal is to characterize the $\modal$-\'etale maps for the $n$-truncations. We call such maps \define{$n$-\'etale}. Note that the case of propositional truncation has already been addressed in \cref{eg:etale_prop}.
+
+For the following lemma, recall that for a modality all propositions are modal if and only if all units $\eta : X\to \modal X$ are surjective. 
 
 \begin{lem}\label{lem:etale_char}
 Let $\modal$ be a modality for which all propositions are modal, and consider a map $f:A\to B$. The following are equivalent:
@@ -186,7 +184,7 @@ By \cref{lem:etale_char} and the fact that $\eqv{(\tproj{0}{a}=\tproj{0}{x})}{\b
 A \arrow[r,swap,"f"] & B
 \end{tikzcd}
 \end{equation*}
-is a pullback square. Furhtermore, this square is a pullback if and only if the induced map
+is a pullback square. Furthermore, this square is a pullback if and only if the induced map
 \begin{equation*}
 \Big(\sm{x:A}\brck{a=x}\Big)\to\Big(\sm{y:B}\brck{f(a)=y}\Big)
 \end{equation*}
@@ -195,7 +193,8 @@ is an equivalence, for each $a:A$.
 
 \subsection{Modal descent}
 
-The following theorem can be seen as a `modal flattening lemma'.
+The following theorem can be seen as a `modal flattening lemma', since it is analogous to \cref{thm:rcoeq_cartesian}.
+
 \begin{thm}\label{thm:etale_flattening}
 Consider a pullback square
 \begin{equation*}
@@ -354,9 +353,33 @@ X \arrow[r,swap,"\modalunit"] & \modal X
 is a pullback square. In particular the top map is $\modal$-connected, so this square is in fact a $\modal$-naturality square.
 \end{cor}
 
+We conclude with a slightly more economic rephrasing of \cref{thm:etale_flattening}, which is an easy corollary of the results in this section.
+
+\begin{thm}
+Consider a commuting square
+\begin{equation*}
+\begin{tikzcd}
+E' \arrow[d,swap,"{p'}"] \arrow[r,"g"] & E \arrow[d,"p"] \\
+B' \arrow[r,swap,"f"] & B
+\end{tikzcd}
+\end{equation*}
+with $H:f\circ p'\htpy p\circ g$, where $E$ and $B$ are modal types, where $p':E'\to B'$ is $\modal$-\'etale. Then the following are equivalent:
+\begin{enumerate}
+\item The square is a pullback square.
+\item The square
+\begin{equation*}
+\begin{tikzcd}
+\modal E' \arrow[r,"\tilde{g}"] \arrow[d,swap,"{\modal p'}"] & E \arrow[d,"p"] \\
+\modal B \arrow[r,swap,"\tilde{f}"] & B
+\end{tikzcd}
+\end{equation*}
+is a pullback square, where $\tilde{f}$ and $\tilde{g}$ are the unique extensions of $f$ and $g$ along the modal units of $B'$ and $E'$, respectively.
+\end{enumerate}
+\end{thm}
+
 \subsection{The reflective factorization system of a modality}
 
-In this subsection we investigate the reflective factorization system assiciated to a modality, of which the right class is the class of $\modal$-\'etale maps. The left class is the class of \emph{$\modal$-equivalences}.
+In this subsection we investigate the reflective factorization system associated to a modality, of which the right class is the class of $\modal$-\'etale maps. The left class is the class of \emph{$\modal$-equivalences}.
 \begin{defn}
 We say that a map $f:A\to B$ is an \define{$\modal$-equivalence} if $L f:\modal A\to \modal B$ is an equivalence.
 \end{defn}
@@ -371,7 +394,7 @@ We also note that the $n$-equivalences are not stable under pullbacks, whereas t
 \unit\arrow[r] & \sphere{n+1}
 \end{tikzcd}
 \end{equation*}
-Here the map on the right is an $n$-equivalence, since $\sphere{n+1}$ is $n$-connected. However, the map on the left is not an $n$-equivalence, since the $n$-th homotpy group of $\loopspace{\sphere{n+1}}$ is not trivial: it is the $(n+1)$-st homotopy group of $\sphere{n+1}$, which is $\Z$.
+Here the map on the right is an $n$-equivalence, since $\sphere{n+1}$ is $n$-connected. However, the map on the left is not an $n$-equivalence, since the $n$-th homotopy group of $\loopspace{\sphere{n+1}}$ is not trivial: it is the $(n+1)$-st homotopy group of $\sphere{n+1}$, which is $\Z$.
 \end{rmk}
 
 \begin{defn}
@@ -484,7 +507,7 @@ For any map $f:X\to Y$, the type of factorizations into a $\modal$-connected map
 
 The class of $\modal$-\'etale morphisms into a given type $A$, thought of as objects of the slice category $\UU/A$, form a reflective subuniverse in the following sense.
 
-\begin{thm}
+\begin{thm}\label{thm:et_up}
 Let $f:A\to X$ be a map. Then the pre-composition function
 \begin{equation*}
 \mathrm{hom}_X(\mathsf{et}(f),e)\to \mathrm{hom}_X(f,e)
@@ -562,6 +585,8 @@ Let $\mathcal{B}$ be a family of reflexive graphs over $\mathcal{A}$. The follow
 \end{enumerate}
 \end{cor}
 
+The following proposition is analogous to \cref{cor:etale_lex}.
+
 \begin{prp}
 Consider a pullback square
 \begin{equation*}
@@ -590,6 +615,8 @@ Consider the diagram
 \end{equation*}
 of reflexive graphs. Since $f$ is assumed to be a fibration, we obtain by \cref{thm:etale_fibration} that the square on the right is a pullback square. Furthermore, since the left square is a pullback square by assumption, it follows that the outer rectangle is again a pullback square. Hence the assertion follows from \cref{thm:rcoeq_cartesian}.
 \end{proof}
+
+The following proposition is analogous to \cref{cor:etale_pb}.
 
 \begin{prp}
 Consider a pullback square
@@ -628,7 +655,7 @@ is an equivalence. We also write $\mathcal{L}^\Delta$ for the class of $\Delta$-
 \end{defn}
 
 \begin{lem}
-The $\Delta$-equivalences satisfy the 3-for-2 property.
+The $\Delta$-equivalences satisfy the 3-for-2 property.\hfill$\square$
 \end{lem}
 
 \begin{prp}
@@ -642,6 +669,17 @@ Let $f:\mathsf{rGph}(\mathcal{B},\mathcal{A})$ be a morphism of reflexive graphs
 is an equivalence.
 \end{enumerate}
 \end{prp}
+
+\begin{proof}
+We have a commuting square
+\begin{equation*}
+\begin{tikzcd}
+\mathsf{rGph}(\mathsf{rcoeq}(\mathcal{A}),X) \arrow[r,"\blank\circ \mathsf{rcoeq}(f)"] \arrow[d] & \mathsf{rGph}(\mathsf{rcoeq}(\mathcal{B}),X) \arrow[d] \\
+\mathsf{rGph}(\mathcal{A},\Delta(X)) \arrow[r,"\blank\circ f"] & \mathsf{rGph}(\mathcal{B},\Delta(X))
+\end{tikzcd}
+\end{equation*}
+in which the two vertical maps are equivalences. Therefore it follows that if $\mathsf{rcoeq}(f)$ is an equivalence, then so is the bottom map in the square. Conversely, if the bottom map in the square is an equivalence for every type $X$, then $\blank\circ\mathsf{rcoeq}(f)$ is an equivalence for any type $X$, which implies by \cref{prp:equiv_precomp} that $\mathsf{rcoeq}(f)$ is an equivalence.
+\end{proof}
 
 \begin{defn}
 Let $f:\mathsf{rGph}(\mathcal{B},\mathcal{A})$ be a morphism of reflexive graphs. We define the morphisms
@@ -657,11 +695,11 @@ by the universal property of pullbacks, as indicated in the following diagram
 & \mathcal{A} \arrow[r,swap,"\mathsf{constr}"] & \Delta(\rcoeq(\mathcal{A}))
 \end{tikzcd}
 \end{equation*}
-The morphism $\mathsf{et}_\Delta(f)$ is called the \define{equifibrant replacement} of $f$, and the morphism $\eta_f$ is called the \define{unit} of the equifibrant replacement.
+The morphism $\mathsf{et}_\Delta(f)$ is called the \define{\'etale factor} of $f$, and the morphism $\eta_f$ is called the \define{unit} of the \'etale factor.
 \end{defn}
 
 \begin{lem}\label{lem:D_equiv_pullback}
-For any morphism $f:\mathsf{rGph}(\mathcal{B},\mathcal{A})$, the unit $\eta_f$ of the equifibrant replacement of $f$ is a $\Delta$-equivalence. 
+For any morphism $f:\mathsf{rGph}(\mathcal{B},\mathcal{A})$, the unit $\eta_f$ of the \'etale factor of $f$ is a $\Delta$-equivalence. 
 \end{lem}
 
 \begin{proof}
@@ -686,7 +724,7 @@ The pair $(\mathcal{L}^\Delta,\mathcal{R}^\Delta)$ forms an orthogonal factoriza
 \end{thm}
 
 \begin{proof}
-It follows from \cref{cor:fibration_pullback,lem:D_equiv_pullback} that every morphism of reflexive graphs factors as a $\Delta$-equivalence followed by a $\Delta$-\'etale map. Therefore it remains to show that the class of $\Delta$-equivalences is left orthogonal to the class of $\Delta$-\'etale maps.
+Since any pullback of a morphism between discrete reflexive graphs is a fibration of reflexive graphs, it follows from \cref{lem:D_equiv_pullback} that every morphism of reflexive graphs factors as a $\Delta$-equivalence followed by a $\Delta$-\'etale map. Therefore it remains to show that the class of $\Delta$-equivalences is left orthogonal to the class of $\Delta$-\'etale maps.
 
 We have to show that for every $\Delta$-equivalence $i:\mathcal{A}\to\mathcal{B}$, and every $\Delta$-\'etale morphism $f:\mathcal{X}\to\mathcal{Y}$, the square
 \begin{equation*}
@@ -707,13 +745,17 @@ is a pullback square. Consider the commuting cube
 In this cube the top and bottom squares are pullback by the assumption that $f$ is $\Delta$-\'etale and the fact that exponents of pullback squares are again pullback squares. Furthermore, the square in the front left is pullback, because the two vertical maps are equivalences by the assumption that $i:\mathcal{A}\to\mathcal{B}$ is a $\Delta$-equivalence. Therefore we conclude that the square in the back right is also a pullback square, as desired.
 \end{proof}
 
-\begin{thm}
+\begin{thm}\label{thm:rgph_et_up}
 For any morphism $f:\mathsf{rGph}(\mathcal{B},\mathcal{A})$, the pre-composition map
 \begin{equation*}
 \mathsf{rGph}_{\mathcal{A}}(\mathsf{et}_\Delta(f),e)\to \mathrm{hom}_{\mathcal{A}}(f,e)
 \end{equation*}
 is an equivalence for every $\Delta$-\'etale map $e:\mathcal{C}\to\mathcal{A}$.
 \end{thm}
+
+\begin{proof}
+Analogous to \cref{thm:et_up}.
+\end{proof}
 
 \subsection{Equifibrant replacement}\label{sec:equifibrant_replacement}
 
@@ -733,12 +775,24 @@ of morphisms of reflexive graphs \define{over} $\mathcal{A}$ to consist of tripl
 \begin{lem}
 Let $\mathcal{B}$ and $\mathcal{C}$ be families of reflexive graphs over $\mathcal{A}$. Then there is an equivalence
 \begin{equation*}
-\eqv{\mathsf{rGph}_{\mathcal{A}}(\mathcal{B},\mathcal{C})}{\sm{f:\mathsf{rGph}(\msm{\mathcal{A}}{\mathcal{B}},\msm{\mathcal{A}}{\mathcal{B}})} \proj 1 = \proj 1 \circ f}
+\eqv{\mathsf{rGph}_{\mathcal{A}}(\mathcal{B},\mathcal{C})}{\sm{f:\mathsf{rGph}(\msm{\mathcal{A}}{\mathcal{B}},\msm{\mathcal{A}}{\mathcal{B}})} \proj 1 = \proj 1 \circ f}.
 \end{equation*}
 \end{lem}
 
+Note that, given a reflexive graph $\mathcal{A}$, any family $B:\mathsf{rcoeq}(\mathcal{A})\to\UU$ determines an equifibered family $\mathsf{equifib\usc{}fam}(B)$ over $\mathcal{A}$ given by
+\begin{align*}
+\pts{\mathsf{equifib\usc{}fam}(B)}(x) & \defeq B(\mathsf{constr}_0(x)) \\
+\edg{\mathsf{equifib\usc{}fam}(B)}(e) & \defeq \mathsf{tr}_B(\mathsf{constr}_1(e)) \\
+\rfx{\mathsf{equifib\usc{}fam}(B)}(x,y) & \defeq \mathsf{htpy\usc{}eq}(\mathsf{ap}_{\mathsf{tr}_B}(\rfx{\mathsf{constr}}(x)),y).
+\end{align*}
+In other words, $\mathsf{equifib\usc{}fam}$ is an operation that takes a family $B:\mathsf{rcoeq}(\mathcal{A})\to\UU$ to an equifibered family over $\mathcal{A}$. Moreover, it is not hard to see that
+\begin{equation*}
+\mathsf{equifib\usc{}fam} : (\mathsf{rcoeq}(\mathcal{A})\to\UU)\to\mathsf{equifib}(\mathcal{A})
+\end{equation*}
+is in fact an equivalence, where $\mathsf{equifib}(\mathcal{A})$ is the type of all (small) equifibered families over $\mathcal{A}$. In the following definition we observe that any family over $\mathcal{A}$ induces an equifibered family over $\mathcal{A}$. 
+
 \begin{defn}
-Let $\mathcal{B}$ be a family of reflexive graphs over $\mathcal{A}$. We define the equifibrant replacement $\mathsf{EqF}(\mathcal{B})$ of $\mathcal{B}$ by
+Let $\mathcal{B}$ be a family of reflexive graphs over $\mathcal{A}$. We define the \define{equifibrant replacement} $\mathsf{EqF}(\mathcal{B})$ of $\mathcal{B}$ by
 \begin{equation*}
 \mathsf{EqF}(\mathcal{B}) \defeq \mathsf{equifib\usc{}fam}(\fibf{\rcoeq(\proj 1)}),
 \end{equation*}
@@ -753,21 +807,48 @@ Consider a family $\mathcal{B}$ of reflexive graphs over $\mathcal{A}$, and let 
 is an equivalence for every equifibered family $\mathcal{E}$ over $\mathcal{A}$.
 \end{thm}
 
+\begin{proof}
+First we observe that the square
+\begin{equation*}
+\begin{tikzcd}
+\msm{\mathcal{A}}{\mathsf{EqF}(\mathcal{B})} \arrow[r] \arrow[d,swap,"p"] & \Delta(\mathsf{rcoeq}(\msm{\mathcal{A}}{\mathcal{B}})) \arrow[d,"\mathsf{rcoeq}(\proj 1)"] \\
+\mathcal{A} \arrow[r,swap,"\mathsf{constr}"] & \Delta(\mathsf{rcoeq}(\mathcal{A}))
+\end{tikzcd}
+\end{equation*}
+is a pullback square of reflexive graphs. Thus, the map $p$ is the \'etale factor of the morphism $\proj 1 : \msm{\mathcal{A}}{\mathcal{B}}\to \mathcal{A}$. Now the claim follows by \cref{thm:rgph_et_up}.
+\end{proof}
+
+\begin{rmk}
+By the universal property of the equifibrant replacement it follows that the family $\pts{\mathsf{EqF}(\mathcal{B})}$ of vertices of the equifibrant replacement of $\mathcal{B}$ can be seen as a `recursive' higher inductive family of types. It comes equipped with
+\begin{align*}
+\zeta & : \prd{x,y:\pts{A}} \edg{A}(x,y)\to \eqv{\pts{\mathsf{EqF}(\mathcal{B})}(x)}{\pts{\mathsf{EqF}(\mathcal{B})}(y)} \\
+\epsilon & : \prd{x:\pts{A}} \zeta(\rfx{\mathcal{A}}(x))\htpy \idfunc[\pts{\mathsf{EqF}(\mathcal{B})}(x)] \\
+\pts{\eta} & : \prd{x:\pts{A}} \pts{B}(x) \to \pts{\mathsf{EqF}(\mathcal{B})}(x) \\
+\edg{\eta} & : \prd{x,y:\pts{A}}{e:\edg{A}(x,y)}{u:\pts{B}(x)}{v:\pts{B}(y)} \edg{B}(e,u,v) \to \zeta(e,u)=v \\
+\rfx{\zeta} & : \prd{x:\pts{A}}{u:\pts{B}(x)} \edg{\eta}(\rfx{\mathcal{A}}(x),\rfx{\mathcal{B}}(u))= \epsilon(x,u).
+\end{align*}
+In other words, the equifibrant replacement is the homotopy initial family of types over $\pts{A}$ with equivalences over the edges of $\mathcal{A}$ (coherent with reflexivity) and a morphism $\eta : \mathsf{rGph}_{\mathcal{A}}(\mathcal{B},\mathsf{EqF}(\mathcal{B}))$.
+\end{rmk}
+
 \subsection{Identity types of reflexive coequalizers}
 
 \begin{defn}
 Consider a reflexive graph $\mathcal{A}$ with a base point $a:A_0$. We define the \define{universal $\Delta$-bundle} $\mathcal{E}(a)$ over $\mathcal{A}$ at $a$ to be the equifibered family over $\mathcal{A}$ corresponding to the equifibrant replacement of the morphism $a:\mathsf{rGph}(\unit,\mathcal{A})$ corresponding to $a:A_0$. 
 \end{defn}
 
-\begin{thm}
+\begin{prp}
 Consider a reflexive graph $\mathcal{A}$ with a base point $a:A_0$. Then there are equivalences
 \begin{equation*}
 \pts{\mathcal{E}(a)}(x) \eqvsym (\mathsf{constr}_0(a)=\mathsf{constr}_0(x))
 \end{equation*}
 In particular, we have an equivalence $\eqv{\pts{\mathcal{E}(a)}(a)}{\loopspace{\rcoeq(\mathcal{A})}}$. 
-\end{thm}
+\end{prp}
 
-In the following theorem we establish the universal property of the identity type of $\rcoeq(\mathcal{A})$ as the initial reflexive relation $I$ on 
+\begin{proof}
+Immediate from the definition of the equifibrant replacement.
+\end{proof}
+
+In the following theorem we establish the universal property of the identity type of $\rcoeq(\mathcal{A})$ as the initial reflexive relation $R$ on $\pts{A}$ with certain extra structure. 
 
 \begin{thm}
 Consider a reflexive graph $\mathcal{A}$, and let
@@ -781,9 +862,9 @@ be a reflexive relation on $A_0$ equipped with a `composition' operation
 \end{equation*}
 satisfying the unit law
 \begin{align*}
-\mathsf{left\usc{}unit}_\mu & : \prd{x,y:\pts{A}}{r:R(x,y)} \mu(\rfx{\mathcal{A}}(y),r)=r.
+\mathsf{left\usc{}unit}_\mu & : \prd{a,x:\pts{A}}{r:R(a,x)} \mu(\rfx{\mathcal{A}}(x),r)=r.
 \end{align*}
-Then there is a uniqe extension
+Then there is a unique extension
 \begin{equation*}
 \begin{tikzcd}
 \mathcal{A} \arrow[r,"\bar{\mu}"] \arrow[d] & (A_0,R,\rho) \\
@@ -799,6 +880,16 @@ of the morphism $\bar{\mu}:\mathsf{rGph}(\mathcal{A},(A_0,R,\rho))$ consisting o
 where $k(\mathsf{constr}_0)$ is the pre-kernel of the function $\mathsf{constr}_0:A_0\to\rcoeq(\mathcal{A})$.
 \end{thm}
 
+\begin{proof}
+The data $(R,\mu,\mathsf{left\usc{}unit}_\mu)$ equivalently gives for every $a:A$ an equifibered family $\mathcal{B}(a)$ over $\mathcal{A}$ consisting of
+\begin{align*}
+\pts{\mathcal{B}(a)}(x) & \defeq R(a,x) \\
+\edg{\mathcal{B}(a)}(e) & \defeq \mu(e) \\
+\rfx{\mathcal{B}(a)}(x,r) & \defeq \mathsf{left\usc{}unit}_\mu(r),
+\end{align*}
+and the reflexivity term $\rho$ provides for every $a:\pts{A}$ a term of type $\pts{\mathcal{B}(a)}$. Thus we have by \cref{thm:eqf_initial} for every $a:\pts{A}$ a unique morphism from the equifibrant replacement of $a:\unit\to \mathcal{A}$ to $\mathcal{B}$ over $\mathcal{A}$. Equivalently, we have a unique extension of $\bar{\mu}$ along $\mathcal{A}\to k(\mathsf{constr}_0)$ as asserted.
+\end{proof}
+
 \begin{cor}
 The loop space of the suspension $\susp X$ of a pointed type $X$ is the initial pointed type $Y$ equipped with a pointed map 
 \begin{equation*}
@@ -807,9 +898,15 @@ X\to_\ast (\eqv{Y}{Y}).
 In particular, the loop space of the $(n+1)$-sphere is the initial pointed type $Y$ equipped with a pointed map $\sphere{n}\to (\eqv{Y}{Y})$, or equivalently, an $(n+1)$-loop $\loopspace[n+1]{\mathrm{BAut}(Y)}$. Even more in particular, the loop space of the $2$-sphere is the initial pointed type $Y$ equipped with a homotopy $\idfunc[Y]\htpy\idfunc[Y]$. 
 \end{cor}
 
+\begin{cor}
+The type $\Z$ if integers is the initial pointed type equipped with an automorphism.
+\end{cor}
+
 \section{Equifibrant replacement for other homotopy colimits}
 
 \subsection{Equifibrant replacement for diagrams over graphs}
+
+Recall that the colimit of a diagram $\mathcal{D}$ over a reflexive graph $\mathcal{A}$ is simply the reflexive coequalizer of the reflexive graph $\msm{\mathcal{A}}{\mathcal{D}}$.
 
 \begin{defn}
 Let $\tau:\mathcal{D}'\to\mathcal{D}$ be a natural transformation of diagrams over a reflexive graph $\mathcal{A}$. 
@@ -834,9 +931,17 @@ is a pullback square of reflexive graphs. We write $\mathcal{R}$ for the class o
 A natural transformation $\tau:\mathcal{D}'\to\mathcal{D}$ is \'etale if and only if it is cartesian.
 \end{thm}
 
+\begin{proof}
+This follows directly by \cref{thm:etale_fibration,prp:nattrans_cartesian}.
+\end{proof}
+
 \begin{thm}
 The pair $(\mathcal{W},\mathcal{R})$ forms an orthogonal factorization system. 
 \end{thm}
+
+\begin{proof}
+This follows from \cref{thm:modal_rofs}. 
+\end{proof}
 
 \section{Equifibrant replacement for sequential colimits}\label{sec:seqcolim_eqf}%
 \sectionmark{Sequential colimits}
@@ -845,7 +950,7 @@ The pair $(\mathcal{W},\mathcal{R})$ forms an orthogonal factorization system.
 Let $\mathcal{B}$ be a sequential family over $\mathcal{A}$, and consider $x:A_n$. We write $\mathcal{B}_n[x]$ for the type sequence
 \begin{equation*}
 \begin{tikzcd}
-B_n(x) \arrow[r] & B_{n+1}(f_n(x)) \arrow[r] & B_{n+2}(f_{n+1}(x)) \arrow[r] & \cdots.
+B_n(x) \arrow[r] & B_{n+1}(f_n(x)) \arrow[r] & B_{n+2}(f_{n+1}(f_n(x))) \arrow[r] & \cdots.
 \end{tikzcd}
 \end{equation*}
 \end{defn}
@@ -864,8 +969,28 @@ We define
 \end{equation*}
 by $\square B_n(x)\defeq \tfcolim \mathcal{B}_n[x]$. Next, we have to construct a fiberwise equivalence
 \begin{equation*}
-g_\infty : \prd{n:\N}{x:A_n} \square B_n \eqvsym \square B_{n+1}
+g_\infty : \prd{n:\N}{x:A_n} \square B_n(x) \eqvsym \square B_{n+1}(f_n(x))
 \end{equation*}
+Note that we have the natural transformation
+\begin{equation*}
+\begin{tikzcd}[column sep=small]
+B_n(x) \arrow[d] \arrow[r] & \cdots \arrow[r] & B_{k+n}(f^k(x)) \arrow[r] \arrow[d] & B_{(k+1)+n}(f^{k+1}(x)) \arrow[r] \arrow[d] & \cdots \\
+B_{n+1}(x) \arrow[r] & \cdots \arrow[r] & B_{k+(n+1)}(f^k(f(x))) \arrow[r] & B_{(k+1)+(n+1)}(f^{k+1}(f(x))) \arrow[r]
+& \cdots
+\end{tikzcd}
+\end{equation*}
+Now we observe that there are identifications
+\begin{equation*}
+(k+(n+1),f^k(f(x)))=((k+1)+n,f^{k+1}(x)),
+\end{equation*}
+which we may use to construct equivalences going up diagonally in each naturality square. An induction argument reveals that each square of the form
+\begin{equation*}
+\begin{tikzcd}
+B_{k+(n+1)}(f^k(f(x))) \arrow[r] \arrow[d] & B_{(k+1)+(n+1)}(f^{k+1}(f(x))) \arrow[d] \\
+B_{(k+1)+n}(f^{k+1}(x)) \arrow[r] & B_{(k+2)+n}(f^{k+2}(x))
+\end{tikzcd}
+\end{equation*}
+commutes, from which we obtain the desired equivalence.\footnote{A formalization of this argument appears in \url{https://github.com/cmu-phil/Spectral/blob/master/colimit/seq_colim.hlean}}
 \end{proof}
 
 \begin{thm}\label{thm:colim_fib}
@@ -877,11 +1002,7 @@ is an equivalence for any equifibered family $\mathcal{E}$ over $\mathcal{A}$.
 \end{thm}
 
 \begin{proof}
-Let $\mathcal{E}$ be an equifibered family over $\mathcal{A}$, and consider a morphism $\mathrm{hom}_{\mathcal{A}}(\mathcal{B},\mathcal{E})$. First we note that the canonical map
-\begin{equation*}
-\mathsf{seq\usc{}cocone}_{\mathcal{B}_n[x]}(E_n(x)) \to \mathsf{nat}(\mathcal{B}_n[x],\mathcal{E}_n[x])
-\end{equation*}
-is an equivalence.
+This fact is formalized in \cite{DoornRijkeSojakova}. An `informalized' proof is work in progress.
 \end{proof}
 
 \begin{cor}\label{thm:colim_sigma}
@@ -1018,6 +1139,7 @@ Then the canonical map
 is a group isomorphism, for any $k\geq 1$.
 \end{thm}
 
+\endinput
 \section{From jww Floris and Kristina}
 Recall that the relation $\leq$ on the natural numbers is defined as an inductive family of types $\leq:\N\to\N\to\UU$ with
 \begin{align*}

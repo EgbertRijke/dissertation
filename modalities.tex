@@ -1,6 +1,6 @@
-\chapter{Modalities}\label{chap:modalities}
+%\chapter{Modalities}\label{chap:modalities}
 
-\section{Modalities, reflective subuniverses and factorization systems}\label{sec:modal-refl-subun}
+\section{Modalities}\label{sec:modal-refl-subun}
 
 In this section we will introduce the following four notions of modality
 and prove that they are all equivalent:
@@ -21,11 +21,11 @@ A \define{higher modality} consists of a modal operator and modal unit together 
 \item for every $A:\UU$ and every dependent type $P:\modal A\to\UU$, a
 function
 \begin{equation*}
-\mathsf{ind}^\modal_A:\big(\prd{a:A}\modal(P(\eta(a)))\big)\to\prd{z:\modal A}\modal(P(z)).
+\mathsf{ind}_{\modal A}:\big(\prd{a:A}\modal(P(\eta(a)))\big)\to\prd{z:\modal A}\modal(P(z)).
 \end{equation*}
 \item An identification
 \begin{equation*}
-\mathsf{comp}^\modal_A(f,x):\id{\mathsf{ind}^\modal_A(f)(\eta(x))}{f(x)}
+\mathsf{comp}_{\modal A}(f,x):\id{\mathsf{ind}_{\modal A}(f)(\eta(x))}{f(x)}
 \end{equation*}
 for each $f:\prd{x:A}\modal(P(\eta(x)))$.
 \item For any $x,y:\modal A$ the modal unit $\modalunit[(\id{x}{y})]:\id{x}{y}\to \modal(\id{x}{y})$ is an equivalence.
@@ -195,13 +195,13 @@ equivalent to find a term of type
 \begin{equation*}
 \prd{x:\modal \modal X}\modal(\modalunit[\modal X](f(x))=x).
 \end{equation*}
-Now we are in the position to use the induction principle of higher modalites
+Now we are in the position to use the induction principle of higher modalities
 again, so it suffices to show that $\modalunit(f(\modalunit(x)))=\modalunit(x)$
 for any $x:\modal X$. This follows from the fact that $f\circ\modalunit=\idfunc$.
 \end{proof}
 
 \begin{thm}\label{thm:subuniv-highermod}
-The data of two higher modalites $\modal$ and $\modal'$
+The data of two higher modalities $\modal$ and $\modal'$
 are identical if and only if they have the same modal types.
 \end{thm}
 
@@ -273,18 +273,18 @@ that the pre-composition map
 \end{equation*}
 is an equivalence for each $A:\UU$ and $P:\modal A\to\UU$.
 By the given induction principle and computation rule, we obtain a
-right inverse $\mathsf{ind}^\modal_A$ of $\blank\circ\modalunit[A]$.
+right inverse $\mathsf{ind}_{\modal A}$ of $\blank\circ\modalunit[A]$.
 
 To show that it is a left inverse, consider $s:\prd{x:\modal A}\modal(P(x))$.
 We need to find a homotopy
 \begin{equation*}
-\prd{x:\modal A}\id{s(x)}{\mathsf{ind}^\modal_A(s\circ \modalunit_A)(x)}.
+\prd{x:\modal A}\id{s(x)}{\mathsf{ind}_{\modal A}(s\circ \modalunit_A)(x)}.
 \end{equation*}
 By assumption we have that $P(x)$ is
-modal for each $z:\modal A$ and hence it follows that $\id{s(x)}{\mathsf{ind}^\modal_A(s\circ \modalunit_A)(x)}$
+modal for each $z:\modal A$ and hence it follows that $\id{s(x)}{\mathsf{ind}_{\modal A}(s\circ \modalunit_A)(x)}$
 is modal for each $x$. Hence it suffices to find a function of type
 \begin{equation*}
-\prd{a:A}\id{s(\modalunit_A(a))}{\mathsf{ind}^\modal_A(s\circ \modalunit_A)(\modalunit_A(a))}.
+\prd{a:A}\id{s(\modalunit_A(a))}{\mathsf{ind}_{\modal A}(s\circ \modalunit_A)(\modalunit_A(a))}.
 \end{equation*}
 This follows straight from the computation rule of higher modalities.
 \end{proof}
@@ -376,7 +376,7 @@ Note that
 so we see immediately that $\varphi$ is a left inverse of $\modalunit$.
 
 To show that $\varphi$ is a right inverse of $\modalunit$, note that the type
-of functions $h$ fitting in a commuting square of the fom
+of functions $h$ fitting in a commuting square of the form
 \begin{equation*}
 \begin{tikzcd}[column sep=-3em]
 \modal(\sm{x:\modal X}\modal(P(x))) \arrow[rr,densely dotted,"h"] & & \modal(\sm{x:\modal X}\modal(P(x))) \\
@@ -421,7 +421,6 @@ Note that a type $X$ is modal or $\modal$-connected just when the map $X\to\unit
 
   Note that $Q \to\iscontr(A)$ is also the defining condition for the $\closed Q$-modal types from \cref{eg:closed}.
   That is, the $\open Q$-connected types coincide with the $\closed Q$-modal types.
-  We will come back to this relationship in \cref{eg:artin}.
 \end{eg}
 
 The following theorem combines Lemma 7.5.7 and Theorem 7.7.4 of \cite{hottbook}.
@@ -991,7 +990,7 @@ square
 \unit \arrow[r,equals] & \unit
 \end{tikzcd}
 \end{equation*}
-where the dotted map, is the uniqe map into the pullback $\fib{r}{g(b)}$. In
+where the dotted map, is the unique map into the pullback $\fib{r}{g(b)}$. In
 this square, the left map is in $\mathcal{L}$ because $\mathcal{L}$ is assumed
 to be stable under pullbacks, and the right map is in $\mathcal{R}$ by assumption,
 so the type of diagonal fillers is contractible.
@@ -1060,6 +1059,144 @@ Thus, precomposition by $\modalunit$ is an equivalence, so in fact that we have 
 By \cref{lem:rs_idstable}, the identity types of $\modal X$ are modal, so we have a higher modality as well.
 \end{proof}
 
+\section{Accessible reflective subuniverses}\label{sec:accessible}
+
+\begin{defn}
+Given a family $f:\prd{i:I}A_i\to B_i$ of maps, a type $X$ is said to be \define{$f$-local} if the precomposition map
+\begin{equation*}
+\precomp{f_i}:(B_i\to X)\to (A_i\to X)
+\end{equation*}
+is an equivalence, for each $i:I$. The family $f$ is said to be a \define{presentation} of a reflective subuniverse $L$ if the subuniverses of $f$-local types and $L$-local types coincide. A reflective subuniverse is said to be \define{accessible} if there exists a presentation for it. 
+\end{defn}
+
+In \cite{RijkeShulmanSpitters} it is shown that the subuniverse of $f$-local types is always a reflective subuniverse, provided that sufficiently many higher inductive types are available. However, it is not clear whether their construction is possible in our current setting, where the only higher inductive types that are assumed to exist are homotopy pushouts. In this section we will establish general properties of accessible reflective subuniverses. We will show in \cref{chap:compact} that for any family $f$ of maps between \emph{compact} types, the subuniverse of $f$-local types is indeed reflective. 
+
+\begin{rmk}
+Note that being accessible is structure; different families can present the same reflective subuniverse or modality.
+As a trivial example, note that localizing at the empty
+type, and localizing at the type family on $\bool$ defined by
+$\bfalse\mapsto \emptyt$ and $\btrue\mapsto \unit$ both map all types to contractible types.
+
+However, we are usually only interested in properties of presentations insofar as they determine properties of subuniverses.
+For instance, by \cref{thm:acc-modal}, a reflective subuniverse is a modality exactly when it has a presentation in which each $C(a)=\unit$.
+\end{rmk}
+
+\begin{eg}\label{thm:trunc-acc}
+The trivial modality $\truncf{(-2)}$ is presented by $\emptyt$, while the propositional truncation modality $\truncf{(-1)}$ is presented by $\bool$.  More generally, the
+$n$-truncation modality $\truncf{n}$ is presented by the $(n+1)$-sphere $\Sn^{n+1}$.
+\end{eg}
+
+\begin{eg}\label{thm:open-acc}
+For every mere proposition $P$, the open modality $\open P (X) \defeq (P\to X)$ from \cref{eg:open} is 
+presented by the singleton type family $P$.
+To see this, note that $\modalunit[X] : X \to (P\to X)$ is the same as the map in the definition of locality, so that $X$ is modal for the open modality on $P$ if and only if it is $P$-local.
+(If $P$ is not a mere proposition, however, then $X\mapsto (P\to X)$ is not a modality, and in particular does not coincide with localization at $P$.)
+\end{eg}
+
+\begin{eg}\label{thm:closed-acc}
+  The closed modality $\closed P$ from \cref{eg:closed} associated to a mere proposition $P$ is presented by the type family $\lam{x} \emptyt : P \to \UU$.
+  For by definition, $A$ is null for this family if and only if for any $p:P$ the map $A \to (\emptyt \to A)$ is an equivalence.
+  But $\emptyt \to P$ is contractible, so this says that $P\to\iscontr(A)$, which was the definition of $\closed P$-modal types from \cref{eg:closed}.
+\end{eg}
+
+
+
+\begin{lem}\label{lemma:characterizationsigmaflocal}
+    Let $f:\prd{i:I}A_i\to B_i$ be a family of maps. Denote the family consisting of the suspensions
+    of the functions by $\susp{f} : \prd{i:I} \susp{A_i} \to \susp{B_i}$.
+    A type $X$ is $\suspsym f$-local if and only if for every $x,y : X$, the type
+    $x =_X y$ is $f$-local.
+    In other words, $L_{\susp{f}} = (L_{f})'$.
+\end{lem}
+
+\begin{proof}
+    By the induction principle for suspension and naturality, we obtain for each $i : I$ a commutative square
+\[
+  \begin{tikzcd}
+    (\susp{B_i} \to X) \arrow[r,"\simeq"] \arrow[d] & \left( \sm{x,y:X} (B_i \to x = y) \right) \arrow[d] \\
+    (\susp{A_i} \to X) \arrow[r,"\simeq"] & \left( \sm{x,y:X} (A_i \to x = y) \right)
+  \end{tikzcd}
+\]
+in which the horizontal maps are equivalences.
+So $X$ is $\suspsym f$-local if and only if the right vertical map is an equivalence
+for every $i : I$, if and only if for each $x,y : X$, the type $x = y$ is $f_i$-local
+for every $i : I$.
+\end{proof}
+
+A general localization is only a reflective subuniverse, but there is a convenient sufficient condition for it to be a modality: if each $C(a)=\unit$.
+A localization modality of this sort is called \emph{nullification}.
+
+\begin{thm}\label{thm:nullification_modality}
+  If $F:\prd{a:A} B(a) \to C(a)$ is such that each $C(a)=\unit$, then localization at $F$ is a modality, called \define{nullification at $B$}.
+\end{thm}
+\begin{proof}
+  It suffices to show that for any $B:A\to\UU$, the $B$-null types are $\Sigma$-closed.
+  Thus, let $X:\UU$ and $Y:X\to \UU$ be such that $X$ and each $Y(x)$ are $B$-null.
+  Then
+  \begin{align*}
+    (B\to \sm{x:X} Y(x))
+    &\eqvsym \sm{g:B\to X} \prd{b:B} Y(g(b)) \\
+    &\eqvsym \sm{x:X} B \to Y(x) \\
+    &\eqvsym \sm{x:X} Y(x)
+  \end{align*}
+  with the inverse equivalence being given by constant maps.
+  Thus, $\sm{x:X} Y(x)$ is $B$-null.
+\end{proof}
+
+Of course, it might happen that $\localization{F}$ is a modality even if $F$ doesn't satisfy the condition of \cref{thm:nullification_modality}.
+For instance, if $B:A\to \UU$ has a section $s:\prd{a:A} B(a)$, then localizing at the family $s' : \prd{a:A} \unit \to B(a)$ is equivalent to nullifying at $B$, since in a section-retraction pair the section is an equivalence if and only if the retraction is.
+However, we can say the following.
+
+\begin{lem}\label{thm:acc-modal}
+  If $F:\prd{a:A} B(a)\to C(a)$ is such that $\localization{F}$ is a modality, then there exists a family $E:D\to \UU$ such that $\localization{F}$ coincides with nullification at $E$.
+\end{lem}
+\begin{proof}
+  Write $\modal\defeq\localization{F}$ and $\modalunit$ for its modal unit.
+  Define $D = \sm{a:A} (\modal (B(a)) + \modal(C(a)))$, and $E:D\to \UU$ by
+  \begin{align*}
+    E(a,\inl(b)) &\defeq \fib{\modalunit[B(a)]}{b}\\
+    E(a,\inr(c)) &\defeq \fib{\modalunit[C(a)]}{c}.
+  \end{align*}
+  Then since $\modalunit$ is $\modal$-connected, each $E(d)$ is $\modal$-connected, and hence every $F$-local type is $E$-null.
+
+  On the other hand, suppose $X$ is an $E$-null type.
+  Each $\modalunit[B(a)]$ and $\modalunit[C(a)]$ is $\localization{E}$-connected, since their fibers are $\localization{E}$-connected (by definition); thus $X$ is also $\modalunit[B(a)]$-local and $\modalunit[C(a)]$-local.
+  But we have the following commutative square:
+  \[
+  \begin{tikzcd}[column sep=large]
+    B(a) \ar[r,"{\modalunit[B(a)]}"] \ar[d,"F(a)"'] & \modal(B(a)) \ar[d,"{\modal(F(a))}"]\\
+    C(a) \ar[r,"{\modalunit[C(a)]}"'] & \modal(C(a))
+  \end{tikzcd}
+  \]
+  and ${\modal(F(a))}$ is an equivalence; thus $X$ is also $F(a)$-local.
+  So the $F$-local types coincide with the $E$-null types.
+\end{proof}
+
+This shows that the following definition of accessible modality is consistent with our terminology of accessible reflective subuniverse.
+
+\begin{defn}\label{defn:accessible}
+A modality $\modal$ on $\UU$ is said to be \define{accessible} if it is the nullification at a family of types in $\UU$, indexed by a type in $\UU$.
+A \define{presentation} of a modality $\modal$ consists of a family of types $B: A\to\UU$, where $A:\UU$, such that the subuniverse of modal types coincides with the subuniverse of $B$-null types.
+\end{defn}
+
+\begin{egs}
+  Our characterizations of the truncation and open and closed modalities in \cref{thm:trunc-acc,thm:open-acc,thm:closed-acc} made no reference to the ambient universe.
+\end{egs}
+
+\begin{eg}
+  By contrast, the double-negation modality $\neg\neg$ \emph{is} defined in a polymorphic way on all universes, but in general there seems no reason for it to be accessible on any of them.
+  However, if propositional resizing holds, then it is the nullification at $\bool$ together with all propositions $P$ such that $\neg\neg P$ holds, and hence accessible.
+
+  Whether or not any inaccessible modalities remain after imposing propositional resizing may depend on large-cardinal principles.
+  It is shown in~\cite{css:large-cardinal} that this is the case for the analogous question about reflective sub-$(\infty,1)$-categories of the $(\infty,1)$-category of $\infty$-groupoids.
+\end{eg}
+
+\begin{rmk}\label{rmk:extend-oops}
+  It is tempting to think that \emph{any} reflective subuniverse $\modal$ on $\UU$ could be extended to an accessible one on $\UU'$ by localizing at the family of \emph{all} functions in $\UU$ that are inverted by $\modal$ (or nullifying at the family of all $\modal$-connected types in $\UU$, in the case of modalities), which is a $\UU'$-small family though not a $\UU$-small one.
+  This does produce an accessible reflective subuniverse $\modal'$ of $\UU'$ such that the $\modal'$-modal types in $\UU$ coincide with the $\modal$-modal ones, but there seems no reason why the modal \emph{operators} $\modal'$ and $\modal$ should agree on types in $\UU$.
+\end{rmk}
+
+\endinput
 \section{Left exact modalities}\label{sec:left-exact-modal}
 
 We have seen that the modal operator of any reflective subuniverse preserves products, but even for a modality it does not generally preserve pullbacks.
@@ -1301,92 +1438,67 @@ In general, saying anything about the identity types of a higher inductive type 
   Thus, by \cref{thm:prop-loc-lex}, it is lex.
 \end{eg}
 
-\section{Accessible modalities}
-A general localization is only a reflective subuniverse, but there is a convenient sufficient condition for it to be a modality: if each $C(a)=\unit$.
-A localization modality of this sort is called \emph{nullification}.
+\section{Accessible reflective subuniverses}\label{sec:accessible}
 
-\begin{thm}\label{thm:nullification_modality}
-  If $F:\prd{a:A} B(a) \to C(a)$ is such that each $C(a)=\unit$, then localization at $F$ is a modality, called \define{nullification at $B$}.
-\end{thm}
-\begin{proof}
-  It suffices to show that for any $B:A\to\UU$, the $B$-null types are $\Sigma$-closed.
-  Thus, let $X:\UU$ and $Y:X\to \UU$ be such that $X$ and each $Y(x)$ are $B$-null.
-  Then
-  \begin{align*}
-    (B\to \sm{x:X} Y(x))
-    &\eqvsym \sm{g:B\to X} \prd{b:B} Y(g(b)) \\
-    &\eqvsym \sm{x:X} B \to Y(x) \\
-    &\eqvsym \sm{x:X} Y(x)
-  \end{align*}
-  with the inverse equivalence being given by constant maps.
-  Thus, $\sm{x:X} Y(x)$ is $B$-null.
-\end{proof}
-
-Of course, it might happen that $\localization{F}$ is a modality even if $F$ doesn't satisfy the condition of \cref{thm:nullification_modality}.
-For instance, if $B:A\to \UU$ has a section $s:\prd{a:A} B(a)$, then localizing at the family $s' : \prd{a:A} \unit \to B(a)$ is equivalent to nullifying at $B$, since in a section-retraction pair the section is an equivalence if and only if the retraction is.
-However, we can say the following.
-
-\begin{lem}\label{thm:acc-modal}
-  If $F:\prd{a:A} B(a)\to C(a)$ is such that $\localization{F}$ is a modality, then there exists a family $E:D\to \UU$ such that $\localization{F}$ coincides with nullification at $E$.
-\end{lem}
-\begin{proof}
-  Write $\modal\defeq\localization{F}$ and $\modalunit$ for its modal unit.
-  Define $D = \sm{a:A} (\modal (B(a)) + \modal(C(a)))$, and $E:D\to \UU$ by
-  \begin{align*}
-    E(a,\inl(b)) &\defeq \fib{\modalunit[B(a)]}{b}\\
-    E(a,\inr(c)) &\defeq \fib{\modalunit[C(a)]}{c}.
-  \end{align*}
-  Then since $\modalunit$ is $\modal$-connected, each $E(d)$ is $\modal$-connected, and hence every $F$-local type is $E$-null.
-
-  On the other hand, suppose $X$ is an $E$-null type.
-  Each $\modalunit[B(a)]$ and $\modalunit[C(a)]$ is $\localization{E}$-connected, since their fibers are $\localization{E}$-connected (by definition); thus $X$ is also $\modalunit[B(a)]$-local and $\modalunit[C(a)]$-local.
-  But we have the following commutative square:
-  \[
-  \begin{tikzcd}[column sep=large]
-    B(a) \ar[r,"{\modalunit[B(a)]}"] \ar[d,"F(a)"'] & \modal(B(a)) \ar[d,"{\modal(F(a))}"]\\
-    C(a) \ar[r,"{\modalunit[C(a)]}"'] & \modal(C(a))
-  \end{tikzcd}
-  \]
-  and ${\modal(F(a))}$ is an equivalence; thus $X$ is also $F(a)$-local.
-  So the $F$-local types coincide with the $E$-null types.
-\end{proof}
-
-This shows that the following pair of definitions are consistent.
-
-\begin{defn}\label{defn:accessible}
-A reflective subuniverse on $\UU$ is said to be \define{accessible} if it is the localization at a family of maps in $\UU$, indexed by a type in $\UU$.
-Similarly, a modality $\modal$ on $\UU$ is said to be \define{accessible} if it is the nullification at a family of types in $\UU$, indexed by a type in $\UU$.
-
-Explicitly, a \define{presentation} of a reflective subuniverse $\modal$ of $\UU$ consists of a family of maps $F : \prd{a:A} B(a) \to C(a)$, where $A:\UU$ and $B,C:A\to\UU$, such that $\modal = \localization{F}$.
-Similarly, a \define{presentation} of a modality $\modal$ consists of a family of types $B: A\to\UU$, where $A:\UU$, such that $\modal = \localization{B}$.
+\begin{defn}
+Given a family $f:\prd{i:I}A_i\to B_i$ of maps, a type $X$ is said to be \define{$f$-local} if the precomposition map
+\begin{equation*}
+\precomp{f_i}:(B_i\to X)\to (A_i\to X)
+\end{equation*}
+is an equivalence, for each $i:I$. The family $f$ is said to be a \define{presentation} of a reflective subuniverse $L$ if the subuniverses of $f$-local types and $L$-local types coincide. A reflective subuniverse is said to be \define{accessible} if there exists a presentation for it. 
 \end{defn}
 
-\begin{egs}
-  Our characterizations of the truncation and open and closed modalities in \cref{thm:trunc-acc,thm:open-acc,thm:closed-acc} made no reference to the ambient universe.
-\end{egs}
-
-\begin{eg}
-  By contrast, the double-negation modality $\neg\neg$ \emph{is} defined in a polymorphic way on all universes, but in general there seems no reason for it to be accessible on any of them.
-  However, if propositional resizing holds, then it is the nullification at $\bool$ together with all propositions $P$ such that $\neg\neg P$ holds, and hence accessible.
-
-  Whether or not any inaccessible modalities remain after imposing propositional resizing may depend on large-cardinal principles.
-  It is shown in~\cite{css:large-cardinal} that this is the case for the analogous question about reflective sub-$(\infty,1)$-categories of the $(\infty,1)$-category of $\infty$-groupoids.
-\end{eg}
-
-\begin{eg}
-  Suppose that all types in $\UU$ are 0-types.
-  We have tacitly assumed that all universes are closed under all higher inductive types, so (assuming univalence) this is not actually possible, but to get a feeling for what else could in principle go wrong suppose we drop that assumption.
-  Then if $F$ is a family such that the higher inductive type $\localization{F}$ does not preserve 0-types, we might (depending on what we assume about closure under higher inductive types) still be able to define a modality on $\UU$ by $\modal X = \trunc0{\localization{F}X}$.
-  But if $\UU'$ is a larger universe containing non-0-types, then this $\modal$ would not eliminate into types in $\UU'$, and if we define $\modal'$ by localizing at $F$ in $\UU'$ then the canonical map $\modal' X \to \modal X$ would be the 0-truncation rather than an equivalence.
-  So \cref{thm:acc-extend} is not as trivial as it may seem.
-\end{eg}
-
-\begin{rmk}\label{rmk:extend-oops}
-  It is tempting to think that \emph{any} reflective subuniverse $\modal$ on $\UU$ could be extended to an accessible one on $\UU'$ by localizing at the family of \emph{all} functions in $\UU$ that are inverted by $\modal$ (or nullifying at the family of all $\modal$-connected types in $\UU$, in the case of modalities), which is a $\UU'$-small family though not a $\UU$-small one.
-  This does produce an accessible reflective subuniverse $\modal'$ of $\UU'$ such that the $\modal'$-modal types in $\UU$ coincide with the $\modal$-modal ones, but there seems no reason why the modal \emph{operators} $\modal'$ and $\modal$ should agree on types in $\UU$.
-\end{rmk}
+In \cite{RijkeShulmanSpitters} it is shown that the subuniverse of $f$-local types is always a reflective subuniverse. However, it is not clear whether their construction is possible in our current setting, where the only higher inductive types that are assumed to exist are homotopy pushouts. In this section we will establish general properties of accessible reflective subuniverses. We will show in \cref{chap:compact} that for any family $f$ of maps between \emph{compact} types, the subuniverse of $f$ is indeed reflective. 
 
 \begin{rmk}
-  Reflective subuniverses and modalities defined by localization have another convenient property: their eliminators have a strict judgmental computation rule (assuming that our higher inductive localization type has a judgmental computation rule on point-constructors, which is usually assumed).
-  This will be useful in \cref{thm:subtopos-model}.
+Note that being accessible is structure; different families can present the same reflective subuniverse or modality.
+As a trivial example, note that localizing at the empty
+type, and localizing at the type family on $\bool$ defined by
+$\bfalse\mapsto \emptyt$ and $\btrue\mapsto \unit$ both map all types to contractible types.
+
+However, we are usually only interested in properties of presentations insofar as they determine properties of subuniverses.
+For instance, by \cref{thm:acc-modal}, a reflective subuniverse is a modality exactly when it has a presentation in which each $C(a)=\unit$.
+Similarly, in \cref{sec:lex-top-cotop} we will define a modality to be ``topological'' if it has a presentation in which each $C(a)=\unit$ and each $B(a)$ is a mere proposition.
 \end{rmk}
+
+\begin{eg}\label{thm:trunc-acc}
+The trivial modality $\truncf{(-2)}$ is presented by $\emptyt$, while the propositional truncation modality $\truncf{(-1)}$ is presented by $\bool$.  More generally, the
+$n$-truncation modality $\truncf{n}$ is presented by the $(n+1)$-sphere $\Sn^{n+1}$.
+\end{eg}
+
+\begin{eg}\label{thm:open-acc}
+For every mere proposition $P$, the open modality $\open P (X) \defeq (P\to X)$ from \cref{eg:open} is 
+presented by the singleton type family $P$.
+To see this, note that $\modalunit[X] : X \to (P\to X)$ is the same as the map in the definition of locality, so that $X$ is modal for the open modality on $P$ if and only if it is $P$-local.
+(If $P$ is not a mere proposition, however, then $X\mapsto (P\to X)$ is not a modality, and in particular does not coincide with localization at $P$.)
+\end{eg}
+
+\begin{eg}\label{thm:closed-acc}
+  The closed modality $\closed P$ from \cref{eg:closed} associated to a mere proposition $P$ is presented by the type family $\lam{x} \emptyt : P \to \UU$.
+  For by definition, $A$ is null for this family if and only if for any $p:P$ the map $A \to (\emptyt \to A)$ is an equivalence.
+  But $\emptyt \to P$ is contractible, so this says that $P\to\iscontr(A)$, which was the definition of $\closed P$-modal types from \cref{eg:closed}.
+\end{eg}
+
+
+
+\begin{lem}\label{lemma:characterizationsigmaflocal}
+    Let $f:\prd{i:I}A_i\to B_i$ be a family of maps. Denote the family consisting of the suspensions
+    of the functions by $\susp{f} : \prd{i:I} \susp{A_i} \to \susp{B_i}$.
+    A type $X$ is $\suspsym f$-local if and only if for every $x,y : X$, the type
+    $x =_X y$ is $f$-local.
+    In other words, $L_{\susp{f}} = (L_{f})'$.
+\end{lem}
+
+\begin{proof}
+    By the induction principle for suspension and naturality, we obtain for each $i : I$ a commutative square
+\[
+  \begin{tikzcd}
+    (\susp{B_i} \to X) \arrow[r,"\simeq"] \arrow[d] & \left( \sm{x,y:X} (B_i \to x = y) \right) \arrow[d] \\
+    (\susp{A_i} \to X) \arrow[r,"\simeq"] & \left( \sm{x,y:X} (A_i \to x = y) \right)
+  \end{tikzcd}
+\]
+in which the horizontal maps are equivalences.
+So $X$ is $\suspsym f$-local if and only if the right vertical map is an equivalence
+for every $i : I$, if and only if for each $x,y : X$, the type $x = y$ is $f_i$-local
+for every $i : I$.
+\end{proof}

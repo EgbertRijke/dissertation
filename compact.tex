@@ -30,14 +30,14 @@ Consider a type sequence $\mathcal{A}\jdeq (A,f)$, and let $X$ be a type. We def
 A_0^X \arrow[r,"f_0\circ \blank"] & A_1^X \arrow[r,"f_1\circ\blank"] & A_2^X \arrow[r,"f_2\circ\blank"] & \cdots. 
 \end{tikzcd}
 \end{equation*}
-Futhermore, given a natural transformation $\tau:\mathsf{Seq}(\mathcal{A},\mathcal{B})$ of type sequences, we define the natural transformation $\tau^X$ to consist of
+Furthermore, given a natural transformation $\tau:\mathsf{Seq}(\mathcal{A},\mathcal{B})$ of type sequences, we define the natural transformation $\tau^X$ to consist of
 \begin{equation*}
 \begin{tikzcd}[column sep=large]
 A_0^X \arrow[r,"f_0\circ \blank"] \arrow[d,swap,"\tau_0\circ\blank"] & A_1^X \arrow[r,"f_1\circ\blank"] \arrow[d,swap,"\tau_1\circ\blank"] & A_2^X \arrow[r,"f_2\circ\blank"] \arrow[d,swap,"\tau_2\circ\blank"] & \cdots \\
 B_0^X \arrow[r,swap,"g_0\circ \blank"] & B_1^X \arrow[r,swap,"g_1\circ\blank"] & B_2^X \arrow[r,swap,"g_2\circ\blank"] & \cdots
 \end{tikzcd}
 \end{equation*}
-where the naturality squares commute by whiskering the natulity squares of $\tau$. 
+where the naturality squares commute by whiskering the naturality squares of $\tau$. 
 \end{defn}
 
 In particular, if $\tau:\mathsf{Seq}(\mathcal{A},\Delta Y)$ is a cocone with vertex $Y$, then $\tau^X :\mathsf{Seq}(\mathcal{A}^X,(\Delta Y)^X)$ is a cocone with vertex $Y^X$, since $(\Delta Y)^X \jdeq \Delta (Y^X)$.  
@@ -147,7 +147,7 @@ Suppose $X$ is compact, and $Y(x)$ is compact for each $x:X$. Then the total spa
 \end{cor}
 
 \begin{proof}
-Let $\mathcal{A}$ be a type sequence. Then we have the following commuting pentangle
+Let $\mathcal{A}$ be a type sequence. Then we have the following commuting pentagon
 \begin{equation*}
 \begin{tikzcd}[column sep=-5em]
 & \mathsf{colim}\Big(\mathcal{A}^{\sm{x:X}Y(x)}\Big) \arrow[rr] \arrow[dl] & & A_\infty^{\sm{x:X}Y(x)} \arrow[dr] \\
@@ -305,7 +305,7 @@ Likewise, the composite $\mathsf{shift}(h) \circ j$ is just the natural transfor
 \mathsf{colim}(\mathcal{B}) \arrow[r,swap,"\mathsf{colim}(g)"] \arrow[ur,"\mathsf{colim}(j)"] & \mathsf{colim}(\mathsf{shift}(\mathcal{B}))
 \end{tikzcd}
 \end{equation*}
-Since both $\tfcolim(f)$ and $\tfcolim(g)$ are equivalences by \cref{lem:colim_shift}, it follows by the 6-for-2 property of equivalences (see Exercise 4.5 of \cite{hottbook}), that the remaining maps are equivalences. In particular $\tfcolim(h)$ is an equivalence. 
+Since both $\tfcolim(f)$ and $\tfcolim(g)$ are equivalences, it follows by the 6-for-2 property of equivalences (see Exercise 4.5 of \cite{hottbook}), that the remaining maps are equivalences. In particular $\tfcolim(h)$ is an equivalence. 
 \end{proof}
 
 \begin{prp}\label{prp:colim_local}
@@ -415,7 +415,7 @@ The initial quasi $F$-local extension of a type $X$ is initial by the universal 
 \end{rmk}
 
 \begin{eg}
-Consider the family of maps consisting just of the terminal projection $\bool\to\unit$. We claim that the quasi $\bool$-local extension of $X$ is equivalent to $\join{X}{X}$, i.e.~that we have a pushout square
+Consider the family of maps consisting just of the terminal projection $\bool\to\unit$. We sketch an argument that the quasi $\bool$-local extension of $X$ is equivalent to $\join{X}{X}$, i.e.~that we have a pushout square
 \begin{equation*}
 \begin{tikzcd}
 (X^2\times \bool)\sqcup^{X\times \bool} X \arrow[r] \arrow[d] & X^2 \arrow[d] \\
@@ -443,7 +443,28 @@ X^2 \sqcup^X X^2 \arrow[r,"\nabla_{\delta_X}"] \arrow[d,swap,"{[\pi_1,\pi_2,\mat
 X \arrow[r] & X\sqcup^{(X^2 \sqcup^X X^2)}X^2.
 \end{tikzcd}
 \end{equation*}
-Now we note that by \cref{thm:2pushout_iterated} the pushout of the span in the square above is the 2-pushout of the 2-span
+Now we observe that for any cube
+\begin{equation*}
+\begin{tikzcd}
+& A_{111} \arrow[dl] \arrow[d] \arrow[dr] \\
+A_{110} \arrow[d] & A_{101} \arrow[dl] \arrow[dr] & A_{011} \arrow[d] \\
+A_{100} \arrow[dr] & A_{010} \arrow[d] \arrow[from=ul,crossing over] \arrow[from=ur,crossing over] & A_{001} \arrow[dl] \\
+& A_{000}
+\end{tikzcd}
+\end{equation*}
+the following are equivalent:
+\begin{enumerate}
+\item The cube is cocartesian.
+\item The the square
+\begin{equation*}
+\begin{tikzcd}
+A_{011}\sqcup^{A_{111}} A_{101} \arrow[r] \arrow[d] & A_{001} \arrow[d] \\
+A_{010}\sqcup^{A_{110}} A_{100} \arrow[r] & A_{000}
+\end{tikzcd}
+\end{equation*}
+is cocartesian.
+\end{enumerate}
+We cite \cite{Munson} for this observation, and the analogous result in homotopy type theory is work in progress. Using the above equivalence, it follows that the pushout $X^2\sqcup ^X X^2$ is the colimit of the diagram
 \begin{equation*}
 \begin{tikzcd}
 & X \arrow[dl] \arrow[d] \arrow[dr] \\
@@ -451,7 +472,7 @@ X \arrow[d] & X^2 \arrow[dl,swap,"\pi_1" very near start] \arrow[dr] & X^2 \arro
 X & X \arrow[from=ul,crossing over] & X^2
 \end{tikzcd}
 \end{equation*}
-Another way of computing this 2-pushout as an iterated pushout is as the following pushout
+Furthermore, by the same equivalence we see that another way of computing this colimit is as the following pushout
 \begin{equation*}
 \begin{tikzcd}
 X^2 \arrow[r,"\pi_2"] \arrow[d,swap,"\pi_1"] & X \arrow[d] \\
@@ -523,6 +544,8 @@ and therefore it follows that $\eta^\ast:(LX\to Y)\to (X\to Y)$ is an equivalenc
 \begin{cor}
 For any family $N:I\to \UU$ of compact types, the subuniverse of $N$-null types is a modality.
 \end{cor}
+
+\endinput
 
 \section{An orthogonal factorization system associated to a reflective subuniverse presented by a family of maps between compact types}
 \sectionmark{An orthogonal factorization system}
@@ -610,7 +633,9 @@ has a diagonal filler, it follows by \cref{lem:equiv_colim_diagfiller} that the 
 \end{proof}
 
 \begin{defn}
-Consider maps $f:A\to B$ and $g:X\to Y$. We define the \define{initial quasi-$f$-right extension} $QR_f(g):QR_f X\to Y$\marginnote{Obviously the terminology might need some consideration} of $g$ to be the cogap map of the cube
+Consider maps $f:A\to B$ and $g:X\to Y$. We define the \define{initial quasi-$f$-right extension} $QR_f(g):QR_f X\to Y$
+%\marginnote{Obviously the terminology might need some consideration}
+of $g$ to be the cogap map of the cube
 \begin{equation*}
 \begin{tikzcd}
 & X^B\times A \arrow[dl] \arrow[dr] \arrow[d] & \phantom{(X^A\times_{Y^A}Y^B)\times B} \\

@@ -1,6 +1,6 @@
 \chapter{Type theoretic descent}\label{chap:descent}
 
-In this chapter we study homotopy pushouts, which were established in homotopy type theory as higher inductive types in section 6.8 of \cite{hottbook}. From this chapter on, we will assume that universes are closed under homotopy pushouts. This is the last assumption that we will be making in the present work. In particular, we will not assume the existence of higher inductive types with some self-reference in the constructors (e.g.~the propositional truncation).
+In this chapter we study homotopy pushouts, which were established as higher inductive types in homotopy type theory in section 6.8 of \cite{hottbook}. From this chapter on, we will assume that universes are closed under homotopy pushouts. This is the last assumption that we will be making in the present work. In particular, we will not assume the existence of higher inductive types with some self-reference in the constructors (e.g.~the propositional truncation).
 
 Our first main result is the descent theorem for homotopy pushouts (\cref{thm:descent,cor:descent_fib}), in which we establish that a cartesian transformation of spans
 \begin{equation*}
@@ -18,7 +18,7 @@ A \arrow[dr] & A'\sqcup^{S'}B' \arrow[d] \arrow[from=ul,crossing over] & B \arro
 & A\sqcup^S B
 \end{tikzcd}
 \end{equation*}
-of which the vertical sides are pullback squares. Here we need univalence to establish uniqueness.
+of which the vertical sides are pullback squares.
 
 The second main theorem of this chapter, \cref{thm:cartesian_cube}, is an adaption to homotopy type theory of a theorem due to \cite{AnelBiedermanFinsterJoyal}. It is closely related to the descent theorem but can be stated without a universe: for any commuting cube
 \begin{equation*}
@@ -166,7 +166,7 @@ A \arrow[r,swap,"\inl"] & A \sqcup^{\mathcal{S}} B.
 \end{defn}
 
 \begin{rmk}
-We note that if $\mathcal{S}\jdeq (S,f,g)$ is a span of \emph{pointed} and pointed maps between them, then the pushout $A\sqcup^{\mathcal{S}} B$ of $\mathcal{S}$ is again a pointed type. The cocone $(\inl,\inr,\glue)$ consists of two pointed maps and a pointed homotopy filling the square of pointed maps. Moreover, the pushout $A\sqcup^{\mathcal{S}} B$ satisfies a pointed version of the universal property: for any pointed type $Y$ the square
+We note that if $\mathcal{S}\jdeq (S,f,g)$ is a span of \emph{pointed} types and pointed maps between them, then the pushout $A\sqcup^{\mathcal{S}} B$ of $\mathcal{S}$ is again a pointed type. The cocone $(\inl,\inr,\glue)$ consists of two pointed maps and a pointed homotopy filling the square of pointed maps. Moreover, the pushout $A\sqcup^{\mathcal{S}} B$ satisfies a pointed version of the universal property: for any pointed type $Y$ the square
 \begin{equation*}
 \begin{tikzcd}
 (A\sqcup^{\mathcal{S}} B \to_\ast Y) \arrow[r] \arrow[d] & (B\to_\ast Y) \arrow[d] \\
@@ -175,19 +175,6 @@ We note that if $\mathcal{S}\jdeq (S,f,g)$ is a span of \emph{pointed} and point
 \end{equation*}
 is a pullback square. 
 \end{rmk}
-
-\begin{comment}
-\begin{proof}
-It is straightforward to verify that the triangle
-\begin{equation*}
-\begin{tikzcd}
-\phantom{T^A \times_{T^S} T^B} & T^X \arrow[dl,swap,"{\mathsf{cocone\usc{}map}(i,j,H)}"] \arrow[dr,"{\mathsf{gap}(\blank\circ i,\blank\circ j, \mathsf{eq\usc{}htpy}(\blank\cdot H))}"] & \phantom{\mathsf{cocone}(T)} \\
-\mathsf{cocone}(T) \arrow[rr,swap,"{\mathsf{gap}(i,j,\mathsf{eq\usc{}htpy}(H))}"] & & T^A \times_{T^S} T^B
-\end{tikzcd}
-\end{equation*}
-commutes. Since the bottom map is an equivalence by \cref{lem:cocone_pb}, it follows that if either one of the remaining maps is an equivalence, so is the other. The claim now follows by \cref{thm:is_pullback}.
-\end{proof}
-\end{comment}
 
 \subsection{Examples of pushouts}
 
@@ -291,6 +278,63 @@ A\vee B \arrow[r,"\mathsf{wedge\usc{}in}"] \arrow[d] & A\times B \arrow[d] \\
 \end{defn}
 
 \subsection{Properties of iterated pushouts}
+The following corollary is also called the \define{pasting property} of pullbacks.\index{pasting property!of pullbacks|textit}\marginnote{edit}
+
+\begin{cor}\label{thm:pb_pasting}
+Consider a commuting diagram of the form
+\begin{equation*}
+\begin{tikzcd}
+A \arrow[r,"k"] \arrow[d,swap,"f"] & B \arrow[r,"l"] \arrow[d,"g"] & C \arrow[d,"h"] \\
+X \arrow[r,swap,"i"] & Y \arrow[r,swap,"j"] & Z
+\end{tikzcd}
+\end{equation*}
+with homotopies $H:i\circ f\htpy g\circ k$ and $K:j\circ g\htpy h\circ l$, and the homotopy
+\begin{equation*}
+\ct{(j\cdot H)}{(K\cdot k)}:j\circ i\circ f\htpy h\circ l\circ k
+\end{equation*}
+witnessing that the outer rectangle commutes. Furthermore, suppose that the square on the right is a pullback square. Then the following are equivalent:
+\begin{samepage}%
+\begin{enumerate}
+\item The square on the left is a pullback square.
+\item The outer rectangle is a pullback square.
+\end{enumerate}%
+\end{samepage}%
+\end{cor}
+
+\begin{proof}
+The commutativity of the two squares induces fiberwise transformations
+\begin{align*}
+& \prd{x:X}\fib{f}{x}\to \fib{g}{i(x)} \\
+& \prd{y:Y}\fib{g}{y}\to \fib{h}{j(y)}.
+\end{align*}
+By the assumption that the square on the right is a pullback square, it follows from \cref{cor:pb_fibequiv} that the fiberwise transformation
+\begin{equation*}
+\prd{y:Y}\fib{g}{y}\to\fib{h}{j(y)}
+\end{equation*}
+is a fiberwise equivalence. Therefore it follows from 3-for-2 property of equivalences that the fiberwise transformation
+\begin{equation*}
+\prd{x:X}\fib{f}{x}\to\fib{g}{i(x)}
+\end{equation*}
+is a fiberwise equivalence if and only if the fiberwise transformation
+\begin{equation*}
+\prd{x:X}\fib{f}{x}\to\fib{h}{j(i(x))}
+\end{equation*}
+is a fiberwise equivalence. Now the claim follows from one more application of \cref{cor:pb_fibequiv}.
+\end{proof}
+
+\begin{cor}
+Consider a commuting cube
+\begin{equation*}
+\begin{tikzcd}
+& S' \arrow[dl] \arrow[dr] \arrow[d] \\
+A' \arrow[d] & S \arrow[dl] \arrow[dr] & B' \arrow[dl,crossing over] \arrow[d] \\
+A \arrow[dr] & X' \arrow[d] \arrow[from=ul,crossing over] & B \arrow[dl] \\
+& X,
+\end{tikzcd}
+\end{equation*}
+of which the two front squares are pullback squares. Then the back left square is a pullback square if and only if the back right square is a pullback square.
+\end{cor}
+
 \begin{prp}\label{thm:pushout_pasting}
 Consider the following configuration of commuting squares:\index{pushout!pasting property|textit}\index{pasting property!for pushouts|textit}
 \begin{equation*}
@@ -596,7 +640,7 @@ A \arrow[dr] & X' \arrow[d] \arrow[from=ul,crossing over] & B \arrow[dl] \\
 \end{tikzcd}
 \end{equation*}
 By the universal property of $B'$ it follows that there is a unique map $g':S'\to B'$ making the cube commute. 
-Moreover, since the two front squares and the back left squares are pullback squares by construction, it follows by \cref{thm:pb_pasting} that also the back right square is a pullback square. Thus we obtain a cartasian transformation of spans.
+Moreover, since the two front squares and the back left squares are pullback squares by construction, it follows by \cref{thm:pb_pasting} that also the back right square is a pullback square. Thus we obtain a cartesian transformation of spans.
 \end{proof}
 
 The following theorem is analogous to \cref{thm:desc_fam}.
@@ -776,17 +820,6 @@ A' \arrow[dr,swap] & \sm{x:X}\fib{h_X}{x} \arrow[d] \arrow[from=ul,crossing over
 \end{equation*}
 We have seen that the top square is a pushout. The vertical maps are all equivalences, so the vertical squares are all pushout squares. Thus it follows from one more application of \cref{thm:pushout_pasting} that the bottom square is a pushout.
 \end{proof}
-
-%\begin{cor}
-%For any map $f:A\sqcup^S B\to X$, and any $x:X$, the square
-%\begin{equation*}
-%\begin{tikzcd}
-%\fib{f_S}{x} \arrow[r] \arrow[d] & \fib{f_B}{x} \arrow[d] \\
-%\fib{f_A}{x} \arrow[r] & \fib{f}{x}
-%\end{tikzcd}
-%\end{equation*}
-%is a pushout square.
-%\end{cor}
 
 \begin{thm}\label{thm:cartesian_cube}
 Consider a commuting cube of types 
@@ -1189,7 +1222,7 @@ For any coherent H-space $X$ there is a fiber sequence
 \begin{equation*}
 X \hookrightarrow \join{X}{X} \twoheadrightarrow \susp X.
 \end{equation*}
-The map $\eta_X:\join{X}{X}\to \susp X$ is called the \define{Hopf fibration}.
+The map $\eta_X:\join{X}{X}\to \susp X$ is called the \define{Hopf fibration} for $X$.
 \end{thm}
 
 \begin{proof}
@@ -1206,3 +1239,13 @@ where the front map is obtained by the universal property of the pushout.
 
 In this cube, the two vertical squares in the back are pullback squares by \cref{thm:pb_fibequiv}, since $\mu(\blank,y)$ and $\mu(x,\blank)$ are equivalences for every $x:X$ and $y:X$, respectively. Since the bottom and top squares are pushout squares it follows by \cref{thm:cartesian_cube} that the front two squares are pullback squares.
 \end{proof}
+
+\begin{rmk}
+The classical Hopf fibration
+\begin{equation*}
+\begin{tikzcd}
+\sphere{1} \arrow[r,hookrightarrow] & \sphere{3} \arrow[r,->>] & \sphere{2}
+\end{tikzcd}
+\end{equation*}
+is now obtained from the fact that $\join{\sphere{1}}{\sphere{1}}\eqvsym \sphere{3}$, which was established in \cite{BruneriePhD}. Indeed, the circle is a coherent H-space.
+\end{rmk}

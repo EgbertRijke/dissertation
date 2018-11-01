@@ -12,9 +12,9 @@ and for any coherent H-space $X$ we have a reflexive coequalizer diagram
 X \arrow[r,yshift=1ex] \arrow[r,yshift=-1ex] & \unit \arrow[l] \arrow[r] & \susp X.
 \end{tikzcd}
 \end{equation*}
-However, both the pre-kernel of a map and a coherent H-space come equipped with a multiplicative structure that satisfies unit laws. What spaces do we get when take not only the reflexive coequalizer, but also take the multiplicative structure and unit laws into account?
+However, both the pre-kernel of a map and a coherent H-space come equipped with a multiplicative structure that satisfies unit laws. What spaces do we get when take not only the reflexive coequalizer, but also take into account the multiplicative structure and unit laws when forming the colimit?
 
-We answer this question by studying at `$2$-truncated simplicial types', by which we understand tiples $(A_0,A_1,A_2)$ consisting of
+We answer this question by studying `$2$-truncated simplicial types', by which we understand triples $(A_0,A_1,A_2)$ consisting of
 \begin{align*}
 A_0 & : \UU \\
 A_1 & : A_0 \to A_0 \to \UU\\
@@ -34,7 +34,7 @@ is an equivalence. As in the case of reflexive graphs, discrete $2$-simplicial t
 \end{equation*}
 and a fibration is a morphism that is right orthogonal with respect to all morphisms in the above cosimplicial diagram. This condition is equivalent to being right orthogonal to the horn inclusions.
 
-Analogous to \cref{thm:rcoeq_is_pushout}, we show that the geometric realization of a $2$-simplicial type $\mathcal{A}$ is simply the homotopy colimit of the diagram
+Analogous to \cref{thm:rcoeq_is_pushout}, we show that the typal realization of a $2$-simplicial type $\mathcal{A}$ is simply the homotopy colimit of the diagram
 \begin{equation*}
 \begin{tikzcd}
 & \tilde{A}_2 \arrow[dl] \arrow[d] \arrow[dr] \\
@@ -43,9 +43,9 @@ Analogous to \cref{thm:rcoeq_is_pushout}, we show that the geometric realization
 \end{tikzcd}
 \end{equation*}
 where $\tilde{A}_i$ is the total space of all $i$-cells.
-This presentation of the geometric realization allows us to compute geometric realizations as iterated pushouts.
+This presentation of the typal realization allows us to compute typal realizations as iterated pushouts.
 
-We will show in \cref{cor:2-pre-kernel} that the geometric realization of the $2$-pre-kernel of a map $f:A\to X$ is the triple fiberwise join $\join[X]{A}{\join[X]{A}{A}}$, and we will show in \cref{cor:geom_hspace} that the geometric realization of a coherent H-space is the cofiber of the Hopf fibration
+We will show in \cref{cor:2-pre-kernel} that the typal realization of the $2$-pre-kernel of a map $f:A\to X$ is the triple fiberwise join $\join[X]{A}{\join[X]{A}{A}}$, and we will show in \cref{cor:geom_hspace} that the typal realization of a coherent H-space is the cofiber of the Hopf fibration
 \begin{equation*}
 \begin{tikzcd}
 \join{X}{X} \arrow[r,"\eta_X"] \arrow[d] & \susp X \arrow[d] \\
@@ -79,7 +79,7 @@ consisting of
 \mathsf{left\usc{}unit}_{\mathcal{A}} & : \prd{x_1,x_2:A_0}{g:A_1(x_1,x_2)} A_2(\rfx{\mathcal{A}}(x_1),g,g) \\
 \mathsf{coh\usc{}unit}_{\mathcal{A}} & : \prd{x:A_0} \mathsf{left\usc{}unit}(\rfx{\mathcal{A}}(x))=\mathsf{right\usc{}unit}(\rfx{\mathcal{A}}(x)).
 \end{align*}
-Given a 2-semi-simplicial structure $\mathcal{A}$, we write $\mathsf{simp}(\mathcal{A})$ for the type of quadruples in the $2$-simplicial structre of $\mathcal{A}$.
+Given a 2-semi-simplicial structure $\mathcal{A}$, we write $\mathsf{simp}(\mathcal{A})$ for the type of quadruples in the $2$-simplicial structure of $\mathcal{A}$.
 \end{enumerate}
 \end{defn}
 
@@ -216,11 +216,11 @@ The \define{standard $0$-simplex} $\Delta[0]$ is the $2$-simplicial type with ju
 \end{equation*}
 given by $f\mapsto \pts{f}(\ttt)$ is an equivalence, for every $2$-simplicial type $\mathcal{A}$.
 
-The \define{standard $1$-simplex} $\Delta[1]$ is the $2$-simplicial type with two vertices $0$ and $1$, and a non-degenerate edge $s$ from $0$ to $1$. The universal property of the stardard $1$-simplex is that the function
+The \define{standard $1$-simplex} $\Delta[1]$ is the $2$-simplicial type with two vertices $0$ and $1$, and a non-degenerate edge $s$ from $0$ to $1$. The universal property of the standard $1$-simplex is that the function
 \begin{equation*}
 \mathsf{sType}_2(\Delta[1],\mathcal{A}) \to \tilde{A}_1
 \end{equation*}
-is an equvialence for every $2$-simplicial type $\mathcal{A}$.
+is an equivalence for every $2$-simplicial type $\mathcal{A}$.
 
 The \define{standard $2$-simplex} $\Delta[2]$ is the $2$-simplicial type consisting of three vertices, three non-degenerate arrows, and a $2$-cell filling the triangle, as indicated in the diagram
 \begin{equation*}
@@ -233,7 +233,7 @@ The function
 \begin{equation*}
 \mathsf{sType}_2(\Delta[2],\mathcal{A}) \to \tilde{A}_2
 \end{equation*}
-that evaluates $f$ at the non-degenerate $2$-cell, is an equvialence. This is the universal property of the standard $2$-simplex.
+that evaluates $f$ at the non-degenerate $2$-cell, is an equivalence. This is the universal property of the standard $2$-simplex.
 
 We obtain a diagram of the form
 \begin{equation*}
@@ -258,7 +258,7 @@ respectively. More formally, $\Lambda_0[2]$ is the 2-simplicial type consisting 
 \edg{\Lambda_0[2]}(i,j) & \defeq (i\leq j)\land (i=0) \\
 \Lambda_0[2]_2(x_0,x_1,x_2,p,r,q) & \defeq \Big(\sm{\alpha:x_0=x_1}\mathsf{tr}(\alpha,r)=q\Big)\vee\Big(\sm{\alpha:x_1=x_2}\mathsf{tr}(\alpha^{-1},r)=p\Big),
 \end{align*}
-and there is only one way to equip this 2-semi-simplical structure with a simplical structure.
+and there is only one way to equip this 2-semi-simplicial structure with a simplicial structure.
 The horns $\Lambda_1[2]$ and $\Lambda_2[2]$ can be defined similarly. We note that the horns can also be presented as pushouts (of $2$-simplicial types) as follows:
 \begin{equation*}
 \begin{tikzcd}
@@ -370,18 +370,18 @@ A cone on a $2$-simplicial type $\mathcal{A}$ with vertex $X$ is simply a morphi
 \begin{equation*}
 \mathsf{sType}_2(\mathcal{A},\Delta X).
 \end{equation*}
-A morphism $f:\mathsf{sType}_2(\mathcal{A},\Delta X)$ is said to be a \define{geometric realization}\marginnote{If geometric realization is not good terminology, could use `$2$-simplicial coequalizer' or something along those lines} of $\mathcal{A}$ if the function
+A morphism $f:\mathsf{sType}_2(\mathcal{A},\Delta X)$ is said to be a \define{typal realization}\marginnote{If typal realization is not good terminology, could use `$2$-simplicial coequalizer' or something along those lines} of $\mathcal{A}$ if the function
 \begin{equation*}
 \Delta(\blank)\circ f : (X\to Y) \to \mathsf{sType}_2(\mathcal{A},\Delta Y)
 \end{equation*}
 is an equivalence for every $Y$. 
 \end{defn}
 
-Our goal for the remainder of this chapter is to study geometric realizations of $2$-simplicial types. In particular, we want to establish that geometric realizations can be obtained as iterated pushouts, and derive from this fact some useful relations between pushouts that we know. However, we need some further machinery to get there.
+Our goal for the remainder of this chapter is to study typal realizations of $2$-simplicial types. In particular, we want to establish that typal realizations can be obtained as iterated pushouts, and derive from this fact some useful relations between pushouts that we know. However, we need some further machinery to get there.
 
 \section{\texorpdfstring{$2$}{2}-cospans and \texorpdfstring{$2$}{2}-pullbacks}
 
-A $2$-cospan is a diagram of the fom
+A $2$-cospan is a diagram of the form
 \begin{equation*}
 \begin{tikzcd}
 A_{110} \arrow[d] & A_{101} \arrow[dl] \arrow[dr] & A_{011} \arrow[d] \\
@@ -567,9 +567,9 @@ The $2$-pullback of the $2$-cospan
 is the double loop space $\loopspace[2]{X}$. 
 \end{cor}
 
-\section{\texorpdfstring{$2$}{2}-spans and \texorpdfstring{$2$}-pushouts}
+\section{\texorpdfstring{$2$}{2}-spans and \texorpdfstring{$2$}{2}-pushouts}
 
-A $2$-span is a diagram of the fom
+A $2$-span is a diagram of the form
 \begin{equation*}
 \begin{tikzcd}
 & A_{111} \arrow[dl] \arrow[d] \arrow[dr] \\
@@ -810,7 +810,7 @@ is $n$-cocartesian.
 \end{enumerate}
 \end{prp}
 
-\section{Geometric realizations as iterated pushouts}
+\section{typal realizations as iterated pushouts}
 
 \begin{defn}
 Every $2$-simplicial type $\mathcal{A}$ determines a $2$-span $\tilde{\mathcal{A}}$ given by
@@ -874,7 +874,7 @@ is an equivalence.
 \end{lem}
 \end{comment}
 
-The following theorem, which states that $f:\mathcal{A}\to \Delta X$ is a geometric realization if and only if the cube
+The following theorem, which states that $f:\mathcal{A}\to \Delta X$ is a typal realization if and only if the cube
 \begin{equation*}
 \begin{tikzcd}
 & \tilde A_2 \arrow[dl] \arrow[d] \arrow[dr] \\
@@ -886,7 +886,7 @@ The following theorem, which states that $f:\mathcal{A}\to \Delta X$ is a geomet
 is cocartesian, is analogous to \cref{thm:rcoeq_is_pushout}.
 
 \begin{thm}
-Consider a morphism $f:\mathsf{sType}_2(\mathcal{A},\Delta X)$. Then $f$ is a geometric realization if and only if the cocone $\tilde{f}$ on the $2$-span $\tilde{A}$ with vertex $X$ is colimiting.
+Consider a morphism $f:\mathsf{sType}_2(\mathcal{A},\Delta X)$. Then $f$ is a typal realization if and only if the cocone $\tilde{f}$ on the $2$-span $\tilde{A}$ with vertex $X$ is colimiting.
 \end{thm}
 
 \begin{proof}
@@ -903,26 +903,26 @@ Note that the map $\varphi$ factors through the type of triples $(f_0,f_1,f_2)$.
 \end{proof}
 
 \begin{cor}
-The geometric realization of the discrete $2$-simplicial type $\Delta(A)$ is equivalent to $A$.
+The typal realization of the discrete $2$-simplicial type $\Delta(A)$ is equivalent to $A$.
 \end{cor}
 
 \begin{cor}
-The geometric realization of the indiscrete $2$-simplicial type $\nabla(A)$ is equivalent to the triple join $\join{A}{\join{A}{A}}$. 
+The typal realization of the indiscrete $2$-simplicial type $\nabla(A)$ is equivalent to the triple join $\join{A}{\join{A}{A}}$. 
 \end{cor}
 
 \begin{cor}\label{cor:2-pre-kernel}
-The geometric realization of the $2$-pre-kernel of a map $f:A\to B$ is the type $\join[X]{A}{\join[X]{A}{A}}$. 
+The typal realization of the $2$-pre-kernel of a map $f:A\to B$ is the type $\join[X]{A}{\join[X]{A}{A}}$. 
 \end{cor}
 
 \begin{cor}\label{cor:geom_hspace}
-Given a coherent $H$-space $X$, the geometric realization of the $2$-simplicial type $S^2 X$ is the cofiber of the Hopf fibration $\eta_X: \join{X}{X} \to \susp X$.
+Given a coherent $H$-space $X$, the typal realization of the $2$-simplicial type $S^2 X$ is the cofiber of the Hopf fibration $\eta_X: \join{X}{X} \to \susp X$.
 \end{cor}
 
 \begin{cor}
-The geometric realization of the standard simplices $\Delta[0]$, $\Delta[1]$, and $\Delta[2]$ are contractible.
+The typal realization of the standard simplices $\Delta[0]$, $\Delta[1]$, and $\Delta[2]$ are contractible.
 \end{cor}
 
 \section{A speculative note on simplicial spaces}
 
 \marginnote{It might be better to write something about simplicial spaces in \cref{chap:equifibrant}, or in the introduction}
-We expect a simplicial space to be discrete, in the sense that the unit $\eta:\mathcal{A}\to |\mathcal{A}|$ of the geometric realization is an equivalence, if and only if it is $\Delta[k]$-null for all $k\in\mathbb{N}$, which happens if and only if $\mathcal{A}$ is $f$-local for all morphisms $f$ between representables. Furthermore, we expect that a morphism $f:\mathcal{A}\to\mathcal{B}$ of simplicial spaces is \'etale in the sense that the naturality square of the unit of geometric realization is a homotopy pullback square, if and only if $f$ is right orthogonal to all morphisms between representables. This can only be the case if the naturality squares (since $f$ is a morphism between presheaves valued in Kan-simplicial sets) are all pullback squares, i.e.~$f$ is cartesian. 
+We expect a simplicial space to be discrete, in the sense that the unit $\eta:\mathcal{A}\to |\mathcal{A}|$ of the typal realization is an equivalence, if and only if it is $\Delta[k]$-null for all $k\in\mathbb{N}$, which happens if and only if $\mathcal{A}$ is $f$-local for all morphisms $f$ between representables. Furthermore, we expect that a morphism $f:\mathcal{A}\to\mathcal{B}$ of simplicial spaces is \'etale in the sense that the naturality square of the unit of typal realization is a homotopy pullback square, if and only if $f$ is right orthogonal to all morphisms between representables. This can only be the case if the naturality squares (since $f$ is a morphism between presheaves valued in Kan-simplicial sets) are all pullback squares, i.e.~$f$ is cartesian. 
